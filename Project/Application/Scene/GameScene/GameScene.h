@@ -121,4 +121,6 @@ private:
 	std::unique_ptr<SpotLightManager> spotLightManager_;
 	std::array<SpotLightData, SpotLightManager::kNumInstanceMax_> spotLightDatas_;
 
+	// テスト
+
 };
