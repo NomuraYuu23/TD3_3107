@@ -2,6 +2,11 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/2D/ImguiManager.h"
 
+SampleObject::~SampleObject()
+{
+
+}
+
 void SampleObject::Initialize(Model* model)
 {
 
@@ -9,7 +14,7 @@ void SampleObject::Initialize(Model* model)
 
 	material_.reset(Material::Create());
 
-	worldtransform_.Initialize();
+	worldtransform_.Initialize(model_->GetRootNode());
 
 	enableLighting_ = 0;
 

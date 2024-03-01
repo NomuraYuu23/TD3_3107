@@ -72,8 +72,8 @@ void GameScene::Initialize() {
 	outline_.color_ = { 0.8f,0.4f,0.1f,1.0f };
 
 	//影
-	shadowManager_ = std::make_unique<ShadowManager>();
-	shadowManager_->Initialize(shadowModel_.get());
+	//shadowManager_ = std::make_unique<ShadowManager>();
+	//shadowManager_->Initialize(shadowModel_.get());
 
 	// 平行光源
 	directionalLight_ = std::make_unique<DirectionalLight>();
@@ -106,7 +106,7 @@ void GameScene::Initialize() {
 		spotLightDatas_[i].decay = 2.0f; // 減衰率
 		spotLightDatas_[i].cosAngle = 2.0f; // スポットライトの余弦
 		spotLightDatas_[i].cosFalloffStart = 1.0f; // フォールオフ開始位置
-		spotLightDatas_[i].used = true; // 使用している
+		spotLightDatas_[i].used = false; // 使用している
 	}
 
 }
@@ -351,14 +351,14 @@ void GameScene::ModelCreate()
 {
 
 	// パーティクル
-	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.obj", dxCommon_, textureHandleManager_.get()));
+	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.gltf", dxCommon_, textureHandleManager_.get()));
 	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_, textureHandleManager_.get()));
 
 	// スカイドーム
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
 
 	// サンプルobj
-	sampleObjModel_.reset(Model::Create("Resources/default/", "teapot.obj", dxCommon_, textureHandleManager_.get()));
+	sampleObjModel_.reset(Model::Create("Resources/default/", "multiMesh.gltf", dxCommon_, textureHandleManager_.get()));
 
 }
 
@@ -398,7 +398,7 @@ void GameScene::ShadowUpdate()
 {
 
 	// リストクリア
-	shadowManager_->ListClear();
+	//shadowManager_->ListClear();
 
 	// リスト登録（影を発生させる物）
 	//shadowManager_->CastsShadowObjListRegister();
@@ -407,6 +407,6 @@ void GameScene::ShadowUpdate()
 	//shadowManager_->ShadowAppearsObjListRegister();
 
 	// 影が出るか
-	shadowManager_->SeeShadow();
+	//shadowManager_->SeeShadow();
 
 }

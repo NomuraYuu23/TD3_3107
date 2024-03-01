@@ -59,7 +59,7 @@ void ParticleManager::SRVCreate()
 	instancingSrvDesc.Buffer.FirstElement = 0;
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	instancingSrvDesc.Buffer.NumElements = kNumInstanceMax_;
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
+	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 	instancingSrvHandleCPU_ = DescriptorHerpManager::GetCPUDescriptorHandle();
 	instancingSrvHandleGPU_ = DescriptorHerpManager::GetGPUDescriptorHandle();
 	DescriptorHerpManager::NextIndexDescriptorHeapChange();
@@ -100,7 +100,7 @@ void ParticleManager::Map(const Matrix4x4& viewProjectionMatrix)
 		std::list<IParticle*>::iterator itr = particleDatas_[i].particles_.begin();
 		for (; itr != particleDatas_[i].particles_.end(); ++itr) {
 			IParticle* particle = *itr;
-			particleForGPUMap_[instanceIndex] = particle->Map(viewProjectionMatrix);
+			particleForGPUMap_[instanceIndex] = particle->Map(viewProjectionMatrix, particleDatas_[i].model_->GetRootNodeLocalMatrix());
 			instanceIndex++;
 		}
 	}

@@ -107,8 +107,8 @@ private:
 	OutLineData outline_;;
 
 	//影
-	std::unique_ptr<ShadowManager> shadowManager_;
-	std::unique_ptr<Model> shadowModel_;
+	//std::unique_ptr<ShadowManager> shadowManager_;
+	//std::unique_ptr<Model> shadowModel_;
 
 	// サンプルOBJ
 	std::unique_ptr<SampleObject> sampleObj_;
@@ -120,7 +120,5 @@ private:
 
 	std::unique_ptr<SpotLightManager> spotLightManager_;
 	std::array<SpotLightData, SpotLightManager::kNumInstanceMax_> spotLightDatas_;
-
-	// テスト
 
 };
