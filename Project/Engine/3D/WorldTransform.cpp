@@ -15,21 +15,35 @@ WorldTransform::~WorldTransform()
 
 }
 
-void WorldTransform::Initialize(const ModelNode& modelNode)
+void WorldTransform::Initialize()
 {
 
-	SetNodeDatas(modelNode);
-
-	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-
 	// 回転行列
-	rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
+	rotateMatrix_ = Matrix4x4::MakeRotateXYZMatrix(transform_.rotate);
 
 	// 方向ベクトルで回転行列
 	usedDirection_ = false;
 
 	// スケールを考えない
-	parentMatrix_ = matrix4x4Calc->MakeAffineMatrix(Vector3{ 1.0f,1.0f,1.0f }, transform_.rotate, transform_.translate);
+	parentMatrix_ = Matrix4x4::MakeAffineMatrix(Vector3{ 1.0f,1.0f,1.0f }, transform_.rotate, transform_.translate);
+
+	UpdateMatrix();
+
+}
+
+void WorldTransform::Initialize(const ModelNode& modelNode)
+{
+
+	SetNodeDatas(modelNode);
+
+	// 回転行列
+	rotateMatrix_ = Matrix4x4::MakeRotateXYZMatrix(transform_.rotate);
+
+	// 方向ベクトルで回転行列
+	usedDirection_ = false;
+
+	// スケールを考えない
+	parentMatrix_ = Matrix4x4::MakeAffineMatrix(Vector3{ 1.0f,1.0f,1.0f }, transform_.rotate, transform_.translate);
 
 	// ノードカウント
 	uint32_t nodeCount = static_cast<uint32_t>(nodeDatas_.size());
@@ -41,10 +55,10 @@ void WorldTransform::Initialize(const ModelNode& modelNode)
 	transformationMatrixesBuff_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixesMap_));
 
 	for (uint32_t i = 0; i < nodeCount; ++i) {
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].World = matrix4x4Calc->MakeIdentity4x4();
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].WVP = matrix4x4Calc->MakeIdentity4x4();
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].WorldInverseTranspose = matrix4x4Calc->MakeIdentity4x4();
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].ScaleInverse = matrix4x4Calc->MakeIdentity4x4();
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].World = Matrix4x4::MakeIdentity4x4();
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].WVP = Matrix4x4::MakeIdentity4x4();
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].WorldInverseTranspose = Matrix4x4::MakeIdentity4x4();
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].ScaleInverse = Matrix4x4::MakeIdentity4x4();
 	}
 
 	UpdateMatrix();
@@ -55,35 +69,33 @@ void WorldTransform::Initialize(const ModelNode& modelNode)
 
 void WorldTransform::UpdateMatrix() {
 
-	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-
 	//拡大縮小行列
-	Matrix4x4 scaleMatrix = matrix4x4Calc->MakeScaleMatrix(transform_.scale);
+	Matrix4x4 scaleMatrix = Matrix4x4::MakeScaleMatrix(transform_.scale);
 	// どう回転行列作るか
 	if (usedDirection_) {
 		// 回転行列
-		rotateMatrix_ = matrix4x4Calc->DirectionToDirection(Vector3{0.0f,0.0f,1.0f}, direction_);
+		rotateMatrix_ = Matrix4x4::DirectionToDirection(Vector3{0.0f,0.0f,1.0f}, direction_);
 	}
 	else {
 		// 回転行列
-		rotateMatrix_ = matrix4x4Calc->MakeRotateXYZMatrix(transform_.rotate);
+		rotateMatrix_ = Matrix4x4::MakeRotateXYZMatrix(transform_.rotate);
 	}
 
 	//平行移動行列
-	Matrix4x4 translateMatrix = matrix4x4Calc->MakeTranslateMatrix(transform_.translate);
+	Matrix4x4 translateMatrix = Matrix4x4::MakeTranslateMatrix(transform_.translate);
 
 	// ワールド行列
-	worldMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(rotateMatrix_, translateMatrix));
+	worldMatrix_ = Matrix4x4::Multiply(scaleMatrix, Matrix4x4::Multiply(rotateMatrix_, translateMatrix));
 
 	//拡大縮小行列
-	scaleMatrix = matrix4x4Calc->MakeScaleMatrix(Vector3{ 1.0f,1.0f,1.0f });
+	scaleMatrix = Matrix4x4::MakeScaleMatrix(Vector3{ 1.0f,1.0f,1.0f });
 	// 親子関係用
-	parentMatrix_ = matrix4x4Calc->Multiply(scaleMatrix, matrix4x4Calc->Multiply(rotateMatrix_, translateMatrix));
+	parentMatrix_ = Matrix4x4::Multiply(scaleMatrix, Matrix4x4::Multiply(rotateMatrix_, translateMatrix));
 
 	// 親子関係
 	if (parent_) {
-		worldMatrix_ = matrix4x4Calc->Multiply(worldMatrix_, parent_->parentMatrix_);
-		parentMatrix_ = matrix4x4Calc->Multiply(parentMatrix_, parent_->parentMatrix_);
+		worldMatrix_ = Matrix4x4::Multiply(worldMatrix_, parent_->parentMatrix_);
+		parentMatrix_ = Matrix4x4::Multiply(parentMatrix_, parent_->parentMatrix_);
 	}
 
 }
@@ -91,14 +103,12 @@ void WorldTransform::UpdateMatrix() {
 void WorldTransform::Map(const Matrix4x4& viewProjectionMatrix)
 {
 
-	Matrix4x4Calc* matrix4x4Calc = Matrix4x4Calc::GetInstance();
-
 	for (uint32_t i = 0; i < nodeDatas_.size(); ++i) {
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].World = matrix4x4Calc->Multiply(nodeDatas_[i].localMatrix, worldMatrix_);
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].WVP = matrix4x4Calc->Multiply(matrix4x4Calc->Multiply(nodeDatas_[i].localMatrix, worldMatrix_), viewProjectionMatrix);
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].WorldInverseTranspose = matrix4x4Calc->Multiply(nodeDatas_[i].localMatrix, matrix4x4Calc->Inverse(worldMatrix_));
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].World = Matrix4x4::Multiply(nodeDatas_[i].localMatrix, worldMatrix_);
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].WVP = Matrix4x4::Multiply(Matrix4x4::Multiply(nodeDatas_[i].localMatrix, worldMatrix_), viewProjectionMatrix);
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].WorldInverseTranspose = Matrix4x4::Multiply(nodeDatas_[i].localMatrix, Matrix4x4::Inverse(worldMatrix_));
 
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].ScaleInverse = matrix4x4Calc->Inverse(matrix4x4Calc->MakeScaleMatrix(transform_.scale)); // objファイルのみ対応
+		transformationMatrixesMap_[nodeDatas_[i].meshNum].ScaleInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale)); // objファイルのみ対応
 	}
 
 }
@@ -114,7 +124,7 @@ void WorldTransform::SRVCreate()
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 
 	if (nodeDatas_.size() == 0){
-		instancingSrvDesc.Buffer.NumElements = 1;
+		assert(0);
 	}
 	else {
 		instancingSrvDesc.Buffer.NumElements = static_cast<UINT>(nodeDatas_.size());
@@ -133,6 +143,7 @@ void WorldTransform::SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* c
 {
 
 	assert(sCommandList == nullptr);
+	assert(nodeDatas_.size() > 0);
 
 	sCommandList = cmdList;
 
@@ -163,8 +174,9 @@ void WorldTransform::SetNodeDatas(const ModelNode& modelNode)
 
 void WorldTransform::Finalize()
 {
-
-	DescriptorHerpManager::DescriptorHeapsMakeNull(indexDescriptorHeap_);
+	if (nodeDatas_.size() > 0) {
+		DescriptorHerpManager::DescriptorHeapsMakeNull(indexDescriptorHeap_);
+	}
 
 }
 
