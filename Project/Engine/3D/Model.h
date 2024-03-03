@@ -44,7 +44,7 @@ class Model
 public:
 
 	struct MaterialData {
-		std::string textureFilePath;
+		std::vector<std::string> textureFilePaths;
 	};
 
 	struct ModelData {
@@ -55,13 +55,20 @@ public:
 		MeshNumManager meshNumManager;
 	};
 
+	enum PipelineStateName {
+		kPipelineStateNameModel,
+		kPipelineStateNameParticle,
+		kPipelineStateNameOutLine,
+		kPipelineStateNameOfCount
+	};
+
 	/// <summary>
 	/// 静的初期化
 	/// </summary>
 	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device,
-		const std::array<ID3D12RootSignature*, GraphicsPipelineState::PipelineStateName::kPipelineStateNameOfCount>& rootSignature,
-		const std::array<ID3D12PipelineState*, GraphicsPipelineState::PipelineStateName::kPipelineStateNameOfCount>& pipelineState);
+		const std::array<ID3D12RootSignature*, PipelineStateName::kPipelineStateNameOfCount>& rootSignature,
+		const std::array<ID3D12PipelineState*, PipelineStateName::kPipelineStateNameOfCount>& pipelineState);
 
 	/// <summary>
 	/// 静的前処理
@@ -101,9 +108,9 @@ private:
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* sCommandList;
 	// ルートシグネチャ
-	static ID3D12RootSignature* sRootSignature[GraphicsPipelineState::PipelineStateName::kPipelineStateNameOfCount];
+	static ID3D12RootSignature* sRootSignature[PipelineStateName::kPipelineStateNameOfCount];
 	// パイプラインステートオブジェクト
-	static ID3D12PipelineState* sPipelineState[GraphicsPipelineState::PipelineStateName::kPipelineStateNameOfCount];
+	static ID3D12PipelineState* sPipelineState[PipelineStateName::kPipelineStateNameOfCount];
 	// ポイントライトマネージャ
 	static PointLightManager* pointLightManager_;
 	//	スポットライトマネージャ
@@ -134,8 +141,8 @@ public:
 	/// テクスチャハンドルの設定
 	/// </summary>
 	/// <param name="textureHandle"></param>
-	void SetTextureHandle(uint32_t textureHandle);
-	uint32_t GetTextureHandle() { return textureHandle_; }
+	void SetTextureHandle(uint32_t textureHandle, uint32_t index);
+	std::vector<UINT> GetTextureHandle() { return textureHandles_; }
 
 	/// <summary>
 	/// ローカルマトリックス取得
@@ -156,10 +163,10 @@ private:
 	std::unique_ptr<Mesh> mesh_;
 
 	//テクスチャ番号
-	UINT textureHandle_ = 0;
+	std::vector<UINT> textureHandles_;
 
 	// リソース設定
-	D3D12_RESOURCE_DESC resourceDesc_;
+	std::vector<D3D12_RESOURCE_DESC> resourceDescs_;
 
 	// デフォルトマテリアル
 	std::unique_ptr<Material> defaultMaterial_;

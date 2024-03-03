@@ -130,6 +130,15 @@
     <Filter Include="Engine\3D\Model">
       <UniqueIdentifier>{462e3abe-b88d-4a64-9c86-ebed41e4207d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Collider2D">
+      <UniqueIdentifier>{b6e2f590-5e31-40f9-898a-3558bc89d6f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Collision2D">
+      <UniqueIdentifier>{df9ebfa6-b4cd-4e76-88d8-f004633d8ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Collider2D">
+      <UniqueIdentifier>{1722d6ea-0329-46db-ac66-2a5b605d89bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -396,6 +405,24 @@
     </ClCompile>
     <ClCompile Include="Engine\Math\Vector2.cpp">
       <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collision2D\Collision2DManager.cpp">
+      <Filter>Engine\Collision2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collision2D\Collision2D.cpp">
+      <Filter>Engine\Collision2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collision2D\Collision2DDebugDraw.cpp">
+      <Filter>Engine\Collision2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider2D\Circle.cpp">
+      <Filter>Engine\Collider2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider2D\Collider2D.cpp">
+      <Filter>Engine\Collider2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider2D\Box.cpp">
+      <Filter>Engine\Collider2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -741,6 +768,36 @@
     <ClInclude Include="Engine\2D\SpriteForGPU.h">
       <Filter>Engine\2D</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Collider2D\ColliderParentObject2D.h">
+      <Filter>Application\Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Collider2D\CollisionConfig2D.h">
+      <Filter>Application\Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collision2D\Collision2D.h">
+      <Filter>Engine\Collision2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collision2D\Collision2DDebugDraw.h">
+      <Filter>Engine\Collision2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collision2D\Collision2DManager.h">
+      <Filter>Engine\Collision2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider2D\ColliderShape2D.h">
+      <Filter>Engine\Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider2D\Box.h">
+      <Filter>Engine\Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider2D\Circle.h">
+      <Filter>Engine\Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider2D\Collider2D.h">
+      <Filter>Engine\Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider2D\Collider2DDebugDrawForGPU.h">
+      <Filter>Engine\Collider2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -759,6 +816,7 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="NomuEngine.vcxproj.user" />
+    <None Include="Resources\shaders\Collider2DDebug.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\Sprite.VS.hlsl">
@@ -785,5 +843,7 @@
     <FxCompile Include="Resources\shaders\OutLine3D.PS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\Collider2DDebug.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Collider2DDebug.PS.hlsl" />
   </ItemGroup>
 </Project>

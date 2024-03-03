@@ -14,10 +14,11 @@
 #include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
 
 #include "../../../Engine/Light/DirectionalLight/DirectionalLight.h" // 平行光源
-#include "../../../Engine/Light/PointLight/PointLight.h" // 点光源
 #include "../../../Engine/Light/PointLight/PointLightManager.h" // 点光源
-#include "../../../Engine/Light/SpotLight/SpotLight.h" //
-#include "../../../Engine/Light/SpotLight/SpotLightManager.h" //
+#include "../../../Engine/Light/SpotLight/SpotLightManager.h" // スポット
+
+#include "../../../Engine/Collision2D/Collision2DManager.h"
+#include "../../../Engine/Collision2D/Collision2DDebugDraw.h"
 
 class GameScene : public IScene
 {
@@ -118,7 +119,23 @@ private:
 	std::unique_ptr<PointLightManager> pointLightManager_;
 	std::array<PointLightData, PointLightManager::kNumInstanceMax_> pointLightDatas_;
 
+	// スポットライト
 	std::unique_ptr<SpotLightManager> spotLightManager_;
 	std::array<SpotLightData, SpotLightManager::kNumInstanceMax_> spotLightDatas_;
 
+	// Collision2DManager
+	std::unique_ptr<Collision2DManager> collision2DManager_;
+	// Collision2DDebugDraw
+	std::unique_ptr<Collision2DDebugDraw> collision2DDebugDraw_;
+	std::array<uint32_t, Collision2DDebugDraw::kTexutureNameOfCount> collision2DDebugDrawTextures_;
+
+	std::unique_ptr<Box> box_;
+	Vector2 boxCenter_;
+	std::unique_ptr<Box> box1_;
+	Vector2 box1Center_;
+	std::unique_ptr<Circle> circle_;
+	Vector2 circleCenter_;
+	std::unique_ptr<Circle> circle1_;
+	Vector2 circle1Center_;
+	
 };

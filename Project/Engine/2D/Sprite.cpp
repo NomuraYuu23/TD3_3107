@@ -14,9 +14,9 @@ UINT Sprite::sDescriptorHandleIncrementSize;
 // コマンドリスト
 ID3D12GraphicsCommandList* Sprite::sCommandList = nullptr;
 // ルートシグネチャ
-ComPtr<ID3D12RootSignature> Sprite::sRootSignature;
+ID3D12RootSignature* Sprite::sRootSignature;
 // パイプラインステートオブジェクト
-ComPtr<ID3D12PipelineState> Sprite::sPipelineState;
+ID3D12PipelineState* Sprite::sPipelineState;
 
 /// <summary>
 /// 静的初期化
@@ -24,8 +24,8 @@ ComPtr<ID3D12PipelineState> Sprite::sPipelineState;
 /// <param name="device">デバイス</param>
 void Sprite::StaticInitialize(
 	ID3D12Device* device,
-	ComPtr<ID3D12RootSignature> rootSignature,
-	ComPtr<ID3D12PipelineState> pipelineState) {
+	ID3D12RootSignature* rootSignature,
+	ID3D12PipelineState* pipelineState) {
 
 	assert(device);
 	
@@ -49,8 +49,8 @@ void Sprite::PreDraw(ID3D12GraphicsCommandList* cmdList) {
 	sCommandList = cmdList;
 
 	//RootSignatureを設定。
-	sCommandList->SetPipelineState(sPipelineState.Get());//PS0を設定
-	sCommandList->SetGraphicsRootSignature(sRootSignature.Get());
+	sCommandList->SetPipelineState(sPipelineState);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature);
 	//形状を設定。PS0に設定しているものとは別。
 	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -64,17 +64,6 @@ void Sprite::PostDraw() {
 	Sprite::sCommandList = nullptr;
 
 }
-
-/// <summary>
-/// スプライト生成
-/// </summary>
-/// <param name="textureHandle">テクスチャハンドル</param>
-/// <param name="position">座標</param>
-/// <param name="color">色</param>
-/// <param name="anchorpoint">アンカーポイント</param>
-/// <param name="isFlipX">左右反転</param>
-/// <param name="isFlipY">上下反転</param>
-/// <returns>生成されたスプライト</returns>
 
 /// <summary>
 /// スプライト生成

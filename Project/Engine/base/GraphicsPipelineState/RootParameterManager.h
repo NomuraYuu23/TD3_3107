@@ -12,11 +12,15 @@
 /// ディスクリプタレンジの名前
 /// </summary>
 enum DescriptorRangeIndex {
-	kDescriptorRangeIndexTexture,
+	kDescriptorRangeIndexTexture0,
+	kDescriptorRangeIndexTexture1,
+	kDescriptorRangeIndexTexture2,
+	kDescriptorRangeIndexTexture3,
 	kDescriptorRangeIndexInstancing,
 	kDescriptorRangeIndexPointLight,
 	kDescriptorRangeIndexSpotLight,
 	kDescriptorRangeIndexTransformMatrix,
+	kDexcriptorRangeIndexCollider2DDebugDrawForGPU,
 	kDescriptorRangeIndexOfCount,
 };
 
@@ -28,6 +32,7 @@ enum RootParameterIndex {
 	kRootParameterIndexSprite,
 	kRootParameterIndexParticle,
 	kRootParameterIndexOutLine,
+	kRootParameterIndexCollision2DDebugDraw,
 	kRootParameterIndexOfCount,
 };
 
@@ -68,6 +73,11 @@ private: // 関数
 	/// アウトライン
 	/// </summary>	
 	static void RootParameterInitializeForOutLine();
+
+	/// <summary>
+	/// コライダーデバッグ2D
+	/// </summary>
+	static void RootParameterInitializeForCollision2DDebugDraw();
 
 	/// <summary>
 	/// ディスクリプタレンジの初期化
