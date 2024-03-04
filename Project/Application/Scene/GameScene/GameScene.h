@@ -11,7 +11,9 @@
 #include "../../../Engine/3D/OutLineData.h"
 #include "../../ShadowManager/ShadowManager.h"
 
-#include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
+//#include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
+//#include "../../Object/Player/Player.h"	// プレイヤー
+#include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
 
 #include "../../../Engine/Light/DirectionalLight/DirectionalLight.h" // 平行光源
 #include "../../../Engine/Light/PointLight/PointLightManager.h" // 点光源
@@ -138,4 +140,7 @@ private:
 	std::unique_ptr<Circle> circle1_;
 	Vector2 circle1Center_;
 	
+	std::unique_ptr<Player> player_;
+	std::unique_ptr<Model> playerModel_;
+
 };

@@ -1,6 +1,7 @@
 #include "SampleObject.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/2D/ImguiManager.h"
+#include "../../../Engine/Input/Input.h"
 
 SampleObject::~SampleObject()
 {
@@ -20,6 +21,13 @@ void SampleObject::Initialize(Model* model)
 
 	shininess_ = 100.0f;
 
+	// 2D用座標・サイズ
+	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
+	scale2D_ = { worldtransform_.transform_.scale.x * 2.0f, worldtransform_.transform_.scale.y * 2.0f };
+
+	// コライダーの初期化
+	Box::Initialize(position2D_, scale2D_.x, scale2D_.y, this);
+
 	RegisteringGlobalVariables();
 
 	ApplyGlobalVariables();
@@ -29,13 +37,24 @@ void SampleObject::Initialize(Model* model)
 void SampleObject::Update()
 {
 
-	ApplyGlobalVariables();
+	//ApplyGlobalVariables();
 
+
+	Input* input = Input::GetInstance();
+	float tmpSpeed = 0.05f;
+	if (input->PushKey(DIK_LEFT)) {
+		worldtransform_.transform_.translate.x -= tmpSpeed;
+	}
+	else if (input->PushKey(DIK_RIGHT)) {
+		worldtransform_.transform_.translate.x += tmpSpeed;
+	}
 	worldtransform_.UpdateMatrix();
+	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
 
 	material_->SetEnableLighting(enableLighting_);
 	material_->SetShininess(shininess_);
 
+	Box::Update(position2D_, scale2D_.x, scale2D_.y);
 }
 
 void SampleObject::Draw(BaseCamera camera)
@@ -62,6 +81,8 @@ void SampleObject::ImGuiDraw()
 	ImGui::RadioButton("BlinnPhongReflection", &enableLighting_, EnableLighting::BlinnPhongReflection);
 
 	ImGui::DragFloat("shininess", &shininess_);
+	float absValue = 30.0f;
+	ImGui::DragFloat3("translate", &worldtransform_.transform_.translate.x, 0.01f, -absValue, absValue);
 
 	ImGui::End();
 

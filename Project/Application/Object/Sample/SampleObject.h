@@ -1,7 +1,8 @@
 #pragma once
 #include "../../../Engine/3D/Model.h"
+#include "../../../Engine/Collider2D/Box.h"
 
-class SampleObject
+class SampleObject : public Box
 {
 
 public:
@@ -36,6 +37,10 @@ private:
 	std::unique_ptr<Material> material_ = nullptr;
 	// ワールドトランスフォーム
 	WorldTransform worldtransform_;
+
+	// コライダー用の座標・スケール
+	Vector2 position2D_ = {};
+	Vector2 scale2D_ = {};
 
 	// 
 	int32_t enableLighting_;

@@ -109,6 +109,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Object\Player\ActionState\AerialState.cpp" />
     <ClCompile Include="Application\AudioManager\ClearAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\GameAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\TitleAudioManager.cpp" />
@@ -182,6 +183,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Scene\IScene\IScene.cpp" />
     <ClCompile Include="Engine\Framework\MyFramework.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\IActionState.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\GroundState.cpp" />
+    <ClCompile Include="Application\Object\Weapon\WeaponState\IWeaponState.cpp" />
+    <ClCompile Include="Application\Object\Weapon\WeaponState\HoldState.cpp" />
+    <ClCompile Include="Application\Object\IObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3D\Material.cpp" />
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
@@ -203,8 +209,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Math\Vector3.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\3D\WorldTransform.cpp" />
+    <ClCompile Include="Application\Object\Player\Player.cpp" />
+    <ClCompile Include="Application\Object\Weapon\Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Object\ObjectList.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\ActionStateList.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\AerialState.h" />
     <ClInclude Include="Application\AudioManager\ClearAudioManager.h" />
     <ClInclude Include="Application\AudioManager\GameAudioManager.h" />
     <ClInclude Include="Application\AudioManager\TitleAudioManager.h" />
@@ -213,6 +224,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider\ColliderParentObject.h" />
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />
+    <ClInclude Include="Application\Object\Weapon\WeaponState\WeaponStateList.h" />
     <ClInclude Include="Application\SampleBone\SampleBone.h" />
     <ClInclude Include="Application\Scene\SceneName.h" />
     <ClInclude Include="Application\Scene\SelectScene\SelectScene.h" />
@@ -328,6 +340,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\3D\VertexData.h" />
     <ClInclude Include="Engine\3D\WorldTransform.h" />
+    <ClInclude Include="Application\Object\Player\Player.h" />
+    <ClInclude Include="Application\Object\Weapon\Weapon.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\IActionState.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\GroundState.h" />
+    <ClInclude Include="Application\Object\Weapon\WeaponState\IWeaponState.h" />
+    <ClInclude Include="Application\Object\Weapon\WeaponState\HoldState.h" />
+    <ClInclude Include="Application\Object\IObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

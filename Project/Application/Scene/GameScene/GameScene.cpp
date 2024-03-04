@@ -125,17 +125,20 @@ void GameScene::Initialize() {
 
 	circle1Center_ = { 640.0f,0.0f };
 
-	box_ = std::make_unique<Box>();
-	box_->Initialize(boxCenter_, 160.0f, 160.0f, nullptr);
+	//box_ = std::make_unique<Box>();
+	//box_->Initialize(boxCenter_, 160.0f, 160.0f, nullptr);
 
-	box1_ = std::make_unique<Box>();
-	box1_->Initialize(box1Center_, 160.0f, 160.0f, nullptr);
+	//box1_ = std::make_unique<Box>();
+	//box1_->Initialize(box1Center_, 160.0f, 160.0f, nullptr);
 
-	circle_ = std::make_unique<Circle>();
-	circle_->Initialize(circleCenter_, 160.0f, nullptr);
+	//circle_ = std::make_unique<Circle>();
+	//circle_->Initialize(circleCenter_, 160.0f, nullptr);
 
-	circle1_ = std::make_unique<Circle>();
-	circle1_->Initialize(circle1Center_, 160.0f, nullptr);
+	//circle1_ = std::make_unique<Circle>();
+	//circle1_->Initialize(circle1Center_, 160.0f, nullptr);
+
+	player_ = std::make_unique<Player>();
+	player_->Initialize(playerModel_.get());
 
 }
 
@@ -177,6 +180,8 @@ void GameScene::Update() {
 	//Obj
 	sampleObj_->Update();
 
+	player_->Update();
+
 	// あたり判定
 	collisionManager_->ListClear();
 	//collisionManager_->ListRegister();
@@ -184,23 +189,25 @@ void GameScene::Update() {
 
 	float radius = 160.0f;
 
-	box_->Update(boxCenter_, radius, radius);
-	box1_->Update(box1Center_, radius, radius);
-	circle_->Update(circleCenter_, radius);
-	circle1_->Update(circle1Center_, radius);
+	//box_->Update(boxCenter_, radius, radius);
+	//box1_->Update(box1Center_, radius, radius);
+	//circle_->Update(circleCenter_, radius);
+	//circle1_->Update(circle1Center_, radius);
 
 	collision2DManager_->ListClear();
-	collision2DManager_->ListRegister(box_.get());
-	collision2DManager_->ListRegister(box1_.get());
-	collision2DManager_->ListRegister(circle_.get());
-	collision2DManager_->ListRegister(circle1_.get());
+	//collision2DManager_->ListRegister(box_.get());
+	//collision2DManager_->ListRegister(box1_.get());
+	//collision2DManager_->ListRegister(circle_.get());
+	//collision2DManager_->ListRegister(circle1_.get());
+	collision2DManager_->ListRegister(&player_->boxCollider_);
+	collision2DManager_->ListRegister(sampleObj_.get());
 	collision2DManager_->CheakAllCollision();
 
 	collision2DDebugDraw_->Clear();
-	collision2DDebugDraw_->Register(box_.get());
-	collision2DDebugDraw_->Register(box1_.get());
-	collision2DDebugDraw_->Register(circle_.get());
-	collision2DDebugDraw_->Register(circle1_.get());
+	//collision2DDebugDraw_->Register(box_.get());
+	//collision2DDebugDraw_->Register(box1_.get());
+	//collision2DDebugDraw_->Register(circle_.get());
+	//collision2DDebugDraw_->Register(circle1_.get());
 	
 	// 影
 	ShadowUpdate();
@@ -248,7 +255,7 @@ void GameScene::Draw() {
 	
 	//Obj
 	sampleObj_->Draw(camera_);
-
+	player_->Draw(camera_);
 	// スカイドーム
 	skydome_->Draw(camera_);
 
@@ -374,6 +381,8 @@ void GameScene::ImguiDraw(){
 	//Obj
 	sampleObj_->ImGuiDraw();
 
+	player_->ImGuiDraw();
+
 	// スカイドーム
 	skydome_->ImGuiDraw();
 
@@ -422,8 +431,10 @@ void GameScene::ModelCreate()
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
 
 	// サンプルobj
-	sampleObjModel_.reset(Model::Create("Resources/default/", "multiMaterial.gltf", dxCommon_, textureHandleManager_.get()));
+	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
+	// プレイヤーモデル
+	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 }
 
 void GameScene::TextureLoad()
