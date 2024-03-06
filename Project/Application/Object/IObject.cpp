@@ -20,9 +20,6 @@ void IObject::Initialize(Model* model)
 	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
 	scale2D_ = { worldtransform_.transform_.scale.x * 2.0f, worldtransform_.transform_.scale.y * 2.0f };
 
-	// コライダーの初期化
-	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
-
 }
 
 void IObject::Update()

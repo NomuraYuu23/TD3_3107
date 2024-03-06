@@ -24,6 +24,13 @@ public:
 	/// </summary>
 	virtual void ImGuiDraw() = 0;
 
+	/// <summary>
+	/// 衝突のコールバック
+	/// </summary>
+	/// <param name="target"></param>
+	/// <param name="tag"></param>
+	virtual void OnCollision(ColliderParentObject2D* target, uint32_t tag) = 0;
+
 public: // アクセッサ
 	/// <summary>
 	/// コライダーの取得
