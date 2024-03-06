@@ -1,7 +1,7 @@
 #pragma once
 #include "IWeaponState.h"
 
-class HoldState : public IWeaponState
+class ThrownState : public IWeaponState
 {
 public:
 	/// <summary>
@@ -11,11 +11,11 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update() override {};
+	void Update() override;
 	/// <summary>
 	/// ImGUi
 	/// </summary>
-	void ImGuiUpdate() override {};
+	void ImGuiUpdate() override;
 
 };
 

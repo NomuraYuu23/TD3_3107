@@ -62,6 +62,6 @@ public:
 
 	float gravity_ = 9.8f;
 
-	bool stateCheck_ = false;
+	Vector3 throwDirect_ = {};
 };
 

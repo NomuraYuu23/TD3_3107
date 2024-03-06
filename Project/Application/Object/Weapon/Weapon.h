@@ -48,10 +48,14 @@ public: // メンバ関数
 	/// 親の設定
 	/// </summary>
 	/// <param name="adress"></param>
-	void SettingParent(WorldTransform* adress) {
-		worldtransform_.SetParent(adress);
-		//worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
-		//worldtransform_.UpdateMatrix();
+	void SettingParent() {
+		worldtransform_.SetParent(parentAdress_);
+		worldtransform_.transform_.translate = localOffset_;
+	}
+	void ReleaseParent() {
+		worldtransform_.SetParent(nullptr);
+		worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
+		worldtransform_.UpdateMatrix();
 	}
 
 	Vector3 GetTargetPosition() { return parentAdress_->GetWorldPosition(); }
@@ -62,5 +66,6 @@ private:
 
 	WorldTransform* parentAdress_ = nullptr;
 
+	Vector3 localOffset_ = {};
 };
 

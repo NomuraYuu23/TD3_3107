@@ -1,10 +1,13 @@
 #include "ReturnState.h"
-#include "../../../Engine/Input/Input.h"
 #include "../Weapon.h"
+#include "../../../Engine/Input/Input.h"
 #include "../../../Engine/Math/Ease.h"
 
 void ReturnState::Initialize()
 {
+	// 親子関係解除
+	weapon_->ReleaseParent();
+
 	StartEasing(60);
 	startPosition_ = weapon_->worldtransform_.transform_.translate;
 
@@ -12,12 +15,6 @@ void ReturnState::Initialize()
 
 void ReturnState::Update()
 {
-
-	Input* input = Input::GetInstance();
-	if (input->TriggerKey(DIK_K)) {
-		StartEasing(120);
-	}
-
 	// 終了処理
 	if (isEnd_) {
 		weapon_->ChangeState(std::make_unique<HoldState>());

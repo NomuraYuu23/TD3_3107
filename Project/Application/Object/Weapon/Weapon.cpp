@@ -8,9 +8,11 @@ void Weapon::Initialize(Model* model)
 	IObject::Initialize(model);
 	worldtransform_.transform_.translate.x = 2.0f;
 
+	// 親子関係でのオフセット
+	localOffset_ = { 2.0f,0,0 };
+
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
-
 	ChangeState(std::make_unique<HoldState>());
 
 }
@@ -39,14 +41,16 @@ void Weapon::ImGuiDraw()
 
 	// 親子変更
 	if (ImGui::Button("ParentDelete")) {
-		SettingParent(nullptr);
+		ReleaseParent();
 	}
 	if (ImGui::Button("ParentAdd")) {
-		SettingParent(parentAdress_);
+		SettingParent();
 	}
 	
 	// ローカル座標
 	ImGui::DragFloat3("localPos", &worldtransform_.transform_.translate.x, 0.01f, -40.0f, 40.0f);
+	// オフセット
+	ImGui::DragFloat3("localOffset", &localOffset_.x, 0.01f, -40.0f, 40.0f);
 	// どっちかを判断
 	std::string name = typeid(*state_).name();
 

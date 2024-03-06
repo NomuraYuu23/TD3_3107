@@ -84,15 +84,12 @@ void Player::ImGuiDraw()
 	ImGui::SeparatorText("");
 	// ステート確認
 	if (typeid(*actionState_) == typeid(AerialState)) {
-		stateCheck_ = true;
+
 	}
 	else {
-		stateCheck_ = false;
-	}
 
-	int isFlag = stateCheck_;
+	}
 	// どっちかを判断
-	ImGui::InputInt("checkBut", &isFlag);
 	std::string name = typeid(*actionState_).name();
 
 	ImGui::Text(name.c_str());

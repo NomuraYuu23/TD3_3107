@@ -212,6 +212,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\Player.cpp" />
     <ClCompile Include="Application\Object\Weapon\Weapon.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\ReturnState.cpp" />
+    <ClCompile Include="Application\Object\Weapon\WeaponState\ThrownState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\ObjectList.h" />
@@ -349,6 +350,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Weapon\WeaponState\HoldState.h" />
     <ClInclude Include="Application\Object\IObject.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnState.h" />
+    <ClInclude Include="Application\Object\Weapon\WeaponState\ThrownState.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
