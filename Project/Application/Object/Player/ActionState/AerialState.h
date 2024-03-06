@@ -13,5 +13,13 @@ public:
 	/// </summary>
 	void Update() override;
 
+private:
+
+	Vector3 velocity_ = {};
+
+	float decreeSpeed_ = 2.0f;
+
+	float jumpPower_ = 0.0f;
+
 };
 
