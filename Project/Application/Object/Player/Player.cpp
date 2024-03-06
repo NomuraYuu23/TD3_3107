@@ -9,9 +9,13 @@ void Player::Initialize(Model* model)
 	input_ = Input::GetInstance();
 	// 基底クラスの初期化
 	IObject::Initialize(model);
+	// コライダーの初期化
+	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
+	boxCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
+	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
+
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
-
 }
 
 void Player::Update()
@@ -21,28 +25,63 @@ void Player::Update()
 		actionState_->Update();
 	}
 
-	// 投げる処理
-
-
-
 	// 基底クラスの更新
 	IObject::Update();
+
+	// 武器の更新
+	if (weapon_) {
+
+		if (input_->TriggerKey(DIK_E)) {
+			weapon_->ChangeState(std::make_unique<ReturnState>());
+		}
+
+		weapon_->Update();
+	}
+
 }
 
 void Player::Draw(BaseCamera camera)
 {
+	// プレイヤーの描画
 	model_->Draw(worldtransform_, camera,material_.get());
+	// 武器の描画
+	if (weapon_) {
+		weapon_->Draw(camera);
+	}
 }
 
 void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
 
-	float absValue = 30.0f;
-	// 座標
-	ImGui::DragFloat3("translate", &worldtransform_.transform_.translate.x, 0.01f, -absValue, absValue);
+	if (ImGui::BeginTabBar("Param")) {
+		// 共通項目
+		if (ImGui::BeginTabItem("Common")) {
+			float absValue = 30.0f;
+			// 座標
+			ImGui::DragFloat3("translate", &worldtransform_.transform_.translate.x, 0.01f, -absValue, absValue);
+			ImGui::DragFloat3("velocity", &velocity_.x);
+			// 重力
+			ImGui::DragFloat("Gravity", &gravity_, 0.01f, -absValue, absValue);
+			
+			ImGui::EndTabItem();
+		}
+		// 地上
+		if (ImGui::BeginTabItem("OnGround")) {
 
+			ImGui::EndTabItem();
+		}
+		// 空中
+		if (ImGui::BeginTabItem("Aerial")) {
 
+			ImGui::EndTabItem();
+		}
+
+		// タブバーを終了
+		ImGui::EndTabBar();
+	}
+
+	ImGui::SeparatorText("");
 	// ステート確認
 	if (typeid(*actionState_) == typeid(AerialState)) {
 		stateCheck_ = true;
@@ -59,6 +98,18 @@ void Player::ImGuiDraw()
 	ImGui::Text(name.c_str());
 
 	ImGui::End();
+
+	// 武器のImGUi
+	if (weapon_) {
+		weapon_->ImGuiDraw();
+	}
+
+}
+
+void Player::OnCollision(ColliderParentObject2D* target, uint32_t tag)
+{
+
+	target, tag;
 
 }
 

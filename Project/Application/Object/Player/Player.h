@@ -25,6 +25,14 @@ public:
 	/// ImGui
 	/// </summary>
 	void ImGuiDraw() override;
+
+	/// <summary>
+	/// 衝突判定
+	/// </summary>
+	/// <param name="target"></param>
+	/// <param name="tag"></param>
+	void OnCollision(ColliderParentObject2D* target, uint32_t tag) override;
+
 public:
 	/// <summary>
 	/// ステートの変更
@@ -38,6 +46,7 @@ public:
 	/// <param name="newWeapon"></param>
 	void SetWeapon(std::unique_ptr<Weapon> newWeapon) {
 		weapon_ = std::move(newWeapon);
+		weapon_->SetParentAdress(&worldtransform_);
 	}
 
 public:
@@ -47,6 +56,11 @@ public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
 	std::unique_ptr<Weapon> weapon_;
+
+	// 速さベクトル
+	Vector3 velocity_ = {};
+
+	float gravity_ = 9.8f;
 
 	bool stateCheck_ = false;
 };
