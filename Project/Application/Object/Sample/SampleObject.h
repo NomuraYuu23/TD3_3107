@@ -17,6 +17,8 @@ public:
 
 	void ImGuiDraw();
 
+	void OnCollision(ColliderParentObject2D* target, uint32_t tag) { target, tag; }
+
 private:
 
 	/// <summary>

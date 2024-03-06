@@ -2,6 +2,7 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Input/Input.h"
+#include "../../Collider2D/CollisionConfig2D.h"
 
 SampleObject::~SampleObject()
 {
@@ -27,6 +28,9 @@ void SampleObject::Initialize(Model* model)
 
 	// コライダーの初期化
 	Box::Initialize(position2D_, scale2D_.x, scale2D_.y, this);
+
+	this->SetCollisionAttribute(kCollisionAttributeEnemy);
+	this->SetCollisionMask(kCollisionAttributePlayer);
 
 	RegisteringGlobalVariables();
 
