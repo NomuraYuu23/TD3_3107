@@ -137,8 +137,14 @@ void GameScene::Initialize() {
 	//circle1_ = std::make_unique<Circle>();
 	//circle1_->Initialize(circle1Center_, 160.0f, nullptr);
 
+	// プレイヤーの初期化
 	player_ = std::make_unique<Player>();
 	player_->Initialize(playerModel_.get());
+	// 武器の生成
+	std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>();
+	weapon->Initialize(weaponModel_.get());
+	// 武器の設定
+	player_->SetWeapon(std::move(weapon));
 
 }
 
@@ -178,8 +184,6 @@ void GameScene::Update() {
 	spotLightManager_->Update(spotLightDatas_);
 
 	//Obj
-	sampleObj_->Update();
-
 	player_->Update();
 
 	// あたり判定
@@ -200,7 +204,6 @@ void GameScene::Update() {
 	//collision2DManager_->ListRegister(circle_.get());
 	//collision2DManager_->ListRegister(circle1_.get());
 	collision2DManager_->ListRegister(&player_->boxCollider_);
-	collision2DManager_->ListRegister(sampleObj_.get());
 	collision2DManager_->CheakAllCollision();
 
 	collision2DDebugDraw_->Clear();
@@ -254,7 +257,6 @@ void GameScene::Draw() {
 	//3Dオブジェクトはここ
 	
 	//Obj
-	sampleObj_->Draw(camera_);
 	player_->Draw(camera_);
 	// スカイドーム
 	skydome_->Draw(camera_);
@@ -282,7 +284,7 @@ void GameScene::Draw() {
 	directionalLight_->Draw(dxCommon_->GetCommadList(), 6);
 
 	// パーティクルはここ
-	particleManager_->Draw();
+	//particleManager_->Draw();
 
 	Model::PostDraw();
 
@@ -379,8 +381,6 @@ void GameScene::ImguiDraw(){
 	ImGui::End();
 
 	//Obj
-	sampleObj_->ImGuiDraw();
-
 	player_->ImGuiDraw();
 
 	// スカイドーム
@@ -435,6 +435,7 @@ void GameScene::ModelCreate()
 
 	// プレイヤーモデル
 	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 }
 
 void GameScene::TextureLoad()
