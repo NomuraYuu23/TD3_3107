@@ -62,6 +62,6 @@ public:
 	// 重力
 	float gravity_ = 9.8f;
 	// 投げる方向
-	Vector3 throwDirect_ = {};
+	Vector3 throwDirect_ = {1,0,0};
 };
 

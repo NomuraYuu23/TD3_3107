@@ -1,5 +1,6 @@
 #pragma once
 #include "IWeaponState.h"
+#include "../../../Engine/Math/Vector3.h"
 
 class ThrownState : public IWeaponState
 {
@@ -18,6 +19,9 @@ public:
 	void ImGuiUpdate() override;
 
 private:
+
+	Vector3 velocity_;
+	float speedValue_;
 
 };
 

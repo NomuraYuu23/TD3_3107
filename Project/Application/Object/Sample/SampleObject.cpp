@@ -27,10 +27,10 @@ void SampleObject::Initialize(Model* model)
 	scale2D_ = { worldtransform_.transform_.scale.x * 2.0f, worldtransform_.transform_.scale.y * 2.0f };
 
 	// コライダーの初期化
-	Box::Initialize(position2D_, scale2D_.x, scale2D_.y, this);
+	//Box::Initialize(position2D_, scale2D_.x, scale2D_.y, this);
 
-	this->SetCollisionAttribute(kCollisionAttributeEnemy);
-	this->SetCollisionMask(kCollisionAttributePlayer);
+	//this->SetCollisionAttribute(kCollisionAttributeEnemy);
+	//this->SetCollisionMask(kCollisionAttributePlayer);
 
 	RegisteringGlobalVariables();
 
@@ -58,7 +58,7 @@ void SampleObject::Update()
 	material_->SetEnableLighting(enableLighting_);
 	material_->SetShininess(shininess_);
 
-	Box::Update(position2D_, scale2D_.x, scale2D_.y);
+	//Box::Update(position2D_, scale2D_.x, scale2D_.y);
 }
 
 void SampleObject::Draw(BaseCamera camera)
