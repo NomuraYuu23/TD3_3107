@@ -16,7 +16,7 @@ void ThrownState::Update()
 {
 
 	if (this->isEnd_) {
-		this->weapon_->ChangeState(std::make_unique<ReturnState>());
+		weapon_->ChangeRequest(Weapon::StateName::kImpaled);
 		return;
 	}
 

@@ -31,11 +31,12 @@ void Player::Update()
 	// 武器の更新
 	if (weapon_) {
 		if (input_->TriggerKey(DIK_E)) {
-			weapon_->ChangeState(std::make_unique<ReturnState>());
+			weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			//weapon_->ChangeState(std::make_unique<ReturnState>());
 		}
 		if (input_->TriggerKey(DIK_Q)) {
 			weapon_->throwDirect_ = throwDirect_;
-			weapon_->ChangeState(std::make_unique<ThrownState>());
+			weapon_->ChangeRequest(Weapon::StateName::kThrown);
 		}
 		weapon_->Update();
 	}

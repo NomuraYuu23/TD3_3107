@@ -17,7 +17,8 @@ void ReturnState::Update()
 {
 	// 終了処理
 	if (isEnd_) {
-		weapon_->ChangeState(std::make_unique<HoldState>());
+		weapon_->ChangeRequest(Weapon::StateName::kHold);
+		//weapon_->ChangeState(std::make_unique<HoldState>());
 		return;
 	}
 
