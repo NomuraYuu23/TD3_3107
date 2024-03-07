@@ -6,3 +6,4 @@
 #include "IWeaponState.h"
 #include "HoldState.h"
 #include "ReturnState.h"
+#include "ThrownState.h"

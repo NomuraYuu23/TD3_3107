@@ -6,7 +6,7 @@
 
 class Player : public IObject
 {
-public:
+public: // 継承
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -25,7 +25,6 @@ public:
 	/// ImGui
 	/// </summary>
 	void ImGuiDraw() override;
-
 	/// <summary>
 	/// 衝突判定
 	/// </summary>
@@ -33,7 +32,7 @@ public:
 	/// <param name="tag"></param>
 	void OnCollision(ColliderParentObject2D* target, uint32_t tag) override;
 
-public:
+public: // メンバ関数
 	/// <summary>
 	/// ステートの変更
 	/// </summary>
@@ -55,13 +54,14 @@ public:
 
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
+	// 武器
 	std::unique_ptr<Weapon> weapon_;
 
 	// 速さベクトル
 	Vector3 velocity_ = {};
-
+	// 重力
 	float gravity_ = 9.8f;
-
+	// 投げる方向
 	Vector3 throwDirect_ = {};
 };
 

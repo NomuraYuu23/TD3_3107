@@ -58,7 +58,5 @@ public:
 	int32_t enableLighting_;
 	float shininess_;
 
-
-
 };
 

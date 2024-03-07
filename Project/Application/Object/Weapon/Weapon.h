@@ -52,20 +52,32 @@ public: // メンバ関数
 		worldtransform_.SetParent(parentAdress_);
 		worldtransform_.transform_.translate = localOffset_;
 	}
+
+	/// <summary>
+	/// 親子の設定解除
+	/// </summary>
 	void ReleaseParent() {
 		worldtransform_.SetParent(nullptr);
 		worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 		worldtransform_.UpdateMatrix();
 	}
 
+	/// <summary>
+	/// 親のワールド座標
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetTargetPosition() { return parentAdress_->GetWorldPosition(); }
+	
+	// 投げる方向
+	Vector3 throwDirect_ = {};
 
 private:
 	// 現在の状態
 	std::unique_ptr<IWeaponState> state_;
-
+	// 親のワールドトランスフォーム
 	WorldTransform* parentAdress_ = nullptr;
-
+	// 動かすオフセット座標
 	Vector3 localOffset_ = {};
+
 };
 

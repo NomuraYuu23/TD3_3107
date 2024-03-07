@@ -17,5 +17,7 @@ public:
 	/// </summary>
 	void ImGuiUpdate() override;
 
+private:
+
 };
 

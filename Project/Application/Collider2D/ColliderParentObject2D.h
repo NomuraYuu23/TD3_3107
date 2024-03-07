@@ -8,4 +8,4 @@ class Enemy;
 class SampleObject;
 class IObject;
 
-using ColliderParentObject2D = std::variant<Sample*, Player*, SampleObject*, IObject*, Weapon*>;
+using ColliderParentObject2D = std::variant<Player*, IObject*, Weapon*>;

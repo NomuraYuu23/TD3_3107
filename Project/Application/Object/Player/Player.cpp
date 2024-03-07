@@ -30,11 +30,13 @@ void Player::Update()
 
 	// 武器の更新
 	if (weapon_) {
-
 		if (input_->TriggerKey(DIK_E)) {
 			weapon_->ChangeState(std::make_unique<ReturnState>());
 		}
-
+		if (input_->TriggerKey(DIK_Q)) {
+			weapon_->throwDirect_ = throwDirect_;
+			weapon_->ChangeState(std::make_unique<ThrownState>());
+		}
 		weapon_->Update();
 	}
 
@@ -63,7 +65,11 @@ void Player::ImGuiDraw()
 			ImGui::DragFloat3("velocity", &velocity_.x);
 			// 重力
 			ImGui::DragFloat("Gravity", &gravity_, 0.01f, -absValue, absValue);
+		
+			ImGui::DragFloat3("ThrowDirect", &throwDirect_.x, 0.01f, -10, 10);
 			
+			throwDirect_ = throwDirect_.Normalize(throwDirect_);
+
 			ImGui::EndTabItem();
 		}
 		// 地上

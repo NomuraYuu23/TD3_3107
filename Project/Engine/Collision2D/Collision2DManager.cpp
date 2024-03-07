@@ -46,12 +46,21 @@ void Collision2DManager::CheakAllCollision()
 void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderShape2D colliderB)
 {
 
-	std::visit([](const auto& a, const auto& b) {
+	//IObject* parentA = std::get<0>(colliderA)->GetParentObject();
+	//auto parentB = std::get<0>(colliderB)->GetParentObject();
+
+	std::visit([&](const auto& a, const auto& b) {
 		// 衝突フィルタリング
 		if (!(a->GetCollisionAttribute() & b->GetCollisionMask()) ||
 			!(b->GetCollisionAttribute() & a->GetCollisionMask())) {
 			return;
 		}
+
+		//// 適切なクラスにキャストする
+		//IObject* objectA = nullptr;
+		//if (auto* box = std::get_if<Box*>(a)) {
+		//	objectA = *box;
+		//}
 
 		if (Collision2D::IsCollision(*a, *b)) {
 			// 衝突処理
@@ -61,6 +70,9 @@ void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderS
 			//	collisionData = { p2, t2, pushBackDist ,p1};
 			//	y->OnCollision(x, collisionData);
 			//	}, a->GetParentObject(), b->GetParentObject());
+
+			//parentA->OnCollision(colliderB, 0);
+
 		}
 		}, colliderA, colliderB);
 
