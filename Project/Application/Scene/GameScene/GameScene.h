@@ -145,4 +145,7 @@ private:
 
 	std::unique_ptr<Model> weaponModel_;
 
+	std::unique_ptr<MapManager> mapManager_;
+	std::unique_ptr<Model> terrainModel_;
+
 };

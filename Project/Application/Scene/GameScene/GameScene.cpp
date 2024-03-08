@@ -117,25 +117,6 @@ void GameScene::Initialize() {
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateNameCollision2DDebugDraw].Get(),
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateNameCollision2DDebugDraw].Get());
 
-	boxCenter_ = { 640.0f,360.0f };
-	
-	box1Center_ = { 0.0f,0.0f };
-
-	circleCenter_ = { 0.0f,360.0f };
-
-	circle1Center_ = { 640.0f,0.0f };
-
-	//box_ = std::make_unique<Box>();
-	//box_->Initialize(boxCenter_, 160.0f, 160.0f, nullptr);
-
-	//box1_ = std::make_unique<Box>();
-	//box1_->Initialize(box1Center_, 160.0f, 160.0f, nullptr);
-
-	//circle_ = std::make_unique<Circle>();
-	//circle_->Initialize(circleCenter_, 160.0f, nullptr);
-
-	//circle1_ = std::make_unique<Circle>();
-	//circle1_->Initialize(circle1Center_, 160.0f, nullptr);
 
 	// プレイヤーの初期化
 	player_ = std::make_unique<Player>();
@@ -146,6 +127,8 @@ void GameScene::Initialize() {
 	// 武器の設定
 	player_->SetWeapon(std::move(weapon));
 
+	mapManager_ = std::make_unique<MapManager>();
+	mapManager_->Initialize(terrainModel_.get());
 }
 
 /// <summary>
@@ -184,25 +167,16 @@ void GameScene::Update() {
 	spotLightManager_->Update(spotLightDatas_);
 
 	//Obj
+	// マップ
+	mapManager_->Update();
+	// プレイヤー
 	player_->Update();
 
 	// あたり判定
 	collisionManager_->ListClear();
-	//collisionManager_->ListRegister();
 	collisionManager_->CheakAllCollision();
 
-	float radius = 160.0f;
-
-	//box_->Update(boxCenter_, radius, radius);
-	//box1_->Update(box1Center_, radius, radius);
-	//circle_->Update(circleCenter_, radius);
-	//circle1_->Update(circle1Center_, radius);
-
 	collision2DManager_->ListClear();
-	//collision2DManager_->ListRegister(box_.get());
-	//collision2DManager_->ListRegister(box1_.get());
-	//collision2DManager_->ListRegister(circle_.get());
-	//collision2DManager_->ListRegister(circle1_.get());
 	collision2DManager_->ListRegister(&player_->boxCollider_);
 	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
 	collision2DManager_->CheakAllCollision();
@@ -259,6 +233,9 @@ void GameScene::Draw() {
 	
 	//Obj
 	player_->Draw(camera_);
+	// ブロック用
+	mapManager_->Draw(camera_);
+
 	// スカイドーム
 	skydome_->Draw(camera_);
 
@@ -382,6 +359,8 @@ void GameScene::ImguiDraw(){
 	ImGui::End();
 
 	//Obj
+	mapManager_->ImGuiDraw();
+
 	player_->ImGuiDraw();
 
 	// スカイドーム
@@ -436,7 +415,10 @@ void GameScene::ModelCreate()
 
 	// プレイヤーモデル
 	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
-	weaponModel_.reset(Model::Create("Resources/Spear/", "Spear.obj", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/GameObject/Spear/", "Spear.obj", dxCommon_, textureHandleManager_.get()));
+
+	// 地形ブロック
+	terrainModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
 }
 
 void GameScene::TextureLoad()

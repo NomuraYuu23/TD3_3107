@@ -5,6 +5,10 @@
 class IObject
 {
 public:
+	IObject() {};
+	~IObject() = default;
+
+public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
