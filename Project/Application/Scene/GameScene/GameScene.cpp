@@ -129,6 +129,9 @@ void GameScene::Initialize() {
 
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->Initialize(terrainModel_.get());
+
+	gameCamera_ = std::make_unique<GameBasicCamera>();
+	gameCamera_->Initialize();
 }
 
 /// <summary>
@@ -358,6 +361,8 @@ void GameScene::ImguiDraw(){
 
 	collision2DDebugDraw_->ImGuiDraw();
 
+	gameCamera_->ImGuiDraw();
+
 #endif // _DEBUG
 
 }
@@ -385,7 +390,12 @@ void GameScene::DebugCameraUpdate()
 		camera_.Update();
 	}
 	else {
-
+		// 
+		gameCamera_->Update();
+		// 
+		camera_ = static_cast<BaseCamera>(*gameCamera_.get());
+		// 
+		camera_.Update();
 	}
 #endif
 

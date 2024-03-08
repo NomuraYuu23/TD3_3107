@@ -40,6 +40,9 @@ private:
 	/// ブロックの追加
 	/// </summary>
 	void RegisterBlock();
+	void RegisterBlock(const Vector3& position);
+
+	void InitializePlacement();
 
 private:
 	// 地形ブロック

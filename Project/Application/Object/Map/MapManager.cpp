@@ -11,7 +11,7 @@ void MapManager::Initialize(Model* model)
 		it != blocks_.end();++it) {
 		(*it)->Initialize(terrainModel_);
 	}
-
+	InitializePlacement();
 }
 
 void MapManager::Update()
@@ -68,4 +68,26 @@ void MapManager::RegisterBlock()
 	newBlock->Initialize(terrainModel_);
 	// 追加
 	blocks_.push_back(std::move(newBlock));
+}
+
+void MapManager::RegisterBlock(const Vector3& position)
+{
+	std::unique_ptr<IObject> newBlock;
+	newBlock = std::make_unique<Terrain>();
+	newBlock->Initialize(terrainModel_);
+	newBlock->worldtransform_.transform_.translate = position;
+	// 追加
+	blocks_.push_back(std::move(newBlock));
+
+}
+
+void MapManager::InitializePlacement()
+{
+	// 横（地面
+	for (int i = 0; i < 30; i++) {
+		RegisterBlock({ 20.0f - 2.0f * (float)i,-2.0f,0 });
+	}
+	for (int i = 0; i < 1; i++) {
+		RegisterBlock({ 8.0f, 2.0f * (float)i, 0 });
+	}
 }

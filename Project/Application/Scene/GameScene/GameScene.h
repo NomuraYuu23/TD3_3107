@@ -14,6 +14,7 @@
 //#include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
 //#include "../../Object/Player/Player.h"	// プレイヤー
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
+#include "../../Object/GameCamera/GameBasicCamera.h"
 
 #include "../../../Engine/Light/DirectionalLight/DirectionalLight.h" // 平行光源
 #include "../../../Engine/Light/PointLight/PointLightManager.h" // 点光源
@@ -151,5 +152,7 @@ private:
 
 	std::unique_ptr<MapManager> mapManager_;
 	std::unique_ptr<Model> terrainModel_;
+
+	std::unique_ptr<GameBasicCamera> gameCamera_;
 
 };

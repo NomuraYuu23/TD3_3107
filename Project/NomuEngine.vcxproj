@@ -189,6 +189,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Weapon\WeaponState\HoldState.cpp" />
     <ClCompile Include="Application\Object\IObject.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\ImpaledState.cpp" />
+    <ClCompile Include="Application\Object\GameCamera\GameBasicCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3D\Material.cpp" />
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
@@ -360,6 +361,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Map\Terrain.h" />
     <ClInclude Include="Application\Object\Map\MapManager.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponTimer.h" />
+    <ClInclude Include="Application\Object\GameCamera\GameBasicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
