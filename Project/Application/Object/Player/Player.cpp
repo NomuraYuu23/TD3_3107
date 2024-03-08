@@ -10,9 +10,10 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 	// コライダーの初期化
-	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
-	boxCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
-	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
+	scale2D_.x *= 0.95f;
+	circleCollider_.Initialize(position2D_, scale2D_.x, this);
+	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
+	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
@@ -27,12 +28,13 @@ void Player::Update()
 
 	// 基底クラスの更新
 	IObject::Update();
+	// コライダー
+	CircleColliderUpdate();
 
 	// 武器の更新
 	if (weapon_) {
 		if (input_->TriggerKey(DIK_E)) {
 			weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			//weapon_->ChangeState(std::make_unique<ReturnState>());
 		}
 		if (input_->TriggerKey(DIK_Q)) {
 			weapon_->throwDirect_ = throwDirect_;
@@ -115,11 +117,22 @@ void Player::OnCollision(ColliderParentObject2D target)
 	// 武器との衝突
 	if (std::holds_alternative<Weapon*>(target)) {
 		// 壁に刺さっている状態なら
-		if (std::holds_alternative<ImpaledState*>(weapon_->nowState_)) {
+		if (std::holds_alternative<ImpaledState*>(weapon_->nowState_) && !weapon_->GetIsTread()) {
+			weapon_->SetIsTread(true);
+			//weapon_->treadTimer_.StartTimer(30);
 			ChangeState(std::make_unique<AerialState>());
 			return;
 		}
 	}
+	// 地形との当たり判定
+	else if (std::holds_alternative<Terrain*>(target)) {
+
+
+
+	}
+
+	// 
+
 }
 
 void Player::ChangeState(std::unique_ptr<IActionState> newState)

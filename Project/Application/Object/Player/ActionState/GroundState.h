@@ -13,5 +13,9 @@ public:
 	/// </summary>
 	void Update() override;
 
+private:
+	// 移動
+	float moveSpeed_;
+
 };
 

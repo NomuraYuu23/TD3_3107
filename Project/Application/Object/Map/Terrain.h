@@ -6,6 +6,7 @@
 /// </summary>
 class Terrain : public IObject
 {
+public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -38,6 +39,7 @@ private:
 
 	static uint32_t sSerialNumber_;
 
+	
 
 };
 

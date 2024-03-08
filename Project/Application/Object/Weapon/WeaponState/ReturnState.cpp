@@ -2,6 +2,7 @@
 #include "../Weapon.h"
 #include "../../../Engine/Input/Input.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../Engine/Math/Math.h"
 
 void ReturnState::Initialize()
 {
@@ -54,4 +55,7 @@ void ReturnState::EaseUpdate()
 	IWeaponState::EaseUpdate();
 	// 線形補間による座標更新
 	weapon_->worldtransform_.transform_.translate = Ease::Easing(Ease::EaseName::EaseOutSine, startPosition_, weapon_->GetTargetPosition(), ease_t_);
+
+	//weapon_->worldtransform_.transform_.translate.x += Math::Lerp(startPosition_.x, weapon_->GetTargetPosition().x, 0.3f);
+	//weapon_->worldtransform_.transform_.translate.y += Math::Lerp(startPosition_.y, weapon_->GetTargetPosition().y, 0.3f);
 }

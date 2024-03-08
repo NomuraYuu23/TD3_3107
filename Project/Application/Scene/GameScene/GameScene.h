@@ -82,6 +82,10 @@ private:
 
 private:
 
+	void CollisionUpdate();
+
+private:
+
 	// パーティクルマネージャー
 	ParticleManager* particleManager_ = nullptr;
 	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;

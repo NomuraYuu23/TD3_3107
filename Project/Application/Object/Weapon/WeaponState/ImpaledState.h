@@ -21,5 +21,6 @@ private:
 
 	int easeTime_ = 0;
 
+
 };
 

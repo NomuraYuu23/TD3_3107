@@ -3,6 +3,7 @@
 
 void GroundState::Initialize()
 {
+	moveSpeed_ = 6.0f;
 }
 
 void GroundState::Update()
@@ -14,12 +15,11 @@ void GroundState::Update()
 	}
 
 	// 移動入力
-	float tmpSpeed = 2.0f;
 	if (player_->input_->PushKey(DIK_A)) {
-		player_->velocity_.x = -tmpSpeed;
+		player_->velocity_.x = -moveSpeed_;
 	}
 	else if (player_->input_->PushKey(DIK_D)) {
-		player_->velocity_.x = tmpSpeed;
+		player_->velocity_.x = moveSpeed_;
 	}
 	else {
 		player_->velocity_.x = 0;

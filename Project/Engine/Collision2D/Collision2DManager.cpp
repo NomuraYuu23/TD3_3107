@@ -48,8 +48,12 @@ void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderS
 {
 	std::visit([](const auto& a, const auto& b) {
 		// 衝突フィルタリング
-		if (!(a->GetCollisionAttribute() & b->GetCollisionMask()) ||
-			!(b->GetCollisionAttribute() & a->GetCollisionMask())) {
+		//if (!(a->GetCollisionAttribute() & b->GetCollisionMask()) ||
+		//	!(b->GetCollisionAttribute() & a->GetCollisionMask())) {
+		//	return;
+		//}
+
+		if (a->GetCollisionAttribute() == b->GetCollisionAttribute()) {
 			return;
 		}
 

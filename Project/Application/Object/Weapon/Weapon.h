@@ -109,6 +109,26 @@ public: // メンバ関数
 	// 投げる方向
 	Vector3 throwDirect_ = {};
 
+	/// <summary>
+	/// 踏まれたフラグ取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsTread() { return isTread_; }
+
+	/// <summary>
+	/// 踏まれたフラグ設定
+	/// </summary>
+	/// <param name="isJump"></param>
+	void SetIsTread(bool isTread) 
+	{ 
+		isTread_ = isTread;
+		//coolTimer_ = 0;
+	}
+
+	//WeaponTimer treadTimer_;
+
+	float coolTimer_ = 0;
+
 private:
 	// ステート
 	std::unique_ptr<IWeaponState> state_;
@@ -116,6 +136,8 @@ private:
 	WorldTransform* parentAdress_ = nullptr;
 	// 動かすオフセット座標
 	Vector3 localOffset_ = {};
+	// 一回踏んだか確認フラグ
+	bool isTread_ = false;
 
 };
 

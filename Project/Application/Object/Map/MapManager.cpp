@@ -52,6 +52,14 @@ void MapManager::ImGuiDraw()
 
 }
 
+void MapManager::CollisionRegister(Collision2DManager* collisionManager)
+{
+	for (std::list<std::unique_ptr<IObject>>::iterator it = blocks_.begin();
+		it != blocks_.end(); ++it) {
+		collisionManager->ListRegister(&(*it)->boxCollider_);
+	}
+}
+
 void MapManager::RegisterBlock()
 {
 	//IObject* newBlock =

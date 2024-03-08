@@ -25,6 +25,8 @@ void Terrain::Update()
 
 	// 基底クラスの更新
 	IObject::Update();
+	// コライダー
+	BoxColliderUpdate();
 }
 
 void Terrain::Draw(BaseCamera camera)

@@ -1,6 +1,6 @@
 #pragma once
 #include "../../Engine/3D/Model.h"
-#include "../../Engine/Collider2D/Box.h"
+#include "../../Engine/Collider2D/ColliderShape2D.h"
 
 class IObject
 {
@@ -44,6 +44,15 @@ public: // アクセッサ
 		return boxCollider_;
 	}
 
+protected:
+	void BoxColliderUpdate() {
+		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y);
+	}
+
+	void CircleColliderUpdate() {
+		circleCollider_.Update(position2D_, scale2D_.x);
+	}
+
 public:
 	// モデル
 	Model* model_ = nullptr;
@@ -56,6 +65,7 @@ public:
 
 	// コライダー
 	Box boxCollider_;
+	Circle circleCollider_;
 
 	// マテリアル関係
 	std::unique_ptr<Material> material_ = nullptr;

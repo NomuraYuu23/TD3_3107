@@ -9,7 +9,7 @@ void ThrownState::Initialize()
 	// ステート更新
 	SetNowState(this);
 	// 開始設定
-	this->StartEasing(90);
+	//this->StartEasing(90);
 	// 速さ
 	speedValue_ = 10.0f;
 	velocity_ = {};

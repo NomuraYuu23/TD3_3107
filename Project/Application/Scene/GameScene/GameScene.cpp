@@ -34,7 +34,7 @@ void GameScene::Initialize() {
 	TransformStructure baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
 		0.58f,0.0f,0.0f,
-		0.0f, 23.0f, -35.0f };
+		0.0f, 23.0f, -100.0f };
 	camera_.SetTransform(baseCameraTransform);
 
 	//パーティクル
@@ -171,21 +171,9 @@ void GameScene::Update() {
 	mapManager_->Update();
 	// プレイヤー
 	player_->Update();
-
-	// あたり判定
-	collisionManager_->ListClear();
-	collisionManager_->CheakAllCollision();
-
-	collision2DManager_->ListClear();
-	collision2DManager_->ListRegister(&player_->boxCollider_);
-	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
-	collision2DManager_->CheakAllCollision();
-
-	collision2DDebugDraw_->Clear();
-	//collision2DDebugDraw_->Register(box_.get());
-	//collision2DDebugDraw_->Register(box1_.get());
-	//collision2DDebugDraw_->Register(circle_.get());
-	//collision2DDebugDraw_->Register(circle1_.get());
+	
+	// 当たり判定の設定とチェック
+	CollisionUpdate();
 	
 	// 影
 	ShadowUpdate();
@@ -396,6 +384,9 @@ void GameScene::DebugCameraUpdate()
 		// ビュー行列の転送
 		camera_.Update();
 	}
+	else {
+
+	}
 #endif
 
 }
@@ -415,7 +406,7 @@ void GameScene::ModelCreate()
 
 	// プレイヤーモデル
 	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
-	weaponModel_.reset(Model::Create("Resources/GameObject/Spear/", "Spear.obj", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/GameObject/SpearB/", "SpearB.obj", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
@@ -472,5 +463,28 @@ void GameScene::ShadowUpdate()
 
 	// 影が出るか
 	//shadowManager_->SeeShadow();
+
+}
+
+void GameScene::CollisionUpdate()
+{
+
+	// あたり判定
+	collisionManager_->ListClear();
+	collisionManager_->CheakAllCollision();
+
+	collision2DManager_->ListClear();
+	collision2DManager_->ListRegister(&player_->circleCollider_);
+	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
+	
+	mapManager_->CollisionRegister(collision2DManager_.get());
+
+	collision2DManager_->CheakAllCollision();
+
+	collision2DDebugDraw_->Clear();
+	//collision2DDebugDraw_->Register(box_.get());
+	//collision2DDebugDraw_->Register(box1_.get());
+	//collision2DDebugDraw_->Register(circle_.get());
+	//collision2DDebugDraw_->Register(circle1_.get());
 
 }

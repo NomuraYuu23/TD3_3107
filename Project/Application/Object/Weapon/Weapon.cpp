@@ -8,10 +8,10 @@ void Weapon::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 	worldtransform_.transform_.translate.x = 2.0f;
-
+	worldtransform_.usedDirection_ = true;
 	// 親子関係でのオフセット
 	localOffset_ = { 2.0f,0,0 };
-
+	scale2D_ *= 0.95f;
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
@@ -27,8 +27,20 @@ void Weapon::Update()
 		state_->Update();
 	}
 
+	// 二段ジャンプのクールタイム
+	//treadTimer_.UpdateTimer();
+	if (isTread_) {
+		coolTimer_ += (1.0f / 30.0f);
+		if (coolTimer_ >= 1.0f) {
+			isTread_ = false;
+			coolTimer_ = 0;
+		}
+	}
+
 	// 基底クラスの更新
 	IObject::Update();
+	// コライダー
+	BoxColliderUpdate();
 }
 
 void Weapon::Draw(BaseCamera camera)
@@ -50,6 +62,10 @@ void Weapon::ImGuiDraw()
 		SettingParent();
 	}
 	
+	// 回転処理
+	ImGui::DragFloat3("Rotation", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
+	worldtransform_.direction_ = Vector3::Normalize(this->throwDirect_);
+
 	// ローカル座標
 	ImGui::DragFloat3("localPos", &worldtransform_.transform_.translate.x, 0.01f, -40.0f, 40.0f);
 	// オフセット
@@ -69,6 +85,15 @@ void Weapon::ImGuiDraw()
 
 void Weapon::OnCollision(ColliderParentObject2D target)
 {
+	// 壁・ブロックとの衝突判定
+	if (std::holds_alternative<Terrain*>(target)) {
+		// 投げられている状態なら刺さった状態へ
+		if (std::holds_alternative<ThrownState*>(nowState_)) {
+			ChangeRequest(Weapon::StateName::kImpaled);
+			return;
+		}
+	}
+
 	target;
 }
 
