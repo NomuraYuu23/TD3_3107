@@ -5,6 +5,8 @@
 
 void ReturnState::Initialize()
 {
+	SetNowState(this);
+
 	// 親子関係解除
 	weapon_->ReleaseParent();
 

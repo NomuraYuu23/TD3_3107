@@ -1,5 +1,4 @@
 #pragma once
-
 ///
 ///	武器ステートのIncludePath
 /// 

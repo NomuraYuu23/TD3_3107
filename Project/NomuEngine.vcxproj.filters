@@ -873,6 +873,9 @@
     <ClInclude Include="Application\Object\Weapon\WeaponState\ImpaledState.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Object\Weapon\WeaponState\StateList.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">

@@ -1,6 +1,7 @@
 #include "Weapon.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Input/Input.h"
+#include "../../Collider2D/CollisionConfig2D.h"
 
 void Weapon::Initialize(Model* model)
 {
@@ -13,6 +14,8 @@ void Weapon::Initialize(Model* model)
 
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
+	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
+	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
 	ChangeState(std::make_unique<HoldState>());
 
 }
@@ -64,9 +67,9 @@ void Weapon::ImGuiDraw()
 
 }
 
-void Weapon::OnCollision(ColliderParentObject2D* target, uint32_t tag)
+void Weapon::OnCollision(ColliderParentObject2D target)
 {
-	target, tag;
+	target;
 }
 
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)

@@ -204,6 +204,7 @@ void GameScene::Update() {
 	//collision2DManager_->ListRegister(circle_.get());
 	//collision2DManager_->ListRegister(circle1_.get());
 	collision2DManager_->ListRegister(&player_->boxCollider_);
+	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
 	collision2DManager_->CheakAllCollision();
 
 	collision2DDebugDraw_->Clear();
@@ -435,7 +436,7 @@ void GameScene::ModelCreate()
 
 	// プレイヤーモデル
 	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
-	weaponModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/Spear/", "Spear.obj", dxCommon_, textureHandleManager_.get()));
 }
 
 void GameScene::TextureLoad()

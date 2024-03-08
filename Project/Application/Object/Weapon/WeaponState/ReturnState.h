@@ -17,9 +17,14 @@ public:
 	/// ImGui
 	/// </summary>
 	void ImGuiUpdate() override;
-
+	/// <summary>
+	/// 開始設定
+	/// </summary>
+	/// <param name="frame"></param>
 	void StartEasing(int frame) override;
-
+	/// <summary>
+	/// イージング（タイマー）更新
+	/// </summary>
 	void EaseUpdate() override;
 private:
 

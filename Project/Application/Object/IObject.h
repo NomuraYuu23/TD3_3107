@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	virtual void OnCollision(ColliderParentObject2D* target, uint32_t tag) = 0;
+	virtual void OnCollision(ColliderParentObject2D target) = 0;
 
 public: // アクセッサ
 	/// <summary>

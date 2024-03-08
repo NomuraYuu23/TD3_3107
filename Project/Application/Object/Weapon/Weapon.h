@@ -1,6 +1,7 @@
 #pragma once
 #include "../IObject.h"
 #include "WeaponState/WeaponStateList.h"
+#include "WeaponState/StateList.h"
 
 class Weapon : public IObject
 {
@@ -15,6 +16,9 @@ public: // サブクラス
 
 		//kCount,
 	};
+
+	// 現在のステート
+	WeaponState nowState_;
 
 public: // 継承
 	/// <summary>
@@ -40,7 +44,7 @@ public: // 継承
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	void OnCollision(ColliderParentObject2D* target, uint32_t tag) override;
+	void OnCollision(ColliderParentObject2D target) override;
 
 private:
 	/// <summary>
@@ -106,7 +110,7 @@ public: // メンバ関数
 	Vector3 throwDirect_ = {};
 
 private:
-	// 現在の状態
+	// ステート
 	std::unique_ptr<IWeaponState> state_;
 	// 親のワールドトランスフォーム
 	WorldTransform* parentAdress_ = nullptr;

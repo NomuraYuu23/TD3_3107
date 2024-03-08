@@ -1,4 +1,5 @@
 #pragma once
+#include "StateList.h"
 #include "../../../Engine/2D/ImguiManager.h"
 
 class Weapon;
@@ -32,11 +33,19 @@ public:
 	/// </summary>
 	/// <param name="frame"></param>
 	virtual void StartEasing(int frame);
+
 protected:
 	/// <summary>
 	/// イージングの更新
 	/// </summary>
 	virtual void EaseUpdate();
+
+public: //アクセッサ
+	/// <summary>
+	/// 現状のステート設定
+	/// </summary>
+	/// <param name="state"></param>
+	void SetNowState(WeaponState state);
 
 protected:
 	// 武器
@@ -45,11 +54,10 @@ protected:
 	float ease_t_ = 0;
 	// 終了フレーム数
 	float easingEndFrame_ = 0;
+	// 開始フラグ
+	bool isStart_ = false;
 	// 終了タイミング取得
 	bool isEnd_ = false;
-protected:
-	//// イージング中か
-	//bool isEasing_ = false;
 
 };
 

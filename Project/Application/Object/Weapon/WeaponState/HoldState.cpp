@@ -5,5 +5,6 @@ void HoldState::Initialize()
 {
 	// 親子付け
 	weapon_->SettingParent();
+	SetNowState(this);
 
 }

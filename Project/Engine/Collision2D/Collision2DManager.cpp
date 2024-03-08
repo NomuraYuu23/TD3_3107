@@ -1,5 +1,6 @@
 #include "Collision2DManager.h"
 #include "Collision2D.h"
+#include "../../../Application/Object/ObjectList.h"
 
 void Collision2DManager::Initialize()
 {
@@ -45,33 +46,21 @@ void Collision2DManager::CheakAllCollision()
 
 void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderShape2D colliderB)
 {
-
-	//IObject* parentA = std::get<0>(colliderA)->GetParentObject();
-	//auto parentB = std::get<0>(colliderB)->GetParentObject();
-
-	std::visit([&](const auto& a, const auto& b) {
+	std::visit([](const auto& a, const auto& b) {
 		// 衝突フィルタリング
 		if (!(a->GetCollisionAttribute() & b->GetCollisionMask()) ||
 			!(b->GetCollisionAttribute() & a->GetCollisionMask())) {
 			return;
 		}
 
-		//// 適切なクラスにキャストする
-		//IObject* objectA = nullptr;
-		//if (auto* box = std::get_if<Box*>(a)) {
-		//	objectA = *box;
-		//}
-
 		if (Collision2D::IsCollision(*a, *b)) {
 			// 衝突処理
-			//std::visit([=](const auto& x, const auto& y) {
-			//	CollisionData collisionData = { p1, t1, pushBackDist ,p2};
-			//	x->OnCollision(y, collisionData);
-			//	collisionData = { p2, t2, pushBackDist ,p1};
-			//	y->OnCollision(x, collisionData);
-			//	}, a->GetParentObject(), b->GetParentObject());
-
-			//parentA->OnCollision(colliderB, 0);
+			std::visit([=](const auto& x, const auto& y) {
+				//CollisionData collisionData = { p1, t1, pushBackDist ,p2};
+				x->OnCollision(y);
+				//collisionData = { p2, t2, pushBackDist ,p1};
+				y->OnCollision(x);
+				}, a->GetParentObject(), b->GetParentObject());
 
 		}
 		}, colliderA, colliderB);

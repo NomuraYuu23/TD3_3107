@@ -110,11 +110,16 @@ void Player::ImGuiDraw()
 
 }
 
-void Player::OnCollision(ColliderParentObject2D* target, uint32_t tag)
+void Player::OnCollision(ColliderParentObject2D target)
 {
-
-	target, tag;
-
+	// 武器との衝突
+	if (std::holds_alternative<Weapon*>(target)) {
+		// 壁に刺さっている状態なら
+		if (std::holds_alternative<ImpaledState*>(weapon_->nowState_)) {
+			ChangeState(std::make_unique<AerialState>());
+			return;
+		}
+	}
 }
 
 void Player::ChangeState(std::unique_ptr<IActionState> newState)

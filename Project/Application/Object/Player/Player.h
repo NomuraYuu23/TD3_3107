@@ -30,7 +30,7 @@ public: // 継承
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	void OnCollision(ColliderParentObject2D* target, uint32_t tag) override;
+	void OnCollision(ColliderParentObject2D target) override;
 
 public: // メンバ関数
 	/// <summary>
@@ -47,6 +47,8 @@ public: // メンバ関数
 		weapon_ = std::move(newWeapon);
 		weapon_->SetParentAdress(&worldtransform_);
 	}
+
+	Weapon* GetWeapon() { return weapon_.get(); }
 
 public:
 	// 入力

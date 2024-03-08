@@ -17,5 +17,9 @@ public:
 	/// </summary>
 	void ImGuiUpdate() override;
 
+private:
+
+	int easeTime_ = 0;
+
 };
 

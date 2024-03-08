@@ -4,8 +4,8 @@
 void ImpaledState::Initialize()
 {
 	// 終了までのカウント開始
-	StartEasing(120);
-
+	//StartEasing(120);
+	SetNowState(this);
 }
 
 void ImpaledState::Update()
@@ -25,6 +25,19 @@ void ImpaledState::ImGuiUpdate()
 {
 
 	ImGui::Begin("Impaled");
+
+	if (ImGui::Button("ReturnButton")) {
+		isEnd_ = true;
+	}
+
+	ImGui::Separator();
+
+	ImGui::DragInt("easeTime", &easeTime_, 1, 1, 600);
+
+	if (ImGui::Button("EasingStart")) {
+		isStart_ = true;
+		StartEasing(easeTime_);
+	}
 
 	ImGui::End();
 
