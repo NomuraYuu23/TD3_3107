@@ -3,6 +3,7 @@
 #include "../../../Engine/Input/Input.h"
 #include "../../../Engine/Math/Ease.h"
 #include "../../../Engine/Math/Math.h"
+#include "../../GameUtility/MathUtility.h"
 
 void ReturnState::Initialize()
 {
@@ -11,7 +12,7 @@ void ReturnState::Initialize()
 	// 親子関係解除
 	weapon_->ReleaseParent();
 
-	StartEasing(60);
+	//StartEasing(30);
 	startPosition_ = weapon_->worldtransform_.transform_.translate;
 
 }
@@ -54,8 +55,6 @@ void ReturnState::EaseUpdate()
 	// イージングの値更新
 	IWeaponState::EaseUpdate();
 	// 線形補間による座標更新
-	weapon_->worldtransform_.transform_.translate = Ease::Easing(Ease::EaseName::EaseOutSine, startPosition_, weapon_->GetTargetPosition(), ease_t_);
-
-	//weapon_->worldtransform_.transform_.translate.x += Math::Lerp(startPosition_.x, weapon_->GetTargetPosition().x, 0.3f);
-	//weapon_->worldtransform_.transform_.translate.y += Math::Lerp(startPosition_.y, weapon_->GetTargetPosition().y, 0.3f);
+	weapon_->worldtransform_.transform_.translate.x = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.x, weapon_->GetTargetPosition().x, 0.01f);
+	weapon_->worldtransform_.transform_.translate.y = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.y, weapon_->GetTargetPosition().y, 0.01f);
 }

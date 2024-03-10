@@ -1,0 +1,35 @@
+#include "TimerLib.h"
+
+void TimerLib::StartSetting()
+{
+	// リセット
+	isEnd_ = false;
+	nowFrame_ = 0;
+	// 開始
+	isActive_ = true;
+}
+
+void TimerLib::Start(float endTime)
+{
+	// 初期化
+	StartSetting();
+
+	// 終了フレーム
+	endFrame_ = endTime;
+
+}
+
+void TimerLib::Update()
+{
+
+	if (isActive_) {
+
+		if (nowFrame_ >= 1.0f) {
+			isEnd_ = true;
+			return;
+		}
+
+		this->nowFrame_ += (1.0f / endFrame_);
+
+	}
+}

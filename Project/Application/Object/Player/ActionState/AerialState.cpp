@@ -5,7 +5,7 @@ void AerialState::Initialize()
 {
 	//player_->worldtransform_.transform_.translate.y += 5.0f;
 	// 落下処理
-	player_->velocity_.y = 0;
+	player_->velocity_.y = 20.0f;
 
 	jumpPower_ = 1.50f;
 
@@ -31,8 +31,8 @@ void AerialState::Update()
 	}
 
 	// 落下処理
-	float powerValue = 6.0f;
-	jumpPower_ += powerValue * kDeltaTime_;
+	//float powerValue = 6.0f;
+	//jumpPower_ += powerValue * kDeltaTime_;
 	// ジャンプ（重力計算
 	jumpPower_ += (-player_->gravity_) * kDeltaTime_;
 

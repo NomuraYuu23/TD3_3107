@@ -7,6 +7,11 @@ void Player::Initialize(Model* model)
 {
 	// ポインタの設定
 	input_ = Input::GetInstance();
+
+	// 入力処理受付クラス
+	//controller_ = std::make_unique<PlayerController>();
+	controller_.Initialize(this);
+
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 	// コライダーの初期化
@@ -25,6 +30,8 @@ void Player::Update()
 	if (actionState_) {
 		actionState_->Update();
 	}
+
+	controller_.InputUpdate();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -118,7 +125,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 	if (std::holds_alternative<Weapon*>(target)) {
 		// 壁に刺さっている状態なら
 		if (std::holds_alternative<ImpaledState*>(weapon_->nowState_) && !weapon_->GetIsTread()) {
-			weapon_->SetIsTread(true);
+			weapon_->TreadSetting();
 			//weapon_->treadTimer_.StartTimer(30);
 			ChangeState(std::make_unique<AerialState>());
 			return;

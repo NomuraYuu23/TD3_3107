@@ -2,6 +2,7 @@
 #include "../IObject.h"
 #include "WeaponState/WeaponStateList.h"
 #include "WeaponState/StateList.h"
+#include "../GameUtility/TimerLib.h"
 
 class Weapon : public IObject
 {
@@ -116,18 +117,9 @@ public: // メンバ関数
 	bool GetIsTread() { return isTread_; }
 
 	/// <summary>
-	/// 踏まれたフラグ設定
+	/// 踏まれた際の初期設定
 	/// </summary>
-	/// <param name="isJump"></param>
-	void SetIsTread(bool isTread) 
-	{ 
-		isTread_ = isTread;
-		//coolTimer_ = 0;
-	}
-
-	//WeaponTimer treadTimer_;
-
-	float coolTimer_ = 0;
+	void TreadSetting();
 
 private:
 	// ステート
@@ -138,6 +130,9 @@ private:
 	Vector3 localOffset_ = {};
 	// 一回踏んだか確認フラグ
 	bool isTread_ = false;
+
+	// タイマーライブラリ
+	TimerLib timer_;
 
 };
 

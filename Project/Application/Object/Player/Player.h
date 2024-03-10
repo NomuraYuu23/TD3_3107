@@ -1,8 +1,10 @@
 #pragma once
 #include "../IObject.h"
-#include "../../../Engine/Input/Input.h"
-#include "ActionState/ActionStateList.h"
 #include "../Weapon/Weapon.h"
+#include "../../../Engine/Input/Input.h"
+
+#include "ActionState/ActionStateList.h"
+#include "System/PlayerController.h"
 
 class Player : public IObject
 {
@@ -58,6 +60,9 @@ public:
 	std::unique_ptr<IActionState> actionState_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
+
+	//std::unique_ptr<PlayerController> controller_;
+	PlayerController controller_;
 
 	// 速さベクトル
 	Vector3 velocity_ = {};

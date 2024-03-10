@@ -26,6 +26,7 @@ public:
 	/// イージング（タイマー）更新
 	/// </summary>
 	void EaseUpdate() override;
+
 private:
 
 	Vector3 startPosition_ = {};

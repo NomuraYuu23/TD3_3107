@@ -218,6 +218,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Map\Terrain.cpp" />
     <ClCompile Include="Application\Object\Map\MapManager.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponTimer.cpp" />
+    <ClCompile Include="Application\Object\GameUtility\TimerLib.cpp" />
+    <ClCompile Include="Application\Object\Player\System\PlayerController.cpp" />
+    <ClCompile Include="Application\Object\GameUtility\MathUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\ObjectList.h" />
@@ -362,6 +365,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Map\MapManager.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponTimer.h" />
     <ClInclude Include="Application\Object\GameCamera\GameBasicCamera.h" />
+    <ClInclude Include="Application\Object\GameUtility\TimerLib.h" />
+    <ClInclude Include="Application\Object\Player\System\PlayerController.h" />
+    <ClInclude Include="Application\Object\GameUtility\MathUtility.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

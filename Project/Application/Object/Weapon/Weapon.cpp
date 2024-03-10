@@ -16,6 +16,8 @@ void Weapon::Initialize(Model* model)
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
 	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
+
+	// ステート変更
 	ChangeState(std::make_unique<HoldState>());
 
 }
@@ -27,15 +29,13 @@ void Weapon::Update()
 		state_->Update();
 	}
 
-	// 二段ジャンプのクールタイム
-	//treadTimer_.UpdateTimer();
-	if (isTread_) {
-		coolTimer_ += (1.0f / 30.0f);
-		if (coolTimer_ >= 1.0f) {
-			isTread_ = false;
-			coolTimer_ = 0;
-		}
+	// 二段ジャンプのクールタイム設定
+	if (isTread_ && timer_.IsEnd()) {
+		isTread_ = false;
 	}
+
+	// タイマー
+	timer_.Update();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -105,4 +105,10 @@ void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
 	newState->Initialize();
 	// ステート渡し
 	state_ = std::move(newState);
+}
+
+void Weapon::TreadSetting()
+{
+	isTread_ = true;
+	timer_.Start(30.0f);
 }
