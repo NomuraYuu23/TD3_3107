@@ -45,30 +45,35 @@ void PlayerController::ControllerProcess()
 		}
 
 		// 投げ
-		CheckAction = std::holds_alternative<HoldState*>(player_->weapon_->nowState_);
+		//CheckAction = std::holds_alternative<HoldState*>(player_->weapon_->nowState_);
 		// 武器持ってなければfalse
-		if (input_->TriggerJoystick(kJoystickButtonRB) && CheckAction) {
-			if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
-				return;
+		if (input_->TriggerJoystick(kJoystickButtonRB)) {
+			// 投げ入力
+			if (std::holds_alternative<HoldState*>(player_->weapon_->nowState_)) {
+				// 右スティックの入力がなければキャンセル
+				if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
+					return;
+				}
+				// 方向
+				player_->weapon_->throwDirect_ = player_->throwDirect_;
+				player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
+				// 地上で投げた場合は槍の重力フラグをオン
+				if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
+					player_->weapon_->GravityInitialize();
+				}
 			}
-			
-			player_->weapon_->throwDirect_ = player_->throwDirect_;
-			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
-			// 地上で投げた場合は槍の重力フラグをオン
-			if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
-				player_->weapon_->GravityInitialize();
-			}
-		}
-		// 戻ってくる入力
-		if (input_->TriggerJoystick(kJoystickButtonLB)) {
 			// 待機に入る
-			if (std::holds_alternative<ImpaledState*>(player_->weapon_->nowState_)) {
+			else if (std::holds_alternative<ImpaledState*>(player_->weapon_->nowState_)) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
 			}
 			// 戻ってくる
 			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->nowState_)) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
+
+		}
+		// 戻ってくる入力
+		if (input_->TriggerJoystick(kJoystickButtonLB)) {
 		}
 
 		// 投げる方向
