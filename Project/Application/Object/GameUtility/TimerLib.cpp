@@ -9,13 +9,13 @@ void TimerLib::StartSetting()
 	isActive_ = true;
 }
 
-void TimerLib::Start(float endTime)
+void TimerLib::Start(float endFrame)
 {
 	// 初期化
 	StartSetting();
 
 	// 終了フレーム
-	endFrame_ = endTime;
+	endFrame_ = endFrame;
 
 }
 

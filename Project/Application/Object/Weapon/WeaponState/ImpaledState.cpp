@@ -16,9 +16,6 @@ void ImpaledState::Update()
 		return;
 	}
 
-	// タイマー処理
-	EaseUpdate();
-
 }
 
 void ImpaledState::ImGuiUpdate()
@@ -33,11 +30,6 @@ void ImpaledState::ImGuiUpdate()
 	ImGui::Separator();
 
 	ImGui::DragInt("easeTime", &easeTime_, 1, 1, 600);
-
-	if (ImGui::Button("EasingStart")) {
-		isStart_ = true;
-		StartEasing(easeTime_);
-	}
 
 	ImGui::End();
 

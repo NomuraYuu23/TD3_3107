@@ -1,8 +1,8 @@
 #pragma once
 #include "IWeaponState.h"
-#include "../../../Engine/Math/Vector3.h"
+#include "../../GameUtility/TimerLib.h"
 
-class ReturnState : public IWeaponState
+class ReturnWaitState : public IWeaponState
 {
 public:
 	/// <summary>
@@ -18,16 +18,7 @@ public:
 	/// </summary>
 	void ImGuiUpdate() override;
 
-	/// <summary>
-	/// イージング（タイマー）更新
-	/// </summary>
-	void EaseUpdate();
-
 private:
-	// 座標
-	Vector3 startPosition_ = {};
-	// Lerpの補間レート
-	float lerp_t = 0;
-
+	// 終了タイマー用
+	TimerLib endTimer_;
 };
-

@@ -8,11 +8,11 @@ void ThrownState::Initialize()
 	weapon_->ReleaseParent();
 	// ステート更新
 	SetNowState(this);
-	// 開始設定
-	//this->StartEasing(90);
+
 	// 速さ
 	speedValue_ = 10.0f;
-	velocity_ = {};
+	//velocity_ = {};
+	velocity_ = weapon_->throwDirect_ * speedValue_;
 }
 
 void ThrownState::Update()
@@ -22,13 +22,14 @@ void ThrownState::Update()
 		weapon_->ChangeRequest(Weapon::StateName::kImpaled);
 		return;
 	}
-	// 更新
-	this->EaseUpdate();
+
+	if (weapon_->GetIsGravity()) {
+		velocity_.y -= 9.8f * kDeltaTime_;
+	}
 
 	// 移動処理
-	velocity_ = weapon_->throwDirect_ * speedValue_;
 	weapon_->worldtransform_.transform_.translate += velocity_ * kDeltaTime_;
-
+	weapon_->worldtransform_.direction_ = Vector3::Normalize(velocity_);
 }
 
 void ThrownState::ImGuiUpdate()
@@ -36,7 +37,7 @@ void ThrownState::ImGuiUpdate()
 	// 投げられている状態のImGui
 	ImGui::Begin("ThrownState");
 
-
+	ImGui::DragFloat3("Velocity", &velocity_.x);
 
 	ImGui::End();
 

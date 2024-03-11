@@ -14,7 +14,7 @@ void ReturnState::Initialize()
 
 	//StartEasing(30);
 	startPosition_ = weapon_->worldtransform_.transform_.translate;
-
+	lerp_t = 0.05f;
 }
 
 void ReturnState::Update()
@@ -35,26 +35,18 @@ void ReturnState::ImGuiUpdate()
 {
 	ImGui::Begin("ReturnState");
 
-	ImGui::DragFloat("easeT", &ease_t_);
-	ImGui::DragFloat("EndFrame", &easingEndFrame_);
-	ImGui::Text("%d : end", isEnd_);
+	ImGui::DragFloat("lerpRatio", &lerp_t, 0.01f, 0, 1);
 
 	ImGui::End();
 
 }
 
-void ReturnState::StartEasing(int frame)
-{
-	// 開始関数
-	IWeaponState::StartEasing(frame);
-
-}
-
 void ReturnState::EaseUpdate()
 {
-	// イージングの値更新
-	IWeaponState::EaseUpdate();
 	// 線形補間による座標更新
-	weapon_->worldtransform_.transform_.translate.x = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.x, weapon_->GetTargetPosition().x, 0.01f);
-	weapon_->worldtransform_.transform_.translate.y = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.y, weapon_->GetTargetPosition().y, 0.01f);
+	weapon_->worldtransform_.transform_.translate.x = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.x, weapon_->GetTargetPosition().x, lerp_t);
+	weapon_->worldtransform_.transform_.translate.y = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.y, weapon_->GetTargetPosition().y, lerp_t);
+
+	weapon_->worldtransform_.direction_ = weapon_->worldtransform_.transform_.translate - weapon_->GetTargetPosition();
+
 }

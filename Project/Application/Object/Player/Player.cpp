@@ -5,11 +5,7 @@
 
 void Player::Initialize(Model* model)
 {
-	// ポインタの設定
-	input_ = Input::GetInstance();
-
 	// 入力処理受付クラス
-	//controller_ = std::make_unique<PlayerController>();
 	controller_.Initialize(this);
 
 	// 基底クラスの初期化
@@ -31,7 +27,7 @@ void Player::Update()
 		actionState_->Update();
 	}
 
-	controller_.InputUpdate();
+	controller_.Update();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -40,13 +36,6 @@ void Player::Update()
 
 	// 武器の更新
 	if (weapon_) {
-		if (input_->TriggerKey(DIK_E)) {
-			weapon_->ChangeRequest(Weapon::StateName::kReturn);
-		}
-		if (input_->TriggerKey(DIK_Q)) {
-			weapon_->throwDirect_ = throwDirect_;
-			weapon_->ChangeRequest(Weapon::StateName::kThrown);
-		}
 		weapon_->Update();
 	}
 
@@ -125,9 +114,17 @@ void Player::OnCollision(ColliderParentObject2D target)
 	if (std::holds_alternative<Weapon*>(target)) {
 		// 壁に刺さっている状態なら
 		if (std::holds_alternative<ImpaledState*>(weapon_->nowState_) && !weapon_->GetIsTread()) {
-			weapon_->TreadSetting();
-			//weapon_->treadTimer_.StartTimer(30);
-			ChangeState(std::make_unique<AerialState>());
+			// 地上か待機状態なら早期
+			if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
+				return;
+			}
+
+			if (weapon_->worldtransform_.GetWorldPosition().y + weapon_->scale2D_.y < worldtransform_.GetWorldPosition().y) {
+				// 
+				weapon_->TreadSetting();
+				ChangeState(std::make_unique<ActionWaitState>());
+
+			}
 			return;
 		}
 	}

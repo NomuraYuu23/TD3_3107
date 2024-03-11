@@ -28,18 +28,6 @@ public:
 	/// </summary>
 	virtual void ImGuiUpdate() = 0;
 
-	/// <summary>
-	/// カウント開始
-	/// </summary>
-	/// <param name="frame"></param>
-	virtual void StartEasing(int frame);
-
-protected:
-	/// <summary>
-	/// イージングの更新
-	/// </summary>
-	virtual void EaseUpdate();
-
 public: //アクセッサ
 	/// <summary>
 	/// 現状のステート設定
@@ -50,14 +38,7 @@ public: //アクセッサ
 protected:
 	// 武器
 	Weapon* weapon_ = nullptr;
-	// 線形補間用のT
-	float ease_t_ = 0;
-	// 終了フレーム数
-	float easingEndFrame_ = 0;
-	// 開始フラグ
-	bool isStart_ = false;
-	// 終了タイミング取得
+	// 終了フラグ
 	bool isEnd_ = false;
-
 };
 

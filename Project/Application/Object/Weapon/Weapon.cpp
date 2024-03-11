@@ -19,7 +19,8 @@ void Weapon::Initialize(Model* model)
 
 	// ステート変更
 	ChangeState(std::make_unique<HoldState>());
-
+	// 重力
+	gravityValue_ = 9.8f;
 }
 
 void Weapon::Update()
@@ -64,7 +65,6 @@ void Weapon::ImGuiDraw()
 	
 	// 回転処理
 	ImGui::DragFloat3("Rotation", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
-	worldtransform_.direction_ = Vector3::Normalize(this->throwDirect_);
 
 	// ローカル座標
 	ImGui::DragFloat3("localPos", &worldtransform_.transform_.translate.x, 0.01f, -40.0f, 40.0f);
@@ -74,6 +74,8 @@ void Weapon::ImGuiDraw()
 	std::string name = typeid(*state_).name();
 
 	ImGui::Text(name.c_str());
+
+	ImGui::Text("%d : isGravity", isGravity_);
 
 	ImGui::End();
 
@@ -85,16 +87,29 @@ void Weapon::ImGuiDraw()
 
 void Weapon::OnCollision(ColliderParentObject2D target)
 {
-	// 壁・ブロックとの衝突判定
-	if (std::holds_alternative<Terrain*>(target)) {
-		// 投げられている状態なら刺さった状態へ
-		if (std::holds_alternative<ThrownState*>(nowState_)) {
+	// 持っている状態なら早期
+	if (std::holds_alternative<HoldState*>(nowState_)) {
+		return;
+	}
+
+	// 投げられてる状態
+	if (std::holds_alternative<ThrownState*>(nowState_))
+	{
+		// 壁・ブロックとの衝突判定
+		if (std::holds_alternative<Terrain*>(target)) {
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;
 		}
 	}
-
-	target;
+	// 返ってくる状態
+	else if (std::holds_alternative<ReturnState*>(nowState_))
+	{
+		// プレイヤーとの
+		if (std::holds_alternative<Player*>(target)) {
+			ChangeRequest(Weapon::StateName::kHold);
+			return;
+		}
+	}
 }
 
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
@@ -105,6 +120,28 @@ void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
 	newState->Initialize();
 	// ステート渡し
 	state_ = std::move(newState);
+}
+
+void Weapon::ChangeRequest(Weapon::StateName request)
+{
+	// 重力のフラグリセット
+	isGravity_ = false;
+	// リクエストに応じてステート変更
+	switch (request)
+	{
+	case Weapon::StateName::kHold:
+		ChangeState(std::make_unique<HoldState>());
+		break;
+	case Weapon::StateName::kThrown:
+		ChangeState(std::make_unique<ThrownState>());
+		break;
+	case Weapon::StateName::kImpaled:
+		ChangeState(std::make_unique<ImpaledState>());
+		break;
+	case Weapon::StateName::kReturn:
+		ChangeState(std::make_unique<ReturnState>());
+		break;
+	}
 }
 
 void Weapon::TreadSetting()

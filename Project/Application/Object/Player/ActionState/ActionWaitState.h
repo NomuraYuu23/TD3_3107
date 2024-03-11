@@ -1,7 +1,8 @@
 #pragma once
 #include "IActionState.h"
+#include "../../GameUtility/TimerLib.h"
 
-class GroundState : public IActionState
+class ActionWaitState : public IActionState
 {
 public:
 	/// <summary>
@@ -14,10 +15,8 @@ public:
 	void Update() override;
 
 private:
-	// 移動
-	float moveSpeed_;
 
-	bool isFall_ = false;
+	TimerLib changeTimer_;
 
 };
 

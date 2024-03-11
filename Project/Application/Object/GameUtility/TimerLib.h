@@ -7,15 +7,10 @@ public:
 
 public:
 	/// <summary>
-	/// 初期化関数
-	/// </summary>
-	void StartSetting();
-
-	/// <summary>
 	/// タイマー設定関数
 	/// </summary>
-	/// <param name="endTime"></param>
-	void Start(float endTime);
+	/// <param name="endFrame"></param>
+	void Start(float endFrame = 60.0f);
 
 	/// <summary>
 	/// 更新
@@ -26,6 +21,12 @@ public: // アクセッサ
 
 	bool IsEnd() { return isEnd_; }
 	bool IsActive() { return isActive_; }
+
+private:
+	/// <summary>
+	/// 初期化関数
+	/// </summary>
+	void StartSetting();
 
 private:
 	// 終了フレーム

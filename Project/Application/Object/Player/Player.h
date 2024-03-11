@@ -52,25 +52,34 @@ public: // メンバ関数
 
 	Weapon* GetWeapon() { return weapon_.get(); }
 
-public:
-	// 入力
-	Input* input_ = nullptr;
+	/// <summary>
+	/// 現在の状態
+	/// </summary>
+	/// <returns></returns>
+	PlayerState GetNowState() { return nowState_; }
 
+	/// <summary>
+	/// ステートの設定
+	/// </summary>
+	/// <param name="state"></param>
+	void SetNowState(PlayerState state) { nowState_ = state; }
+
+public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
-
-	//std::unique_ptr<PlayerController> controller_;
-	PlayerController controller_;
-
 	// 速さベクトル
 	Vector3 velocity_ = {};
 	// 重力
 	float gravity_ = 9.8f;
 	// 投げる方向
-	Vector3 throwDirect_ = {1,0,0};
+	Vector3 throwDirect_ = { 1,0,0 };
 
-	
+private:
+	// 現状のステート
+	PlayerState nowState_;
+	// 操作クラス
+	PlayerController controller_;
 };
 

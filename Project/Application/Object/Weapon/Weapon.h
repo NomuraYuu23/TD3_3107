@@ -59,30 +59,29 @@ public: // メンバ関数
 	/// 変更のリクエスト
 	/// </summary>
 	/// <param name="request"></param>
-	void ChangeRequest(Weapon::StateName request) {
-		switch (request)
-		{
-		case Weapon::StateName::kHold:
-			ChangeState(std::make_unique<HoldState>());
-			break;
-		case Weapon::StateName::kThrown:
-			ChangeState(std::make_unique<ThrownState>());
-			break;
-		case Weapon::StateName::kImpaled:
-			ChangeState(std::make_unique<ImpaledState>());
-			break;
-		case Weapon::StateName::kReturn:
-			ChangeState(std::make_unique<ReturnState>());
-			break;
-		}
-	}
+	void ChangeRequest(Weapon::StateName request);
 
+public: // アクセッサ
 	/// <summary>
 	/// 親のトランスフォームアドレス格納
 	/// </summary>
 	/// <param name="adress"></param>
 	void SetParentAdress(WorldTransform* adress) { parentAdress_ = adress; }
 
+	/// <summary>
+	/// 親のワールド座標
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetTargetPosition() { return parentAdress_->GetWorldPosition(); }
+	/// <summary>
+	/// 踏まれたフラグ取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsTread() { return isTread_; }
+
+	bool GetIsGravity() { return isGravity_; }
+
+public: // 外部で行う設定関数
 	/// <summary>
 	/// 親の設定
 	/// </summary>
@@ -102,24 +101,20 @@ public: // メンバ関数
 	}
 
 	/// <summary>
-	/// 親のワールド座標
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetTargetPosition() { return parentAdress_->GetWorldPosition(); }
-	
-	// 投げる方向
-	Vector3 throwDirect_ = {};
-
-	/// <summary>
-	/// 踏まれたフラグ取得
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsTread() { return isTread_; }
-
-	/// <summary>
 	/// 踏まれた際の初期設定
 	/// </summary>
 	void TreadSetting();
+
+	/// <summary>
+	/// 重力が掛かる際の初期化
+	/// </summary>
+	void GravityInitialize() {
+		isGravity_ = true;
+	}
+
+
+	// 投げる方向
+	Vector3 throwDirect_ = {};
 
 private:
 	// ステート
@@ -133,6 +128,11 @@ private:
 
 	// タイマーライブラリ
 	TimerLib timer_;
+
+	// 重力フラグ
+	bool isGravity_ = false;
+	// 重力の値
+	float gravityValue_ = 0;
 
 };
 

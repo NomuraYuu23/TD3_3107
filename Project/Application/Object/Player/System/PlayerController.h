@@ -11,7 +11,10 @@ public:
 
 public:
 	void Initialize(Player* player);
-	void InputUpdate();
+	void Update();
+
+	void ControllerProcess();
+	void KeyBoardProcess();
 
 private:
 	// インプットクラス

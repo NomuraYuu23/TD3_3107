@@ -13,3 +13,5 @@
 #include "ImpaledState.h"
 // 帰ってきてる状態（空中
 #include "ReturnState.h"
+// 返ってくる直前の待機状態
+#include "ReturnWaitState.h"

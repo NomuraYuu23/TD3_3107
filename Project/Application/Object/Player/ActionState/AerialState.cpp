@@ -19,6 +19,8 @@ void AerialState::Initialize()
 		velocity_.x = -moveXPower;
 	}
 
+	player_->SetNowState(this);
+
 }
 
 void AerialState::Update()
@@ -31,13 +33,17 @@ void AerialState::Update()
 	}
 
 	// 落下処理
-	//float powerValue = 6.0f;
-	//jumpPower_ += powerValue * kDeltaTime_;
 	// ジャンプ（重力計算
 	jumpPower_ += (-player_->gravity_) * kDeltaTime_;
 
+
 	// Y軸更新処理
 	player_->velocity_.y += jumpPower_;
+
+	if (player_->velocity_.y <= -30.0f) {
+		player_->velocity_.y = -30.0f;
+	}
+
 	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_;
 	
 	// X軸更新処理
