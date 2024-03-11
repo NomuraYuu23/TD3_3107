@@ -48,6 +48,10 @@ void PlayerController::ControllerProcess()
 		CheckAction = std::holds_alternative<HoldState*>(player_->weapon_->nowState_);
 		// 武器持ってなければfalse
 		if (input_->TriggerJoystick(kJoystickButtonRB) && CheckAction) {
+			if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
+				return;
+			}
+			
 			player_->weapon_->throwDirect_ = player_->throwDirect_;
 			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
 			// 地上で投げた場合は槍の重力フラグをオン
