@@ -22,6 +22,8 @@ public: // アクセッサ
 	bool IsEnd() { return isEnd_; }
 	bool IsActive() { return isActive_; }
 
+	float GetNowFrame() { return nowFrame_; }
+
 private:
 	/// <summary>
 	/// 初期化関数

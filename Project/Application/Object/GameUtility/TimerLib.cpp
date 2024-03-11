@@ -26,6 +26,7 @@ void TimerLib::Update()
 
 		if (nowFrame_ >= 1.0f) {
 			isEnd_ = true;
+			isActive_ = false;
 			return;
 		}
 

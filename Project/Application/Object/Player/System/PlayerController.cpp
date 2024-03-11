@@ -18,15 +18,6 @@ void PlayerController::Update()
 	// キーボード用
 	KeyBoardProcess();
 
-	if (player_->weapon_) {
-		if (input_->TriggerKey(DIK_E)) {
-			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-		}
-		if (input_->TriggerKey(DIK_Q)) {
-			player_->weapon_->throwDirect_ = player_->throwDirect_;
-			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
-		}
-	}
 
 }
 
@@ -76,6 +67,17 @@ void PlayerController::ControllerProcess()
 
 void PlayerController::KeyBoardProcess()
 {
+	// 武器
+	if (player_->weapon_) {
+		if (input_->TriggerKey(DIK_E)) {
+			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+		}
+		if (input_->TriggerKey(DIK_Q)) {
+			player_->weapon_->throwDirect_ = player_->throwDirect_;
+			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
+		}
+	}
+
 	float moveSpeed_ = 6.0f;
 	// ステート変更
 	if (input_->TriggerKey(DIK_SPACE)) {

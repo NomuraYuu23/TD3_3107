@@ -2,11 +2,14 @@
 
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../../../Engine/2D/ImguiManager.h"
+#include "../../../Engine/Math/Ease.h"
 
 void Player::Initialize(Model* model)
 {
 	// 入力処理受付クラス
 	controller_.Initialize(this);
+	// 反動クラス
+	recoil_.Initialize(this);
 
 	// 基底クラスの初期化
 	IObject::Initialize(model);
@@ -27,7 +30,10 @@ void Player::Update()
 		actionState_->Update();
 	}
 
+	// 操作クラス
 	controller_.Update();
+	// 反動クラス
+	recoil_.Update();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -127,6 +133,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 			return;
 		}
+		else if (std::holds_alternative<ReturnState*>(weapon_->nowState_)) {
+			// 反動生成
+			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
+
+			return;
+		}
+
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {

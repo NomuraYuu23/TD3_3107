@@ -1,10 +1,12 @@
 #pragma once
 #include "../IObject.h"
 #include "../Weapon/Weapon.h"
+#include "../GameUtility/TimerLib.h"
 #include "../../../Engine/Input/Input.h"
 
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerController.h"
+#include "System/Recoil/PlayerRecoil.h"
 
 class Player : public IObject
 {
@@ -76,10 +78,15 @@ public:
 	// 投げる方向
 	Vector3 throwDirect_ = { 1,0,0 };
 
+	TimerLib recoilTimer_;
+
 private:
 	// 現状のステート
 	PlayerState nowState_;
 	// 操作クラス
 	PlayerController controller_;
+	// 反動管理クラス
+	PlayerRecoil recoil_;
+
 };
 
