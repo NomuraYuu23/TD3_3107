@@ -21,6 +21,8 @@ void Player::Initialize(Model* model)
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
+
+	weapon_->SettingParent();
 }
 
 void Player::Update()
@@ -125,7 +127,14 @@ void Player::OnCollision(ColliderParentObject2D target)
 				return;
 			}
 
-			if (weapon_->worldtransform_.GetWorldPosition().y + weapon_->scale2D_.y < worldtransform_.GetWorldPosition().y) {
+			//if (weapon_->worldtransform_.GetWorldPosition().y + weapon_->scale2D_.y < worldtransform_.GetWorldPosition().y) {
+			//	// 
+			//	weapon_->TreadSetting();
+			//	ChangeState(std::make_unique<ActionWaitState>());
+			//}
+			
+			// 移動ベクトルが下向きの時にのみ
+			if (velocity_.y < 0) {
 				// 
 				weapon_->TreadSetting();
 				ChangeState(std::make_unique<ActionWaitState>());
@@ -133,6 +142,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 			return;
 		}
+		// 帰ってきてる時の衝突
 		else if (std::holds_alternative<ReturnState*>(weapon_->nowState_)) {
 			// 反動生成
 			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));

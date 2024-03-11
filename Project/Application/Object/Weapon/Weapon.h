@@ -14,7 +14,7 @@ public: // サブクラス
 		kThrown,	// 投げられている
 		kImpaled,	// 刺さっている
 		kReturn,	// 帰ってきてる
-
+		kWait,		// 壁での待機時間
 		//kCount,
 	};
 

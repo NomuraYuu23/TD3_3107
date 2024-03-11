@@ -119,13 +119,16 @@ void GameScene::Initialize() {
 
 
 	// プレイヤーの初期化
-	player_ = std::make_unique<Player>();
-	player_->Initialize(playerModel_.get());
 	// 武器の生成
 	std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>();
+	// 初期化
 	weapon->Initialize(weaponModel_.get());
+	// 生成
+	player_ = std::make_unique<Player>();
 	// 武器の設定
 	player_->SetWeapon(std::move(weapon));
+	// 初期化
+	player_->Initialize(playerModel_.get());
 
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->Initialize(terrainModel_.get());

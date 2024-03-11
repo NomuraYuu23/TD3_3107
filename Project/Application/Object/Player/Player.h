@@ -66,6 +66,8 @@ public: // メンバ関数
 	/// <param name="state"></param>
 	void SetNowState(PlayerState state) { nowState_ = state; }
 
+	bool IsRecoil() { return recoil_.IsActive(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -78,15 +80,13 @@ public:
 	// 投げる方向
 	Vector3 throwDirect_ = { 1,0,0 };
 
-	TimerLib recoilTimer_;
-
 private:
 	// 現状のステート
 	PlayerState nowState_;
-	// 操作クラス
-	PlayerController controller_;
 	// 反動管理クラス
 	PlayerRecoil recoil_;
+	// 操作クラス
+	PlayerController controller_;
 
 };
 

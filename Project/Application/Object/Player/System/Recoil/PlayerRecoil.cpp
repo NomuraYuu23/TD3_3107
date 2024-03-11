@@ -10,7 +10,7 @@ void PlayerRecoil::Initialize(Player* player)
 
 void PlayerRecoil::CreateRecoil(const Vector3& direction)
 {
-	float kPower = 30.0f;
+	float kPower = 80.0f;
 	this->startValue_ = direction;
 	startValue_ *= kPower;
 
@@ -20,7 +20,7 @@ void PlayerRecoil::CreateRecoil(const Vector3& direction)
 
 void PlayerRecoil::Update()
 {
-
+	// 早期終了
 	if (!timer_.IsActive()) {
 		return;
 	}

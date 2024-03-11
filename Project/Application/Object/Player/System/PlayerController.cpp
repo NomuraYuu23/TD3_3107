@@ -12,6 +12,11 @@ void PlayerController::Initialize(Player* player)
 
 void PlayerController::Update()
 {
+
+	if (player_->IsRecoil()) {
+		return;
+	}
+
 	// コントローラー用
 	ControllerProcess();
 
@@ -52,7 +57,14 @@ void PlayerController::ControllerProcess()
 		}
 		// 戻ってくる入力
 		if (input_->TriggerJoystick(kJoystickButtonLB)) {
-			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			// 待機に入る
+			if (std::holds_alternative<ImpaledState*>(player_->weapon_->nowState_)) {
+				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
+			}
+			// 戻ってくる
+			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->nowState_)) {
+				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
 		}
 
 		// 投げる方向
@@ -70,7 +82,15 @@ void PlayerController::KeyBoardProcess()
 	// 武器
 	if (player_->weapon_) {
 		if (input_->TriggerKey(DIK_E)) {
-			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			//player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			// 待機に入る
+			if (std::holds_alternative<ImpaledState*>(player_->weapon_->nowState_)) {
+				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
+			}
+			// 戻ってくる
+			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->nowState_)) {
+				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
 		}
 		if (input_->TriggerKey(DIK_Q)) {
 			player_->weapon_->throwDirect_ = player_->throwDirect_;
@@ -80,10 +100,13 @@ void PlayerController::KeyBoardProcess()
 
 	float moveSpeed_ = 6.0f;
 	// ステート変更
-	if (input_->TriggerKey(DIK_SPACE)) {
+	bool CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState());
+	if (input_->TriggerKey(DIK_SPACE) && !CheckAction) {
+		// 切り替え
 		player_->ChangeState(std::make_unique<AerialState>());
 		return;
 	}
+
 	// 移動入力
 	if (input_->PushKey(DIK_A)) {
 		player_->velocity_.x = -moveSpeed_;

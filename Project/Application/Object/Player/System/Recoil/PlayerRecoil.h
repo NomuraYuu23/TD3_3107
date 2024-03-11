@@ -26,6 +26,13 @@ public: // メンバ関数
 	/// </summary>
 	void Update();
 
+public: // アクセッサ
+	/// <summary>
+	/// 反動中かどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsActive() { return timer_.IsActive(); }
+
 private:
 	// 親ポインタ
 	Player* player_ = nullptr;

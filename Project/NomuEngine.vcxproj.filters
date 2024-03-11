@@ -463,9 +463,6 @@
     <ClCompile Include="Application\Object\Map\MapManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Object\Weapon\WeaponTimer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Object\GameCamera\GameBasicCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -485,6 +482,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Application\Object\Player\System\Recoil\PlayerRecoil.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Object\Player\System\Handler\IHandler.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -912,9 +912,6 @@
     <ClInclude Include="Application\Object\Map\MapManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Object\Weapon\WeaponTimer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Object\GameCamera\GameBasicCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -937,6 +934,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Application\Object\Player\System\Recoil\PlayerRecoil.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Object\Player\System\Handler\IHandler.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

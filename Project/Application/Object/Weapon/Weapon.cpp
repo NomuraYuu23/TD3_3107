@@ -77,6 +77,8 @@ void Weapon::ImGuiDraw()
 
 	ImGui::Text("%d : isGravity", isGravity_);
 
+	ImGui::DragFloat3("Direct", &this->throwDirect_.x);
+
 	ImGui::End();
 
 	if (state_) {
@@ -140,6 +142,9 @@ void Weapon::ChangeRequest(Weapon::StateName request)
 		break;
 	case Weapon::StateName::kReturn:
 		ChangeState(std::make_unique<ReturnState>());
+		break;
+	case Weapon::StateName::kWait:
+		ChangeState(std::make_unique<ReturnWaitState>());
 		break;
 	}
 }
