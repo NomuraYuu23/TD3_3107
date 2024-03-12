@@ -129,8 +129,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
     <ClCompile Include="Engine\3D\ModelNode.cpp" />
     <ClCompile Include="Engine\3D\OutLineData.cpp" />
+    <ClCompile Include="Engine\Animation\Animation.cpp" />
+    <ClCompile Include="Engine\Animation\AnimationData.cpp" />
     <ClCompile Include="Engine\Animation\AnimationFile.cpp" />
     <ClCompile Include="Engine\Animation\IBone.cpp" />
+    <ClCompile Include="Engine\Animation\NodeAnimationData.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\base\DescriptorHerpManager.cpp" />
     <ClCompile Include="Engine\base\GraphicsPipelineState\BlendStateManager.cpp" />
@@ -151,6 +154,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Light\SpotLight\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Line\Line.cpp" />
     <ClCompile Include="Engine\Line\Segment.cpp" />
+    <ClCompile Include="Engine\Math\Matrix3x3.cpp" />
     <ClCompile Include="Engine\Math\Quaternion.cpp" />
     <ClCompile Include="Engine\Math\ShortestDistance.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />
@@ -257,9 +261,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\ModelLoader.h" />
     <ClInclude Include="Engine\3D\ModelNode.h" />
     <ClInclude Include="Engine\3D\OutLineData.h" />
+    <ClInclude Include="Engine\Animation\Animation.h" />
+    <ClInclude Include="Engine\Animation\AnimationData.h" />
     <ClInclude Include="Engine\Animation\AnimationFile.h" />
     <ClInclude Include="Engine\Animation\BoneData.h" />
     <ClInclude Include="Engine\Animation\IBone.h" />
+    <ClInclude Include="Engine\Animation\NodeAnimationData.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Engine\base\DescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\GraphicsPipelineState\BlendStateManager.h" />
@@ -287,6 +294,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Light\SpotLight\SpotLightManager.h" />
     <ClInclude Include="Engine\Line\Line.h" />
     <ClInclude Include="Engine\Line\Segment.h" />
+    <ClInclude Include="Engine\Math\Matrix3x3.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
     <ClInclude Include="Engine\Math\RandomEngine.h" />
     <ClInclude Include="Engine\Math\ShortestDistance.h" />

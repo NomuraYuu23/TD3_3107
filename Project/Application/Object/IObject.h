@@ -46,7 +46,7 @@ public: // アクセッサ
 
 protected:
 	void BoxColliderUpdate() {
-		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y);
+		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
 
 	void CircleColliderUpdate() {

@@ -18,20 +18,53 @@
 			"mesh":0,
 			"name":"Cube",
 			"rotation":[
-				0.7071068286895752,
+				0.70710688829422,
 				0,
 				0,
-				0.7071068286895752
+				0.7071066498756409
 			]
 		},
 		{
 			"mesh":1,
 			"name":"Plane",
 			"rotation":[
-				0.7071068286895752,
+				0.70710688829422,
 				0,
 				0,
-				0.7071068286895752
+				0.7071066498756409
+			]
+		}
+	],
+	"animations":[
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":0,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":1,
+						"path":"rotation"
+					}
+				}
+			],
+			"name":"anim",
+			"samplers":[
+				{
+					"input":8,
+					"interpolation":"LINEAR",
+					"output":9
+				},
+				{
+					"input":8,
+					"interpolation":"LINEAR",
+					"output":10
+				}
 			]
 		}
 	],
@@ -179,6 +212,30 @@
 			"componentType":5123,
 			"count":6,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":8,
+			"componentType":5126,
+			"count":3,
+			"max":[
+				1.6666666666666667
+			],
+			"min":[
+				0
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":9,
+			"componentType":5126,
+			"count":3,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":10,
+			"componentType":5126,
+			"count":3,
+			"type":"VEC4"
 		}
 	],
 	"bufferViews":[
@@ -229,6 +286,21 @@
 			"byteLength":12,
 			"byteOffset":968,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":12,
+			"byteOffset":980
+		},
+		{
+			"buffer":0,
+			"byteLength":36,
+			"byteOffset":992
+		},
+		{
+			"buffer":0,
+			"byteLength":48,
+			"byteOffset":1028
 		}
 	],
 	"samplers":[
@@ -239,7 +311,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":980,
+			"byteLength":1076,
 			"uri":"multiMaterial.bin"
 		}
 	]

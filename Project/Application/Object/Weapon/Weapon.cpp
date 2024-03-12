@@ -13,7 +13,7 @@ void Weapon::Initialize(Model* model)
 	localOffset_ = { 2.0f,0,0 };
 	scale2D_ *= 0.95f;
 	// コライダーの初期化
-	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
+	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
 	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
 

@@ -10,7 +10,7 @@ void Terrain::Initialize(Model* model)
 	IObject::Initialize(model);
 
 	// コライダーの初期化
-	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, this);
+	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeTerrain);
 	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
 

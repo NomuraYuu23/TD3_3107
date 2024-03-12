@@ -36,7 +36,8 @@
 
 #include "Mesh.h"
 #include "ModelNode.h"
-#include "MeshNumManager.h"
+#include "../Animation/NodeAnimationData.h"
+#include "../Animation/AnimationData.h"
 
 class Model
 {
@@ -49,10 +50,17 @@ public:
 
 	struct ModelData {
 
+		// 頂点
 		std::vector<VertexData> vertices;
+		// マテリアル
 		MaterialData material;
+		// ノード
 		ModelNode rootNode;
-		MeshNumManager meshNumManager;
+		// ノードアニメーション
+		std::vector<AnimationData> animations;
+		// ノードアニメーション数
+		uint32_t nodeAnimationNum;
+
 	};
 
 	enum PipelineStateName {
@@ -153,6 +161,12 @@ public:
 	/// ローカルマトリックス取得
 	/// </summary>
 	ModelNode GetRootNode() { return modelData_.rootNode; }
+
+	/// <summary>
+	/// ノードアニメーションデータ取得
+	/// </summary>
+	/// <returns></returns>
+	std::vector<AnimationData> GetNodeAnimationData() { return modelData_.animations; }
 
 private:
 

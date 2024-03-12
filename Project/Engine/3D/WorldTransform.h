@@ -19,6 +19,11 @@ public:
 	{
 		Matrix4x4 localMatrix; // ローカル行列
 		uint32_t meshNum; // メッシュ番号
+		std::string name; // 名前
+		WorldTransform::NodeData* parent; // 親
+		int32_t parentIndex;
+		Matrix4x4 matrix; //最終的なワールド行列
+		Matrix4x4 offsetMatrix; //
 	};
 
 public:
@@ -50,6 +55,12 @@ public:
 	void UpdateMatrix();
 
 	/// <summary>
+	/// 行列更新
+	/// </summary>
+	/// <param name="rotateMatrix">回転行列</param>
+	void UpdateMatrix(const Matrix4x4& rotateMatrix);
+
+	/// <summary>
 	/// マップ
 	/// </summary>
 	/// <param name="viewProjectionMatrix">ビュープロジェクション</param>
@@ -71,7 +82,7 @@ public:
 	/// ノードデータ設定
 	/// </summary>
 	/// <param name="modelNode">モデルのノード</param>
-	void SetNodeDatas(const ModelNode& modelNode);
+	void SetNodeDatas(const ModelNode& modelNode, int32_t parentIndex);
 
 	/// <summary>
 	/// 消す前に行う処理
@@ -89,6 +100,23 @@ public:
 	/// </summary>
 	/// <param name="parent"></param>
 	void SetParent(WorldTransform* parent) { parent_ = parent; }
+
+	/// <summary>
+	/// ノードデータ取得
+	/// </summary>
+	/// <returns></returns>
+	std::vector<NodeData> GetNodeDatas() { return nodeDatas_; }
+
+	/// <summary>
+	/// ノード名前
+	/// </summary>
+	/// <returns></returns>
+	std::vector<std::string> GetNodeNames();
+
+	/// <summary>
+	/// ローカル行列設定
+	/// </summary>
+	void SetNodeLocalMatrix(const std::vector<Matrix4x4> matrix);
 
 public:
 

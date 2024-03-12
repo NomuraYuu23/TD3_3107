@@ -34,7 +34,7 @@ void WorldTransform::Initialize()
 void WorldTransform::Initialize(const ModelNode& modelNode)
 {
 
-	SetNodeDatas(modelNode);
+	SetNodeDatas(modelNode, -1);
 
 	// 回転行列
 	rotateMatrix_ = Matrix4x4::MakeRotateXYZMatrix(transform_.rotate);
@@ -56,9 +56,7 @@ void WorldTransform::Initialize(const ModelNode& modelNode)
 
 	for (uint32_t i = 0; i < nodeCount; ++i) {
 		transformationMatrixesMap_[nodeDatas_[i].meshNum].World = Matrix4x4::MakeIdentity4x4();
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].WVP = Matrix4x4::MakeIdentity4x4();
 		transformationMatrixesMap_[nodeDatas_[i].meshNum].WorldInverseTranspose = Matrix4x4::MakeIdentity4x4();
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].ScaleInverse = Matrix4x4::MakeIdentity4x4();
 	}
 
 	UpdateMatrix();
@@ -100,15 +98,51 @@ void WorldTransform::UpdateMatrix() {
 
 }
 
+void WorldTransform::UpdateMatrix(const Matrix4x4& rotateMatrix)
+{
+
+	//拡大縮小行列
+	Matrix4x4 scaleMatrix = Matrix4x4::MakeScaleMatrix(transform_.scale);
+
+	// 回転行列
+	rotateMatrix_ = rotateMatrix;
+
+	//平行移動行列
+	Matrix4x4 translateMatrix = Matrix4x4::MakeTranslateMatrix(transform_.translate);
+
+	// ワールド行列
+	worldMatrix_ = Matrix4x4::Multiply(scaleMatrix, Matrix4x4::Multiply(rotateMatrix_, translateMatrix));
+
+	//拡大縮小行列
+	scaleMatrix = Matrix4x4::MakeScaleMatrix(Vector3{ 1.0f,1.0f,1.0f });
+	// 親子関係用
+	parentMatrix_ = Matrix4x4::Multiply(scaleMatrix, Matrix4x4::Multiply(rotateMatrix_, translateMatrix));
+
+	// 親子関係
+	if (parent_) {
+		worldMatrix_ = Matrix4x4::Multiply(worldMatrix_, parent_->parentMatrix_);
+		parentMatrix_ = Matrix4x4::Multiply(parentMatrix_, parent_->parentMatrix_);
+	}
+
+}
+
 void WorldTransform::Map(const Matrix4x4& viewProjectionMatrix)
 {
 
 	for (uint32_t i = 0; i < nodeDatas_.size(); ++i) {
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].World = Matrix4x4::Multiply(nodeDatas_[i].localMatrix, worldMatrix_);
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].WVP = Matrix4x4::Multiply(Matrix4x4::Multiply(nodeDatas_[i].localMatrix, worldMatrix_), viewProjectionMatrix);
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].WorldInverseTranspose = Matrix4x4::Multiply(nodeDatas_[i].localMatrix, Matrix4x4::Inverse(worldMatrix_));
 
-		transformationMatrixesMap_[nodeDatas_[i].meshNum].ScaleInverse = Matrix4x4::Inverse(Matrix4x4::MakeScaleMatrix(transform_.scale)); // objファイルのみ対応
+		if (nodeDatas_[i].parentIndex >= 0) {
+			nodeDatas_[i].matrix = Matrix4x4::Multiply(
+				nodeDatas_[i].localMatrix ,
+				nodeDatas_[nodeDatas_[i].parentIndex].matrix);
+		}
+		else {
+			nodeDatas_[i].matrix = nodeDatas_[i].localMatrix;
+		}
+
+		transformationMatrixesMap_[i].World = Matrix4x4::Multiply(nodeDatas_[i].offsetMatrix, Matrix4x4::Multiply(nodeDatas_[i].matrix, worldMatrix_));
+		transformationMatrixesMap_[i].WorldInverseTranspose = Matrix4x4::Inverse(Matrix4x4::Transpose(transformationMatrixesMap_[i].World));
+
 	}
 
 }
@@ -154,26 +188,29 @@ void WorldTransform::SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* c
 
 }
 
-void WorldTransform::SetNodeDatas(const ModelNode& modelNode)
+void WorldTransform::SetNodeDatas(const ModelNode& modelNode, int32_t parentIndex)
 {
 
-	NodeData nodeData;
+	WorldTransform::NodeData nodeData;
 
 	nodeData.localMatrix = modelNode.localMatrix;
 	nodeData.meshNum = modelNode.meshNum;
-	if(nodeData.meshNum != -1){
-		nodeDatas_.push_back(nodeData);
-	}
+	nodeData.name = modelNode.name;
+	nodeData.parentIndex = parentIndex;
+	nodeData.offsetMatrix = modelNode.offsetMatrix;
+	nodeDatas_.push_back(std::move(nodeData));
+
+	int32_t newParentIndex = static_cast<int32_t>(nodeDatas_.size()) - 1;
 
 	for (uint32_t childIndex = 0; childIndex < modelNode.children.size(); ++childIndex) {
-		// 再帰的に読んで階層構造を作る
-		SetNodeDatas(modelNode.children[childIndex]);
+		SetNodeDatas(modelNode.children[childIndex], newParentIndex);
 	}
 
 }
 
 void WorldTransform::Finalize()
 {
+
 	if (nodeDatas_.size() > 0) {
 		DescriptorHerpManager::DescriptorHeapsMakeNull(indexDescriptorHeap_);
 	}
@@ -190,5 +227,29 @@ Vector3 WorldTransform::GetWorldPosition()
 	position.z = worldMatrix_.m[3][2];
 
 	return position;
+
+}
+
+std::vector<std::string> WorldTransform::GetNodeNames()
+{
+
+	std::vector<std::string> result;
+
+	for (uint32_t i = 0; i < nodeDatas_.size(); ++i) {
+		result.push_back(nodeDatas_[i].name);
+	}
+
+	return result;
+
+}
+
+void WorldTransform::SetNodeLocalMatrix(const std::vector<Matrix4x4> matrix)
+{
+
+	assert(matrix.size() == nodeDatas_.size());
+
+	for (uint32_t i = 0; i < matrix.size(); ++i) {
+		nodeDatas_[i].localMatrix = matrix[i];
+	}
 
 }
