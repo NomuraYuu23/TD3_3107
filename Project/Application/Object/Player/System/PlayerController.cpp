@@ -74,6 +74,7 @@ void PlayerController::ControllerProcess()
 		}
 		// 戻ってくる入力
 		if (input_->TriggerJoystick(kJoystickButtonLB)) {
+			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 		}
 
 		// 投げる方向

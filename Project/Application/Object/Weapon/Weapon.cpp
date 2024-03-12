@@ -79,6 +79,8 @@ void Weapon::ImGuiDraw()
 
 	ImGui::DragFloat3("Direct", &this->throwDirect_.x);
 
+	ImGui::DragFloat2("CollV2", &boxCollider_.position_.x);
+
 	ImGui::End();
 
 	if (state_) {

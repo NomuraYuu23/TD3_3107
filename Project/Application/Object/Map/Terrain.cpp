@@ -40,6 +40,8 @@ void Terrain::ImGuiDraw()
 	ImGui::SeparatorText(name.c_str());
 	name = name + "Position";
 	ImGui::DragFloat3(name.c_str(), &worldtransform_.transform_.translate.x, 0.01f, -30.0f, 30.0f);
+	name = "Terrain" + std::to_string(serialNum_) + "Coll";
+	ImGui::DragFloat2(name.c_str(), &boxCollider_.position_.x);
 
 	//ImGui::End();
 
