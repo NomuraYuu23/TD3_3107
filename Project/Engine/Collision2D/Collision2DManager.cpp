@@ -55,12 +55,12 @@ void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderS
 
 		if (Collision2D::IsCollision(*a, *b)) {
 			// 衝突処理
-			//std::visit([=](const auto& x, const auto& y) {
-			//	CollisionData collisionData = { p1, t1, pushBackDist ,p2};
-			//	x->OnCollision(y, collisionData);
-			//	collisionData = { p2, t2, pushBackDist ,p1};
-			//	y->OnCollision(x, collisionData);
-			//	}, a->GetParentObject(), b->GetParentObject());
+			std::visit([=](const auto& x, const auto& y) {
+
+				x->OnCollision(y);
+				y->OnCollision(x);
+
+				}, a->GetParentObject(), b->GetParentObject());
 		}
 		}, colliderA, colliderB);
 
