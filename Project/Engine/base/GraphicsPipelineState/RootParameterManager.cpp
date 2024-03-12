@@ -29,6 +29,8 @@ void RootParameterManager::Initialize()
 	RootParameterInitializeForOutLine();
 	// コライダーデバッグ2D
 	RootParameterInitializeForCollision2DDebugDraw();
+	// 線
+	RootParameterInitializeForLine();
 
 }
 
@@ -203,6 +205,22 @@ void RootParameterManager::RootParameterInitializeForCollision2DDebugDraw()
 		rootParameters_[kRootParameterIndexCollision2DDebugDraw].push_back(rootParameters[i]);
 	}
 
+
+}
+
+void RootParameterManager::RootParameterInitializeForLine()
+{
+
+	//RootParameter作成。複数設定できるので配列。
+	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	// VP
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;   //CBVを使う
+	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//PixelShaderで使う
+	rootParameters[0].Descriptor.ShaderRegister = 0;                   //レジスタ番号0とバインド
+
+	for (uint32_t i = 0; i < _countof(rootParameters); ++i) {
+		rootParameters_[kRootParameterIndexLine].push_back(rootParameters[i]);
+	}
 
 }
 
