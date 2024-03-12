@@ -44,6 +44,8 @@ void PlayerController::ControllerProcess()
 			return;
 		}
 
+		//---どの状態でも行える操作---//
+
 		// 投げ
 		//CheckAction = std::holds_alternative<HoldState*>(player_->weapon_->nowState_);
 		// 武器持ってなければfalse
