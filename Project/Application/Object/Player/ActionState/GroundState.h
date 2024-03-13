@@ -16,6 +16,7 @@ public:
 private:
 	// 移動
 	float moveSpeed_;
+	float fallPower_;
 
 };
 

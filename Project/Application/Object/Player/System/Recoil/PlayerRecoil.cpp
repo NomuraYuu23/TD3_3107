@@ -5,7 +5,7 @@
 void PlayerRecoil::Initialize(Player* player)
 {
 	player_ = player;
-	recoilFrame_ = 15.0f;
+	recoilFrame_ = 10.0f;
 }
 
 void PlayerRecoil::CreateRecoil(const Vector3& direction)
@@ -13,9 +13,8 @@ void PlayerRecoil::CreateRecoil(const Vector3& direction)
 	float kPower = 80.0f;
 	this->startValue_ = direction;
 	startValue_ *= kPower;
-
+	// フレーム数
 	timer_.Start(this->recoilFrame_);
-
 }
 
 void PlayerRecoil::Update()

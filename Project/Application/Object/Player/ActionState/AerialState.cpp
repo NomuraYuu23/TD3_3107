@@ -40,11 +40,10 @@ void AerialState::Update()
 	// Y軸更新処理
 	player_->velocity_.y += jumpPower_;
 
-	float maxValue = 30.0f;
-
-	if (player_->velocity_.y <= -maxValue) {
-		player_->velocity_.y = -maxValue;
-	}
+	//float maxValue = 30.0f;
+	//if (player_->velocity_.y <= -maxValue) {
+	//	player_->velocity_.y = -maxValue;
+	//}
 
 	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	

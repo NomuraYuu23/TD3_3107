@@ -165,6 +165,10 @@ void Player::OnCollision(ColliderParentObject2D target, const Vector2& targetPos
 		}
 		// 帰ってきてる時の衝突
 		else if (std::holds_alternative<ReturnState*>(weapon_->nowState_)) {
+			// 着地している場合早期リターン
+			if (std::holds_alternative<GroundState*>(nowState_)) {
+				return;
+			}
 			// 反動生成
 			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
 

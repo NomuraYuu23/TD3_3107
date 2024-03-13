@@ -8,6 +8,8 @@ void GroundState::Initialize()
 
 	SetIsFall(true);
 
+	player_->velocity_ = {};
+	fallPower_ = -(1.0f/1.0f);
 }
 
 void GroundState::Update()
@@ -19,6 +21,11 @@ void GroundState::Update()
 	//}
 	if (player_->worldtransform_.transform_.translate.y <= 0) {
 		player_->worldtransform_.transform_.translate.y = 0;
+		player_->velocity_.y = 0;
+	}
+	else {
+		player_->velocity_.y += fallPower_ + (-kGravity) * kDeltaTime_;
+		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	}
 
 }
