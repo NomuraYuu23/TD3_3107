@@ -126,9 +126,6 @@ void PlayerController::KeyBoardProcess()
 	else if (input_->PushKey(DIK_D)) {
 		player_->velocity_.x = moveSpeed_;
 	}
-	else {
-		player_->velocity_.x = 0;
-	}
 	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_;
 
 }

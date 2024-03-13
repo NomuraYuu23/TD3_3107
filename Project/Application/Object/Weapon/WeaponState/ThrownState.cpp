@@ -21,7 +21,6 @@ void ThrownState::Initialize()
 	// 加速しきるまでの時間
 	float maxFrame = 50.0f;
 	acceleratorTimer_.Start(maxFrame);
-
 }
 
 void ThrownState::Update()
@@ -32,20 +31,14 @@ void ThrownState::Update()
 		return;
 	}
 
-
-	//if (acceleratorTimer_.IsActive()) {
-	//	float max_v = 25.0f;
-	//	float min_v = 8.0f;
-	//	speedValue_ = Ease::Easing(Ease::EaseName::EaseOutQuad, min_v, max_v, acceleratorTimer_.GetNowFrame());
-	//}
-
-	//acceleratorTimer_.Update();
-
-	velocity_.x += weapon_->throwDirect_.x * speedValue_ * kDeltaTime_;
-
 	// 武器の重力処理
 	if (weapon_->GetIsGravity()) {
 		velocity_.y -= (9.8f * 1.25f) * kDeltaTime_;
+		velocity_.x += weapon_->throwDirect_.x * speedValue_ * kDeltaTime_;
+	}
+
+	else {
+		velocity_.x += weapon_->throwDirect_.x * (speedValue_ * 2.0f) * kDeltaTime_;
 	}
 
 	// 移動処理

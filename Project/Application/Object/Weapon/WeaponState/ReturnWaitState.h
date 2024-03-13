@@ -2,6 +2,7 @@
 #include "IWeaponState.h"
 #include "../../GameUtility/TimerLib.h"
 #include "../../../Engine/Math/Vector3.h"
+#include "../../../Engine/Math/Vector2.h"
 
 class ReturnWaitState : public IWeaponState
 {
@@ -26,4 +27,6 @@ private:
 	TimerLib pressTimer_;
 
 	Vector3 rotateVector_ = {};
+
+	Vector2 highestPoint_ = {};
 };

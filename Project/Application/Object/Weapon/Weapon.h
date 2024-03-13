@@ -120,7 +120,8 @@ public: // 外部で行う設定関数
 	Vector3 throwDirect_ = {};
 	// 帰ってくる方向
 	Vector2 returnDirect_ = {};
-
+	// 刺さった時の逆ベクトル
+	Vector2 invDirect_ = {};
 
 private:
 	// ステート

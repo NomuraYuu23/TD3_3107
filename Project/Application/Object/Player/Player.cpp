@@ -29,7 +29,7 @@ void Player::Update()
 {
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
-
+	velocity_ = {};
 	// ステートの更新
 	if (actionState_) {
 		actionState_->Update();
@@ -160,14 +160,25 @@ void Player::OnCollision(ColliderParentObject2D target, const Vector2& targetPos
 
 		//float size = 2.0f;
 
-		//Vector3 newPosition = { worldtransform_.transform_.translate.x,targetPosition.y + size,0 };
+		//if (velocity_.x != 0 && velocity_.y == 0) {
+		//	Vector3 correctPos = { targetPosition.x,circleCollider_.position_.y,0 };
 
+		//	if (velocity_.x > 0) {
+		//		correctPos.x -= size;
+		//	}
+		//	else if (velocity_.x < 0) {
+		//		correctPos.x += size;
+		//	}
+
+		//	worldtransform_.transform_.translate = prevPosition_;
+		//}
+		//Vector3 newPosition = { worldtransform_.transform_.translate.x,targetPosition.y + size,0 };
 		//worldtransform_.transform_.translate = newPosition;
 		//this->actionState_->SetIsFall(false);
 
+
 	}
 	targetPosition;
-	// 
 
 }
 

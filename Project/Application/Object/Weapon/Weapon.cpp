@@ -81,11 +81,13 @@ void Weapon::ImGuiDraw()
 
 	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x);
 
-	ImGui::DragFloat3("Direct", &this->throwDirect_.x);
+	ImGui::DragFloat3("ThrowDirect", &this->throwDirect_.x);
+	ImGui::DragFloat3("Velocity", &this->velocity_.x);
 
 	ImGui::DragFloat2("CollV2", &boxCollider_.position_.x);
 
 	ImGui::DragFloat2("returnDirect", &returnDirect_.x);
+	ImGui::DragFloat2("invDirect", &invDirect_.x);
 
 	ImGui::DragFloat("returnRate", &returnRate_, 0.01f, 0.01f, 10.0f);
 
@@ -109,6 +111,8 @@ void Weapon::OnCollision(ColliderParentObject2D target, const Vector2& targetPos
 	{
 		// 壁・ブロックとの衝突判定
 		if (std::holds_alternative<Terrain*>(target)) {
+			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
+			//invDirect_ = boxCollider_.position_ - targetPosition;
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;
 		}
