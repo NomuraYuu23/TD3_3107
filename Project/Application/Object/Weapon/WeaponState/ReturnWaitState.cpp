@@ -18,11 +18,7 @@ void ReturnWaitState::Initialize()
 
 void ReturnWaitState::Update()
 {
-
-	//weapon_->worldtransform_.direction_;
-
-	//weapon_->worldtransform_.transform_.rotate.z += 1.0f / 60.0f;
-	//weapon_->worldtransform_.transform_.rotate.y += 1.0f / 60.0f;
+	// 上下のスティック入力
 	Vector2 rightStick = Input::GetInstance()->GetRightAnalogstick();
 
 	if (rightStick.y < 0) {
@@ -34,8 +30,10 @@ void ReturnWaitState::Update()
 	else {
 		weapon_->returnDirect_.y = 0.0f;
 	}
-	weapon_->worldtransform_.direction_.x += 1.0f / 30.0f;
-	weapon_->worldtransform_.direction_.y += 1.0f / 30.0f;
+
+	//weapon_->worldtransform_.direction_.x = std::cosf(1.0f / 360.0f);
+	//weapon_->worldtransform_.direction_.y = std::sinf(1.0f / 360.0f);
+
 	// 終了タイミング
 	if (endTimer_.IsEnd() || pressTimer_.IsEnd()) {
 		weapon_->ChangeRequest(Weapon::StateName::kReturn);

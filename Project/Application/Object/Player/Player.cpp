@@ -140,8 +140,8 @@ void Player::OnCollision(ColliderParentObject2D target, const Vector2& targetPos
 			if (velocity_.y < 0) {
 				// 
 				weapon_->TreadSetting();
-				ChangeState(std::make_unique<ActionWaitState>());
-
+				//ChangeState(std::make_unique<ActionWaitState>());
+				ChangeState(std::make_unique<AerialState>());
 			}
 			return;
 		}

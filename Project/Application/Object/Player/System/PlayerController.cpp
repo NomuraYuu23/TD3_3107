@@ -29,7 +29,7 @@ void PlayerController::Update()
 void PlayerController::ControllerProcess()
 {
 	Vector2 leftStick = input_->GetLeftAnalogstick();
-	float moveSpeed_ = 6.0f;
+	float moveSpeed_ = 15.0f;
 	bool CheckAction = false;
 
 	if (input_->GetJoystickConnected()) {
