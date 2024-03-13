@@ -81,13 +81,11 @@ public:
 	std::unique_ptr<IActionState> actionState_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
-	// 速さベクトル
-	Vector3 velocity_ = {};
 	// 重力
 	float gravity_ = 9.8f;
 	// 投げる方向
 	Vector3 throwDirect_ = { 1,0,0 };
-
+	// 前座標
 	Vector3 prevPosition_ = {};
 
 private:

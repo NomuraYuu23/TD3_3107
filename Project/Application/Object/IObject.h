@@ -72,6 +72,8 @@ public:
 	std::unique_ptr<Material> material_ = nullptr;
 	int32_t enableLighting_;
 	float shininess_;
+	// 速さベクトル
+	Vector3 velocity_ = {};
 
 };
 

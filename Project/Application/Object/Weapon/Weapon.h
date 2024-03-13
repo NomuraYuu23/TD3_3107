@@ -82,6 +82,8 @@ public: // アクセッサ
 
 	bool GetIsGravity() { return isGravity_; }
 
+	float GetReturnRate() { return returnRate_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 親の設定
@@ -116,6 +118,9 @@ public: // 外部で行う設定関数
 
 	// 投げる方向
 	Vector3 throwDirect_ = {};
+	// 帰ってくる方向
+	Vector2 returnDirect_ = {};
+
 
 private:
 	// ステート
@@ -126,6 +131,8 @@ private:
 	Vector3 localOffset_ = {};
 	// 一回踏んだか確認フラグ
 	bool isTread_ = false;
+	// 帰ってくるときの座標レート
+	float returnRate_ = 1.0f;
 
 	// タイマーライブラリ
 	TimerLib timer_;

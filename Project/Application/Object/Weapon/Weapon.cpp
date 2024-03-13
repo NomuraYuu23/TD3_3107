@@ -21,6 +21,8 @@ void Weapon::Initialize(Model* model)
 	ChangeState(std::make_unique<HoldState>());
 	// 重力
 	gravityValue_ = 9.8f;
+	// 戻るレート
+	returnRate_ = 1.3f;
 }
 
 void Weapon::Update()
@@ -80,6 +82,10 @@ void Weapon::ImGuiDraw()
 	ImGui::DragFloat3("Direct", &this->throwDirect_.x);
 
 	ImGui::DragFloat2("CollV2", &boxCollider_.position_.x);
+
+	ImGui::DragFloat2("returnDirect", &returnDirect_.x);
+
+	ImGui::DragFloat("returnRate", &returnRate_, 0.01f, 0.01f, 10.0f);
 
 	ImGui::End();
 

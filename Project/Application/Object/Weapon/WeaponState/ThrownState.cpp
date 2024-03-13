@@ -14,7 +14,9 @@ void ThrownState::Initialize()
 	// 速さ
 	speedValue_ = 10.0f;
 	// 投げる際の速度
-	velocity_ = weapon_->throwDirect_ * speedValue_;
+	//velocity_ = weapon_->throwDirect_ * speedValue_;
+	velocity_.x = weapon_->throwDirect_.x * (speedValue_ * 2.0f);
+	velocity_.y = weapon_->throwDirect_.y * (speedValue_ * 1.5f);
 
 	// 加速しきるまでの時間
 	float maxFrame = 50.0f;
@@ -43,7 +45,7 @@ void ThrownState::Update()
 
 	// 武器の重力処理
 	if (weapon_->GetIsGravity()) {
-		velocity_.y -= 9.8f * kDeltaTime_;
+		velocity_.y -= (9.8f * 1.25f) * kDeltaTime_;
 	}
 
 	// 移動処理

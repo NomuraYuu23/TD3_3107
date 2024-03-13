@@ -1,5 +1,6 @@
 #pragma once
 #include "IWeaponState.h"
+#include "../../GameUtility/TimerLib.h"
 #include "../../../Engine/Math/Vector3.h"
 
 class ReturnState : public IWeaponState
@@ -23,9 +24,16 @@ public:
 	/// </summary>
 	void EaseUpdate();
 
+	void CreateRelayPoint();
+
 private:
 	// 座標
 	Vector3 startPosition_ = {};
+	// 中継座標
+	Vector3 relayPosition_ = {};
+	// 中継座標までの時間
+	TimerLib RelayTimer_;
+
 	// Lerpの補間レート
 	float lerp_t = 0;
 
