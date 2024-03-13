@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../Engine/Input/Input.h"
+#include "../../../Engine/3D/Model.h"
 
 class Player;
 

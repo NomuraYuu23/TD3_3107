@@ -46,10 +46,10 @@ void AerialState::Update()
 		player_->velocity_.y = -maxValue;
 	}
 
-	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_;
+	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	
 	// X軸更新処理
 	velocity_.x += velocity_.x * kDeltaTime_;
-	player_->worldtransform_.transform_.translate.x += velocity_.x * kDeltaTime_;
+	player_->worldtransform_.transform_.translate.x += velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 }

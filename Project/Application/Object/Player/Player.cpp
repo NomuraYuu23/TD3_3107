@@ -19,17 +19,22 @@ void Player::Initialize(Model* model)
 	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
+	footCollider_.position_ = { position2D_.x,position2D_.y - scale2D_.x - 0.5f };
+	footCollider_.scale_ = { scale2D_.x * 0.75f,scale2D_.x * 0.2f };
+	footCollider_.collider_.Initialize(footCollider_.position_, footCollider_.scale_.x, footCollider_.scale_.y, 0.0f,this);
+
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
 
 	weapon_->SettingParent();
+
 }
 
 void Player::Update()
 {
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
-	velocity_ = {};
+	//velocity_ = {};
 	// ステートの更新
 	if (actionState_) {
 		actionState_->Update();
@@ -44,6 +49,7 @@ void Player::Update()
 	IObject::Update();
 	// コライダー
 	CircleColliderUpdate();
+	footCollider_.collider_.Update(footCollider_.position_, footCollider_.scale_.x, footCollider_.scale_.y, 0.0f);
 
 	// 武器の更新
 	if (weapon_) {
@@ -60,11 +66,23 @@ void Player::Draw(BaseCamera camera)
 	if (weapon_) {
 		weapon_->Draw(camera);
 	}
+
 }
 
 void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
+
+	float ratio = IObject::sPlaySpeed;
+	ImGui::DragFloat("playTime", &ratio);
+	sPlaySpeed = ratio;
+	if (ImGui::Button("Normal")) {
+		sPlaySpeed = 1.0f;
+	}
+
+	if (ImGui::Button("Slow")) {
+		sPlaySpeed = 2.5f;
+	}
 
 	if (ImGui::BeginTabBar("Param")) {
 		// 共通項目

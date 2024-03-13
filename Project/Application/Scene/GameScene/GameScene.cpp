@@ -29,7 +29,10 @@ void GameScene::Initialize() {
 
 	ModelCreate();
 	TextureLoad();
-
+	
+	//arrowSprite_.reset(Sprite::Create(arrowTexture_, { 100,100 }, { 1,1,1,1 }));
+	//arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
+	
 	// ビュープロジェクション
 	TransformStructure baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
@@ -125,6 +128,9 @@ void GameScene::Initialize() {
 	weapon->Initialize(weaponModel_.get());
 	// 生成
 	player_ = std::make_unique<Player>();
+	// テクスチャの読み込み
+	player_->arrowTexture_ = TextureManager::Load("Resources/GameObject/Image/arrow.png", dxCommon_, textureHandleManager_.get());
+	player_->SetArrowModel(particleCircleModel_.get());
 	// 武器の設定
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
@@ -135,6 +141,8 @@ void GameScene::Initialize() {
 
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
+	countTime_ = 0;
+	player_->Update();
 }
 
 /// <summary>
@@ -278,7 +286,7 @@ void GameScene::Draw() {
 
 	//背景
 	//前景スプライト描画
-
+	
 	// UIマネージャー
 	//uiManager_->Draw();
 
@@ -423,6 +431,7 @@ void GameScene::ModelCreate()
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
+
 }
 
 void GameScene::TextureLoad()
@@ -488,6 +497,7 @@ void GameScene::CollisionUpdate()
 
 	collision2DManager_->ListClear();
 	collision2DManager_->ListRegister(&player_->circleCollider_);
+	//collision2DManager_->ListRegister(&player_->GetFootCollider());
 	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
 	
 	mapManager_->CollisionRegister(collision2DManager_.get());

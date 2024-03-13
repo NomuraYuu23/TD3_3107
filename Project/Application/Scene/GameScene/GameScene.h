@@ -155,4 +155,9 @@ private:
 
 	std::unique_ptr<GameBasicCamera> gameCamera_;
 
+	std::unique_ptr<Sprite> arrowSprite_;
+	uint32_t arrowTexture_ = 0u;
+
+	float countTime_ = 0.0f;
+
 };

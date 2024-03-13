@@ -1,5 +1,6 @@
 #include "PlayerController.h"
 #include "../Player.h"
+#include "../../../Engine/base/TextureManager.h"
 
 void PlayerController::Initialize(Player* player)
 {
@@ -21,7 +22,7 @@ void PlayerController::Update()
 	ControllerProcess();
 
 	// キーボード用
-	KeyBoardProcess();
+	//KeyBoardProcess();
 
 
 }
@@ -85,7 +86,7 @@ void PlayerController::ControllerProcess()
 
 	}
 
-	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_;
+	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 }
 

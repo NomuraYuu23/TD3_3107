@@ -42,7 +42,7 @@ void ThrownState::Update()
 	}
 
 	// 移動処理
-	weapon_->worldtransform_.transform_.translate += velocity_ * kDeltaTime_;
+	weapon_->worldtransform_.transform_.translate += (velocity_ * kDeltaTime_) * (1.0f / IObject::sPlaySpeed);
 	weapon_->worldtransform_.direction_ = Vector3::Normalize(velocity_);
 }
 

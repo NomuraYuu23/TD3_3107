@@ -66,6 +66,12 @@ public: // メンバ関数
 	PlayerState GetNowState() { return nowState_; }
 
 	/// <summary>
+	/// 足元のコライダー
+	/// </summary>
+	/// <returns></returns>
+	Box GetFootCollider() { return footCollider_.collider_; }
+
+	/// <summary>
 	/// ステートの設定
 	/// </summary>
 	/// <param name="state"></param>
@@ -75,6 +81,10 @@ public: // メンバ関数
 	/// 反動中か
 	/// </summary>
 	bool IsRecoil() { return recoil_.IsActive(); }
+
+public:
+
+	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
 
 public:
 	// ステート
@@ -88,6 +98,8 @@ public:
 	// 前座標
 	Vector3 prevPosition_ = {};
 
+	uint32_t arrowTexture_ = 0u;
+
 private:
 	// 現状のステート
 	PlayerState nowState_;
@@ -95,6 +107,25 @@ private:
 	PlayerRecoil recoil_;
 	// 操作クラス
 	PlayerController controller_;
+
+	struct FootCollisionData {
+		Vector2 position_ = {};
+		Vector2 scale_ = {};
+		Box collider_ = {};
+	};
+
+	FootCollisionData footCollider_ = {};
+
+
+	struct ArrowUIData {
+		Model* plane_;
+		Vector3 v3Position;
+		float offsetLength;
+	};
+
+	ArrowUIData arrow_;
+
+	bool isSlowGame_ = false;
 
 };
 

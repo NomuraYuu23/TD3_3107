@@ -1,12 +1,15 @@
 #pragma once
 #include "../../Engine/3D/Model.h"
 #include "../../Engine/Collider2D/ColliderShape2D.h"
+#include "GameUtility/CommonConfig.h"
 
 class IObject
 {
 public:
 	IObject() {};
 	~IObject() = default;
+
+	static float sPlaySpeed;
 
 public:
 	/// <summary>

@@ -1,5 +1,7 @@
 #include "IObject.h"
 
+float IObject::sPlaySpeed = 1;
+
 void IObject::Initialize(Model* model)
 {
 	model_ = model;
