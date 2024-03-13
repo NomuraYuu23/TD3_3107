@@ -47,7 +47,7 @@ void Terrain::ImGuiDraw()
 
 }
 
-void Terrain::OnCollision(ColliderParentObject2D target)
+void Terrain::OnCollision(ColliderParentObject2D target, const Vector2& targetPosition)
 {
-	target;
+	target, targetPosition;
 }

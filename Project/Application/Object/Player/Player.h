@@ -34,7 +34,9 @@ public: // 継承
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	void OnCollision(ColliderParentObject2D target) override;
+	void OnCollision(ColliderParentObject2D target, const Vector2& targetPosition) override;
+
+	Vector2 GetCollierPosition() override { return circleCollider_.position_; }
 
 public: // メンバ関数
 	/// <summary>
@@ -52,6 +54,9 @@ public: // メンバ関数
 		weapon_->SetParentAdress(&worldtransform_);
 	}
 
+	/// <summary>
+	/// 武器のポインタ取得
+	/// </summary>
 	Weapon* GetWeapon() { return weapon_.get(); }
 
 	/// <summary>
@@ -66,6 +71,9 @@ public: // メンバ関数
 	/// <param name="state"></param>
 	void SetNowState(PlayerState state) { nowState_ = state; }
 
+	/// <summary>
+	/// 反動中か
+	/// </summary>
 	bool IsRecoil() { return recoil_.IsActive(); }
 
 public:
@@ -79,6 +87,8 @@ public:
 	float gravity_ = 9.8f;
 	// 投げる方向
 	Vector3 throwDirect_ = { 1,0,0 };
+
+	Vector3 prevPosition_ = {};
 
 private:
 	// 現状のステート

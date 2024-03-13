@@ -27,6 +27,9 @@ void Player::Initialize(Model* model)
 
 void Player::Update()
 {
+	// 前フレームの座標
+	prevPosition_ = worldtransform_.GetWorldPosition();
+
 	// ステートの更新
 	if (actionState_) {
 		actionState_->Update();
@@ -116,7 +119,7 @@ void Player::ImGuiDraw()
 
 }
 
-void Player::OnCollision(ColliderParentObject2D target)
+void Player::OnCollision(ColliderParentObject2D target, const Vector2& targetPosition)
 {
 	// 武器との衝突
 	if (std::holds_alternative<Weapon*>(target)) {
@@ -153,11 +156,17 @@ void Player::OnCollision(ColliderParentObject2D target)
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
+		// 前座標に戻す
 
+		//float size = 2.0f;
 
+		//Vector3 newPosition = { worldtransform_.transform_.translate.x,targetPosition.y + size,0 };
+
+		//worldtransform_.transform_.translate = newPosition;
+		//this->actionState_->SetIsFall(false);
 
 	}
-
+	targetPosition;
 	// 
 
 }

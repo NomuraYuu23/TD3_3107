@@ -26,9 +26,19 @@ public:
 	/// </summary>
 	virtual void Update() = 0;
 
+public:
+	/// <summary>
+	/// 落下中フラグ
+	/// </summary>
+	/// <param name="isFall"></param>
+	void SetIsFall(bool isFall) { isFall_ = isFall; }
+
 protected:
 	// プレイヤーのポインタ
 	Player* player_ = nullptr;
+
+	// 落下中か
+	bool isFall_ = false;
 
 };
 

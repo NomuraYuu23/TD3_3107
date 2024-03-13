@@ -10,10 +10,23 @@ public:
 	~PlayerController() = default;
 
 public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="player"></param>
 	void Initialize(Player* player);
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// コントローラー操作処理
+	/// </summary>
 	void ControllerProcess();
+	/// <summary>
+	/// キーボード操作処理
+	/// </summary>
 	void KeyBoardProcess();
 
 private:

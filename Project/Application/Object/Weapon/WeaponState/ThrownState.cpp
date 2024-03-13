@@ -7,6 +7,7 @@ void ThrownState::Initialize()
 {
 	// 親子関係解除処理
 	weapon_->ReleaseParent();
+
 	// ステート更新
 	SetNowState(this);
 

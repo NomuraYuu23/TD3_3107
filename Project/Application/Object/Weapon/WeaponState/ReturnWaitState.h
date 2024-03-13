@@ -1,6 +1,7 @@
 #pragma once
 #include "IWeaponState.h"
 #include "../../GameUtility/TimerLib.h"
+#include "../../../Engine/Math/Vector3.h"
 
 class ReturnWaitState : public IWeaponState
 {
@@ -21,4 +22,6 @@ public:
 private:
 	// 終了タイマー用
 	TimerLib endTimer_;
+
+	Vector3 rotateVector_ = {};
 };

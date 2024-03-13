@@ -33,7 +33,7 @@ public:
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	virtual void OnCollision(ColliderParentObject2D target) = 0;
+	virtual void OnCollision(ColliderParentObject2D target, const Vector2& targetPosition) = 0;
 
 public: // アクセッサ
 	/// <summary>
@@ -44,6 +44,7 @@ public: // アクセッサ
 		return boxCollider_;
 	}
 
+	virtual Vector2 GetCollierPosition() = 0;
 protected:
 	void BoxColliderUpdate() {
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);

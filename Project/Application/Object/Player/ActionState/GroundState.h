@@ -17,7 +17,5 @@ private:
 	// 移動
 	float moveSpeed_;
 
-	bool isFall_ = false;
-
 };
 

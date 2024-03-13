@@ -45,7 +45,8 @@ public: // 継承
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	void OnCollision(ColliderParentObject2D target) override;
+	void OnCollision(ColliderParentObject2D target, const Vector2& targetPosition) override;
+	Vector2 GetCollierPosition() override { return boxCollider_.position_; }
 
 private:
 	/// <summary>
