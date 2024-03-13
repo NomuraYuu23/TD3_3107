@@ -79,6 +79,8 @@ void Weapon::ImGuiDraw()
 
 	ImGui::Text("%d : isGravity", isGravity_);
 
+	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x);
+
 	ImGui::DragFloat3("Direct", &this->throwDirect_.x);
 
 	ImGui::DragFloat2("CollV2", &boxCollider_.position_.x);

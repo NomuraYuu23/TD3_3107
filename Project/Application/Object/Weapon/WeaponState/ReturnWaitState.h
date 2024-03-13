@@ -23,5 +23,7 @@ private:
 	// 終了タイマー用
 	TimerLib endTimer_;
 
+	TimerLib pressTimer_;
+
 	Vector3 rotateVector_ = {};
 };
