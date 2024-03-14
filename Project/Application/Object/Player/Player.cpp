@@ -89,12 +89,6 @@ void Player::ImGuiDraw()
 	}	
 
 	if (ImGui::BeginTabBar("Param")) {
-		if (ImGui::BeginTabItem("Collider")) {
-			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, 0, 10.0f);
-			ImGui::DragFloat2("ColliderSize", &circleCollider_.scale_.x, 0.01f, 0, 10.0f);
-			ImGui::DragFloat("Radius", &circleCollider_.radius_, 0.01f, 0, 10.0f);
-			ImGui::EndTabItem();
-		}
 
 		// 共通項目
 		if (ImGui::BeginTabItem("Common")) {
@@ -109,8 +103,26 @@ void Player::ImGuiDraw()
 			
 			throwDirect_ = throwDirect_.Normalize(throwDirect_);
 
+			if (ImGui::Button("IsGround")) {
+				if (isGround_) {
+					isGround_ = false;
+				}
+				else {
+					isGround_ = true;
+				}
+			}
+
+
 			ImGui::EndTabItem();
 		}
+		// コライダー用
+		if (ImGui::BeginTabItem("Collider")) {
+			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, 0, 10.0f);
+			ImGui::DragFloat2("ColliderSize", &circleCollider_.scale_.x, 0.01f, 0, 10.0f);
+			ImGui::DragFloat("Radius", &circleCollider_.radius_, 0.01f, 0, 10.0f);
+			ImGui::EndTabItem();
+		}
+
 		// 地上
 		if (ImGui::BeginTabItem("OnGround")) {
 
@@ -203,22 +215,28 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			Vector2 targetPos = {};
 			Vector2 targetRad = {};
+			// 対象の情報取得
 			std::visit([&](const auto& a) {
 				targetPos = a->GetColliderPosition();
 				targetRad = a->GetColliderSize();
 				}, target);
 
-			float offset = 0.05f;
+			// 移動文
+			float offset = 0.1f;
 			targetRad.x += offset;
+			targetRad.y += offset;
 
 			if (velocity_.x > 0) {
 				Vector3 correctPosition = { targetPos.x - targetRad.x,worldtransform_.GetWorldPosition().y,0 };
 				worldtransform_.transform_.translate = correctPosition;
 			}
-			else {
+			else if(velocity_.x < 0){
 				Vector3 correctPosition = { targetPos.x + targetRad.x,worldtransform_.GetWorldPosition().y,0 };
 				worldtransform_.transform_.translate = correctPosition;
 			}
+			// 初期化
+			velocity_.x = 0;
+
 		}		
 
 		if (std::fabsf(velocity_.y) != 0) {
@@ -240,13 +258,15 @@ void Player::OnCollision(ColliderParentObject2D target)
 				return;
 			}
 			// 下向き
-			else {
+			else if(velocity_.y < 0){
 				Vector3 correctPosition = { worldtransform_.GetWorldPosition().x,targetPos.y + targetRad.y,0 };
 				worldtransform_.transform_.translate = correctPosition;
 			}
 
 
 			isGround_ = true;
+
+			//velocity_.y = 0;
 
 			if (std::holds_alternative<AerialState*>(GetNowState())) {
 				ChangeState(std::make_unique<GroundState>());
