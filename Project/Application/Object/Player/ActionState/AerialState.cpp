@@ -26,11 +26,11 @@ void AerialState::Initialize()
 void AerialState::Update()
 {
 	// 落下確認処理
-	if (player_->worldtransform_.transform_.translate.y < 0.0f) {
-		player_->worldtransform_.transform_.translate.y = 0;
-		player_->ChangeState(std::make_unique<GroundState>());
-		return;
-	}
+	//if (player_->worldtransform_.transform_.translate.y < 0.0f) {
+	//	player_->worldtransform_.transform_.translate.y = 0;
+	//	player_->ChangeState(std::make_unique<GroundState>());
+	//	return;
+	//}
 
 	// 落下処理
 	// ジャンプ（重力計算

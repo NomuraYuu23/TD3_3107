@@ -497,7 +497,7 @@ void GameScene::CollisionUpdate()
 
 	collision2DManager_->ListClear();
 	collision2DManager_->ListRegister(&player_->circleCollider_);
-	//collision2DManager_->ListRegister(&player_->GetFootCollider());
+	//collision2DManager_->ListRegister(&player_->footCollider_.collider_);
 	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
 	
 	mapManager_->CollisionRegister(collision2DManager_.get());
@@ -509,5 +509,5 @@ void GameScene::CollisionUpdate()
 	//collision2DDebugDraw_->Register(box1_.get());
 	//collision2DDebugDraw_->Register(circle_.get());
 	//collision2DDebugDraw_->Register(circle1_.get());
-
+	//collision2DDebugDraw_->Register(&player_->circleCollider_);
 }

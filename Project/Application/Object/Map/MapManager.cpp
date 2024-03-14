@@ -87,7 +87,7 @@ void MapManager::InitializePlacement()
 	for (int i = 0; i < 30; i++) {
 		RegisterBlock({ 16.0f - 2.0f * (float)i,-2.0f,0 });
 	}
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 8; i++) {
 		RegisterBlock({ 8.0f, 2.0f * (float)i, 0 });
 	}
 }

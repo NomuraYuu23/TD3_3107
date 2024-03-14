@@ -99,7 +99,7 @@ void Weapon::ImGuiDraw()
 
 }
 
-void Weapon::OnCollision(ColliderParentObject2D target, const Vector2& targetPosition)
+void Weapon::OnCollision(ColliderParentObject2D target)
 {
 	// 持っている状態なら早期
 	if (std::holds_alternative<HoldState*>(nowState_)) {
@@ -127,7 +127,6 @@ void Weapon::OnCollision(ColliderParentObject2D target, const Vector2& targetPos
 		}
 	}
 
-	targetPosition;
 }
 
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)

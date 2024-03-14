@@ -10,6 +10,19 @@
 
 class Player : public IObject
 {
+private:
+	struct FootCollisionData {
+		Vector2 position_ = {};
+		Vector2 scale_ = {};
+		Box collider_ = {};
+	};
+
+	struct ArrowUIData {
+		Model* plane_;
+		Vector3 v3Position;
+		float offsetLength;
+	};
+
 public: // 継承
 	/// <summary>
 	/// 初期化
@@ -34,9 +47,10 @@ public: // 継承
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	void OnCollision(ColliderParentObject2D target, const Vector2& targetPosition) override;
+	void OnCollision(ColliderParentObject2D target) override;
 
-	Vector2 GetCollierPosition() override { return circleCollider_.position_; }
+	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
+	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
 
 public: // メンバ関数
 	/// <summary>
@@ -100,6 +114,11 @@ public:
 
 	uint32_t arrowTexture_ = 0u;
 
+	FootCollisionData footCollider_ = {};
+
+
+	bool isGround_ = false;
+
 private:
 	// 現状のステート
 	PlayerState nowState_;
@@ -107,21 +126,6 @@ private:
 	PlayerRecoil recoil_;
 	// 操作クラス
 	PlayerController controller_;
-
-	struct FootCollisionData {
-		Vector2 position_ = {};
-		Vector2 scale_ = {};
-		Box collider_ = {};
-	};
-
-	FootCollisionData footCollider_ = {};
-
-
-	struct ArrowUIData {
-		Model* plane_;
-		Vector3 v3Position;
-		float offsetLength;
-	};
 
 	ArrowUIData arrow_;
 

@@ -62,8 +62,8 @@ void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderS
 			// 衝突処理
 			std::visit([=](const auto& x, const auto& y) {
 
-				x->OnCollision(y, y->GetCollierPosition());
-				y->OnCollision(x, x->GetCollierPosition());
+				x->OnCollision(y);
+				y->OnCollision(x);
 
 				}, a->GetParentObject(), b->GetParentObject());
 		}

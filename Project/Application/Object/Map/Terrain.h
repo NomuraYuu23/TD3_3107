@@ -31,9 +31,11 @@ public:
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	void OnCollision(ColliderParentObject2D target, const Vector2& targetPosition) override;
+	void OnCollision(ColliderParentObject2D target) override;
 
-	Vector2 GetCollierPosition() override { return boxCollider_.position_; }
+	Vector2 GetColliderPosition() override { return boxCollider_.position_; }
+	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
+
 private:
 	// シリアルナンバー
 	uint32_t serialNum_ = 0;

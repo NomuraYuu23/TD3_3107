@@ -3,6 +3,7 @@
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../ObjectList.h"
 
 void Player::Initialize(Model* model)
 {
@@ -13,9 +14,12 @@ void Player::Initialize(Model* model)
 
 	// 基底クラスの初期化
 	IObject::Initialize(model);
+
+	worldtransform_.transform_.translate = { 0,1,0 };
+
 	// コライダーの初期化
-	scale2D_.x *= 0.95f;
-	circleCollider_.Initialize(position2D_, scale2D_.x, this);
+	circleCollider_.radius_ = 0.95f;
+	circleCollider_.Initialize(position2D_, circleCollider_.radius_, this);
 	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
@@ -27,7 +31,7 @@ void Player::Initialize(Model* model)
 	ChangeState(std::make_unique<GroundState>());
 
 	weapon_->SettingParent();
-
+	isGround_ = false;
 }
 
 void Player::Update()
@@ -60,7 +64,7 @@ void Player::Update()
 
 void Player::Draw(BaseCamera camera)
 {
-	// プレイヤーの描画
+		// プレイヤーの描画
 	model_->Draw(worldtransform_, camera,material_.get());
 	// 武器の描画
 	if (weapon_) {
@@ -82,9 +86,16 @@ void Player::ImGuiDraw()
 
 	if (ImGui::Button("Slow")) {
 		sPlaySpeed = 2.5f;
-	}
+	}	
 
 	if (ImGui::BeginTabBar("Param")) {
+		if (ImGui::BeginTabItem("Collider")) {
+			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, 0, 10.0f);
+			ImGui::DragFloat2("ColliderSize", &circleCollider_.scale_.x, 0.01f, 0, 10.0f);
+			ImGui::DragFloat("Radius", &circleCollider_.radius_, 0.01f, 0, 10.0f);
+			ImGui::EndTabItem();
+		}
+
 		// 共通項目
 		if (ImGui::BeginTabItem("Common")) {
 			float absValue = 30.0f;
@@ -137,12 +148,16 @@ void Player::ImGuiDraw()
 
 }
 
-void Player::OnCollision(ColliderParentObject2D target, const Vector2& targetPosition)
+void Player::OnCollision(ColliderParentObject2D target)
 {
 	// 武器との衝突
 	if (std::holds_alternative<Weapon*>(target)) {
+
+		if (std::holds_alternative<HoldState*>(weapon_->nowState_)) {
+			return;
+		}
 		// 壁に刺さっている状態なら
-		if (std::holds_alternative<ImpaledState*>(weapon_->nowState_) && !weapon_->GetIsTread()) {
+		else if (std::holds_alternative<ImpaledState*>(weapon_->nowState_) && !weapon_->GetIsTread()) {
 			// 地上か待機状態なら早期
 			if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
 				return;
@@ -178,29 +193,69 @@ void Player::OnCollision(ColliderParentObject2D target, const Vector2& targetPos
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
-		// 前座標に戻す
 
-		//float size = 2.0f;
+		// 速度がなければ
+		if (velocity_.x == 0 && velocity_.y == 0) {
+			return;
+		}
+		// 横移動
+		if (std::fabsf(velocity_.x) != 0) {
 
-		//if (velocity_.x != 0 && velocity_.y == 0) {
-		//	Vector3 correctPos = { targetPosition.x,circleCollider_.position_.y,0 };
+			Vector2 targetPos = {};
+			Vector2 targetRad = {};
+			std::visit([&](const auto& a) {
+				targetPos = a->GetColliderPosition();
+				targetRad = a->GetColliderSize();
+				}, target);
 
-		//	if (velocity_.x > 0) {
-		//		correctPos.x -= size;
-		//	}
-		//	else if (velocity_.x < 0) {
-		//		correctPos.x += size;
-		//	}
+			float offset = 0.05f;
+			targetRad.x += offset;
 
-		//	worldtransform_.transform_.translate = prevPosition_;
-		//}
-		//Vector3 newPosition = { worldtransform_.transform_.translate.x,targetPosition.y + size,0 };
-		//worldtransform_.transform_.translate = newPosition;
-		//this->actionState_->SetIsFall(false);
+			if (velocity_.x > 0) {
+				Vector3 correctPosition = { targetPos.x - targetRad.x,worldtransform_.GetWorldPosition().y,0 };
+				worldtransform_.transform_.translate = correctPosition;
+			}
+			else {
+				Vector3 correctPosition = { targetPos.x + targetRad.x,worldtransform_.GetWorldPosition().y,0 };
+				worldtransform_.transform_.translate = correctPosition;
+			}
+		}		
 
+		if (std::fabsf(velocity_.y) != 0) {
+			Vector2 targetPos = {};
+			Vector2 targetRad = {};
+			std::visit([&](const auto& a) {
+				targetPos = a->GetColliderPosition();
+				targetRad = a->GetColliderSize();
+				}, target);
+
+			float offset = 0.05f;
+			targetRad.y += offset;
+
+			// 上向き
+			// 上向きの場合のみ早期
+			if (velocity_.y > 0) {
+				Vector3 correctPosition = { worldtransform_.GetWorldPosition().x,targetPos.y - targetRad.y,0 };
+				worldtransform_.transform_.translate = correctPosition;
+				return;
+			}
+			// 下向き
+			else {
+				Vector3 correctPosition = { worldtransform_.GetWorldPosition().x,targetPos.y + targetRad.y,0 };
+				worldtransform_.transform_.translate = correctPosition;
+			}
+
+
+			isGround_ = true;
+
+			if (std::holds_alternative<AerialState*>(GetNowState())) {
+				ChangeState(std::make_unique<GroundState>());
+				return;
+			}
+
+		}
 
 	}
-	targetPosition;
 
 }
 
