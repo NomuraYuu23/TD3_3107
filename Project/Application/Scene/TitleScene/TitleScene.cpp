@@ -38,7 +38,7 @@ void TitleScene::Initialize()
 	skydome_->Initialize(skydomeModel_.get());
 
 	// 槍
-	spear_ = std::make_unique<Spear>();
+	spear_ = std::make_unique<SampleObject>();
 	spear_->Initialize(spearModel_.get());
 
 	//アウトライン

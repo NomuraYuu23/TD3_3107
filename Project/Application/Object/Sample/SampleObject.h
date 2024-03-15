@@ -1,8 +1,9 @@
 #pragma once
 #include "../../../Engine/3D/Model.h"
-#include "../../../Engine/Collider2D/Box.h"
+#include "../../../Engine/Physics/RigidBody.h"
+#include "../../../Engine/Animation/Animation.h"
 
-class SampleObject : public Box
+class SampleObject
 {
 
 public:
@@ -16,8 +17,6 @@ public:
 	void Draw(BaseCamera camera);
 
 	void ImGuiDraw();
-
-	void OnCollision(ColliderParentObject2D* target, uint32_t tag) { target, tag; }
 
 private:
 
@@ -40,14 +39,15 @@ private:
 	// ワールドトランスフォーム
 	WorldTransform worldtransform_;
 
-	// コライダー用の座標・スケール
-	Vector2 position2D_ = {};
-	Vector2 scale2D_ = {};
-
 	// 
 	int32_t enableLighting_;
 
 	float shininess_;
+
+	//ノードアニメーション
+	Animation animation_;
+
+	RigidBody rigidBody_;
 
 };
 

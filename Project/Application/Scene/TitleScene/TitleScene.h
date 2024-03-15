@@ -5,7 +5,7 @@
 
 #include "../../Skydome/Skydome.h"
 
-#include "../../../Application/Object/Spear/Spear.h"
+#include "../../../Application/Object/Sample/SampleObject.h"
 
 class TitleScene : public IScene
 {
@@ -67,7 +67,7 @@ private: // メンバ変数
 	bool isDrawSkydome_ = true;
 
 	// 槍
-	std::unique_ptr<Spear> spear_;
+	std::unique_ptr<SampleObject> spear_;
 	std::unique_ptr<Model> spearModel_;
 
 	//アウトライン仮

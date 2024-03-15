@@ -517,6 +517,15 @@
     <ClCompile Include="Application\Object\Spear\Spear.cpp">
       <Filter>Application\Object\Spear</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Physics\InertiaTensor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Physics\massPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Physics\RigidBody.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imgui.h">
@@ -998,6 +1007,15 @@
     </ClInclude>
     <ClInclude Include="Application\Object\Spear\Spear.h">
       <Filter>Application\Object\Spear</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\InertiaTensor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\massPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\RigidBody.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

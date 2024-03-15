@@ -45,7 +45,7 @@ void Spear::Initialize(Model* model)
 	);
 
 	// アニメーション再生
-	anim_.startAnimation(0, true);
+	//anim_.startAnimation(0, true);
 }
 
 void Spear::Update()
