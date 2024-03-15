@@ -5,6 +5,8 @@
 
 #include "../../Skydome/Skydome.h"
 
+#include "../../../Application/Object/Spear/Spear.h"
+
 class TitleScene : public IScene
 {
 
@@ -63,6 +65,10 @@ private: // メンバ変数
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<Model> skydomeModel_;
 	bool isDrawSkydome_ = true;
+
+	// 槍
+	std::unique_ptr<Spear> spear_;
+	std::unique_ptr<Model> spearModel_;
 
 	//アウトライン仮
 	OutLineData outline_;

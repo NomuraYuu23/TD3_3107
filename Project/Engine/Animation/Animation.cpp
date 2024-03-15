@@ -128,9 +128,9 @@ std::vector<Matrix4x4> Animation::AnimationUpdate()
 		}
 
 		// 現在値
-		//positions_[i] = targetPositions_[i];
-		//rotations_[i] = targetRotations_[i];
-		//scalings_[i] = targetScalings_[i];
+		/*positions_[i] = targetPositions_[i];
+		rotations_[i] = targetRotations_[i];
+		scalings_[i] = targetScalings_[i];*/
 
 		positions_[i] = Ease::Easing(Ease::EaseName::Lerp, positions_[i], targetPositions_[i], moveT_);
 		rotations_[i] = Quaternion::Slerp(rotations_[i], targetRotations_[i], moveT_);

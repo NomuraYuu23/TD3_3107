@@ -37,6 +37,10 @@ void TitleScene::Initialize()
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
 
+	// 槍
+	spear_ = std::make_unique<Spear>();
+	spear_->Initialize(spearModel_.get());
+
 	//アウトライン
 	outline_.Initialize();
 	outline_.Map();
@@ -66,6 +70,9 @@ void TitleScene::Update()
 	// スカイドーム
 	skydome_->Update();
 
+	// 槍
+	spear_->Update();
+
 }
 
 void TitleScene::Draw()
@@ -91,6 +98,9 @@ void TitleScene::Draw()
 	if (isDrawSkydome_) {
 		skydome_->Draw(camera_);
 	}
+
+	// 槍
+	spear_->Draw(camera_);
 
 	Model::PostDraw();
 	Model::PreDrawOutLine(dxCommon_->GetCommadList());
@@ -127,6 +137,8 @@ void TitleScene::ModelCreate()
 	// スカイドーム
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
 
+	// 槍
+	spearModel_.reset(Model::Create("Resources/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 }
 
 void TitleScene::TextureLoad()

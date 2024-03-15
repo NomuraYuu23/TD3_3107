@@ -136,6 +136,9 @@
     <Filter Include="Engine\Collider2D">
       <UniqueIdentifier>{1722d6ea-0329-46db-ac66-2a5b605d89bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Object\Spear">
+      <UniqueIdentifier>{1105dbcf-298a-4ba6-bad0-22f791e427a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -489,6 +492,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Math\Matrix3x3.cpp">
       <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Object\Spear\Spear.cpp">
+      <Filter>Application\Object\Spear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -947,6 +953,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Matrix3x3.h">
       <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Object\Spear\Spear.h">
+      <Filter>Application\Object\Spear</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
