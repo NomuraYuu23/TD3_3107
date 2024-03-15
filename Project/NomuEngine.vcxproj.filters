@@ -346,9 +346,6 @@
     <ClCompile Include="Engine\base\GraphicsPipelineState\BlendStateManager.cpp">
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\DescriptorHerpManager.cpp">
-      <Filter>Engine\Base\GraphicsPipelineState</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\GraphicsPipelineState\InputLayoutManager.cpp">
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClCompile>
@@ -489,6 +486,30 @@
     </ClCompile>
     <ClCompile Include="Engine\Math\Matrix3x3.cpp">
       <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DSVDescriptorHerpManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DxCommand.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DXGIDevice.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Log.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\RenderTargetTexture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\RTVDescriptorHerpManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\SRVDescriptorHerpManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\SwapChain.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -768,9 +789,6 @@
     <ClInclude Include="Engine\base\GraphicsPipelineState\BlendStateManager.h">
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\DescriptorHerpManager.h">
-      <Filter>Engine\Base\GraphicsPipelineState</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\GraphicsPipelineState\InputLayoutManager.h">
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClInclude>
@@ -947,6 +965,30 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Matrix3x3.h">
       <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DSVDescriptorHerpManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DxCommand.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DXGIDevice.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Log.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\RenderTargetTexture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\RTVDescriptorHerpManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\SwapChain.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

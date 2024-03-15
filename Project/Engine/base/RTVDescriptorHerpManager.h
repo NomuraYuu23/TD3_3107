@@ -11,13 +11,13 @@
 
 using namespace DirectX;
 
-class DescriptorHerpManager
+class RTVDescriptorHerpManager
 {
 
 public: // 静的変数
 
 	//ディスクリプタの数
-	static const size_t kNumDescriptors = 256;
+	static const size_t kNumDescriptors = 64;
 	// ディスクリプタヒープ
 	static Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
 
@@ -36,30 +36,28 @@ public: // 静的関数
 	/// シングルトンインスタンスの取得
 	/// </summary>
 	/// <returns></returns>
-	static DescriptorHerpManager* GetInstance();
+	static RTVDescriptorHerpManager* GetInstance();
 
 	/// <summary>
 	///  初期化
 	/// </summary>
-	/// <param name="dxCommon"></param>
-	static void Initialize(DirectXCommon* dxCommon);
+	/// <param name="device"></param>
+	static void Initialize(ID3D12Device* device);
 
 	static D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle();
 
-	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle();
-
 	static void NextIndexDescriptorHeapChange();
-	
+
 	static void DescriptorHeapsMakeNull(uint32_t index);
 
 	static uint32_t GetNextIndexDescriptorHeap() { return nextIndexDescriptorHeap_; }
 
 private: // シングルトン
 
-	DescriptorHerpManager() = default;
-	~DescriptorHerpManager() = default;
-	DescriptorHerpManager(const DescriptorHerpManager&) = delete;
-	DescriptorHerpManager& operator=(const DescriptorHerpManager&) = delete;
+	RTVDescriptorHerpManager() = default;
+	~RTVDescriptorHerpManager() = default;
+	RTVDescriptorHerpManager(const RTVDescriptorHerpManager&) = delete;
+	RTVDescriptorHerpManager& operator=(const RTVDescriptorHerpManager&) = delete;
 
 };
 
