@@ -2,6 +2,7 @@
 #include <cassert>
 #include "../../externals/imgui/imgui_impl_dx12.h"
 #include "BufferResource.h"
+#include "DxCommand.h"
 
 using namespace DirectX;
 
@@ -100,7 +101,7 @@ void TextureManager::ResetTexture(const std::vector<uint32_t>& handles)
 		textures_[handles[i]].gpuDescHandleSRV.ptr = 0;
 		textures_[handles[i]].name.clear();
 		textures_[handles[i]].used = false;
-		DescriptorHerpManager::DescriptorHeapsMakeNull(textures_[handles[i]].indexDescriptorHeap);
+		SRVDescriptorHerpManager::DescriptorHeapsMakeNull(textures_[handles[i]].indexDescriptorHeap);
 	}
 
 }
@@ -127,7 +128,7 @@ const D3D12_RESOURCE_DESC TextureManager::GetResourceDesc(uint32_t textureHandle
 void TextureManager::SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* commandList, UINT rootParamIndex, uint32_t textureHandle) {
 
 	assert(textureHandle < textures_.size());
-	ID3D12DescriptorHeap* ppHeaps[] = { DescriptorHerpManager::descriptorHeap_.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { SRVDescriptorHerpManager::descriptorHeap_.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 	
 	//シェーダーリソースビューをセット
@@ -261,7 +262,7 @@ uint32_t TextureManager::LoadInternal(const std::string& fileName, DirectXCommon
 		}
 	}
 
-	assert(indexNextDescriptorHeap < DescriptorHerpManager::kNumDescriptors);
+	assert(indexNextDescriptorHeap < SRVDescriptorHerpManager::kNumDescriptors);
 	uint32_t handle = indexNextDescriptorHeap;
 
 	Texture& texture = textures_.at(handle);
@@ -280,13 +281,13 @@ uint32_t TextureManager::LoadInternal(const std::string& fileName, DirectXCommon
 	assert(SUCCEEDED(hr));
 
 	ID3D12CommandList* commandLists[] = { dxCommon->GetCommadListLoad() };
-	dxCommon->GetCommandQueue()->ExecuteCommandLists(1, commandLists);
+	DxCommand::GetCommandQueue()->ExecuteCommandLists(1, commandLists);
 
 	//実行待ち
 	//Fenceの値を更新
 	dxCommon->SetFenceVal(dxCommon->GetFenceVal() + 1);
 	//GPUがここまでたどり着いたときに、Fenceの値を指定した値に代入するようにSignalを送る
-	dxCommon->GetCommandQueue()->Signal(dxCommon->GetFence(), dxCommon->GetFenceVal());
+	DxCommand::GetCommandQueue()->Signal(dxCommon->GetFence(), dxCommon->GetFenceVal());
 
 	//Fenceの値が指定したSignal値にたどり着いているが確認する
 	//GetCompletedValueの初期値はFence作成時に渡した初期値
@@ -313,14 +314,11 @@ uint32_t TextureManager::LoadInternal(const std::string& fileName, DirectXCommon
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
-	//DescriptorSizeを取得しておく
-	const uint32_t desriptorSizeSRV = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
 	//SRVを作成するDescriptorHeapの場所を決める
-	texture.cpuDescHandleSRV = DescriptorHerpManager::GetCPUDescriptorHandle();
-	texture.gpuDescHandleSRV = DescriptorHerpManager::GetGPUDescriptorHandle();
-	texture.indexDescriptorHeap = DescriptorHerpManager::GetNextIndexDescriptorHeap();
-	DescriptorHerpManager::NextIndexDescriptorHeapChange();
+	texture.cpuDescHandleSRV = SRVDescriptorHerpManager::GetCPUDescriptorHandle();
+	texture.gpuDescHandleSRV = SRVDescriptorHerpManager::GetGPUDescriptorHandle();
+	texture.indexDescriptorHeap = SRVDescriptorHerpManager::GetNextIndexDescriptorHeap();
+	SRVDescriptorHerpManager::NextIndexDescriptorHeapChange();
 	//SRVの生成
 	device_->CreateShaderResourceView(texture.resource.Get(), &srvDesc, texture.cpuDescHandleSRV);
 
