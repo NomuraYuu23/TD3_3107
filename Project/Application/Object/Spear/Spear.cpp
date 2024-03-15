@@ -35,10 +35,8 @@ void Spear::Initialize(Model* model)
 		initScales.push_back(newScale);
 	}
 
-	// アニメーション生成
-	anim_ = std::make_unique<Animation>();
 	// アニメーション初期化
-	anim_->Initialize(
+	anim_.Initialize(
 		model_->GetNodeAnimationData(),
 		initPositions,
 		initQuaternions,
@@ -47,13 +45,13 @@ void Spear::Initialize(Model* model)
 	);
 
 	// アニメーション再生
-	anim_->startAnimation(0, true);
+	anim_.startAnimation(0, true);
 }
 
 void Spear::Update()
 {
 	// アニメーション更新
-	worldtransform_.SetNodeLocalMatrix(anim_->AnimationUpdate());
+	worldtransform_.SetNodeLocalMatrix(anim_.AnimationUpdate());
 
 	worldtransform_.UpdateMatrix();
 

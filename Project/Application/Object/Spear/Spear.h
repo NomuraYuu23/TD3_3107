@@ -41,7 +41,7 @@ public: // メンバ関数
 private: // メンバ変数
 
 	// アニメーション
-	std::unique_ptr<Animation> anim_;
+	Animation anim_;
 
 };
 
