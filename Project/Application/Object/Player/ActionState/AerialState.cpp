@@ -5,7 +5,7 @@ void AerialState::Initialize()
 {
 	//player_->worldtransform_.transform_.translate.y += 5.0f;
 	// 落下処理
-	player_->velocity_.y = 20.0f;
+	player_->velocity_.y = 10.0f;
 
 	jumpPower_ = 1.50f;
 
@@ -20,7 +20,7 @@ void AerialState::Initialize()
 	}
 
 	player_->SetNowState(this);
-
+	testCount = 0;
 }
 
 void AerialState::Update()
@@ -34,21 +34,26 @@ void AerialState::Update()
 
 	// 落下処理
 	// ジャンプ（重力計算
-	jumpPower_ += (-player_->gravity_) * kDeltaTime_;
-
+	//jumpPower_ += (-player_->gravity_) * kDeltaTime_;
 
 	// Y軸更新処理
-	player_->velocity_.y += jumpPower_;
-
-	//float maxValue = 30.0f;
-	//if (player_->velocity_.y <= -maxValue) {
-	//	player_->velocity_.y = -maxValue;
+	//player_->velocity_.y += jumpPower_;
+	float mass = 1.0f;
+	// Y軸処理
+	//if (player_->velocity_.y > 0){
+	//	if (testCount % 2 == 0) {
+	//		player_->velocity_.y += mass * (-player_->gravity_) * kDeltaTime_;
+	//		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	//	}
 	//}
-
-	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	
-	// X軸更新処理
+	//else {
+	player_->velocity_.y += mass * (-player_->gravity_) * kDeltaTime_;
+	//}
+	testCount++;
+	// X軸処理
 	velocity_.x += velocity_.x * kDeltaTime_;
-	player_->worldtransform_.transform_.translate.x += velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+
+	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 }

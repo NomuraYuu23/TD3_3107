@@ -3,7 +3,9 @@
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../Engine/Math/Math.h"
 #include "../ObjectList.h"
+#include "../../../Engine/Collision2D/Collision2D.h"
 
 void Player::Initialize(Model* model)
 {
@@ -36,6 +38,7 @@ void Player::Initialize(Model* model)
 
 void Player::Update()
 {
+	
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
 	//velocity_ = {};
@@ -49,16 +52,16 @@ void Player::Update()
 	// 反動クラス
 	recoil_.Update();
 
+	// 武器の更新
+	if (weapon_) {
+		weapon_->Update();
+	}
+
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
 	CircleColliderUpdate();
 	footCollider_.collider_.Update(footCollider_.position_, footCollider_.scale_.x, footCollider_.scale_.y, 0.0f);
-
-	// 武器の更新
-	if (weapon_) {
-		weapon_->Update();
-	}
 
 }
 
@@ -192,10 +195,10 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 		// 帰ってきてる時の衝突
 		else if (std::holds_alternative<ReturnState*>(weapon_->nowState_)) {
-			// 着地している場合早期リターン
-			if (std::holds_alternative<GroundState*>(nowState_)) {
-				return;
-			}
+			//// 着地している場合早期リターン
+			//if (std::holds_alternative<GroundState*>(nowState_)) {
+			//	return;
+			//}
 			// 反動生成
 			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
 
@@ -206,12 +209,26 @@ void Player::OnCollision(ColliderParentObject2D target)
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
 
-		// 速度がなければ
-		if (velocity_.x == 0 && velocity_.y == 0) {
+		// 前の座標から現座標へのベクトル
+		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;
+		moveDirect = Vector3::Normalize(moveDirect);
+
+		// 移動していない場合
+		if (moveDirect.x == 0 && moveDirect.y == 0) {
 			return;
 		}
+		// 斜め移動
+		if (moveDirect.x != 0 && moveDirect.y != 0) {
+			Vector2 targetPos = {};
+			Vector2 targetRad = {};
+			std::visit([&](const auto& a) {
+				targetPos = a->GetColliderPosition();
+				targetRad = a->GetColliderSize();
+				}, target);
+		}
+
 		// 横移動
-		if (std::fabsf(velocity_.x) != 0) {
+		if (moveDirect.x != 0) {
 
 			Vector2 targetPos = {};
 			Vector2 targetRad = {};
@@ -220,47 +237,77 @@ void Player::OnCollision(ColliderParentObject2D target)
 				targetPos = a->GetColliderPosition();
 				targetRad = a->GetColliderSize();
 				}, target);
+			targetRad *= 0.5f;
+			// 右上
+			Vector3 maxPos = {
+				targetPos.x + targetRad.x,	// 右
+				targetPos.y + targetRad.y,	// 上
+			};
+			// 左下
+			Vector3 minPos = { 
+				targetPos.x - targetRad.x,	// 左
+				targetPos.y - targetRad.y,	// 下
+			};
 
 			// 移動文
 			float offset = 0.1f;
-			targetRad.x += offset;
-			targetRad.y += offset;
+			targetRad.x += offset + circleCollider_.radius_;
+			targetRad.y += offset + circleCollider_.radius_;
 
-			if (velocity_.x > 0) {
-				Vector3 correctPosition = { targetPos.x - targetRad.x,worldtransform_.GetWorldPosition().y,0 };
-				worldtransform_.transform_.translate = correctPosition;
+			if (velocity_.x > 0 && moveDirect.x	> 0) {
+				// 修正x座標
+				float correctX = targetPos.x - targetRad.x;
+				worldtransform_.transform_.translate.x = correctX;
 			}
-			else if(velocity_.x < 0){
-				Vector3 correctPosition = { targetPos.x + targetRad.x,worldtransform_.GetWorldPosition().y,0 };
-				worldtransform_.transform_.translate = correctPosition;
+			else if(velocity_.x < 0 && moveDirect.x < 0){
+				// 修正x座標
+				float correctX = targetPos.x + targetRad.x;
+				worldtransform_.transform_.translate.x = correctX;
 			}
 			// 初期化
 			velocity_.x = 0;
 
+
+			//if()
+
 		}		
 
-		if (std::fabsf(velocity_.y) != 0) {
+		if (moveDirect.y != 0) {
+
+			if (velocity_.x != 0) {
+				return;
+			}
+
 			Vector2 targetPos = {};
 			Vector2 targetRad = {};
+			// 対象の情報取得
 			std::visit([&](const auto& a) {
 				targetPos = a->GetColliderPosition();
 				targetRad = a->GetColliderSize();
 				}, target);
+			targetRad *= 0.5f;
+			Vector3 maxPos = { targetPos.x + targetRad.x,targetPos.y + targetRad.y };
+			Vector3 minPos = { targetPos.x - targetRad.x,targetPos.y - targetRad.y };
 
-			float offset = 0.05f;
-			targetRad.y += offset;
+			// 移動文
+			float offset = 0.1f;
+			targetRad.x += offset + circleCollider_.radius_;
+			targetRad.y += offset + circleCollider_.radius_;
 
 			// 上向き
 			// 上向きの場合のみ早期
-			if (velocity_.y > 0) {
-				Vector3 correctPosition = { worldtransform_.GetWorldPosition().x,targetPos.y - targetRad.y,0 };
-				worldtransform_.transform_.translate = correctPosition;
+			if (moveDirect.y > 0) {
+				// 修正y座標
+				float correctY = targetPos.y - targetRad.y;
+				worldtransform_.transform_.translate.y = correctY;
+
 				return;
 			}
 			// 下向き
-			else if(velocity_.y < 0){
-				Vector3 correctPosition = { worldtransform_.GetWorldPosition().x,targetPos.y + targetRad.y,0 };
-				worldtransform_.transform_.translate = correctPosition;
+			else if(moveDirect.y < 0){
+				// 修正y座標
+				float correctY = targetPos.y + targetRad.y;
+				worldtransform_.transform_.translate.y = correctY;
 			}
 
 

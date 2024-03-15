@@ -1,6 +1,7 @@
 #include "PlayerRecoil.h"
 #include "../../Player.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../GameUtility/MathUtility.h"
 
 void PlayerRecoil::Initialize(Player* player)
 {
@@ -10,9 +11,12 @@ void PlayerRecoil::Initialize(Player* player)
 
 void PlayerRecoil::CreateRecoil(const Vector3& direction)
 {
-	float kPower = 80.0f;
-	this->startValue_ = direction;
-	startValue_ *= kPower;
+	float kPower = 10.0f;
+	// 正規化
+	recoilValue_ = Vector3::Normalize(direction);
+	// 値を
+	recoilValue_.x *= kPower * 4.5f;
+	recoilValue_.y *= kPower;
 	// フレーム数
 	timer_.Start(this->recoilFrame_);
 }
@@ -25,8 +29,18 @@ void PlayerRecoil::Update()
 	}
 
 
-	velocity_ = Ease::Easing(Ease::EaseName::EaseInOutCubic, startValue_, { 0,0,0 }, timer_.GetNowFrame());
-	player_->worldtransform_.transform_.translate += velocity_ * kDeltaTime_;
+	//velocity_ = Ease::Easing(Ease::EaseName::EaseInOutCubic, startValue_, { 0,0,0 }, timer_.GetNowFrame());
+	//player_->worldtransform_.transform_.translate += velocity_ * kDeltaTime_;
+	//player_->velocity_ = MathUtility::LerpT(player_->velocity_, {}, 0.5f * kDeltaTime_);
+	// 反動の速度ベクトルを計算	
+	recoilValue_.x = MathUtility::Lerp(recoilValue_.x, 0, 0.1f);
+	recoilValue_.y = MathUtility::Lerp(recoilValue_.y, 0, 0.1f);
+	player_->velocity_.x += recoilValue_.x * kDeltaTime_;
+	player_->velocity_.y += recoilValue_.y * kDeltaTime_;
+
+
+	player_->worldtransform_.transform_.translate += player_->velocity_ * kDeltaTime_;
+	//player_->worldtransform_.transform_.translate.x += player_->velocity_.x;
 
 	timer_.Update();
 

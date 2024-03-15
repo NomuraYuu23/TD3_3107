@@ -21,6 +21,26 @@ void PlayerController::Update()
 	// コントローラー用
 	ControllerProcess();
 
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_H)) {
+		player_->ChangeState(std::make_unique<AerialState>());
+	}
+
+	//// 移動入力
+	//if (input_->PushKey(DIK_A)) {
+	//	player_->velocity_.x = -5.f;
+	//}
+	//else if (input_->PushKey(DIK_D)) {
+	//	player_->velocity_.x = 5.f;
+	//}
+	//else {
+	//	player_->velocity_.x = 0;
+	//}
+
+
+#endif // _DEBUG
+
+
 	// キーボード用
 	//KeyBoardProcess();
 

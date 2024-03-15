@@ -44,8 +44,8 @@ private:
 private:
 	// 加算速さ
 	Vector3 velocity_ = {};
-	// 開始時の大きさ
-	Vector3 startValue_ = {};
+	// 反動の大きさ
+	Vector3 recoilValue_ = {};
 
 };
 

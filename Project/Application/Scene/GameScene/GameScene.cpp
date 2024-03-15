@@ -152,6 +152,11 @@ void GameScene::Update() {
 
 #ifdef _DEBUG
 	ImguiDraw();
+
+	if (input_->TriggerKey(DIK_L)) {
+		requestSceneNo = kTitle;
+	}
+
 #endif
 
 	if (requestSceneNo == kClear || requestSceneNo == kTitle || isBeingReset_) {

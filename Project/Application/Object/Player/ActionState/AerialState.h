@@ -21,5 +21,6 @@ private:
 
 	float jumpPower_ = 0.0f;
 
+	int testCount = 0;
 };
 
