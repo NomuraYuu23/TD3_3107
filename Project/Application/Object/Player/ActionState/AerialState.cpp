@@ -5,7 +5,7 @@ void AerialState::Initialize()
 {
 	//player_->worldtransform_.transform_.translate.y += 5.0f;
 	// 落下処理
-	player_->velocity_.y = 10.0f;
+	player_->velocity_.y = player_->jumpPower_;
 
 	jumpPower_ = 1.50f;
 

@@ -119,6 +119,8 @@ public:
 
 	bool isGround_ = false;
 
+	float jumpPower_ = 0;
+
 private:
 	// 現状のステート
 	PlayerState nowState_;

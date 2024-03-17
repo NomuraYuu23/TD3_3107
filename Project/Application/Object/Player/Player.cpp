@@ -17,7 +17,7 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { 0,1,0 };
+	worldtransform_.transform_.translate = { 0,3.0f,0 };
 
 	// コライダーの初期化
 	circleCollider_.radius_ = 0.95f;
@@ -34,6 +34,8 @@ void Player::Initialize(Model* model)
 
 	weapon_->SettingParent();
 	isGround_ = false;
+	gravity_ = 35.0f;
+	jumpPower_ = 20.0f;
 }
 
 void Player::Update()
@@ -134,6 +136,8 @@ void Player::ImGuiDraw()
 		// 空中
 		if (ImGui::BeginTabItem("Aerial")) {
 
+			ImGui::DragFloat("JumpPower", &jumpPower_, 0.01f, 0, 100.0f);
+
 			ImGui::EndTabItem();
 		}
 
@@ -217,16 +221,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 		if (moveDirect.x == 0 && moveDirect.y == 0) {
 			return;
 		}
-		// 斜め移動
-		if (moveDirect.x != 0 && moveDirect.y != 0) {
-			Vector2 targetPos = {};
-			Vector2 targetRad = {};
-			std::visit([&](const auto& a) {
-				targetPos = a->GetColliderPosition();
-				targetRad = a->GetColliderSize();
-				}, target);
-		}
-
 		// 横移動
 		if (moveDirect.x != 0) {
 
@@ -266,7 +260,10 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 			// 初期化
 			velocity_.x = 0;
-
+			worldtransform_.UpdateMatrix();
+			if (moveDirect.y != 0) {
+				return;
+			}
 
 			//if()
 
@@ -312,6 +309,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 
 			isGround_ = true;
+			worldtransform_.UpdateMatrix();
 
 			//velocity_.y = 0;
 
@@ -321,6 +319,25 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 
 		}
+
+		//if (moveDirect.x != 0 && moveDirect.y != 0) {
+		//	// 斜め移動
+		//	Vector2 targetPos = {};
+		//	Vector2 targetRad = {};
+		//	std::visit([&](const auto& a) {
+		//		targetPos = a->GetColliderPosition();
+		//		targetRad = a->GetColliderSize();
+		//		}, target);
+		//	// 修正方向のベクトル
+		//	Vector2 correctVector = Vector2(worldtransform_.GetWorldPosition().x, worldtransform_.GetWorldPosition().y) - targetPos;
+
+		//	correctVector = Vector2::Normalize(correctVector) * 5.0f/*(circleCollider_.radius_ - Vector2::Length(circleCollider_.position_ - targetPos))*/;
+		//	//correctVector=
+		//	Vector2 correctPos = targetPos + correctVector;
+
+		//	worldtransform_.transform_.translate = { correctPos.x,correctPos.y,0 };
+		//	circleCollider_.position_ = correctPos;
+		//}
 
 	}
 
