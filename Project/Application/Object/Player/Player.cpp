@@ -92,6 +92,12 @@ void Player::ImGuiDraw()
 	if (ImGui::Button("Slow")) {
 		sPlaySpeed = 2.5f;
 	}	
+	Vector3 direct = worldtransform_.GetWorldPosition() - prevPosition_;
+	direct = Vector3::Normalize(direct);
+	ImGui::Text("%f : X", std::fabs(direct.x));
+	ImGui::Text("%f : Y", std::fabs(direct.y));
+
+	ImGui::DragFloat("thres", &threshold_y_, 0.01f, 0, 1.0f);
 
 	if (ImGui::BeginTabBar("Param")) {
 
@@ -216,12 +222,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 前の座標から現座標へのベクトル
 		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;
 		moveDirect = Vector3::Normalize(moveDirect);
-		float threshold_y = 0.17f;
+
 		// 移動していない場合
 		if (moveDirect.x == 0 && moveDirect.y == 0) {
 			return;
 		}
-		if (std::abs(moveDirect.x) > std::abs(moveDirect.y)) {
+		if (std::fabs(moveDirect.x) > std::fabs(moveDirect.y)) {
 			Vector2 targetPos = {};
 			Vector2 targetRad = {};
 			// 対象の情報取得
@@ -263,7 +269,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			worldtransform_.UpdateMatrix();
 
 		}
-		else if (std::abs(moveDirect.x) < std::abs(moveDirect.y) - threshold_y) {
+		else if (/*(std::fabs(moveDirect.x) < 0.6f) && */std::fabs(moveDirect.x) < (std::fabs(moveDirect.y) - threshold_y_)) {
 			Vector2 targetPos = {};
 			Vector2 targetRad = {};
 			// 対象の情報取得
@@ -286,8 +292,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// 修正y座標
 				float correctY = targetPos.y - targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
-
-				return;
 			}
 			// 下向き
 			else if (moveDirect.y < 0) {

@@ -85,7 +85,7 @@ void MapManager::InitializePlacement()
 {
 	// 横（地面
 	for (int i = 0; i < 30; i++) {
-		RegisterBlock({ 16.0f - 2.0f * (float)i,-2.0f,0 });
+		RegisterBlock({ 16.0f - 2.0f * (float)i,-4.0f,0 });
 	}
 	for (int i = 0; i < 8; i++) {
 		RegisterBlock({ 8.0f, 2.0f * (float)i, 0 });
