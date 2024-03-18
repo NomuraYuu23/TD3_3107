@@ -216,14 +216,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 前の座標から現座標へのベクトル
 		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;
 		moveDirect = Vector3::Normalize(moveDirect);
-
+		float threshold_y = 0.17f;
 		// 移動していない場合
 		if (moveDirect.x == 0 && moveDirect.y == 0) {
 			return;
 		}
-		// 横移動
-		if (moveDirect.x != 0) {
-
+		if (std::abs(moveDirect.x) > std::abs(moveDirect.y)) {
 			Vector2 targetPos = {};
 			Vector2 targetRad = {};
 			// 対象の情報取得
@@ -238,43 +236,34 @@ void Player::OnCollision(ColliderParentObject2D target)
 				targetPos.y + targetRad.y,	// 上
 			};
 			// 左下
-			Vector3 minPos = { 
+			Vector3 minPos = {
 				targetPos.x - targetRad.x,	// 左
 				targetPos.y - targetRad.y,	// 下
 			};
 
-			// 移動文
+			// サイズ分
 			float offset = 0.1f;
 			targetRad.x += offset + circleCollider_.radius_;
 			targetRad.y += offset + circleCollider_.radius_;
 
-			if (velocity_.x > 0 && moveDirect.x	> 0) {
+			if (moveDirect.x > 0) {
 				// 修正x座標
-				float correctX = targetPos.x - targetRad.x;
+				//float correctX = targetPos.x + targetRad.x;
+				float correctX = minPos.x - (circleCollider_.radius_ + offset);
 				worldtransform_.transform_.translate.x = correctX;
 			}
-			else if(velocity_.x < 0 && moveDirect.x < 0){
+			else if (moveDirect.x < 0) {
 				// 修正x座標
-				float correctX = targetPos.x + targetRad.x;
+				//float correctX = targetPos.x - targetRad.x;
+				float correctX = maxPos.x + (circleCollider_.radius_ + offset);
 				worldtransform_.transform_.translate.x = correctX;
 			}
 			// 初期化
 			velocity_.x = 0;
 			worldtransform_.UpdateMatrix();
-			if (moveDirect.y != 0) {
-				return;
-			}
 
-			//if()
-
-		}		
-
-		if (moveDirect.y != 0) {
-
-			if (velocity_.x != 0) {
-				return;
-			}
-
+		}
+		else if (std::abs(moveDirect.x) < std::abs(moveDirect.y) - threshold_y) {
 			Vector2 targetPos = {};
 			Vector2 targetRad = {};
 			// 対象の情報取得
@@ -301,7 +290,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				return;
 			}
 			// 下向き
-			else if(moveDirect.y < 0){
+			else if (moveDirect.y < 0) {
 				// 修正y座標
 				float correctY = targetPos.y + targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
@@ -319,26 +308,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 
 		}
-
-		//if (moveDirect.x != 0 && moveDirect.y != 0) {
-		//	// 斜め移動
-		//	Vector2 targetPos = {};
-		//	Vector2 targetRad = {};
-		//	std::visit([&](const auto& a) {
-		//		targetPos = a->GetColliderPosition();
-		//		targetRad = a->GetColliderSize();
-		//		}, target);
-		//	// 修正方向のベクトル
-		//	Vector2 correctVector = Vector2(worldtransform_.GetWorldPosition().x, worldtransform_.GetWorldPosition().y) - targetPos;
-
-		//	correctVector = Vector2::Normalize(correctVector) * 5.0f/*(circleCollider_.radius_ - Vector2::Length(circleCollider_.position_ - targetPos))*/;
-		//	//correctVector=
-		//	Vector2 correctPos = targetPos + correctVector;
-
-		//	worldtransform_.transform_.translate = { correctPos.x,correctPos.y,0 };
-		//	circleCollider_.position_ = correctPos;
-		//}
-
 	}
 
 }
