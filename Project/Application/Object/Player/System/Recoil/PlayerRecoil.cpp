@@ -15,8 +15,8 @@ void PlayerRecoil::CreateRecoil(const Vector3& direction)
 	// 正規化
 	recoilValue_ = Vector3::Normalize(direction);
 	// 値を
-	recoilValue_.x *= kPower * 4.5f;
-	recoilValue_.y *= kPower;
+	recoilValue_.x *= kPower * 15.0f;
+	recoilValue_.y *= kPower * 10.0f;
 	// フレーム数
 	timer_.Start(this->recoilFrame_);
 }

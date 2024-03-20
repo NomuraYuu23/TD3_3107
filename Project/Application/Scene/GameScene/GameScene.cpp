@@ -504,6 +504,7 @@ void GameScene::CollisionUpdate()
 	collision2DManager_->ListRegister(&player_->circleCollider_);
 	//collision2DManager_->ListRegister(&player_->footCollider_.collider_);
 	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
+	collision2DManager_->ListRegister(&player_->GetFootCollider()->boxCollider_);
 	
 	mapManager_->CollisionRegister(collision2DManager_.get());
 

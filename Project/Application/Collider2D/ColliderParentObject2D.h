@@ -8,5 +8,6 @@ class Enemy;
 class SampleObject;
 class IObject;
 class Terrain;
+class PlayerFootCollider;
 
-using ColliderParentObject2D = std::variant<Player*, IObject*, Weapon*, Terrain*>;
+using ColliderParentObject2D = std::variant<Player*, IObject*, Weapon*, Terrain*, PlayerFootCollider*>;

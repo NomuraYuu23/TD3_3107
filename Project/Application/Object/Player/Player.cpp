@@ -9,11 +9,6 @@
 
 void Player::Initialize(Model* model)
 {
-	// 入力処理受付クラス
-	controller_.Initialize(this);
-	// 反動クラス
-	recoil_.Initialize(this);
-
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
@@ -25,9 +20,12 @@ void Player::Initialize(Model* model)
 	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
-	footCollider_.position_ = { position2D_.x,position2D_.y - scale2D_.x - 0.5f };
-	footCollider_.scale_ = { scale2D_.x * 0.75f,scale2D_.x * 0.2f };
-	footCollider_.collider_.Initialize(footCollider_.position_, footCollider_.scale_.x, footCollider_.scale_.y, 0.0f,this);
+	// 入力処理受付クラス
+	controller_.Initialize(this);
+	// 反動クラス
+	recoil_.Initialize(this);
+	// 足場クラス
+	footCollider_.Initialize(model, this);
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
@@ -63,8 +61,8 @@ void Player::Update()
 	IObject::Update();
 	// コライダー
 	CircleColliderUpdate();
-	footCollider_.collider_.Update(footCollider_.position_, footCollider_.scale_.x, footCollider_.scale_.y, 0.0f);
-
+	// 足元のコライダー
+	footCollider_.Update();
 }
 
 void Player::Draw(BaseCamera camera)
@@ -76,6 +74,9 @@ void Player::Draw(BaseCamera camera)
 		weapon_->Draw(camera);
 	}
 
+	if (isDebugDraw_) {
+		footCollider_.DebugDraw(camera);
+	}
 }
 
 void Player::ImGuiDraw()
@@ -92,6 +93,9 @@ void Player::ImGuiDraw()
 	if (ImGui::Button("Slow")) {
 		sPlaySpeed = 2.5f;
 	}	
+
+	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
+
 	Vector3 direct = worldtransform_.GetWorldPosition() - prevPosition_;
 	direct = Vector3::Normalize(direct);
 	ImGui::Text("%f : X", std::fabs(direct.x));
@@ -107,6 +111,7 @@ void Player::ImGuiDraw()
 			// 座標
 			ImGui::DragFloat3("translate", &worldtransform_.transform_.translate.x, 0.01f, -absValue, absValue);
 			ImGui::DragFloat3("velocity", &velocity_.x);
+			ImGui::DragFloat3("Scale", &worldtransform_.transform_.scale.x);
 			// 重力
 			ImGui::DragFloat("Gravity", &gravity_, 0.01f, -absValue, absValue);
 		
@@ -163,6 +168,8 @@ void Player::ImGuiDraw()
 	std::string name = typeid(*actionState_).name();
 
 	ImGui::Text(name.c_str());
+
+	footCollider_.ImGuiDraw();
 
 	ImGui::End();
 
@@ -300,8 +307,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.y = correctY;
 			}
 
-
-			isGround_ = true;
+			//isGround_ = true;
 			worldtransform_.UpdateMatrix();
 
 			//velocity_.y = 0;

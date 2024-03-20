@@ -7,6 +7,7 @@
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerController.h"
 #include "System/Recoil/PlayerRecoil.h"
+#include "PlayerFootCollider.h"
 
 class Player : public IObject
 {
@@ -51,7 +52,7 @@ public: // 継承
 
 	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
-
+	Box GetBoxCollider() override { return boxCollider_; }
 public: // メンバ関数
 	/// <summary>
 	/// ステートの変更
@@ -83,7 +84,7 @@ public: // メンバ関数
 	/// 足元のコライダー
 	/// </summary>
 	/// <returns></returns>
-	Box GetFootCollider() { return footCollider_.collider_; }
+	PlayerFootCollider* GetFootCollider() { return &footCollider_; }
 
 	/// <summary>
 	/// ステートの設定
@@ -114,8 +115,7 @@ public:
 
 	uint32_t arrowTexture_ = 0u;
 
-	FootCollisionData footCollider_ = {};
-
+	PlayerFootCollider footCollider_;
 
 	bool isGround_ = false;
 
@@ -134,6 +134,8 @@ private:
 	bool isSlowGame_ = false;
 
 	float threshold_y_ = 0.17f;
+
+	bool isDebugDraw_ = true;
 
 };
 

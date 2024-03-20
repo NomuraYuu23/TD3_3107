@@ -48,6 +48,8 @@ public: // 継承
 	void OnCollision(ColliderParentObject2D target) override;
 	Vector2 GetColliderPosition() override { return boxCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
+	Box GetBoxCollider() override { return boxCollider_; }
+
 private:
 	/// <summary>
 	/// ステート変更

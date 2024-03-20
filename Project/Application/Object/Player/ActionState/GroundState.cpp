@@ -31,4 +31,9 @@ void GroundState::Update()
 		player_->velocity_.y += fallPower_ + (-kGravity) * kDeltaTime_;
 		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	}
+
+	if (player_->velocity_.y <= -40.0f) {
+		player_->velocity_.y = -40.0f;
+	}
+
 }

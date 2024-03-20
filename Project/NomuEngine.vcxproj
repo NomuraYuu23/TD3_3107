@@ -229,6 +229,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\System\PlayerController.cpp" />
     <ClCompile Include="Application\Object\GameUtility\MathUtility.cpp" />
     <ClCompile Include="Application\Object\Player\System\Recoil\PlayerRecoil.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\SpearAerialState.cpp" />
+    <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\Player\ActionState\ActionWaitState.h" />
@@ -386,6 +388,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\System\Recoil\PlayerRecoil.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\IHandler.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\GroundHandler.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\SpearAerialState.h" />
+    <ClInclude Include="Application\Object\Player\PlayerFootCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
