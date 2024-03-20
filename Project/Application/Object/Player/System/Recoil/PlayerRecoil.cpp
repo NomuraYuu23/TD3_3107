@@ -16,7 +16,7 @@ void PlayerRecoil::CreateRecoil(const Vector3& direction)
 	recoilValue_ = Vector3::Normalize(direction);
 	// 値を
 	recoilValue_.x *= kPower * 15.0f;
-	recoilValue_.y *= kPower * 10.0f;
+	recoilValue_.y *= kPower * 25.0f;
 	// フレーム数
 	timer_.Start(this->recoilFrame_);
 }
@@ -33,8 +33,10 @@ void PlayerRecoil::Update()
 	//player_->worldtransform_.transform_.translate += velocity_ * kDeltaTime_;
 	//player_->velocity_ = MathUtility::LerpT(player_->velocity_, {}, 0.5f * kDeltaTime_);
 	// 反動の速度ベクトルを計算	
-	recoilValue_.x = MathUtility::Lerp(recoilValue_.x, 0, 0.1f);
-	recoilValue_.y = MathUtility::Lerp(recoilValue_.y, 0, 0.1f);
+	float lerpRate = 0.2f;
+	recoilValue_.x = MathUtility::Lerp(recoilValue_.x, 0, lerpRate);
+	recoilValue_.y = MathUtility::Lerp(recoilValue_.y, 0, lerpRate);
+	// 速度に計算
 	player_->velocity_.x += recoilValue_.x * kDeltaTime_;
 	player_->velocity_.y += recoilValue_.y * kDeltaTime_;
 

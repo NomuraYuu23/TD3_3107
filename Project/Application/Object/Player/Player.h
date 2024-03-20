@@ -121,6 +121,8 @@ public:
 
 	float jumpPower_ = 0;
 
+	float spearJumpPower_ = 0;
+
 private:
 	// 現状のステート
 	PlayerState nowState_;
@@ -135,7 +137,7 @@ private:
 
 	float threshold_y_ = 0.17f;
 
-	bool isDebugDraw_ = true;
+	bool isDebugDraw_ = false;
 
 };
 
