@@ -33,8 +33,7 @@ void Player::Initialize(Model* model)
 	weapon_->SettingParent();
 	isGround_ = false;
 	gravity_ = 35.0f;
-	jumpPower_ = 20.0f;
-	spearJumpPower_ = 30.0f;
+
 }
 
 void Player::Update()
@@ -147,10 +146,6 @@ void Player::ImGuiDraw()
 		}
 		// 空中
 		if (ImGui::BeginTabItem("Aerial")) {
-
-			ImGui::DragFloat("JumpPower", &jumpPower_, 0.01f, 0, 100.0f);
-
-			ImGui::DragFloat("spearJumpPower", &spearJumpPower_, 0.01f, 0, 100.0f);
 
 			ImGui::EndTabItem();
 		}

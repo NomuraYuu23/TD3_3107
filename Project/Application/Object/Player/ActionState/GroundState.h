@@ -17,6 +17,7 @@ private:
 	// 移動
 	float moveSpeed_;
 	float fallPower_;
+	float gravity_ = 0;
 
 };
 

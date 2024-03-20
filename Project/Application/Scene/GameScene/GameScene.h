@@ -13,6 +13,7 @@
 
 //#include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
 //#include "../../Object/Player/Player.h"	// プレイヤー
+#include "../../Object/GameObjectData.h"
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
 #include "../../Object/GameCamera/GameBasicCamera.h"
 
@@ -86,7 +87,8 @@ private:
 	void CollisionUpdate();
 
 private:
-
+	// json保存用のクラス
+	GameObjectData* gameData_ = nullptr;
 	// パーティクルマネージャー
 	ParticleManager* particleManager_ = nullptr;
 	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;

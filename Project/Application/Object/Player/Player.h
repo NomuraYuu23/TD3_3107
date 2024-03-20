@@ -3,6 +3,7 @@
 #include "../Weapon/Weapon.h"
 #include "../GameUtility/TimerLib.h"
 #include "../../../Engine/Input/Input.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerController.h"
@@ -118,10 +119,6 @@ public:
 	PlayerFootCollider footCollider_;
 
 	bool isGround_ = false;
-
-	float jumpPower_ = 0;
-
-	float spearJumpPower_ = 0;
 
 private:
 	// 現状のステート

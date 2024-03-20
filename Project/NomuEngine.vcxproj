@@ -198,6 +198,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\GameCamera\GameBasicCamera.cpp" />
     <ClCompile Include="Application\Object\Player\System\Handler\IHandler.cpp" />
     <ClCompile Include="Application\Object\Player\System\Handler\GroundHandler.cpp" />
+    <ClCompile Include="Application\Object\GameObjectData.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3D\Material.cpp" />
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
@@ -390,6 +391,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\System\Handler\GroundHandler.h" />
     <ClInclude Include="Application\Object\Player\ActionState\SpearAerialState.h" />
     <ClInclude Include="Application\Object\Player\PlayerFootCollider.h" />
+    <ClInclude Include="Application\Object\GameObjectData.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

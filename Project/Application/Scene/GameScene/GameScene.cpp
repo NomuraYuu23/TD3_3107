@@ -143,6 +143,14 @@ void GameScene::Initialize() {
 	gameCamera_->Initialize();
 	countTime_ = 0;
 	player_->Update();
+
+#ifdef _DEBUG
+
+	gameData_ = GameObjectData::GetInstance();
+	gameData_->Initialize();
+
+#endif // _DEBUG
+
 }
 
 /// <summary>
@@ -378,6 +386,8 @@ void GameScene::ImguiDraw(){
 	collision2DDebugDraw_->ImGuiDraw();
 
 	gameCamera_->ImGuiDraw();
+
+	gameData_->ApplyGlobalVariables();
 
 #endif // _DEBUG
 

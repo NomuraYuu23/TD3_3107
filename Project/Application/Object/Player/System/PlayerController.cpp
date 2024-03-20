@@ -14,7 +14,7 @@ void PlayerController::Initialize(Player* player)
 void PlayerController::Update()
 {
 
-	if (player_->IsRecoil() || std::holds_alternative<AerialState*>(player_->GetNowState())) {
+	if (player_->IsRecoil() /*|| std::holds_alternative<AerialState*>(player_->GetNowState())*/) {
 		return;
 	}
 

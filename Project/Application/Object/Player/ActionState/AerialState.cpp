@@ -5,7 +5,13 @@ void AerialState::Initialize()
 {
 	//player_->worldtransform_.transform_.translate.y += 5.0f;
 	// 落下処理
-	player_->velocity_.y = player_->jumpPower_;
+	// jsonデータ
+	const char* groupName = "Player";
+	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue(groupName, "NormalJumpPower");
+	
+	groupName = "Common";
+	
+	gravity_ = GlobalVariables::GetInstance()->GetFloatValue(groupName, "Gravity");
 
 	jumpPower_ = 1.50f;
 
@@ -47,9 +53,9 @@ void AerialState::Update()
 	//		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	//	}
 	//}
-	//else {
-	player_->velocity_.y += mass * (-player_->gravity_) * kDeltaTime_;
-	//}
+
+	player_->velocity_.y += mass * (-gravity_) * kDeltaTime_;
+
 	testCount++;
 	// X軸処理
 	velocity_.x += velocity_.x * kDeltaTime_;

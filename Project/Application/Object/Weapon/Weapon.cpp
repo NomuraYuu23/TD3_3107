@@ -20,7 +20,7 @@ void Weapon::Initialize(Model* model)
 	// ステート変更
 	ChangeState(std::make_unique<HoldState>());
 	// 重力
-	gravityValue_ = 9.8f;
+	gravityValue_ = 35.0f;
 	// 戻るレート
 	returnRate_ = 1.3f;
 }
