@@ -94,6 +94,13 @@ void Player::ImGuiDraw()
 		sPlaySpeed = 2.5f;
 	}	
 
+	if (ImGui::Button("PosReset")) {
+		worldtransform_.transform_.translate = { 0,3.0f,0 };
+		velocity_ = {};
+		worldtransform_.UpdateMatrix();
+		isGround_ = true;
+	}
+
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
 
 	Vector3 direct = worldtransform_.GetWorldPosition() - prevPosition_;
@@ -263,13 +270,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 			targetRad.x += offset + circleCollider_.radius_;
 			targetRad.y += offset + circleCollider_.radius_;
 
-			if (moveDirect.x > 0) {
+			if (/*moveDirect.x > 0*/worldtransform_.GetWorldPosition().x < targetPos.x) {
 				// 修正x座標
 				//float correctX = targetPos.x + targetRad.x;
 				float correctX = minPos.x - (circleCollider_.radius_ + offset);
 				worldtransform_.transform_.translate.x = correctX;
 			}
-			else if (moveDirect.x < 0) {
+			else if (/*moveDirect.x < 0*/worldtransform_.GetWorldPosition().x > targetPos.x) {
 				// 修正x座標
 				//float correctX = targetPos.x - targetRad.x;
 				float correctX = maxPos.x + (circleCollider_.radius_ + offset);
@@ -308,7 +315,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			//velocity_.y = 0;
 
-			if (std::holds_alternative<AerialState*>(GetNowState())) {
+			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 				ChangeState(std::make_unique<GroundState>());
 				return;
 			}

@@ -87,11 +87,16 @@ void MapManager::InitializePlacement()
 	for (int i = 0; i < 30; i++) {
 		RegisterBlock({ 16.0f - 2.0f * (float)i,-4.0f,0 });
 	}
+	// 縦壁
 	for (int i = 0; i < 8; i++) {
 		RegisterBlock({ 8.0f, 2.0f * (float)i, 0 });
 	}
+	for (int i = 0; i < 8; i++) {
+		RegisterBlock({ 10.0f, 2.0f * (float)i, 0 });
+	}
 
-	for (int i = 0; i < 7; i++) {
+	// ２段目
+	for (int i = 0; i < 8; i++) {
 		RegisterBlock({ 2.0f + 2.0f * (float)i,-2.0f,0 });
 
 	}
