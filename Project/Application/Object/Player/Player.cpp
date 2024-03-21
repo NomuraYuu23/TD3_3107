@@ -229,29 +229,35 @@ void Player::OnCollision(ColliderParentObject2D target)
 		moveDirect = Vector3::Normalize(moveDirect);
 
 		// 移動していない場合
-		if (moveDirect.x == 0 && moveDirect.y == 0) {
+		if (moveDirect.x == 0 && moveDirect.y == 0 || velocity_.x == 0 && velocity_.y == 0) {
 			return;
 		}
-		if (std::fabs(moveDirect.x) > std::fabs(moveDirect.y)) {
-			Vector2 targetPos = {};
-			Vector2 targetRad = {};
-			// 対象の情報取得
-			std::visit([&](const auto& a) {
-				targetPos = a->GetColliderPosition();
-				targetRad = a->GetColliderSize();
-				}, target);
-			targetRad *= 0.5f;
-			// 右上
-			Vector3 maxPos = {
-				targetPos.x + targetRad.x,	// 右
-				targetPos.y + targetRad.y,	// 上
-			};
-			// 左下
-			Vector3 minPos = {
-				targetPos.x - targetRad.x,	// 左
-				targetPos.y - targetRad.y,	// 下
-			};
 
+		Vector2 targetPos = {};
+		Vector2 targetRad = {};
+		// 対象の情報取得
+		std::visit([&](const auto& a) {
+			targetPos = a->GetColliderPosition();
+			targetRad = a->GetColliderSize();
+			}, target);
+		targetRad *= 0.5f;
+		// 右上
+		Vector3 maxPos = {
+			targetPos.x + targetRad.x,	// 右
+			targetPos.y + targetRad.y,	// 上
+		};
+		// 左下
+		Vector3 minPos = {
+			targetPos.x - targetRad.x,	// 左
+			targetPos.y - targetRad.y,	// 下
+		};
+
+		
+		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
+
+		/*if (std::fabs(moveDirect.x) > std::fabs(moveDirect.y)) {*/
+		//if (std::fabs(moveDirect.x) != 0 && velocity_.x != 0) {
+		if(std::fabs(p2tDist.x) > std::fabs(p2tDist.y)){
 			// サイズ分
 			float offset = 0.1f;
 			targetRad.x += offset + circleCollider_.radius_;
@@ -269,23 +275,15 @@ void Player::OnCollision(ColliderParentObject2D target)
 				float correctX = maxPos.x + (circleCollider_.radius_ + offset);
 				worldtransform_.transform_.translate.x = correctX;
 			}
+
 			// 初期化
 			velocity_.x = 0;
+
 			worldtransform_.UpdateMatrix();
 
 		}
-		else if (/*(std::fabs(moveDirect.x) < 0.6f) && */std::fabs(moveDirect.x) < (std::fabs(moveDirect.y) - threshold_y_)) {
-			Vector2 targetPos = {};
-			Vector2 targetRad = {};
-			// 対象の情報取得
-			std::visit([&](const auto& a) {
-				targetPos = a->GetColliderPosition();
-				targetRad = a->GetColliderSize();
-				}, target);
-			targetRad *= 0.5f;
-			Vector3 maxPos = { targetPos.x + targetRad.x,targetPos.y + targetRad.y };
-			Vector3 minPos = { targetPos.x - targetRad.x,targetPos.y - targetRad.y };
-
+		//else if (std::fabs(moveDirect.x) < (std::fabs(moveDirect.y) - threshold_y_)) {
+		else if(std::fabs(p2tDist.x) < std::fabs(p2tDist.y)){
 			// 移動文
 			float offset = 0.1f;
 			targetRad.x += offset + circleCollider_.radius_;

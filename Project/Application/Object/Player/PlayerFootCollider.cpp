@@ -22,7 +22,7 @@ void PlayerFootCollider::Initialize(Model* model, Player* parent)
 
 	// 2D用座標・サイズ
 	position2D_ = { worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y };
-	scale2D_ = { 0.95f*1.95f, worldtransform_.transform_.scale.y };
+	scale2D_ = { 0.95f*1.95f, worldtransform_.transform_.scale.y / 2.0f };
 
 	worldtransform_.SetParent(&player_->worldtransform_);
 	worldtransform_.transform_.translate.y = -(player_->circleCollider_.radius_ + 0.05f);
@@ -60,7 +60,7 @@ void PlayerFootCollider::OnCollision(ColliderParentObject2D target)
 		return;
 	}
 	else {
-		//if (!player_->isGround_) {
+		//if (!player_->isGround_ && player_->velocity_.y < 0) {
 		//	// 前の座標から現座標へのベクトル
 		//	Vector3 moveDirect = worldtransform_.GetWorldPosition() - player_->prevPosition_;
 		//	moveDirect = Vector3::Normalize(moveDirect);
