@@ -60,6 +60,50 @@ void PlayerFootCollider::OnCollision(ColliderParentObject2D target)
 		return;
 	}
 	else {
+		//if (!player_->isGround_) {
+		//	// 前の座標から現座標へのベクトル
+		//	Vector3 moveDirect = worldtransform_.GetWorldPosition() - player_->prevPosition_;
+		//	moveDirect = Vector3::Normalize(moveDirect);
+
+		//	Vector2 targetPos = {};
+		//	Vector2 targetRad = {};
+		//	// 対象の情報取得
+		//	std::visit([&](const auto& a) {
+		//		targetPos = a->GetColliderPosition();
+		//		targetRad = a->GetColliderSize();
+		//		}, target);
+		//	targetRad *= 0.5f;
+		//	Vector3 maxPos = { targetPos.x + targetRad.x,targetPos.y + targetRad.y };
+		//	Vector3 minPos = { targetPos.x - targetRad.x,targetPos.y - targetRad.y };
+
+		//	// 移動文
+		//	float offset = 0.1f;
+		//	targetRad.x += offset + player_->circleCollider_.radius_;
+		//	targetRad.y += offset + player_->circleCollider_.radius_;
+
+		//	// 上向き
+		//	// 上向きの場合のみ早期
+		//	if (moveDirect.y > 0) {
+		//		// 修正y座標
+		//		float correctY = targetPos.y - targetRad.y;
+		//		worldtransform_.transform_.translate.y = correctY;
+		//	}
+		//	// 下向き
+		//	else if (moveDirect.y < 0) {
+		//		// 修正y座標
+		//		float correctY = targetPos.y + targetRad.y;
+		//		worldtransform_.transform_.translate.y = correctY;
+		//	}
+
+		//	worldtransform_.UpdateMatrix();
+
+		//	if (std::holds_alternative<AerialState*>(player_->GetNowState())) {
+		//		player_->ChangeState(std::make_unique<GroundState>());
+		//		return;
+		//	}
+
+		//}
+
 		player_->isGround_ = true;
 	}
 

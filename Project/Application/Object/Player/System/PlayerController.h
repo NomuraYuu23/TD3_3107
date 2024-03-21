@@ -25,6 +25,16 @@ public:
 	/// コントローラー操作処理
 	/// </summary>
 	void ControllerProcess();
+
+	/// <summary>
+	/// 空中での操作
+	/// </summary>
+	void AerialMoveProcess();
+	/// <summary>
+	/// 地上での操作
+	/// </summary>
+	void GroundMoveProcess();
+
 	/// <summary>
 	/// キーボード操作処理
 	/// </summary>

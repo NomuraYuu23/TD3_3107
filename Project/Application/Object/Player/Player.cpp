@@ -113,7 +113,7 @@ void Player::ImGuiDraw()
 			ImGui::DragFloat3("velocity", &velocity_.x);
 			ImGui::DragFloat3("Scale", &worldtransform_.transform_.scale.x);
 			// 重力
-			ImGui::DragFloat("Gravity", &gravity_, 0.01f, -absValue, absValue);
+			//ImGui::DragFloat("Gravity", &gravity_, 0.01f, -absValue, absValue);
 		
 			ImGui::DragFloat3("ThrowDirect", &throwDirect_.x, 0.01f, -10, 10);
 			

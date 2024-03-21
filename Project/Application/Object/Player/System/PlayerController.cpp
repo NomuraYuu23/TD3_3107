@@ -49,21 +49,13 @@ void PlayerController::Update()
 
 void PlayerController::ControllerProcess()
 {
-	Vector2 leftStick = input_->GetLeftAnalogstick();
-	float moveSpeed_ = 15.0f;
+	//Vector2 leftStick = input_->GetLeftAnalogstick();
+	//float moveSpeed_ = 15.0f;
 	bool CheckAction = false;
 
 	if (input_->GetJoystickConnected()) {
-		// 左右移動
-		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * moveSpeed_;
-		// ジャンプ
-		// ジャンプ中は入力を受け付けない
-		CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState());
-		if (input_->TriggerJoystick(kJoystickButtonA) && !CheckAction) {
-			// 切り替え
-			player_->ChangeState(std::make_unique<AerialState>());
-			return;
-		}
+		// 地上処理
+		GroundMoveProcess();
 
 		//---どの状態でも行える操作---//
 
@@ -108,6 +100,31 @@ void PlayerController::ControllerProcess()
 
 	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
+}
+
+void PlayerController::AerialMoveProcess()
+{
+
+}
+
+void PlayerController::GroundMoveProcess()
+{
+	Vector2 leftStick = input_->GetLeftAnalogstick();
+	float moveSpeed_ = 10.0f;
+	bool CheckAction = std::holds_alternative<GroundState*>(player_->GetNowState());
+
+	// 地上にいる場合
+	if (CheckAction) {
+		// 左右移動
+		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * moveSpeed_;
+		// ジャンプ
+		// ジャンプ中は入力を受け付けない
+		if (input_->TriggerJoystick(kJoystickButtonA)) {
+			// 切り替え
+			player_->ChangeState(std::make_unique<AerialState>());
+			return;
+		}
+	}
 }
 
 void PlayerController::KeyBoardProcess()
