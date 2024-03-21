@@ -14,6 +14,11 @@ private:
 		float gravity_;
 	};
 
+	struct WeaponData {
+		float gravity_;
+
+	};
+
 public:
 	/// <summary>
 	/// シングルトン
@@ -31,9 +36,11 @@ public:
 private:
 	// 
 	GlobalVariables* globalVariables_ = nullptr;
+	// 全体の情報
+	CommonData common_;
 	// プレイヤーの情報
 	PlayerData player_;
-	// 
-	CommonData common_;
+	// 武器の情報
+	WeaponData weapon_;
 };
 

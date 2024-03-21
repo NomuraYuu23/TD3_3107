@@ -9,14 +9,12 @@ void ReturnState::Initialize()
 {
 	SetNowState(this);
 
-	// 親子関係解除
-	weapon_->ReleaseParent();
 	// 角度から方向
 	weapon_->worldtransform_.usedDirection_ = true;
 
 	//StartEasing(30);
 	startPosition_ = weapon_->worldtransform_.transform_.translate;
-	lerp_t = 0.1f;
+	lerp_t = 0.2f;
 	CreateRelayPoint();
 }
 

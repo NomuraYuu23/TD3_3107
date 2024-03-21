@@ -100,8 +100,9 @@ public: // 外部で行う設定関数
 	/// 親子の設定解除
 	/// </summary>
 	void ReleaseParent() {
+		worldtransform_.transform_.translate = parentAdress_->GetWorldPosition();
 		worldtransform_.SetParent(nullptr);
-		worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
+		//worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 		worldtransform_.UpdateMatrix();
 	}
 

@@ -29,4 +29,6 @@ private:
 	Vector3 rotateVector_ = {};
 
 	Vector2 highestPoint_ = {};
+
+	Vector2 hitPosition_ = {};
 };

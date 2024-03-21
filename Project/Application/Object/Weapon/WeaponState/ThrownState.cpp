@@ -34,13 +34,14 @@ void ThrownState::Update()
 
 	// 武器の重力処理
 	if (weapon_->GetIsGravity()) {
-		float g = GlobalVariables::GetInstance()->GetFloatValue("Common", "Gravity");
+		float g = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "Gravity");
 		velocity_.y += (-g) * kDeltaTime_;
 		velocity_.x += weapon_->throwDirect_.x * speedValue_ * kDeltaTime_;
 	}
 
 	else {
 		velocity_.x += weapon_->throwDirect_.x * (speedValue_ * 2.0f) * kDeltaTime_;
+		//velocity_.y += weapon_->throwDirect_.y * (speedValue_ * 2.0f) * kDeltaTime_;
 	}
 
 	// 移動処理

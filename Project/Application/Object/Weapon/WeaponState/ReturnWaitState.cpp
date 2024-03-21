@@ -20,7 +20,8 @@ void ReturnWaitState::Initialize()
 	// 待機座標の生成
 	highestPoint_.x = weapon_->worldtransform_.GetWorldPosition().x + weapon_->invDirect_.x * moveValue;
 	highestPoint_.y = weapon_->worldtransform_.GetWorldPosition().y + weapon_->invDirect_.y * moveValue;
-
+	// 刺さった場所
+	hitPosition_ = { weapon_->worldtransform_.GetWorldPosition().x ,weapon_->worldtransform_.GetWorldPosition().y };
 }
 
 void ReturnWaitState::Update()
