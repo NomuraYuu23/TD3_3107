@@ -23,6 +23,8 @@ void Weapon::Initialize(Model* model)
 	gravityValue_ = 35.0f;
 	// 戻るレート
 	returnRate_ = 1.3f;
+	// 投げの速度
+	throwSpeedRate_ = 10.0f;
 }
 
 void Weapon::Update()
@@ -64,6 +66,8 @@ void Weapon::ImGuiDraw()
 	if (ImGui::Button("ParentAdd")) {
 		SettingParent();
 	}
+
+	ImGui::DragFloat("Speed", &throwSpeedRate_, 0.01f, 0, 200.0f);
 	
 	// 回転処理
 	ImGui::DragFloat3("Rotation", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);

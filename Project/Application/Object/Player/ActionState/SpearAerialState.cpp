@@ -9,7 +9,7 @@ void SpearAerialState::Initialize()
 	const char* groupName = "Player";
 	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue(groupName, "SpearJumpPower");
 
-	groupName = "Common";
+	//groupName = "Common";
 
 	gravity_ = GlobalVariables::GetInstance()->GetFloatValue(groupName, "Gravity");
 

@@ -125,6 +125,8 @@ public: // 外部で行う設定関数
 	// 刺さった時の逆ベクトル
 	Vector2 invDirect_ = {};
 
+	float throwSpeedRate_;
+
 private:
 	// ステート
 	std::unique_ptr<IWeaponState> state_;

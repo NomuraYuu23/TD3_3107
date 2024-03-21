@@ -7,6 +7,7 @@ private:
 	struct PlayerData {
 		float normalJumpPower_;
 		float highJumpPower_;
+		float gravity_;
 	};
 
 	struct CommonData {

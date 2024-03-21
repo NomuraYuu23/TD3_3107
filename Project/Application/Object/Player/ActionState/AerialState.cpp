@@ -9,7 +9,7 @@ void AerialState::Initialize()
 	const char* groupName = "Player";
 	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue(groupName, "NormalJumpPower");
 	
-	groupName = "Common";
+	//groupName = "Common";
 	
 	gravity_ = GlobalVariables::GetInstance()->GetFloatValue(groupName, "Gravity");
 
@@ -17,13 +17,13 @@ void AerialState::Initialize()
 
 	// 横方向用の計算
 	velocity_ = {};
-	float moveXPower = 3.0f;
-	if (player_->velocity_.x > 0) {
-		velocity_.x = moveXPower;
-	}
-	else if (player_->velocity_.x < 0) {
-		velocity_.x = -moveXPower;
-	}
+	//float moveXPower = 3.0f;
+	//if (player_->velocity_.x > 0) {
+	//	velocity_.x = moveXPower;
+	//}
+	//else if (player_->velocity_.x < 0) {
+	//	velocity_.x = -moveXPower;
+	//}
 
 	player_->SetNowState(this);
 	player_->isGround_ = true;

@@ -1,6 +1,7 @@
 {
     "Player": {
-        "NormalJumpPower": 20.0,
+        "Gravity": 25.0,
+        "NormalJumpPower": 15.0,
         "SpearJumpPower": 30.0
     }
 }

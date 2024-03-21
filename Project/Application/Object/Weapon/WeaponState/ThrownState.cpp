@@ -2,6 +2,7 @@
 #include "../Weapon.h"
 #include "../../../Engine/Math/DeltaTime.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 void ThrownState::Initialize()
 {
@@ -12,7 +13,7 @@ void ThrownState::Initialize()
 	SetNowState(this);
 
 	// 速さ
-	speedValue_ = 10.0f;
+	speedValue_ = weapon_->throwSpeedRate_;
 	// 投げる際の速度
 	//velocity_ = weapon_->throwDirect_ * speedValue_;
 	velocity_.x = weapon_->throwDirect_.x * (speedValue_ * 2.0f);
@@ -33,7 +34,8 @@ void ThrownState::Update()
 
 	// 武器の重力処理
 	if (weapon_->GetIsGravity()) {
-		velocity_.y -= (9.8f * 1.25f) * kDeltaTime_;
+		float g = GlobalVariables::GetInstance()->GetFloatValue("Common", "Gravity");
+		velocity_.y += (-g) * kDeltaTime_;
 		velocity_.x += weapon_->throwDirect_.x * speedValue_ * kDeltaTime_;
 	}
 

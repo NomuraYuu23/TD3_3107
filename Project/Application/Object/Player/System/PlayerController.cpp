@@ -94,6 +94,19 @@ void PlayerController::ControllerProcess()
 
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
+
+		// スローモーション
+		if (std::holds_alternative<HoldState*>(player_->weapon_->nowState_)) {
+			if (stickDirect.x == 0 && stickDirect.y == 0) {
+				player_->sPlaySpeed = 1.0f;
+			}
+			else {
+				player_->sPlaySpeed = 5.0f;
+			}
+		}
+		else {
+			player_->sPlaySpeed = 1.0f;
+		}
 		player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
 
 	}

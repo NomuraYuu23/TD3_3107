@@ -10,6 +10,7 @@ void GameObjectData::Initialize()
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "NormalJumpPower", player_.normalJumpPower_);
 	globalVariables_->AddItem(groupName, "SpearJumpPower", player_.highJumpPower_);
+	globalVariables_->AddItem(groupName, "Gravity", player_.gravity_);
 
 	groupName = "Common";
 	// グループを追加
@@ -31,6 +32,6 @@ void GameObjectData::ApplyGlobalVariables()
 	groupName = "Player";
 	player_.normalJumpPower_ = globalVariables_->GetFloatValue(groupName, "NormalJumpPower");
 	player_.highJumpPower_ = globalVariables_->GetFloatValue(groupName, "SpearJumpPower");
-
+	player_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 
 }

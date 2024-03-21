@@ -199,16 +199,10 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
 				return;
 			}
-
-			//if (weapon_->worldtransform_.GetWorldPosition().y + weapon_->scale2D_.y < worldtransform_.GetWorldPosition().y) {
-			//	// 
-			//	weapon_->TreadSetting();
-			//	ChangeState(std::make_unique<ActionWaitState>());
-			//}
 			
 			// 移動ベクトルが下向きの時にのみ
 			if (velocity_.y < 0) {
-				// 
+				// 踏む際の武器設定
 				weapon_->TreadSetting();
 				//ChangeState(std::make_unique<ActionWaitState>());
 				ChangeState(std::make_unique<SpearAerialState>());
@@ -218,9 +212,9 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 帰ってきてる時の衝突
 		else if (std::holds_alternative<ReturnState*>(weapon_->nowState_)) {
 			//// 着地している場合早期リターン
-			//if (std::holds_alternative<GroundState*>(nowState_)) {
-			//	return;
-			//}
+			if (std::holds_alternative<GroundState*>(nowState_)) {
+				return;
+			}
 			// 反動生成
 			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
 
