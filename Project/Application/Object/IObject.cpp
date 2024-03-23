@@ -28,5 +28,5 @@ void IObject::Update()
 {
 	// 行列・座標更新
 	worldtransform_.UpdateMatrix();
-	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
+	position2D_ = { worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y };
 }

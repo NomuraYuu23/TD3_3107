@@ -1,4 +1,6 @@
 #pragma once
+#include "../../../Engine/Math/Vector2.h"
+
 /// <summary>
 /// 急遽追加する計算関数
 /// </summary>
@@ -13,5 +15,8 @@ public:
 	static T LerpT(T start, T end, float t) {
 		return start + (end - start) * t;
 	}
+
+	static float CalcAngle(const Vector2& position, const Vector2& direction);
+
 };
 

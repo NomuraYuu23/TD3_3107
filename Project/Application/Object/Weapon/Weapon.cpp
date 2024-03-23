@@ -2,6 +2,7 @@
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Input/Input.h"
 #include "../../Collider2D/CollisionConfig2D.h"
+#include "../GameUtility/MathUtility.h"
 
 void Weapon::Initialize(Model* model)
 {
@@ -11,7 +12,11 @@ void Weapon::Initialize(Model* model)
 	worldtransform_.usedDirection_ = true;
 	// 親子関係でのオフセット
 	localOffset_ = { 2.0f,0,0 };
-	scale2D_ *= 0.95f;
+	//scale2D_ *= 0.95f;
+
+	worldtransform_.transform_.scale = { 1.0f,1.0f,3.0f };
+	scale2D_ = { 0.1f,6.0f };
+
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
@@ -45,7 +50,10 @@ void Weapon::Update()
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
-	BoxColliderUpdate();
+	Vector3 direct = worldtransform_.direction_;
+	//float angle = MathUtility::CalcAngle(position2D_, { direct.x,direct.y });
+	float angle = std::atan2f(direct.y, direct.x);
+	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
 }
 
 void Weapon::Draw(BaseCamera camera)
@@ -66,34 +74,56 @@ void Weapon::ImGuiDraw()
 	if (ImGui::Button("ParentAdd")) {
 		SettingParent();
 	}
+	Vector3 direct = worldtransform_.direction_;
+	float angle = MathUtility::CalcAngle(position2D_, { direct.x,direct.y });
 
-	ImGui::DragFloat("Speed", &throwSpeedRate_, 0.01f, 0, 200.0f);
-	
-	// 回転処理
-	ImGui::DragFloat3("Rotation", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
+	ImGui::DragFloat("kakudo", &angle);
+	ImGui::Text("%d : isGravity", isGravity_);
+	ImGui::DragFloat3("Velocity", &this->velocity_.x);
 
+	ImGui::SeparatorText("Collider");
+	ImGui::DragFloat2("CollV2", &boxCollider_.position_.x);
+	ImGui::DragFloat2("ScaleColl", &scale2D_.x, 0.01f, 0, 10.0f);
+
+	ImGui::SeparatorText("WorldTransform");
 	// ローカル座標
 	ImGui::DragFloat3("localPos", &worldtransform_.transform_.translate.x, 0.01f, -40.0f, 40.0f);
 	// オフセット
 	ImGui::DragFloat3("localOffset", &localOffset_.x, 0.01f, -40.0f, 40.0f);
+	// サイズ
+	ImGui::DragFloat3("scla", &worldtransform_.transform_.scale.x, 0.01f, 0, 100);
+	// 回転処理
+	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
+	// オイラー角
+	ImGui::DragFloat3("Rotation", &worldtransform_.transform_.rotate.x);
 	// どっちかを判断
 	std::string name = typeid(*state_).name();
 
 	ImGui::Text(name.c_str());
 
-	ImGui::Text("%d : isGravity", isGravity_);
 
-	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x);
+	if (ImGui::BeginTabBar("State")) {
+		if (ImGui::BeginTabItem("Thrown")) {
 
-	ImGui::DragFloat3("ThrowDirect", &this->throwDirect_.x);
-	ImGui::DragFloat3("Velocity", &this->velocity_.x);
+			ImGui::DragFloat("Speed", &throwSpeedRate_, 0.01f, 0, 200.0f);
+			ImGui::DragFloat3("ThrowDirect", &this->throwDirect_.x);
 
-	ImGui::DragFloat2("CollV2", &boxCollider_.position_.x);
+			ImGui::EndTabItem();
+		}
 
-	ImGui::DragFloat2("returnDirect", &returnDirect_.x);
-	ImGui::DragFloat2("invDirect", &invDirect_.x);
+		// 共通項目
+		if (ImGui::BeginTabItem("Return")) {
 
-	ImGui::DragFloat("returnRate", &returnRate_, 0.01f, 0.01f, 10.0f);
+			ImGui::DragFloat2("returnDirect", &returnDirect_.x);
+			ImGui::DragFloat2("invDirect", &invDirect_.x);
+			ImGui::DragFloat("returnRate", &returnRate_, 0.01f, 0.01f, 10.0f);
+
+			ImGui::EndTabItem();
+		}
+
+		// タブバーを終了
+		ImGui::EndTabBar();
+	}
 
 	ImGui::End();
 
@@ -105,6 +135,9 @@ void Weapon::ImGuiDraw()
 
 void Weapon::OnCollision(ColliderParentObject2D target)
 {
+	if (std::holds_alternative<Terrain*>(target)) {
+		target;
+	}
 	// 持っている状態なら早期
 	if (std::holds_alternative<HoldState*>(nowState_)) {
 		return;
