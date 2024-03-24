@@ -20,6 +20,8 @@ private:
 	};
 
 	struct CommonData {
+		// スロー時の値
+		float slowMotionFactor_;
 		// 重力
 		float gravity_;
 	};

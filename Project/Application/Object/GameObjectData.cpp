@@ -8,6 +8,7 @@ void GameObjectData::Initialize()
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "Gravity", common_.gravity_);
+	globalVariables_->AddItem(groupName, "SlowFactor", common_.slowMotionFactor_);
 
 	groupName = "Player";
 	// グループを追加
@@ -33,6 +34,7 @@ void GameObjectData::ApplyGlobalVariables()
 	// 基本的な部分
 	const char* groupName = "Common";
 	common_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
+	common_.slowMotionFactor_ = globalVariables_->GetFloatValue(groupName, "SlowFactor");
 
 	// プレイヤー
 	groupName = "Player";

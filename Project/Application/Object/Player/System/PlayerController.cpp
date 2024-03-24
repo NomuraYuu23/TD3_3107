@@ -1,6 +1,7 @@
 #include "PlayerController.h"
 #include "../Player.h"
 #include "../../../Engine/base/TextureManager.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 void PlayerController::Initialize(Player* player)
 {
@@ -104,7 +105,7 @@ void PlayerController::ControllerProcess()
 			}
 			else {
 				// スローの倍率
-				player_->sPlaySpeed = 5.0f;
+				player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 				// UI表示
 				player_->isArrowUiDraw_ = true;
 			}
