@@ -5,16 +5,27 @@ class GameObjectData
 {
 private:
 	struct PlayerData {
+		// 通常のジャンプ量
 		float normalJumpPower_;
+		// 槍ジャンプ
 		float highJumpPower_;
+		// 重力
 		float gravity_;
+
+		// 地上の移動量
+		float moveValue_;
+		// 空中の加速度
+		float aerialAcceleration_;
+
 	};
 
 	struct CommonData {
+		// 重力
 		float gravity_;
 	};
 
 	struct WeaponData {
+		// 重力
 		float gravity_;
 
 	};

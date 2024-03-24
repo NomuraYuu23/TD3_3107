@@ -57,11 +57,12 @@ void PlayerController::ControllerProcess()
 		// 地上処理
 		GroundMoveProcess();
 
+		// 空中処理
+		AerialMoveProcess();
+
 		//---どの状態でも行える操作---//
 
 		// 投げ
-		//CheckAction = std::holds_alternative<HoldState*>(player_->weapon_->nowState_);
-		// 武器持ってなければfalse
 		if (input_->TriggerJoystick(kJoystickButtonRB)) {
 			// 投げ入力
 			if (std::holds_alternative<HoldState*>(player_->weapon_->nowState_)) {
@@ -117,19 +118,37 @@ void PlayerController::ControllerProcess()
 
 void PlayerController::AerialMoveProcess()
 {
+	Vector2 leftStick = input_->GetLeftAnalogstick();
+	float moveSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
+	bool CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState());
 
+	// 地上にいる場合
+	if (CheckAction) {
+		// 左右移動
+		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_;
+
+	}
 }
 
 void PlayerController::GroundMoveProcess()
 {
 	Vector2 leftStick = input_->GetLeftAnalogstick();
-	float moveSpeed_ = 10.0f;
+	float moveSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
 	bool CheckAction = std::holds_alternative<GroundState*>(player_->GetNowState());
 
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
 		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * moveSpeed_;
+		//player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_;
+
+		//if (player_->velocity_.x >= 10.0f) {
+		//	player_->velocity_.x = 10.0f;
+		//}
+		//else if (player_->velocity_.x <= -10.0f) {
+		//	player_->velocity_.x = -10.0f;
+		//}
+
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない
 		if (input_->TriggerJoystick(kJoystickButtonA)) {
