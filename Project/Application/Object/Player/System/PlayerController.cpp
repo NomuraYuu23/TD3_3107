@@ -52,6 +52,7 @@ void PlayerController::ControllerProcess()
 	//Vector2 leftStick = input_->GetLeftAnalogstick();
 	//float moveSpeed_ = 15.0f;
 	bool CheckAction = false;
+	player_->isArrowUiDraw_ = false;
 
 	if (input_->GetJoystickConnected()) {
 		// 地上処理
@@ -102,7 +103,10 @@ void PlayerController::ControllerProcess()
 				player_->sPlaySpeed = 1.0f;
 			}
 			else {
+				// スローの倍率
 				player_->sPlaySpeed = 5.0f;
+				// UI表示
+				player_->isArrowUiDraw_ = true;
 			}
 		}
 		else {

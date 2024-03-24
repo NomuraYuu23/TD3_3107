@@ -247,6 +247,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider\ColliderParentObject.h" />
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
+    <ClInclude Include="Application\Object\Player\System\UI\PlayerUI.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnWaitState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\StateList.h" />

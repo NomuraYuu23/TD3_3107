@@ -6,6 +6,7 @@
 #include "../../../Engine/Math/Math.h"
 #include "../ObjectList.h"
 #include "../../../Engine/Collision2D/Collision2D.h"
+#include "../GameUtility/MathUtility.h"
 
 void Player::Initialize(Model* model)
 {
@@ -67,7 +68,10 @@ void Player::Update()
 
 void Player::Draw(BaseCamera camera)
 {
-		// プレイヤーの描画
+	Vector3 offset = throwDirect_ * 2.0f;
+	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &camera);
+
+	// プレイヤーの描画
 	model_->Draw(worldtransform_, camera,material_.get());
 	// 武器の描画
 	if (weapon_) {

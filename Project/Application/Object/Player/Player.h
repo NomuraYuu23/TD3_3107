@@ -102,6 +102,8 @@ public:
 
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
 
+	Vector2 screenPos_ = {};
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -119,6 +121,8 @@ public:
 	PlayerFootCollider footCollider_;
 
 	bool isGround_ = false;
+
+	bool isArrowUiDraw_ = false;
 
 private:
 	// 現状のステート

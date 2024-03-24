@@ -29,10 +29,7 @@ void GameScene::Initialize() {
 
 	ModelCreate();
 	TextureLoad();
-	
-	//arrowSprite_.reset(Sprite::Create(arrowTexture_, { 100,100 }, { 1,1,1,1 }));
-	//arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
-	
+		
 	// ビュープロジェクション
 	TransformStructure baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
@@ -144,6 +141,10 @@ void GameScene::Initialize() {
 	countTime_ = 0;
 	player_->Update();
 
+	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
+	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
+	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
+	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y,player_->throwDirect_.x));
 #ifdef _DEBUG
 
 	gameData_ = GameObjectData::GetInstance();
@@ -198,7 +199,19 @@ void GameScene::Update() {
 	mapManager_->Update();
 	// プレイヤー
 	player_->Update();
-	
+
+	if (player_->isArrowUiDraw_) {
+		arrowSprite_->SetIsInvisible(false);
+	}
+	else {
+		arrowSprite_->SetIsInvisible(true);
+	}
+
+	arrowSprite_->SetPosition(player_->screenPos_);
+	arrowSprite_->SetRotate(std::atan2f(-player_->throwDirect_.y, player_->throwDirect_.x));
+
+	//arrowSprite_->Update();
+
 	// 当たり判定の設定とチェック
 	CollisionUpdate();
 	
@@ -302,7 +315,7 @@ void GameScene::Draw() {
 	
 	// UIマネージャー
 	//uiManager_->Draw();
-
+	arrowSprite_->Draw();
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 
