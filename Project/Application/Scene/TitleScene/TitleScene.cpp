@@ -33,6 +33,10 @@ void TitleScene::Initialize()
 		0.0f, 0.0f, -35.0f };
 	camera_.SetTransform(baseCameraTransform);
 
+	// 平行光源
+	directionalLight_ = std::make_unique<DirectionalLight>();
+	directionalLight_->Initialize();
+
 	// スカイドーム
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
@@ -67,11 +71,25 @@ void TitleScene::Update()
 	// カメラ
 	camera_.Update();
 	
+	// 光源向き変更用ImGui
+	ImGui::Begin("光源");
+	ImGui::DragFloat3("光源向き", &direction.x, 0.01f, -1.0f, 1.0f);
+	ImGui::End();
+
+	//光源
+	DirectionalLightData directionalLightData;
+	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData.direction = Vector3::Normalize(direction);
+	directionalLightData.intencity = intencity;
+	directionalLight_->Update(directionalLightData);
+
 	// スカイドーム
 	skydome_->Update();
 
 	// 槍
 	spear_->Update();
+	// ImGui表示
+	spear_->ImGuiDraw();
 
 }
 
@@ -93,6 +111,9 @@ void TitleScene::Draw()
 	Model::PreDraw(dxCommon_->GetCommadList());
 
 	//3Dオブジェクトはここ
+
+	//光源
+	directionalLight_->Draw(dxCommon_->GetCommadList(), 6);
 
 	// スカイドーム
 	if (isDrawSkydome_) {
@@ -138,7 +159,7 @@ void TitleScene::ModelCreate()
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
 
 	// 槍
-	spearModel_.reset(Model::Create("Resources/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
+	spearModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
 }
 
 void TitleScene::TextureLoad()

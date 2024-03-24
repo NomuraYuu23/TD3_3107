@@ -7,6 +7,8 @@
 
 #include "../../../Application/Object/Sample/SampleObject.h"
 
+#include "../../../Engine/Light/DirectionalLight/DirectionalLight.h" // 平行光源
+
 class TitleScene : public IScene
 {
 
@@ -60,6 +62,11 @@ private: // メンバ変数
 	std::unique_ptr<TitleAudioManager> audioManager_;
 
 	bool isDecreasingVolume = true;
+
+	// ライト
+	std::unique_ptr<DirectionalLight> directionalLight_;
+	Vector3 direction = { 1.0f, -1.0f, 0.0f };
+	float intencity = 1.0f;
 
 	// スカイドーム
 	std::unique_ptr<Skydome> skydome_;
