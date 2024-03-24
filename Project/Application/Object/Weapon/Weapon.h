@@ -148,5 +148,9 @@ private:
 	// 重力の値
 	float gravityValue_ = 0;
 
+	bool isCollisionCheck_ = false;
+
+	float rotateAngle_ = 0;
+
 };
 

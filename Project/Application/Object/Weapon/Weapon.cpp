@@ -15,7 +15,7 @@ void Weapon::Initialize(Model* model)
 	//scale2D_ *= 0.95f;
 
 	worldtransform_.transform_.scale = { 1.0f,1.0f,3.0f };
-	scale2D_ = { 0.1f,6.0f };
+	scale2D_ = { 6.0f,0.10f };
 
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
@@ -51,8 +51,8 @@ void Weapon::Update()
 	IObject::Update();
 	// コライダー
 	Vector3 direct = worldtransform_.direction_;
-	//float angle = MathUtility::CalcAngle(position2D_, { direct.x,direct.y });
-	float angle = std::atan2f(direct.y, direct.x);
+	//float angle = MathUtility::CalcAngle({ direct.x,direct.y });
+	float angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
 }
 
@@ -80,7 +80,14 @@ void Weapon::ImGuiDraw()
 	ImGui::DragFloat("kakudo", &angle);
 	ImGui::Text("%d : isGravity", isGravity_);
 	ImGui::DragFloat3("Velocity", &this->velocity_.x);
+	ImGui::DragFloat("angle", &rotateAngle_, 0.01f, 0, 100.0f);
+	angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 
+	ImGui::DragFloat("DirectAngle", &angle);
+
+	ImGui::Text("%d : IsCollision", isCollisionCheck_);
+
+	isCollisionCheck_ = false;
 	ImGui::SeparatorText("Collider");
 	ImGui::DragFloat2("CollV2", &boxCollider_.position_.x);
 	ImGui::DragFloat2("ScaleColl", &scale2D_.x, 0.01f, 0, 10.0f);
@@ -136,6 +143,7 @@ void Weapon::ImGuiDraw()
 void Weapon::OnCollision(ColliderParentObject2D target)
 {
 	if (std::holds_alternative<Terrain*>(target)) {
+		isCollisionCheck_ = true;
 		target;
 	}
 	// 持っている状態なら早期

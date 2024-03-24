@@ -18,5 +18,7 @@ public:
 
 	static float CalcAngle(const Vector2& position, const Vector2& direction);
 
+	static float CalcAngle(const Vector2& direction);
+
 };
 
