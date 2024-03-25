@@ -44,7 +44,7 @@ void Player::Update()
 	prevPosition_ = worldtransform_.GetWorldPosition();
 	//velocity_ = {};
 	// ステートの更新
-	if (actionState_) {
+	if (actionState_ && !recoil_.IsActive()) {
 		actionState_->Update();
 	}
 
@@ -224,7 +224,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 			// 反動生成
 			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
-
+			throwDirect_ = Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition());
 			return;
 		}
 

@@ -6,17 +6,19 @@
 void PlayerRecoil::Initialize(Player* player)
 {
 	player_ = player;
-	recoilFrame_ = 60.0f;
+	recoilFrame_ = 15.0f;
 }
 
 void PlayerRecoil::CreateRecoil(const Vector3& direction)
 {
-	float kPower = 10.0f;
+	//float kPower = 30.0f;
 	// 正規化
 	recoilValue_ = Vector3::Normalize(direction);
-	// 値を
-	recoilValue_.x *= kPower * 20.0f;
-	recoilValue_.y *= kPower * 25.0f;
+	//// 値を
+	//recoilValue_.x *= kPower;
+	//recoilValue_.y *= kPower;
+	player_->velocity_ = recoilValue_ * 20.0f;
+	recoilValue_ *= 20.0f;
 	// フレーム数
 	timer_.Start(this->recoilFrame_);
 }
@@ -48,12 +50,18 @@ void PlayerRecoil::Update()
 	player_->velocity_.x += recoilValue_.x * kDeltaTime_;
 	player_->velocity_.y += recoilValue_.y * kDeltaTime_;
 
+	//float speed = 15.0f;
+	//velocity_ += (recoilValue_ * speed) * kDeltaTime_;
 
+	//player_->worldtransform_.transform_.translate += velocity_ * kDeltaTime_;
 	player_->worldtransform_.transform_.translate += player_->velocity_ * kDeltaTime_;
 	//player_->worldtransform_.transform_.translate.x += player_->velocity_.x;
 
 	timer_.Update();
 
+	if (timer_.IsEnd()) {
+		//player_->velocity_;
+	}
 
 }
 

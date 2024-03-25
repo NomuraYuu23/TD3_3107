@@ -95,6 +95,11 @@ void PlayerController::ControllerProcess()
 			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 		}
 
+		if (player_->IsRecoil()) {
+			player_->isArrowUiDraw_ = true;
+			return;
+		}
+
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 

@@ -1,5 +1,6 @@
 #include "AerialState.h"
 #include "../Player.h"
+#include "../../GameUtility/MathUtility.h"
 
 void AerialState::Initialize()
 {
@@ -43,6 +44,7 @@ void AerialState::Update()
 	//	}
 	//}
 
+	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.01f);
 	player_->velocity_.y += mass * (-gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// X軸処理

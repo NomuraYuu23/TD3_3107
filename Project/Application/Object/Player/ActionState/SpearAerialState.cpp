@@ -1,5 +1,6 @@
 #include "SpearAerialState.h"
 #include "../Player.h"
+#include "../../GameUtility/MathUtility.h"
 
 void SpearAerialState::Initialize()
 {
@@ -25,6 +26,7 @@ void SpearAerialState::Update()
 	// Y軸速度計算
 	float mass = 1.0f;
 
+	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.01f);
 	player_->velocity_.y += mass * (-player_->gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// 更新
