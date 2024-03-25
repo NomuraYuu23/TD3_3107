@@ -90,6 +90,9 @@ void Player::ImGuiDraw()
 	float ratio = IObject::sPlaySpeed;
 	ImGui::DragFloat("playTime", &ratio);
 	sPlaySpeed = ratio;
+	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
+	//ImGui::DragFloat("")
+
 	if (ImGui::Button("Normal")) {
 		sPlaySpeed = 1.0f;
 	}
@@ -313,17 +316,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.y = correctY;
 			}
 
-			//isGround_ = true;
 			worldtransform_.UpdateMatrix();
 
-			//velocity_.y = 0;
 
+			// ジャンプ中・槍ジャンプ中なら
 			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 				ChangeState(std::make_unique<GroundState>());
-				return;
 			}
-
 		}
+
+		// 反動のキャンセル
+		if (recoil_.IsActive()) {
+			recoil_.CancelRecoil();
+		}
+
 	}
 
 }

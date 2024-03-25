@@ -26,6 +26,11 @@ public: // メンバ関数
 	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 強制終了関数
+	/// </summary>
+	void CancelRecoil();
+
 public: // アクセッサ
 	/// <summary>
 	/// 反動中かどうか
@@ -46,6 +51,7 @@ private:
 	Vector3 velocity_ = {};
 	// 反動の大きさ
 	Vector3 recoilValue_ = {};
-
+	// ゲームスピードに応じた更新回数用の値
+	float slowValue_ = 0;
 };
 

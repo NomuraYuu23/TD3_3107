@@ -13,6 +13,11 @@ public:
 	void Start(float endFrame = 60.0f);
 
 	/// <summary>
+	/// タイマー終了関数
+	/// </summary>
+	void End();
+
+	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update();

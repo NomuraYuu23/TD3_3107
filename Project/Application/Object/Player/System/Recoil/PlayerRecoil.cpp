@@ -6,7 +6,7 @@
 void PlayerRecoil::Initialize(Player* player)
 {
 	player_ = player;
-	recoilFrame_ = 10.0f;
+	recoilFrame_ = 60.0f;
 }
 
 void PlayerRecoil::CreateRecoil(const Vector3& direction)
@@ -27,7 +27,15 @@ void PlayerRecoil::Update()
 	if (!timer_.IsActive()) {
 		return;
 	}
-
+	// タイムスケールに合わせる処理
+	slowValue_++;
+	float timeScale = slowValue_ / IObject::sPlaySpeed;
+	if (timeScale == 1.0f) {
+		slowValue_ = 0;
+	}
+	else {
+		return;
+	}
 
 	//velocity_ = Ease::Easing(Ease::EaseName::EaseInOutCubic, startValue_, { 0,0,0 }, timer_.GetNowFrame());
 	//player_->worldtransform_.transform_.translate += velocity_ * kDeltaTime_;
@@ -46,5 +54,12 @@ void PlayerRecoil::Update()
 
 	timer_.Update();
 
+
+}
+
+void PlayerRecoil::CancelRecoil()
+{
+	// タイマーの終了
+	timer_.End();
 
 }

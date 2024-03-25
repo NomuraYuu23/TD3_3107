@@ -19,14 +19,21 @@ void TimerLib::Start(float endFrame)
 
 }
 
+void TimerLib::End()
+{
+	isEnd_ = true;
+	isActive_ = false;
+}
+
 void TimerLib::Update()
 {
 
 	if (isActive_) {
 
 		if (nowFrame_ >= 1.0f) {
-			isEnd_ = true;
-			isActive_ = false;
+			//isEnd_ = true;
+			//isActive_ = false;
+			End();
 			return;
 		}
 

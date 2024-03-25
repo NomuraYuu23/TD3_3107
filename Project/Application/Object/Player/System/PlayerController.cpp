@@ -14,10 +14,10 @@ void PlayerController::Initialize(Player* player)
 
 void PlayerController::Update()
 {
-
-	if (player_->IsRecoil() /*|| std::holds_alternative<AerialState*>(player_->GetNowState())*/) {
-		return;
-	}
+	//// 入力キャンセル
+	//if (player_->IsRecoil()) {
+	//	return;
+	//}
 
 	// コントローラー用
 	ControllerProcess();
@@ -123,6 +123,11 @@ void PlayerController::ControllerProcess()
 
 void PlayerController::AerialMoveProcess()
 {
+	// 入力キャンセル
+	if (player_->IsRecoil()) {
+		return;
+	}
+
 	Vector2 leftStick = input_->GetLeftAnalogstick();
 	float moveSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
 	bool CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState());
@@ -137,6 +142,11 @@ void PlayerController::AerialMoveProcess()
 
 void PlayerController::GroundMoveProcess()
 {
+	// 入力キャンセル
+	if (player_->IsRecoil()) {
+		return;
+	}
+
 	Vector2 leftStick = input_->GetLeftAnalogstick();
 	float moveSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
 	bool CheckAction = std::holds_alternative<GroundState*>(player_->GetNowState());
