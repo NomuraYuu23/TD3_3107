@@ -109,6 +109,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AerialState.cpp" />
     <ClCompile Include="Application\AudioManager\ClearAudioManager.cpp" />
@@ -234,6 +235,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\Player\ActionState\ActionWaitState.h" />
     <ClInclude Include="Application\Object\GameUtility\CommonConfig.h" />
     <ClInclude Include="Application\Object\ObjectList.h" />

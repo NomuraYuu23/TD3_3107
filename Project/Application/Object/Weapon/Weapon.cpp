@@ -1,6 +1,8 @@
 #include "Weapon.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Input/Input.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
+
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../GameUtility/MathUtility.h"
 
@@ -13,9 +15,11 @@ void Weapon::Initialize(Model* model)
 	// 親子関係でのオフセット
 	localOffset_ = { 2.0f,0,0 };
 	//scale2D_ *= 0.95f;
-
-	worldtransform_.transform_.scale = { 1.0f,1.0f,3.0f };
-	scale2D_ = { 6.0f,0.10f };
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	float scaleRate = globalVariables->GetFloatValue("Weapon", "ScaleRate");
+	//float scaleRate = 2.5f;
+	worldtransform_.transform_.scale = { 1.0f,1.0f,scaleRate };
+	scale2D_ = { scaleRate * 2.0f,0.10f };
 
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);

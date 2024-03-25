@@ -4,6 +4,6 @@
         "Gravity": 25.0,
         "MoveSpeed": 10.0,
         "NormalJumpPower": 15.0,
-        "SpearJumpPower": 30.0
+        "SpearJumpPower": 25.0
     }
 }

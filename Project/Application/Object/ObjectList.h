@@ -7,3 +7,4 @@
 #include "Map/MapManager.h"
 #include "Map/Terrain.h"
 #include "Player/PlayerFootCollider.h"
+#include "GameCamera/FollowCamera.h"

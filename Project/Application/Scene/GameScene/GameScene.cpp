@@ -132,19 +132,31 @@ void GameScene::Initialize() {
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
 	player_->Initialize(playerModel_.get());
+	// 更新
+	//countTime_ = 0;
+	player_->Update();
 
+	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->Initialize(terrainModel_.get());
 
+	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
-	countTime_ = 0;
-	player_->Update();
+	
+	// 追従カメラ（仮
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
+	followCamera_->SetPlayer(player_.get());
 
+
+	// 矢印のUI
 	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
 	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
 	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y,player_->throwDirect_.x));
+
+	// Jsonデータのクラス
 #ifdef _DEBUG
 
 	gameData_ = GameObjectData::GetInstance();
@@ -400,6 +412,8 @@ void GameScene::ImguiDraw(){
 
 	gameCamera_->ImGuiDraw();
 
+	followCamera_->ImGuiDraw();
+
 	gameData_->ApplyGlobalVariables();
 
 #endif // _DEBUG
@@ -431,8 +445,9 @@ void GameScene::DebugCameraUpdate()
 	else {
 		// 
 		gameCamera_->Update();
+		followCamera_->Update();
 		// 
-		camera_ = static_cast<BaseCamera>(*gameCamera_.get());
+		camera_ = static_cast<BaseCamera>(*followCamera_.get());
 		// 
 		camera_.Update();
 	}

@@ -27,17 +27,19 @@ void ReturnWaitState::Initialize()
 void ReturnWaitState::Update()
 {
 	// 上下のスティック入力
-	Vector2 rightStick = Input::GetInstance()->GetRightAnalogstick();
+	//Vector2 rightStick = Input::GetInstance()->GetRightAnalogstick();
 
-	if (rightStick.y < 0) {
-		weapon_->returnDirect_.y = 1.0f;
-	}
-	else if (rightStick.y > 0) {
-		weapon_->returnDirect_.y = -1.0f;
-	}
-	else {
-		weapon_->returnDirect_.y = 0.0f;
-	}
+	//if (rightStick.y < 0) {
+	//	weapon_->returnDirect_.y = 1.0f;
+	//}
+	//else if (rightStick.y > 0) {
+	//	weapon_->returnDirect_.y = -1.0f;
+	//}
+	//else {
+	//	weapon_->returnDirect_.y = 0.0f;
+	//}
+
+	weapon_->returnDirect_.y = 0.0f;
 
 	//weapon_->worldtransform_.direction_.x = std::cosf(1.0f / 360.0f);
 	//weapon_->worldtransform_.direction_.y = std::sinf(1.0f / 360.0f);

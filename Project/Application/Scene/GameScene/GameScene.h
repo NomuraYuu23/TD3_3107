@@ -156,6 +156,7 @@ private:
 	std::unique_ptr<Model> terrainModel_;
 
 	std::unique_ptr<GameBasicCamera> gameCamera_;
+	std::unique_ptr<FollowCamera> followCamera_;
 
 	std::unique_ptr<Sprite> arrowSprite_;
 	uint32_t arrowTexture_ = 0u;

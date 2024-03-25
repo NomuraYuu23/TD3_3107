@@ -29,7 +29,10 @@ private:
 	struct WeaponData {
 		// 重力
 		float gravity_;
-
+		// 移動速度
+		float speedRatio_;
+		// 
+		float scaleRate_;
 	};
 
 public:

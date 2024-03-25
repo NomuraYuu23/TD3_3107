@@ -23,6 +23,8 @@ void GameObjectData::Initialize()
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "Gravity", weapon_.gravity_);
+	globalVariables_->AddItem(groupName, "SpeedRatio", weapon_.speedRatio_);
+	globalVariables_->AddItem(groupName, "ScaleRate", weapon_.scaleRate_);
 
 	ApplyGlobalVariables(); 
 
@@ -46,5 +48,7 @@ void GameObjectData::ApplyGlobalVariables()
 
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
+	weapon_.speedRatio_ = globalVariables_->GetFloatValue(groupName, "SpeedRatio");
+	weapon_.scaleRate_ = globalVariables_->GetFloatValue(groupName, "ScaleRate");
 
 }

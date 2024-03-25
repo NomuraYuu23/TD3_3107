@@ -83,22 +83,38 @@ void MapManager::RegisterBlock(const Vector3& position)
 
 void MapManager::InitializePlacement()
 {
-	// 横（地面
-	for (int i = 0; i < 30; i++) {
-		RegisterBlock({ 16.0f - 2.0f * (float)i,-4.0f,0 });
+	//// 横（地面
+	//for (int i = 0; i < 30; i++) {
+	//	RegisterBlock({ 16.0f - 2.0f * (float)i,-4.0f,0 });
+	//}
+	//// 縦壁
+	//for (int i = 0; i < 8; i++) {
+	//	RegisterBlock({ 8.0f, 2.0f * (float)i, 0 });
+	//}
+	//for (int i = 0; i < 8; i++) {
+	//	RegisterBlock({ 10.0f, 2.0f * (float)i, 0 });
+	//}
+
+	//// ２段目
+	//for (int i = 0; i < 8; i++) {
+	//	RegisterBlock({ 2.0f + 2.0f * (float)i,-2.0f,0 });
+	//}
+
+#pragma region 床ブロック
+	for (int i = 0; i < 60; ++i) {
+		RegisterBlock({ (float)i * 2.0f ,-4.0f,0 });
 	}
-	// 縦壁
-	for (int i = 0; i < 8; i++) {
-		RegisterBlock({ 8.0f, 2.0f * (float)i, 0 });
-	}
-	for (int i = 0; i < 8; i++) {
-		RegisterBlock({ 10.0f, 2.0f * (float)i, 0 });
+#pragma endregion
+
+#pragma region 初期値から左方向の部分と右の壁
+	RegisterBlock({ -2.0f,-4.0f,0 });
+
+	for (int i = 0; i < 10; ++i) {
+		RegisterBlock({ -4.0f,-4.0f + ((float)i * 2.0f),0 });
+		RegisterBlock({ 60.0f * 2.0f,-4.0f + ((float)i * 2.0f),0 });
 	}
 
-	// ２段目
-	for (int i = 0; i < 8; i++) {
-		RegisterBlock({ 2.0f + 2.0f * (float)i,-2.0f,0 });
+#pragma endregion
 
-	}
 
 }
