@@ -14,7 +14,6 @@ void Weapon::Initialize(Model* model)
 	worldtransform_.usedDirection_ = true;
 	// 親子関係でのオフセット
 	localOffset_ = { 2.0f,0,0 };
-	//scale2D_ *= 0.95f;
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	float scaleRate = globalVariables->GetFloatValue("Weapon", "ScaleRate");
 	//float scaleRate = 2.5f;
@@ -32,8 +31,6 @@ void Weapon::Initialize(Model* model)
 	gravityValue_ = 35.0f;
 	// 戻るレート
 	returnRate_ = 1.3f;
-	// 投げの速度
-	throwSpeedRate_ = 10.0f;
 }
 
 void Weapon::Update()
@@ -60,10 +57,10 @@ void Weapon::Update()
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
 }
 
-void Weapon::Draw(BaseCamera camera)
+void Weapon::Draw(const BaseCamera& camera)
 {
 
-	model_->Draw(worldtransform_, camera);
+	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera));
 
 }
 
@@ -116,7 +113,6 @@ void Weapon::ImGuiDraw()
 	if (ImGui::BeginTabBar("State")) {
 		if (ImGui::BeginTabItem("Thrown")) {
 
-			ImGui::DragFloat("Speed", &throwSpeedRate_, 0.01f, 0, 200.0f);
 			ImGui::DragFloat3("ThrowDirect", &this->throwDirect_.x);
 
 			ImGui::EndTabItem();

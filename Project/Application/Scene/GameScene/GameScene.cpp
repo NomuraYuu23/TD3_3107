@@ -539,11 +539,14 @@ void GameScene::CollisionUpdate()
 	collisionManager_->CheakAllCollision();
 
 	collision2DManager_->ListClear();
+	// プレイヤー
 	collision2DManager_->ListRegister(&player_->circleCollider_);
-	//collision2DManager_->ListRegister(&player_->footCollider_.collider_);
+	// 武器
 	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
+	// プレイヤーの足場
 	collision2DManager_->ListRegister(&player_->GetFootCollider()->boxCollider_);
 	
+	// マップ
 	mapManager_->CollisionRegister(collision2DManager_.get());
 
 	collision2DManager_->CheakAllCollision();

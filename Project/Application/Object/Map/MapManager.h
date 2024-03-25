@@ -24,7 +24,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="camera"></param>
-	void Draw(BaseCamera camera);
+	void Draw(const BaseCamera& camera);
 	/// <summary>
 	/// ImGUi
 	/// </summary>
@@ -41,6 +41,7 @@ private:
 	/// </summary>
 	void RegisterBlock();
 	void RegisterBlock(const Vector3& position);
+	void RegisterBlock(const Vector3& position, const Vector2 scale);
 
 	void InitializePlacement();
 

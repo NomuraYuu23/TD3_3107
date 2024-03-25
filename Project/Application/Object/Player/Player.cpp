@@ -66,13 +66,13 @@ void Player::Update()
 	footCollider_.Update();
 }
 
-void Player::Draw(BaseCamera camera)
+void Player::Draw(const BaseCamera& camera)
 {
 	Vector3 offset = throwDirect_ * 2.0f;
-	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &camera);
-
+	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &const_cast<BaseCamera&>(camera));
+	//screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition(), &camera);
 	// プレイヤーの描画
-	model_->Draw(worldtransform_, camera,material_.get());
+	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera),material_.get());
 	// 武器の描画
 	if (weapon_) {
 		weapon_->Draw(camera);
@@ -260,6 +260,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 		
 		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
 
+		//Vector3 directVector = Vector3::Normalize(velocity_);
+
 		/*if (std::fabs(moveDirect.x) > std::fabs(moveDirect.y)) {*/
 		//if (std::fabs(moveDirect.x) != 0 && velocity_.x != 0) {
 		if(std::fabs(p2tDist.x) > std::fabs(p2tDist.y)){
@@ -268,21 +270,24 @@ void Player::OnCollision(ColliderParentObject2D target)
 			targetRad.x += offset + circleCollider_.radius_;
 			targetRad.y += offset + circleCollider_.radius_;
 
-			if (/*moveDirect.x > 0*/worldtransform_.GetWorldPosition().x < targetPos.x) {
+			if (worldtransform_.GetWorldPosition().x < targetPos.x) {
 				// 修正x座標
-				//float correctX = targetPos.x + targetRad.x;
 				float correctX = minPos.x - (circleCollider_.radius_ + offset);
 				worldtransform_.transform_.translate.x = correctX;
 			}
-			else if (/*moveDirect.x < 0*/worldtransform_.GetWorldPosition().x > targetPos.x) {
+			else if (worldtransform_.GetWorldPosition().x > targetPos.x) {
 				// 修正x座標
-				//float correctX = targetPos.x - targetRad.x;
 				float correctX = maxPos.x + (circleCollider_.radius_ + offset);
 				worldtransform_.transform_.translate.x = correctX;
 			}
 
 			// 初期化
-			velocity_.x = 0;
+			if (recoil_.IsActive()) {
+				velocity_.x *= -1.0f;
+			}
+			else {
+				velocity_.x = 0;
+			}
 
 			worldtransform_.UpdateMatrix();
 

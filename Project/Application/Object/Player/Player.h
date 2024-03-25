@@ -39,7 +39,7 @@ public: // 継承
 	/// 描画
 	/// </summary>
 	/// <param name="camera"></param>
-	void Draw(BaseCamera camera) override;
+	void Draw(const BaseCamera& camera) override;
 	/// <summary>
 	/// ImGui
 	/// </summary>

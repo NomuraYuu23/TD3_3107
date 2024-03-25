@@ -35,7 +35,7 @@ public: // 継承
 	/// 描画
 	/// </summary>
 	/// <param name="camera"></param>
-	void Draw(BaseCamera camera) override;
+	void Draw(const BaseCamera& camera) override;
 	/// <summary>
 	/// ImGui
 	/// </summary>
@@ -125,8 +125,6 @@ public: // 外部で行う設定関数
 	Vector2 returnDirect_ = {};
 	// 刺さった時の逆ベクトル
 	Vector2 invDirect_ = {};
-
-	float throwSpeedRate_;
 
 private:
 	// ステート

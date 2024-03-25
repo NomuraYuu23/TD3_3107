@@ -23,7 +23,7 @@ void MapManager::Update()
 
 }
 
-void MapManager::Draw(BaseCamera camera)
+void MapManager::Draw(const BaseCamera& camera)
 {
 	for (std::list<std::unique_ptr<IObject>>::iterator it = blocks_.begin();
 		it != blocks_.end(); ++it) {
@@ -81,6 +81,18 @@ void MapManager::RegisterBlock(const Vector3& position)
 
 }
 
+void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
+{
+	std::unique_ptr<IObject> newBlock;
+	newBlock = std::make_unique<Terrain>();
+	newBlock->Initialize(terrainModel_);
+	newBlock->worldtransform_.transform_.translate = position;
+	newBlock->worldtransform_.transform_.scale = { scale.x,scale.y,1.0f };
+	newBlock->scale2D_ = scale;
+	// 追加
+	blocks_.push_back(std::move(newBlock));
+}
+
 void MapManager::InitializePlacement()
 {
 	//// 横（地面
@@ -104,6 +116,9 @@ void MapManager::InitializePlacement()
 	for (int i = 0; i < 60; ++i) {
 		RegisterBlock({ (float)i * 2.0f ,-4.0f,0 });
 	}
+
+	//RegisterBlock({ 0,-4.0f,0 }, { 40.0f,1.0f });
+
 #pragma endregion
 
 #pragma region 初期値から左方向の部分と右の壁

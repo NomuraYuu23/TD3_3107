@@ -130,7 +130,7 @@ void PlayerController::AerialMoveProcess()
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
-		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_;
+		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	}
 }
@@ -144,7 +144,8 @@ void PlayerController::GroundMoveProcess()
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
-		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * moveSpeed_;
+		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * moveSpeed_ * (1.0f / IObject::sPlaySpeed);
+
 		//player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_;
 
 		//if (player_->velocity_.x >= 10.0f) {

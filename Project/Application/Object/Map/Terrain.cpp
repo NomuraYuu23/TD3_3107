@@ -29,9 +29,9 @@ void Terrain::Update()
 	BoxColliderUpdate();
 }
 
-void Terrain::Draw(BaseCamera camera)
+void Terrain::Draw(const BaseCamera& camera)
 {
-	model_->Draw(worldtransform_, camera);
+	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera));
 }
 
 void Terrain::ImGuiDraw()

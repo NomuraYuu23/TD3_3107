@@ -25,7 +25,7 @@ public:
 	/// 描画
 	/// </summary>
 	/// <param name="camera"></param>
-	virtual void Draw(BaseCamera camera) = 0;
+	virtual void Draw(const BaseCamera& camera) = 0;
 	/// <summary>
 	/// ImGui
 	/// </summary>
