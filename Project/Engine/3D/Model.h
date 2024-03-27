@@ -67,6 +67,7 @@ public:
 		kPipelineStateNameModel,
 		kPipelineStateNameParticle,
 		kPipelineStateNameOutLine,
+		kPipelineStateNameManyModels,
 		kPipelineStateNameOfCount
 	};
 
@@ -95,6 +96,13 @@ public:
 	/// </summary>
 	/// <param name="cmdList">描画コマンドリスト</param>
 	static void PreDrawOutLine(ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
+	/// 静的前処理
+	/// </summary>
+	/// <param name="cmdList">描画コマンドリスト</param>
+	static void PreManyModelsDraw(ID3D12GraphicsCommandList* cmdList, PointLightManager* pointLightManager = nullptr, SpotLightManager* spotLightManager = nullptr);
+
 
 	/// <summary>
 	/// 描画後処理
@@ -141,7 +149,27 @@ public:
 	/// </summary>
 	void Draw(WorldTransform& worldTransform, BaseCamera& camera);
 	void Draw(WorldTransform& worldTransform, BaseCamera& camera, Material* material);
-	void Draw(WorldTransform& worldTransform, BaseCamera& camera, Material* material,uint32_t texureHandle);
+	void Draw(WorldTransform& worldTransform, BaseCamera& camera, Material* material,uint32_t textureHandle);
+
+	void Draw(
+		const D3D12_GPU_DESCRIPTOR_HANDLE& localMatrixesHandle,
+		const D3D12_GPU_DESCRIPTOR_HANDLE& transformationMatrixesHandle,
+		BaseCamera& camera,
+		uint32_t numInstance);
+	void Draw(
+		const D3D12_GPU_DESCRIPTOR_HANDLE& localMatrixesHandle,
+		const D3D12_GPU_DESCRIPTOR_HANDLE& transformationMatrixesHandle,
+		BaseCamera& camera,
+		uint32_t numInstance,
+		Material* material);
+	void Draw(
+		const D3D12_GPU_DESCRIPTOR_HANDLE& localMatrixesHandle,
+		const D3D12_GPU_DESCRIPTOR_HANDLE& transformationMatrixesHandle,
+		BaseCamera& camera,
+		uint32_t numInstance,
+		Material* material,
+		uint32_t textureHandle);
+
 	void ParticleDraw();
 	void OutLineDraw(WorldTransform& worldTransform, BaseCamera& camera,OutLineData& outLineData);
 

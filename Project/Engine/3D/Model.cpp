@@ -108,6 +108,25 @@ void Model::PreDrawOutLine(ID3D12GraphicsCommandList* cmdList) {
 
 }
 
+void Model::PreManyModelsDraw(ID3D12GraphicsCommandList* cmdList, PointLightManager* pointLightManager, SpotLightManager* spotLightManager)
+{
+
+	assert(sCommandList == nullptr);
+
+	sCommandList = cmdList;
+
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameManyModels]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameManyModels]);
+
+	//形状を設定。PS0に設定しているものとは別。
+	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	pointLightManager_ = pointLightManager;
+	spotLightManager_ = spotLightManager;
+
+}
+
 /// <summary>
 /// 描画後処理
 /// </summary>
@@ -300,6 +319,167 @@ void Model::Draw(WorldTransform& worldTransform, BaseCamera& camera, Material* m
 
 	//描画
 	sCommandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+
+}
+
+
+void Model::Draw(
+	const D3D12_GPU_DESCRIPTOR_HANDLE& localMatrixesHandle, 
+	const D3D12_GPU_DESCRIPTOR_HANDLE& transformationMatrixesHandle, 
+	BaseCamera& camera,
+	uint32_t numInstance)
+{
+
+	// nullptrチェック
+	assert(sDevice);
+	assert(sCommandList);
+
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameManyModels]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameManyModels]);
+
+	//形状を設定。PS0に設定しているものとは別。
+	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	sCommandList->IASetVertexBuffers(0, 1, mesh_->GetVbView()); //VBVを設定
+
+	//マテリアルCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	// カメラCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(7, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
+
+	// ビュープロジェクション
+	sCommandList->SetGraphicsRootConstantBufferView(11, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	for (size_t i = 0; i < modelData_.material.textureFilePaths.size(); ++i) {
+		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2 + static_cast<UINT>(i), textureHandles_[i]);
+	}
+
+	// ポイントライト
+	if (pointLightManager_) {
+		pointLightManager_->Draw(sCommandList, 8);
+	}
+	// スポットライト
+	if (spotLightManager_) {
+		spotLightManager_->Draw(sCommandList, 9);
+	}
+
+	// ワールドトランスフォーム
+	sCommandList->SetGraphicsRootDescriptorTable(10, transformationMatrixesHandle);
+	// ローカル
+	sCommandList->SetGraphicsRootDescriptorTable(1, localMatrixesHandle);
+
+	//描画
+	sCommandList->DrawInstanced(UINT(modelData_.vertices.size()), numInstance, 0, 0);
+
+}
+
+void Model::Draw(
+	const D3D12_GPU_DESCRIPTOR_HANDLE& localMatrixesHandle, 
+	const D3D12_GPU_DESCRIPTOR_HANDLE& transformationMatrixesHandle, 
+	BaseCamera& camera,
+	uint32_t numInstance,
+	Material* material)
+{
+
+	// nullptrチェック
+	assert(sDevice);
+	assert(sCommandList);
+
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameManyModels]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameManyModels]);
+
+	//形状を設定。PS0に設定しているものとは別。
+	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	sCommandList->IASetVertexBuffers(0, 1, mesh_->GetVbView()); //VBVを設定
+
+	//マテリアルCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(0, material->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	// カメラCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(7, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
+
+	// ビュープロジェクション
+	sCommandList->SetGraphicsRootConstantBufferView(11, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	for (size_t i = 0; i < modelData_.material.textureFilePaths.size(); ++i) {
+		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2 + static_cast<UINT>(i), textureHandles_[i]);
+	}
+
+	// ポイントライト
+	if (pointLightManager_) {
+		pointLightManager_->Draw(sCommandList, 8);
+	}
+	// スポットライト
+	if (spotLightManager_) {
+		spotLightManager_->Draw(sCommandList, 9);
+	}
+
+	// ワールドトランスフォーム
+	sCommandList->SetGraphicsRootDescriptorTable(10, transformationMatrixesHandle);
+	// ローカル
+	sCommandList->SetGraphicsRootDescriptorTable(1, localMatrixesHandle);
+
+	//描画
+	sCommandList->DrawInstanced(UINT(modelData_.vertices.size()), numInstance, 0, 0);
+
+}
+
+void Model::Draw(
+	const D3D12_GPU_DESCRIPTOR_HANDLE& localMatrixesHandle, 
+	const D3D12_GPU_DESCRIPTOR_HANDLE& transformationMatrixesHandle, 
+	BaseCamera& camera,
+	uint32_t numInstance,
+	Material* material,
+	uint32_t textureHandle)
+{
+
+	// nullptrチェック
+	assert(sDevice);
+	assert(sCommandList);
+
+	//RootSignatureを設定。
+	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameManyModels]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameManyModels]);
+
+	//形状を設定。PS0に設定しているものとは別。
+	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	sCommandList->IASetVertexBuffers(0, 1, mesh_->GetVbView()); //VBVを設定
+
+	//マテリアルCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(0, material->GetMaterialBuff()->GetGPUVirtualAddress());
+
+	// カメラCBufferの場所を設定
+	sCommandList->SetGraphicsRootConstantBufferView(7, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
+
+	// ビュープロジェクション
+	sCommandList->SetGraphicsRootConstantBufferView(11, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle);
+
+	// ポイントライト
+	if (pointLightManager_) {
+		pointLightManager_->Draw(sCommandList, 8);
+	}
+	// スポットライト
+	if (spotLightManager_) {
+		spotLightManager_->Draw(sCommandList, 9);
+	}
+
+	// ワールドトランスフォーム
+	sCommandList->SetGraphicsRootDescriptorTable(10, transformationMatrixesHandle);
+	// ローカル
+	sCommandList->SetGraphicsRootDescriptorTable(1, localMatrixesHandle);
+
+	//描画
+	sCommandList->DrawInstanced(UINT(modelData_.vertices.size()), numInstance, 0, 0);
 
 }
 
