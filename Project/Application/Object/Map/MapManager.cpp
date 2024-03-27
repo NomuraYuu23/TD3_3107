@@ -113,7 +113,7 @@ void MapManager::InitializePlacement()
 	//}
 
 #pragma region 床ブロック
-	for (int i = 0; i < 60; ++i) {
+	for (int i = 0; i < 30; ++i) {
 		RegisterBlock({ (float)i * 2.0f ,-4.0f,0 });
 	}
 
@@ -122,13 +122,16 @@ void MapManager::InitializePlacement()
 #pragma endregion
 
 #pragma region 初期値から左方向の部分と右の壁
-	RegisterBlock({ -2.0f,-4.0f,0 });
 
-	for (int i = 0; i < 10; ++i) {
-		RegisterBlock({ -4.0f,-4.0f + ((float)i * 2.0f),0 });
-		RegisterBlock({ 60.0f * 2.0f,-4.0f + ((float)i * 2.0f),0 });
+	for (int i = 0; i < 14; ++i) {
+		RegisterBlock({ 0.0f,-4.0f + ((float)i * 2.0f),0 });
+		RegisterBlock({ 30.0f * 2.0f,-4.0f + ((float)i * 2.0f),0 });
 	}
 
+	// 壁じゃん用
+	for (int i = 0; i < 10; ++i) {
+		RegisterBlock({ 24.0f * 2.0f, 4.0f + ((float)i * 2.0f),0 });
+	}
 #pragma endregion
 
 

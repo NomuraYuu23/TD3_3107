@@ -13,7 +13,7 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { 0,3.0f,0 };
+	worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
 
 	// コライダーの初期化
 	circleCollider_.radius_ = 0.95f;
@@ -102,7 +102,7 @@ void Player::ImGuiDraw()
 	}	
 
 	if (ImGui::Button("PosReset")) {
-		worldtransform_.transform_.translate = { 0,3.0f,0 };
+		worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
 		velocity_ = {};
 		worldtransform_.UpdateMatrix();
 		isGround_ = true;
@@ -126,8 +126,6 @@ void Player::ImGuiDraw()
 			ImGui::DragFloat3("translate", &worldtransform_.transform_.translate.x, 0.01f, -absValue, absValue);
 			ImGui::DragFloat3("velocity", &velocity_.x);
 			ImGui::DragFloat3("Scale", &worldtransform_.transform_.scale.x);
-			// 重力
-			//ImGui::DragFloat("Gravity", &gravity_, 0.01f, -absValue, absValue);
 		
 			ImGui::DragFloat3("ThrowDirect", &throwDirect_.x, 0.01f, -10, 10);
 			
@@ -141,7 +139,7 @@ void Player::ImGuiDraw()
 					isGround_ = true;
 				}
 			}
-
+			ImGui::Text("IsGround : %d", isGround_);
 
 			ImGui::EndTabItem();
 		}
@@ -208,7 +206,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 			
 			// 移動ベクトルが下向きの時にのみ
-			if (velocity_.y < 0) {
+			if (velocity_.y < 0 && (!recoil_.IsActive())) {
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
 				//ChangeState(std::make_unique<ActionWaitState>());
@@ -284,13 +282,21 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.x = correctX;
 			}
 
-			// 初期化
-			if (recoil_.IsActive() && !recoil_.IsAccept()) {
-				recoil_.Accept();
-				// ここ定数に変更
-				velocity_.x *= -1.0f;
-			}
-			else  if(!recoil_.IsActive()){
+			//// 初期化
+			//if (recoil_.IsActive() && !recoil_.IsAccept()) {
+			//	// 方向
+			//	weapon_->throwDirect_ = Vector3::Normalize(velocity_);
+
+			//	// 受付フラグ
+			//	recoil_.Accept();
+			//	// ここ定数に変更
+			//	velocity_.x *= -1.0f;
+
+			//	weapon_->ChangeRequest(Weapon::StateName::kThrown);
+			//	ChangeState(std::make_unique<SpearAerialState>());
+
+			//}
+			if(!recoil_.IsActive() && !recoil_.IsAccept()){
 				velocity_.x = 0;
 			}
 
@@ -320,7 +326,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			worldtransform_.UpdateMatrix();
 
-
 			// ジャンプ中・槍ジャンプ中なら
 			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 				ChangeState(std::make_unique<GroundState>());
@@ -330,6 +335,19 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 反動のキャンセル
 		if (recoil_.IsActive() && (isGround_)) {
 			recoil_.CancelRecoil();
+		}
+		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
+			// 方向
+			weapon_->throwDirect_ = throwDirect_;
+
+			// 受付フラグ
+			recoil_.Accept();
+			recoil_.CancelRecoil();
+			// ここ定数に変更
+			velocity_.x *= -0.25f;
+
+			weapon_->ChangeRequest(Weapon::StateName::kThrown);
+			ChangeState(std::make_unique<SpearAerialState>());
 		}
 
 	}

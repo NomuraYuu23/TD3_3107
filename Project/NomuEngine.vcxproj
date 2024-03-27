@@ -253,6 +253,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider2D\CollisionConfig2D.h" />
     <ClInclude Include="Application\Collider\ColliderParentObject.h" />
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\WallJumpState.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
     <ClInclude Include="Application\Object\Player\System\UI\PlayerUI.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />

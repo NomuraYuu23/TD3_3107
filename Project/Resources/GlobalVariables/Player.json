@@ -1,7 +1,7 @@
 {
     "Player": {
         "AerialAcceleration": 7.5,
-        "Gravity": 10.0,
+        "Gravity": 8.0,
         "MoveSpeed": 10.0,
         "NormalJumpPower": 35.0,
         "RecoilFrame": 20.0,

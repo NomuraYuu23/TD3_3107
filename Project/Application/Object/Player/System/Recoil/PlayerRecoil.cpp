@@ -7,6 +7,7 @@
 void PlayerRecoil::Initialize(Player* player)
 {
 	player_ = player;
+	this->isAccept_ = false;
 	recoilFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilFrame");
 	recoilRatio_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilRatio");
 	lerpRatio_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilLerpRatio");

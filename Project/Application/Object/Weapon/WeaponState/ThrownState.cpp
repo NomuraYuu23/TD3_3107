@@ -15,13 +15,9 @@ void ThrownState::Initialize()
 	// 速さ
 	speedValue_ = globalVariables->GetFloatValue("Weapon", "SpeedRatio");
 	// 投げる際の速度
-	//velocity_ = weapon_->throwDirect_ * speedValue_;
 	velocity_.x = weapon_->throwDirect_.x * (speedValue_ * 2.0f);
 	velocity_.y = weapon_->throwDirect_.y * (speedValue_ * 1.5f);
-
-	// 加速しきるまでの時間
-	//float maxFrame = 50.0f;
-	//acceleratorTimer_.Start(maxFrame);
+	weapon_->worldtransform_.direction_ = weapon_->throwDirect_;
 }
 
 void ThrownState::Update()
@@ -41,7 +37,6 @@ void ThrownState::Update()
 
 	else {
 		velocity_.x = weapon_->throwDirect_.x * (speedValue_ * 2.0f);
-		//velocity_.y += weapon_->throwDirect_.y * (speedValue_ * 2.0f) * kDeltaTime_;
 	}
 
 	// 移動処理
