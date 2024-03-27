@@ -21,6 +21,7 @@
 #include "../Light/PointLight/PointLightManager.h"
 #include "../Light/SpotLight/SpotLightManager.h"
 #include "../base/D3DResourceLeakChecker.h"
+#include "../2D/DrawLine.h"
 
 // サウンド再生
 #include "../Audio/Audio.h"
@@ -44,7 +45,7 @@
 #include "../Particle/ParticleManager.h"
 
 // ディスクリプタヒープ
-#include ".../../../base/DescriptorHerpManager.h"
+#include ".../../../base/SRVDescriptorHerpManager.h"
 
 class MyFramework
 {
@@ -80,7 +81,6 @@ protected: // メンバ変数
 
 	WinApp* win = nullptr;
 	DirectXCommon* dxCommon = nullptr;
-	DescriptorHerpManager* descriptorHerpManager = nullptr;
 
 	Audio* audio = nullptr;
 	Input* input = nullptr;

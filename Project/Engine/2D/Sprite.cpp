@@ -9,8 +9,6 @@ using namespace Microsoft::WRL;
 
 // デバイス
 ID3D12Device* Sprite::sDevice = nullptr;
-// ディスクリプタサイズ
-UINT Sprite::sDescriptorHandleIncrementSize;
 // コマンドリスト
 ID3D12GraphicsCommandList* Sprite::sCommandList = nullptr;
 // ルートシグネチャ
@@ -30,8 +28,6 @@ void Sprite::StaticInitialize(
 	assert(device);
 	
 	sDevice = device;
-
-	sDescriptorHandleIncrementSize = sDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 	sRootSignature = rootSignature;
 	sPipelineState = pipelineState;
@@ -176,14 +172,14 @@ bool Sprite::Initialize() {
 	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
 
 	//Sprite用の頂点リソースを作る
-	vertBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(VertexData) * 6);
+	vertBuff_ = BufferResource::CreateBufferResource(sDevice, sizeof(SpriteVertex) * 6);
 
 	//リソースの先頭のアドレスから使う
 	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点6つ分のサイズ
-	vbView_.SizeInBytes = sizeof(VertexData) * 6;
+	vbView_.SizeInBytes = sizeof(SpriteVertex) * 6;
 	//1頂点あたりのサイズ
-	vbView_.StrideInBytes = sizeof(VertexData);
+	vbView_.StrideInBytes = sizeof(SpriteVertex);
 
 	//書き込むためのアドレスを取得
 	vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));

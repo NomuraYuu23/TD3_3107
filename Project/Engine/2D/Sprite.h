@@ -16,7 +16,7 @@
 #include "../Math/Vector4.h"
 #include "../Math/Matrix4x4.h"
 
-#include "../3D/VertexData.h"
+#include "../2D/SpriteVertex.h"
 #include "../3D/TransformationMatrix.h"
 #include "../3D/TransformStructure.h"
 
@@ -66,8 +66,6 @@ private:
 	static const int kVertNum = 6;
 	// デバイス
 	static ID3D12Device* sDevice;
-	// ディスクリプタサイズ
-	static UINT sDescriptorHandleIncrementSize;
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* sCommandList;
 	// ルートシグネチャ
@@ -123,7 +121,7 @@ private:
 	// 頂点バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
 	// 頂点バッファマップ
-	VertexData* vertMap = nullptr;
+	SpriteVertex* vertMap = nullptr;
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
 

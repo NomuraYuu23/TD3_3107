@@ -10,6 +10,7 @@
 #include "../../3D/Model.h"
 #include "../../3D/Material.h"
 #include "../../Particle/ParticleManager.h"
+#include "../../2D/DrawLine.h"
 
 #include "../../../Application/Scene/SceneName.h"
 #include "../../base/ITextureHandleManager.h"
@@ -30,6 +31,7 @@ protected: // 静的メンバ変数
 	static DirectXCommon* dxCommon_;
 	static Input* input_;
 	static Audio* audio_;
+	static RenderTargetTexture* renderTargetTexture_;
 
 	//ビュープロジェクション
 	static BaseCamera camera_;

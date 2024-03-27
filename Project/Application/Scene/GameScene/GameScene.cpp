@@ -260,7 +260,7 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
-	dxCommon_->ClearDepthBuffer();
+	renderTargetTexture_->ClearDepthBuffer();
 
 
 #pragma endregion

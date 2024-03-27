@@ -88,9 +88,6 @@
     <Filter Include="Engine\Animation">
       <UniqueIdentifier>{43280e91-b268-4c81-aac7-d52c62b831b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Application\SampleBone">
-      <UniqueIdentifier>{725bd115-0d5f-49d4-b607-cf4602735a78}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Application\Collider">
       <UniqueIdentifier>{6e8db13d-e007-4744-a040-88bc34cd30d8}</UniqueIdentifier>
     </Filter>
@@ -310,15 +307,6 @@
     <ClCompile Include="Engine\base\ITextureHandleManager.cpp">
       <Filter>Engine\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Animation\AnimationFile.cpp">
-      <Filter>Engine\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Animation\IBone.cpp">
-      <Filter>Engine\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\SampleBone\SampleBone.cpp">
-      <Filter>Application\SampleBone</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Audio\AudioManager.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
@@ -356,9 +344,6 @@
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\GraphicsPipelineState\BlendStateManager.cpp">
-      <Filter>Engine\Base\GraphicsPipelineState</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\DescriptorHerpManager.cpp">
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\GraphicsPipelineState\InputLayoutManager.cpp">
@@ -488,15 +473,42 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Animation\Animation.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Animation\AnimationData.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\2D\DrawLine.cpp">
+      <Filter>Engine\2D</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Animation\NodeAnimationData.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Matrix3x3.cpp">
+      <Filter>Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DSVDescriptorHerpManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DxCommand.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DXGIDevice.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Log.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\RenderTargetTexture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\RTVDescriptorHerpManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\SRVDescriptorHerpManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\SwapChain.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Application\Object\Player\System\Handler\GroundHandler.cpp">
@@ -735,18 +747,6 @@
     <ClInclude Include="Engine\base\ITextureHandleManager.h">
       <Filter>Engine\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Animation\AnimationFile.h">
-      <Filter>Engine\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Animation\IBone.h">
-      <Filter>Engine\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Animation\BoneData.h">
-      <Filter>Engine\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\SampleBone\SampleBone.h">
-      <Filter>Application\SampleBone</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Collider\ColliderParentObject.h">
       <Filter>Application\Collider</Filter>
     </ClInclude>
@@ -802,9 +802,6 @@
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\GraphicsPipelineState\BlendStateManager.h">
-      <Filter>Engine\Base\GraphicsPipelineState</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\DescriptorHerpManager.h">
       <Filter>Engine\Base\GraphicsPipelineState</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\GraphicsPipelineState\InputLayoutManager.h">
@@ -966,16 +963,46 @@
     <ClInclude Include="Application\Object\Player\System\Handler\IHandler.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Animation\Animation.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\2D\ColorVertexData.h">
+      <Filter>Engine\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Animation\AnimationData.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\2D\DrawLine.h">
+      <Filter>Engine\2D</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Animation\NodeAnimationData.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\Animation.h">
+      <Filter>Engine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Animation\AnimationData.h">
+      <Filter>Engine\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Matrix3x3.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DSVDescriptorHerpManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DxCommand.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DXGIDevice.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Log.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\RenderTargetTexture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\RTVDescriptorHerpManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\SwapChain.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Application\Object\Player\System\Handler\GroundHandler.h">
@@ -1017,7 +1044,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="NomuEngine.vcxproj.user" />
-    <None Include="Resources\shaders\Collider2DDebug.hlsli" />
+    <None Include="Resources\shaders\Collider2DDebug.hlsli">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="Resources\shaders\Line.hlsli">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\Sprite.VS.hlsl">
@@ -1044,7 +1076,17 @@
     <FxCompile Include="Resources\shaders\OutLine3D.PS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\Collider2DDebug.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\Collider2DDebug.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Collider2DDebug.VS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\Collider2DDebug.PS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\Line.VS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\Line.PS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
