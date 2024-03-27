@@ -22,6 +22,7 @@ void GameObjectData::Initialize()
 	// 反動用
 	globalVariables_->AddItem(groupName, "RecoilFrame", player_.recoil.time_);
 	globalVariables_->AddItem(groupName, "RecoilRatio", player_.recoil.ratio_);
+	globalVariables_->AddItem(groupName, "RecoilLerpRatio", player_.recoil.lerpRatio_);
 
 	groupName = "Weapon";
 	// グループを追加
@@ -52,6 +53,7 @@ void GameObjectData::ApplyGlobalVariables()
 
 	player_.recoil.time_ = globalVariables_->GetFloatValue(groupName, "RecoilFrame");
 	player_.recoil.ratio_ = globalVariables_->GetFloatValue(groupName, "RecoilRatio");
+	player_.recoil.lerpRatio_ = globalVariables_->GetFloatValue(groupName, "RecoilLerpRatio");
 
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");

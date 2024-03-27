@@ -10,6 +10,8 @@ private: // データ用構造体クラス
 		float ratio_;
 		// 反動の時間
 		float time_;
+		// Lerpの値
+		float lerpRatio_;
 	};
 
 	// プレイヤーの情報

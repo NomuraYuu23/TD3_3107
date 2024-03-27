@@ -8,14 +8,22 @@ void PlayerRecoil::Initialize(Player* player)
 {
 	player_ = player;
 	recoilFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilFrame");
+	recoilRatio_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilRatio");
+	lerpRatio_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilLerpRatio");
 }
 
 void PlayerRecoil::CreateRecoil(const Vector3& direction)
 {
-	this->isAccept_ = false;
+	// デバック時のみ
+#ifdef _DEBUG
+	recoilFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilFrame");
+	recoilRatio_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilRatio");
+	lerpRatio_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "RecoilLerpRatio");
+#endif // _DEBUG
+
+	isAccept_ = false;
 	// 反動の値設定・速度設定
-	float recoilRatio = 35.0f;
-	player_->velocity_ = Vector3::Normalize(direction) * recoilRatio;
+	player_->velocity_ = Vector3::Normalize(direction) * recoilRatio_;
 
 	// 開始
 	timer_.Start(recoilFrame_);
@@ -29,9 +37,8 @@ void PlayerRecoil::Update()
 	}
 
 	// 反動の速度ベクトルを計算	
-	float lerpRate = 0.05f;
-	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, lerpRate);
-	player_->velocity_.y = MathUtility::Lerp(player_->velocity_.y, 0, lerpRate);
+	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, lerpRatio_);
+	player_->velocity_.y = MathUtility::Lerp(player_->velocity_.y, 0, lerpRatio_);
 
 	// 座標計算
 	player_->worldtransform_.transform_.translate += player_->velocity_ * kDeltaTime_;

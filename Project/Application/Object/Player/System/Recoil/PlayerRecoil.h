@@ -56,6 +56,10 @@ private: // 管理
 	TimerLib timer_;
 	// 反動の時間（フレーム
 	float recoilFrame_;
+	// 反動の大きさ
+	float recoilRatio_;
+	// Lerpのレート
+	float lerpRatio_;
 
 private: // 移動
 	// 加算速さ
