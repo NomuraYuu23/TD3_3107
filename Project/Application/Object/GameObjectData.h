@@ -3,7 +3,16 @@
 
 class GameObjectData
 {
-private:
+private: // データ用構造体クラス
+	// 反動の情報
+	struct RecoilData {
+		// 反動の値
+		float ratio_;
+		// 反動の時間
+		float time_;
+	};
+
+	// プレイヤーの情報
 	struct PlayerData {
 		// 通常のジャンプ量
 		float normalJumpPower_;
@@ -16,9 +25,10 @@ private:
 		float moveValue_;
 		// 空中の加速度
 		float aerialAcceleration_;
-
+		// 反動情報
+		RecoilData recoil;
 	};
-
+	// 共通の情報
 	struct CommonData {
 		// スロー時の値
 		float slowMotionFactor_;
@@ -26,6 +36,7 @@ private:
 		float gravity_;
 	};
 
+	// 武器の情報
 	struct WeaponData {
 		// 重力
 		float gravity_;
@@ -58,5 +69,6 @@ private:
 	PlayerData player_;
 	// 武器の情報
 	WeaponData weapon_;
+
 };
 

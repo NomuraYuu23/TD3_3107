@@ -1,6 +1,6 @@
 {
     "Weapon": {
-        "Gravity": 30.0,
+        "Gravity": 3.0,
         "ScaleRate": 2.5,
         "SpeedRatio": 30.0
     }

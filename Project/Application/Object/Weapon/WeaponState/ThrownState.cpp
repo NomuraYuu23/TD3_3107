@@ -35,7 +35,7 @@ void ThrownState::Update()
 	// 武器の重力処理
 	if (weapon_->GetIsGravity()) {
 		float g = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "Gravity");
-		velocity_.y += (-g) * kDeltaTime_;
+		velocity_.y += (kGravity * g) * kDeltaTime_;
 		velocity_.x = weapon_->throwDirect_.x * speedValue_;
 	}
 

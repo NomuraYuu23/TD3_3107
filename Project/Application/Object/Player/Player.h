@@ -110,7 +110,8 @@ public:
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
 	// 重力
-	float gravity_ = 9.8f;
+	//float gravity_ = 9.8f;
+	// 
 	// 投げる方向
 	Vector3 throwDirect_ = { 1,0,0 };
 	// 前座標

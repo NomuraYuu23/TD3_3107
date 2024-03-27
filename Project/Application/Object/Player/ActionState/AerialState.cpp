@@ -45,7 +45,7 @@ void AerialState::Update()
 	//}
 
 	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.01f);
-	player_->velocity_.y += mass * (-gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// X軸処理
 	//velocity_.x += velocity_.x * kDeltaTime_;

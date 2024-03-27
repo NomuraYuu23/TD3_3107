@@ -1,6 +1,6 @@
 {
     "Common": {
-        "Gravity": 40.0,
+        "Gravity": -9.8,
         "SlowFactor": 5.0
     }
 }

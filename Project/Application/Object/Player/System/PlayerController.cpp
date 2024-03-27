@@ -105,14 +105,16 @@ void PlayerController::ControllerProcess()
 
 		// スローモーション
 		if (std::holds_alternative<HoldState*>(player_->weapon_->nowState_)) {
-			if (stickDirect.x == 0 && stickDirect.y == 0) {
-				player_->sPlaySpeed = 1.0f;
-			}
-			else {
+			// スロー処理
+			if((stickDirect.x != 0 || stickDirect.y != 0) && !player_->IsRecoil()){
 				// スローの倍率
 				player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 				// UI表示
 				player_->isArrowUiDraw_ = true;
+			}
+			// 通常
+			else {
+				player_->sPlaySpeed = 1.0f;
 			}
 		}
 		else {

@@ -19,6 +19,10 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "MoveSpeed", player_.moveValue_);
 	globalVariables_->AddItem(groupName, "AerialAcceleration", player_.aerialAcceleration_);
 
+	// 反動用
+	globalVariables_->AddItem(groupName, "RecoilFrame", player_.recoil.time_);
+	globalVariables_->AddItem(groupName, "RecoilRatio", player_.recoil.ratio_);
+
 	groupName = "Weapon";
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
@@ -45,6 +49,9 @@ void GameObjectData::ApplyGlobalVariables()
 	player_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	player_.moveValue_ = globalVariables_->GetFloatValue(groupName, "MoveSpeed");
 	player_.aerialAcceleration_ = globalVariables_->GetFloatValue(groupName, "AerialAcceleration");
+
+	player_.recoil.time_ = globalVariables_->GetFloatValue(groupName, "RecoilFrame");
+	player_.recoil.ratio_ = globalVariables_->GetFloatValue(groupName, "RecoilRatio");
 
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");

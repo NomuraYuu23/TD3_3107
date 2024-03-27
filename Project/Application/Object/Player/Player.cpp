@@ -33,7 +33,7 @@ void Player::Initialize(Model* model)
 
 	weapon_->SettingParent();
 	isGround_ = false;
-	gravity_ = 35.0f;
+	//gravity_ = 35.0f;
 
 }
 
@@ -285,10 +285,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 
 			// 初期化
-			if (recoil_.IsActive()) {
+			if (recoil_.IsActive() && !recoil_.IsAccept()) {
+				recoil_.Accept();
+				// ここ定数に変更
 				velocity_.x *= -1.0f;
 			}
-			else {
+			else  if(!recoil_.IsActive()){
 				velocity_.x = 0;
 			}
 
@@ -326,7 +328,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 
 		// 反動のキャンセル
-		if (recoil_.IsActive()) {
+		if (recoil_.IsActive() && (isGround_)) {
 			recoil_.CancelRecoil();
 		}
 

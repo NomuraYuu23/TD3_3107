@@ -27,7 +27,7 @@ void SpearAerialState::Update()
 	float mass = 1.0f;
 
 	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.01f);
-	player_->velocity_.y += mass * (-player_->gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// 更新
 	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
