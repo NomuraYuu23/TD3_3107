@@ -9,6 +9,7 @@
 #include "System/PlayerController.h"
 #include "System/Recoil/PlayerRecoil.h"
 #include "PlayerFootCollider.h"
+#include "../../../Engine/Animation/Animation.h"
 
 class Player : public IObject
 {
@@ -109,6 +110,7 @@ public:
 	std::unique_ptr<IActionState> actionState_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
+
 	// 重力
 	//float gravity_ = 9.8f;
 	// 
@@ -126,6 +128,10 @@ public:
 	bool isArrowUiDraw_ = false;
 
 private:
+
+	// アニメーションクラス
+	Animation animation_;
+
 	// 現状のステート
 	PlayerState nowState_;
 	// 反動管理クラス

@@ -469,7 +469,7 @@ void GameScene::ModelCreate()
 	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// プレイヤーモデル
-	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
+	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
 	weaponModel_.reset(Model::Create("Resources/GameObject/SpearB/", "SpearB.obj", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック

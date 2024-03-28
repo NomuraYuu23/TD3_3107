@@ -10,8 +10,57 @@
 
 void Player::Initialize(Model* model)
 {
-	// 基底クラスの初期化
-	IObject::Initialize(model);
+	// モデルを引数から取得
+	model_ = model;
+
+	// マテリアル
+	enableLighting_ = false;
+	shininess_ = 100.0f;
+
+	// マテリアル生成
+	material_.reset(Material::Create());
+	material_->SetEnableLighting(enableLighting_);
+	material_->SetShininess(shininess_);
+
+	// 行列
+	worldtransform_.Initialize(model_->GetRootNode());
+	worldtransform_.UpdateMatrix();
+
+	// 初期ローカル座標
+	std::vector<Vector3> initPositions;
+	initPositions.resize(worldtransform_.GetNodeDatas().size());
+	for (uint32_t i = 0; i < initPositions.size(); ++i) {
+		initPositions[i] = { 0.0f, 0.0f, 0.0f };
+	}
+
+	// 初期ローカル回転角
+	std::vector<Quaternion> initRotations;
+	initRotations.resize(worldtransform_.GetNodeDatas().size());
+	for (uint32_t i = 0; i < initRotations.size(); ++i) {
+		initRotations[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	}
+
+	// 初期スケール
+	std::vector<Vector3> initScalings;
+	initScalings.resize(worldtransform_.GetNodeDatas().size());
+	for (uint32_t i = 0; i < initScalings.size(); ++i) {
+		initScalings[i] = { 1.0f, 1.0f, 1.0f };
+	}
+
+	// アニメーションの初期化
+	animation_.Initialize(
+		model_->GetNodeAnimationData(),
+		initPositions,
+		initRotations,
+		initScalings,
+		worldtransform_.GetNodeNames());
+
+	// (テスト) アニメーションの開始
+	animation_.startAnimation(0, true);
+
+	// 2D用座標・サイズ
+	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
+	scale2D_ = { worldtransform_.transform_.scale.x * 2.0f, worldtransform_.transform_.scale.y * 2.0f };
 
 	worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
 
