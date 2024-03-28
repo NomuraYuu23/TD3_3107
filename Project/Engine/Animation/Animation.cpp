@@ -89,6 +89,7 @@ std::vector<Matrix4x4> Animation::AnimationUpdate()
 				// 終了
 				else {
 					animationDatas_[i].isFinished = true;
+					animationDatas_[i].isRun = false;
 				}
 			}
 			if (!animationDatas_[i].isFinished) {
@@ -169,6 +170,17 @@ std::vector<bool> Animation::FinishedAnimations()
 
 	for (uint32_t i = 0; i < animationCalcDataNum_; ++i) {
 		result.push_back(animationDatas_[i].isFinished);
+	}
+
+	return result;
+}
+
+std::vector<bool> Animation::GetRunningAnimations()
+{
+	std::vector<bool> result;
+
+	for (uint32_t i = 0; i < animationCalcDataNum_; ++i) {
+		result.push_back(animationDatas_[i].isRun);
 	}
 
 	return result;

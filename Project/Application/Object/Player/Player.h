@@ -106,6 +106,16 @@ public:
 	Vector2 screenPos_ = {};
 
 public:
+	// アニメーションクラス
+	Animation animation_;
+
+	// アニメーション再生トリガー
+	bool playIdleAnim_ = true;
+	bool playRunAnim_ = false;
+	bool playJumpAnim_ = false;
+	bool playFallingAnim_ = false;
+	bool playLandAnim_ = false;
+
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
 	// 武器
@@ -128,9 +138,6 @@ public:
 	bool isArrowUiDraw_ = false;
 
 private:
-
-	// アニメーションクラス
-	Animation animation_;
 
 	// 現状のステート
 	PlayerState nowState_;

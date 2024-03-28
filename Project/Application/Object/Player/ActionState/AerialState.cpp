@@ -15,6 +15,13 @@ void AerialState::Initialize()
 	
 	gravity_ = GlobalVariables::GetInstance()->GetFloatValue(groupName, "Gravity");
 
+	// 全アニメーションを一度停止
+	for (size_t i = 0; i < player_->model_->GetNodeAnimationData().size(); i++) {
+		player_->animation_.stopAnimation(static_cast<uint32_t>(i));
+	}
+
+	// 再生開始
+	player_->animation_.startAnimation(static_cast<uint32_t>(4), false);
 
 	player_->SetNowState(this);
 	player_->isGround_ = true;
@@ -43,6 +50,16 @@ void AerialState::Update()
 	//		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	//	}
 	//}
+
+	if (player_->animation_.FinishedAnimations()[4]) {
+		// 全アニメーションを一度停止
+		for (size_t i = 0; i < player_->model_->GetNodeAnimationData().size(); i++) {
+			player_->animation_.stopAnimation(static_cast<uint32_t>(i));
+		}
+
+		// 再生開始
+		player_->animation_.startAnimation(static_cast<uint32_t>(0), true);
+	}
 
 	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.01f);
 	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);

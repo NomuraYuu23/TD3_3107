@@ -61,6 +61,12 @@ public:
 	std::vector<bool> FinishedAnimations();
 
 	/// <summary>
+	/// 全てのアニメーションの実行状態ゲッター
+	/// </summary>
+	/// <returns>全アニメーションの実行状態</returns>
+	std::vector<bool> GetRunningAnimations();
+
+	/// <summary>
 	/// 移動補間係数セット
 	/// </summary>
 	/// <param name="moveT"></param>

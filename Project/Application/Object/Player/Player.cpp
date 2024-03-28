@@ -56,7 +56,7 @@ void Player::Initialize(Model* model)
 		worldtransform_.GetNodeNames());
 
 	// (テスト) アニメーションの開始
-	animation_.startAnimation(0, true);
+	animation_.startAnimation(1, true);
 
 	// 2D用座標・サイズ
 	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
@@ -88,7 +88,6 @@ void Player::Initialize(Model* model)
 
 void Player::Update()
 {
-	
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
 	//velocity_ = {};
@@ -105,6 +104,15 @@ void Player::Update()
 	// 武器の更新
 	if (weapon_) {
 		weapon_->Update();
+	}
+
+	// アニメーションの更新
+	for (size_t i = 0; i < animation_.GetRunningAnimations().size(); i++) {
+		// どれか１つでもアニメーションが実行中なら
+		if (animation_.GetRunningAnimations()[static_cast<int>(i)]) {
+			// アニメーションを更新する
+			worldtransform_.SetNodeLocalMatrix(animation_.AnimationUpdate());
+		}
 	}
 
 	// 基底クラスの更新
@@ -124,7 +132,7 @@ void Player::Draw(const BaseCamera& camera)
 	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera),material_.get());
 	// 武器の描画
 	if (weapon_) {
-		weapon_->Draw(camera);
+		//weapon_->Draw(camera);
 	}
 
 	if (isDebugDraw_) {
@@ -230,6 +238,26 @@ void Player::ImGuiDraw()
 
 	footCollider_.ImGuiDraw();
 
+	// アニメーションデバッグ
+	ImGui::Text("AnimationMenu");
+	// アニメーションの数分ループ
+	for (size_t i = 0; i < model_->GetNodeAnimationData().size(); i++) {
+		// ボタン名の取得
+		std::string animCount = "Animation " + std::to_string(i);
+		// ボタンを押すとそのアニメーションを再生
+		if (ImGui::Button(animCount.c_str())) {
+			// 全アニメーションを一度停止
+			for (size_t i = 0; i < model_->GetNodeAnimationData().size(); i++) {
+				animation_.stopAnimation(static_cast<uint32_t>(i));
+			}
+
+			// 再生開始
+			animation_.startAnimation(static_cast<uint32_t>(i), true);
+		}
+		// 改行しない設定に
+		ImGui::SameLine();
+	}
+
 	ImGui::End();
 
 	// 武器のImGUi
@@ -278,6 +306,17 @@ void Player::OnCollision(ColliderParentObject2D target)
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
+
+		// 着地アニメーションの再生トリガーがfalseの時
+		if (!animation_.GetRunningAnimations()[2]) {
+			// 全アニメーションを一度停止
+			for (size_t i = 0; i < model_->GetNodeAnimationData().size(); i++) {
+				animation_.stopAnimation(static_cast<uint32_t>(i));
+			}
+
+			// 再生開始
+			animation_.startAnimation(static_cast<uint32_t>(2), false);
+		}
 
 		// 前の座標から現座標へのベクトル
 		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;

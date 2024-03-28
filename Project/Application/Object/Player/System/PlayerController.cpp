@@ -2,6 +2,7 @@
 #include "../Player.h"
 #include "../../../Engine/base/TextureManager.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
+#include <numbers>
 
 void PlayerController::Initialize(Player* player)
 {
@@ -141,9 +142,9 @@ void PlayerController::AerialMoveProcess()
 
 	// 地上にいる場合
 	if (CheckAction) {
+
 		// 左右移動
 		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-
 	}
 }
 
@@ -158,10 +159,47 @@ void PlayerController::GroundMoveProcess()
 	float moveSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
 	bool CheckAction = std::holds_alternative<GroundState*>(player_->GetNowState());
 
+	// 移動ベクトルがあるなら
+	if (leftStick.x != 0.0f) {
+		// 移動に合わせてプレイヤーを回転させる
+		if (leftStick.x > 0.0f) {
+			player_->worldtransform_.transform_.rotate.y = -(static_cast<float>(std::numbers::pi) / 2.0f);
+		}
+		else {
+			player_->worldtransform_.transform_.rotate.y = (static_cast<float>(std::numbers::pi) / 2.0f);
+		}
+	}
+
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
 		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * moveSpeed_ * (1.0f / IObject::sPlaySpeed);
+
+		// 移動ベクトルがあるなら
+		if (leftStick.x != 0.0f) {
+			// 走りアニメーションの再生トリガーがfalseの時
+			if (!player_->animation_.GetRunningAnimations()[5]) {
+				// 全アニメーションを一度停止
+				for (size_t i = 0; i < player_->model_->GetNodeAnimationData().size(); i++) {
+					player_->animation_.stopAnimation(static_cast<uint32_t>(i));
+				}
+
+				// 再生開始
+				player_->animation_.startAnimation(static_cast<uint32_t>(5), true);
+			}
+		}
+		else {
+			// アイドルアニメーションの再生トリガーがfalseの時
+			if (!player_->animation_.GetRunningAnimations()[1] && !player_->animation_.GetRunningAnimations()[2]) {
+				// 全アニメーションを一度停止
+				for (size_t i = 0; i < player_->model_->GetNodeAnimationData().size(); i++) {
+					player_->animation_.stopAnimation(static_cast<uint32_t>(i));
+				}
+
+				// 再生開始
+				player_->animation_.startAnimation(static_cast<uint32_t>(1), true);
+			}
+		}
 
 		//player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_;
 
