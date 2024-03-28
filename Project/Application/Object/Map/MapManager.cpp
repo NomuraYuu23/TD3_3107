@@ -124,14 +124,21 @@ void MapManager::InitializePlacement()
 #pragma region 初期値から左方向の部分と右の壁
 
 	for (int i = 0; i < 14; ++i) {
+		// 左の壁
 		RegisterBlock({ 0.0f,-4.0f + ((float)i * 2.0f),0 });
+		// 右の壁
 		RegisterBlock({ 30.0f * 2.0f,-4.0f + ((float)i * 2.0f),0 });
 	}
 
 	// 壁じゃん用
-	for (int i = 0; i < 10; ++i) {
-		RegisterBlock({ 24.0f * 2.0f, 4.0f + ((float)i * 2.0f),0 });
+	for (int i = 0; i < 8; ++i) {
+		RegisterBlock({ 24.0f * 2.0f, 8.0f + ((float)i * 2.0f),0 });
 	}
+
+	for (int i = 0; i < 6; ++i) {
+		RegisterBlock({ 30.0f * 2.0f +((float)i * 2.0f), 8.0f + (7 * 2.0f),0});
+	}
+
 #pragma endregion
 
 

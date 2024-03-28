@@ -27,6 +27,8 @@ void Player::Initialize(Model* model)
 	recoil_.Initialize(this);
 	// 足場クラス
 	footCollider_.Initialize(model, this);
+	// コンボクラス
+	jumpCombo.Reset();
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
@@ -116,6 +118,8 @@ void Player::ImGuiDraw()
 	ImGui::Text("%f : Y", std::fabs(direct.y));
 
 	ImGui::DragFloat("thres", &threshold_y_, 0.01f, 0, 1.0f);
+	int count = this->jumpCombo.GetCount();
+	ImGui::DragInt("ComboCount", &count);
 
 	if (ImGui::BeginTabBar("Param")) {
 
@@ -209,6 +213,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (velocity_.y < 0 && (!recoil_.IsActive())) {
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
+				jumpCombo.Add();
 				//ChangeState(std::make_unique<ActionWaitState>());
 				ChangeState(std::make_unique<SpearAerialState>());
 			}
@@ -234,10 +239,10 @@ void Player::OnCollision(ColliderParentObject2D target)
 		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;
 		moveDirect = Vector3::Normalize(moveDirect);
 
-		// 移動していない場合
-		if (moveDirect.x == 0 && moveDirect.y == 0 || velocity_.x == 0 && velocity_.y == 0) {
-			return;
-		}
+		//// 移動していない場合
+		//if (moveDirect.x == 0 && moveDirect.y == 0 || velocity_.x == 0 && velocity_.y == 0) {
+		//	return;
+		//}
 
 		Vector2 targetPos = {};
 		Vector2 targetRad = {};

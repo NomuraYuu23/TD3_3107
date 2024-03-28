@@ -60,6 +60,7 @@ void PlayerFootCollider::OnCollision(ColliderParentObject2D target)
 		return;
 	}
 	else {
+		player_->jumpCombo.Reset();
 		player_->isGround_ = true;
 	}
 

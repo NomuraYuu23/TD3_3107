@@ -8,6 +8,7 @@
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerController.h"
 #include "System/Recoil/PlayerRecoil.h"
+#include "System/Combo/ComboCounter.h"
 #include "PlayerFootCollider.h"
 
 class Player : public IObject
@@ -124,6 +125,9 @@ public:
 	bool isGround_ = false;
 
 	bool isArrowUiDraw_ = false;
+
+	// ジャンプ回数カウントクラス
+	ComboCounter jumpCombo;
 
 private:
 	// 現状のステート
