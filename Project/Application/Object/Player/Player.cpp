@@ -37,6 +37,9 @@ void Player::Initialize(Model* model)
 	isGround_ = false;
 	//gravity_ = 35.0f;
 
+	// 放物線
+	parabola_.Initialize();
+
 }
 
 void Player::Update()
@@ -58,6 +61,17 @@ void Player::Update()
 	// 武器の更新
 	if (weapon_) {
 		weapon_->Update();
+	}
+
+	// 放物線
+	if (isArrowUiDraw_) {
+		parabola_.Update(
+			worldtransform_.GetWorldPosition(),
+			throwDirect_,
+			weapon_->GetGravityValue());
+	}
+	else {
+		parabola_.Reset();
 	}
 
 	// 基底クラスの更新
@@ -367,4 +381,11 @@ void Player::ChangeState(std::unique_ptr<IActionState> newState)
 	newState->Initialize();
 	// ステート渡し
 	actionState_ = std::move(newState);
+}
+
+void Player::DrawLine(BaseCamera& baseCamera)
+{
+
+	parabola_.Draw(baseCamera);
+
 }

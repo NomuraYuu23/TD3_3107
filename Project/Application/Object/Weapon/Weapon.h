@@ -86,6 +86,8 @@ public: // アクセッサ
 
 	float GetReturnRate() { return returnRate_; }
 
+	float GetGravityValue() { return gravityValue_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 親の設定

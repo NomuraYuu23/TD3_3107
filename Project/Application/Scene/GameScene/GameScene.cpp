@@ -288,10 +288,12 @@ void GameScene::Draw() {
 
 	Model::PostDraw();
 	
-#pragma region アウトライン描画
-	Model::PreDrawOutLine(dxCommon_->GetCommadList());
-	
-	Model::PostDraw();
+#pragma region 線描画
+	DrawLine::PreDraw(dxCommon_->GetCommadList());
+
+	player_->DrawLine(camera_);
+
+	DrawLine::PostDraw();
 
 #pragma endregion
 

@@ -11,6 +11,8 @@
 #include "System/Combo/ComboCounter.h"
 #include "PlayerFootCollider.h"
 
+#include "System/Parabola/PlayerParabola.h"
+
 class Player : public IObject
 {
 private:
@@ -99,6 +101,12 @@ public: // メンバ関数
 	/// </summary>
 	bool IsRecoil() { return recoil_.IsActive(); }
 
+	/// <summary>
+	/// 線描画
+	/// </summary>
+	/// <param name="baseCamera">カメラ</param>
+	void DrawLine(BaseCamera& baseCamera);
+
 public:
 
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
@@ -144,6 +152,9 @@ private:
 	float threshold_y_ = 0.17f;
 
 	bool isDebugDraw_ = false;
+
+	// 放物線
+	PlayerParabola parabola_;
 
 };
 
