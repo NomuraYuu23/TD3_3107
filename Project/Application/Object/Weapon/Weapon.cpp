@@ -57,7 +57,14 @@ void Weapon::Update()
 
 void Weapon::Draw(const BaseCamera& camera)
 {
-
+	if (std::holds_alternative<ThrownState*>(nowState_))
+	{
+		// 画面外に出たら戻るステートに変更
+		float deadLength = 750.0f;
+		if (MathUtility::CheckInScreen(worldtransform_.GetWorldPosition(), deadLength, camera)) {
+			ChangeRequest(StateName::kReturn);
+		}
+	}
 	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera));
 
 }
@@ -156,11 +163,6 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	// 投げられてる状態
 	if (std::holds_alternative<ThrownState*>(nowState_))
 	{
-		//// 初手の無敵時間的なやつ
-		//if (!safeLaunchTimer_.IsEnd()) {
-		//	return;
-		//}
-		
 		// プレイヤーとの
 		if (std::holds_alternative<Player*>(target)) {
 			return;

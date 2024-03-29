@@ -54,3 +54,25 @@ Vector2 MathUtility::WorldToScreen(const Vector3& position, BaseCamera* camera)
    
     return Vector2(positionReticle.x, positionReticle.y);
 }
+
+bool MathUtility::CheckInScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera)
+{
+    // スクリーン座標
+    Vector2 screenPosition = MathUtility::WorldToScreen(worldPosition, &const_cast<BaseCamera&>(camera));
+    Vector2 deadZone = { (float)WinApp::kWindowWidth + std::fabsf(offset.x), (float)WinApp::kWindowHeight + std::fabsf(offset.y) };
+    if ((screenPosition.x > deadZone.x || screenPosition.x < -std::fabsf(offset.x)) || (screenPosition.y > deadZone.y || screenPosition.y < -std::fabsf(offset.y))) {
+        return true;
+    }
+    return false;
+}
+
+bool MathUtility::CheckInScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera)
+{
+    // スクリーン座標
+    Vector2 screenPosition = MathUtility::WorldToScreen(worldPosition, &const_cast<BaseCamera&>(camera));
+    Vector2 deadZone = { (float)WinApp::kWindowWidth + std::fabsf(offset), (float)WinApp::kWindowHeight + std::fabsf(offset) };
+    if ((screenPosition.x > deadZone.x || screenPosition.x < -std::fabsf(offset)) || (screenPosition.y > deadZone.y || screenPosition.y < -std::fabsf(offset))) {
+        return true;
+    }
+    return false;
+}

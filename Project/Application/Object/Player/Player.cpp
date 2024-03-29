@@ -107,6 +107,8 @@ void Player::ImGuiDraw()
 	// 足場の描画表示
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
 
+	ImGui::DragFloat2("Screen", &screenPos_.x);
+
 	// ジャンプのコンボ数
 	int count = jumpCombo.GetCount();
 	ImGui::DragInt("ComboCount", &count);

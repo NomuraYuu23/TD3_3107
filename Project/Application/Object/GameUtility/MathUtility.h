@@ -22,7 +22,21 @@ public:
 
 	static float CalcAngle(const Vector2& direction);
 
+	/// <summary>
+	/// ワールド座標からスクリーン座標へ
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="camera"></param>
+	/// <returns></returns>
 	static Vector2 WorldToScreen(const Vector3& position, BaseCamera* camera);
+	/// <summary>
+	/// 画面内かチェックする関数
+	/// </summary>
+	/// <param name="worldPosition"></param>
+	/// <param name="camera"></param>
+	/// <returns></returns>
+	static bool CheckInScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera);
+	static bool CheckInScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera);
 
 };
 
