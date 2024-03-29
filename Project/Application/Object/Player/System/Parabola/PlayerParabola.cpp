@@ -22,11 +22,8 @@ void PlayerParabola::Initialize()
 
 }
 
-void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct, float gravity)
+void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct)
 {
-
-	// 時間倍率
-	float timeMagnification = 1.0f;
 
 	// 初速
 	Vector3 velocity = direct;
@@ -34,7 +31,10 @@ void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct
 
 	// 加速度
 	Vector3 acceleration = { 0.0f,0.0f,0.0f };
-	acceleration.y = (-9.8f * gravity) * kDeltaTime_ * timeMagnification;
+	float gravity = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "Gravity");
+	// 重力倍率
+	const uint32_t kGravityMagnification = 50;
+	acceleration.y = (-9.8f * gravity * kGravityMagnification) * kDeltaTime_;
 
 	// 線の数をリセット
 	numLine_ = 0;
@@ -44,9 +44,9 @@ void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct
 	for (uint32_t i = 0; i < kNumLineMax_; ++i) {
 
 		// 速度
-		velocity =  MassPoint::VelocityCalc(velocity, acceleration, kDeltaTime_ * timeMagnification);
+		velocity =  MassPoint::VelocityCalc(velocity, acceleration, kDeltaTime_ * kTimeMagnification);
 		// 終了位置
-		endPositions_[i] = MassPoint::PositionCalc(startPositions_[i], velocity, kDeltaTime_ * timeMagnification);
+		endPositions_[i] = MassPoint::PositionCalc(startPositions_[i], velocity, kDeltaTime_ * kTimeMagnification);
 		
 		// スタート位置
 		if (i != kNumLineMax_ - 1) {
@@ -76,7 +76,7 @@ void PlayerParabola::Draw(BaseCamera& camera)
 {
 
 	// 色
-	Vector4 color = { 1.0f,1.0f,1.0f,1.0f };
+	Vector4 color = { 0.0f,0.8f,0.4f,1.0f };
 
 	// 描画
 	for (uint32_t i = 0; i < numLine_; ++i) {

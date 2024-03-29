@@ -11,8 +11,7 @@ public:
 
 	void Update(
 		const Vector3& playerPosition,
-		const Vector3& direct, 
-		float gravity);
+		const Vector3& direct);
 
 	void Reset();
 
@@ -21,7 +20,10 @@ public:
 private:
 
 	// 線の最大数
-	static const uint32_t kNumLineMax_ = 64;
+	static const uint32_t kNumLineMax_ = 32;
+
+	// 時間倍率
+	static const uint32_t kTimeMagnification = 5;
 
 	// 線
 	std::array<std::unique_ptr<DrawLine>, kNumLineMax_> drawLines_;

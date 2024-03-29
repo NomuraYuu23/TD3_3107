@@ -66,8 +66,7 @@ void Player::Update()
 	if (isArrowUiDraw_) {
 		parabola_.Update(
 			worldtransform_.GetWorldPosition(),
-			throwDirect_,
-			weapon_->GetGravityValue());
+			throwDirect_);
 	}
 	else {
 		parabola_.Reset();
