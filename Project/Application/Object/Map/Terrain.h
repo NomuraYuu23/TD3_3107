@@ -1,41 +1,41 @@
 #pragma once
 #include "../IObject.h"
+#include "../../../Engine/3D/OneOfManyObjects.h"
 
 /// <summary>
 /// 地形用ブロック
 /// </summary>
-class Terrain : public IObject
+class Terrain : public OneOfManyObjects
 {
 public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="model"></param>
-	void Initialize(Model* model) override;
+	void Initialize() override;
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update() override;
-	/// <summary>
-	/// 描画
-	/// </summary>
-	/// <param name="camera"></param>
-	void Draw(const BaseCamera& camera) override;
+
 	/// <summary>
 	/// ImGui
 	/// </summary>
-	void ImGuiDraw() override;
+	void ImGuiDraw();
 
 	/// <summary>
 	/// 衝突のコールバック
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
-	void OnCollision(ColliderParentObject2D target) override;
+	void OnCollision(ColliderParentObject2D target);
 
-	Vector2 GetColliderPosition() override { return boxCollider_.position_; }
-	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
-	Box GetBoxCollider() override { return boxCollider_; }
+	Vector2 GetColliderPosition() { return boxCollider_.position_; }
+	Vector2 GetColliderSize() { return boxCollider_.scale_; }
+	Box GetBoxCollider() { return boxCollider_; }
+
+	void BoxColliderUpdate() {
+		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
+	}
 
 private:
 	// シリアルナンバー
@@ -43,7 +43,14 @@ private:
 
 	static uint32_t sSerialNumber_;
 
-	
+public:
+
+	// コライダー用の座標・スケール
+	Vector2 position2D_ = {};
+	Vector2 scale2D_ = {};
+
+	// コライダー
+	Box boxCollider_;
 
 };
 
