@@ -64,9 +64,11 @@ public: // アクセッサ
 	/// 踏まれたフラグ取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsTread() { return isTread_; }
+	bool IsTread() { return isTread_; }
 
-	bool GetIsGravity() { return isGravity_; }
+	bool IsGravity() { return isGravity_; }
+
+	void SetIsGravity(bool isGravity) { isGravity_ = isGravity; }
 
 	float GetReturnRate() { return returnRate_; }
 	Vector2 GetColliderPosition() override { return boxCollider_.position_; }
@@ -106,14 +108,6 @@ public: // 外部で行う設定関数
 	/// 踏まれた際の初期設定
 	/// </summary>
 	void TreadSetting();
-
-	/// <summary>
-	/// 重力が掛かる際の初期化
-	/// </summary>
-	void GravityInitialize() {
-		isGravity_ = true;
-	}
-
 
 	// 投げる方向
 	Vector3 throwDirect_ = {};

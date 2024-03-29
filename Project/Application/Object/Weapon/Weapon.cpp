@@ -4,6 +4,7 @@
 
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../GameUtility/MathUtility.h"
+#include "../ObjectList.h"
 
 void Weapon::Initialize(Model* model)
 {
@@ -72,6 +73,12 @@ void Weapon::ImGuiDraw()
 	if (ImGui::Button("ParentAdd")) {
 		SettingParent();
 	}
+
+	if (ImGui::Button("ResetButton"))
+	{
+		ChangeRequest(StateName::kHold);
+	}
+
 	Vector3 direct = worldtransform_.direction_;
 	float angle = MathUtility::CalcAngle(position2D_, { direct.x,direct.y });
 
@@ -149,15 +156,31 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	// 投げられてる状態
 	if (std::holds_alternative<ThrownState*>(nowState_))
 	{
-		// 初手の無敵時間的なやつ
-		if (!safeLaunchTimer_.IsEnd()) {
+		//// 初手の無敵時間的なやつ
+		//if (!safeLaunchTimer_.IsEnd()) {
+		//	return;
+		//}
+		
+		// プレイヤーとの
+		if (std::holds_alternative<Player*>(target)) {
+			return;
+		}
+
+		Vector2 targetPos = {};
+		// 対象の情報取得
+		std::visit([&](const auto& a) {
+			targetPos = a->GetColliderPosition();
+			}, target);
+		Vector2 direct = targetPos - boxCollider_.position_;
+		float dot = Vector2::Dot({ throwDirect_.x,throwDirect_.y }, Vector2::Normalize(direct));
+		// 内積で移動方向との判定
+		if (dot < 0) {
 			return;
 		}
 
 		// 壁・ブロックとの衝突判定
 		if (std::holds_alternative<Terrain*>(target)) {
 			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
-			//invDirect_ = boxCollider_.position_ - targetPosition;
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;
 		}
@@ -187,7 +210,7 @@ void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
 void Weapon::ChangeRequest(Weapon::StateName request)
 {
 	// 重力のフラグリセット
-	isGravity_ = false;
+	//isGravity_ = false;
 	// リクエストに応じてステート変更
 	switch (request)
 	{

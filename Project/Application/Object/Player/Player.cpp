@@ -177,7 +177,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 	// 武器との衝突
 	if (std::holds_alternative<Weapon*>(target)) {
 		// 壁に刺さっている状態なら
-		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->GetIsTread()) {
+		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->IsTread()) {
 			//// 地上か待機状態なら早期
 			//if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
 			//	return;
