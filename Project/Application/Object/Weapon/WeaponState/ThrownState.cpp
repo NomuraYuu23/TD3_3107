@@ -15,9 +15,10 @@ void ThrownState::Initialize()
 	// 速さ
 	speedValue_ = globalVariables->GetFloatValue("Weapon", "SpeedRatio");
 	// 投げる際の速度
-	velocity_.x = weapon_->throwDirect_.x * (speedValue_ * 2.0f);
-	velocity_.y = weapon_->throwDirect_.y * (speedValue_ * 1.5f);
+	velocity_.x = weapon_->throwDirect_.x * (speedValue_);
+	velocity_.y = weapon_->throwDirect_.y * (speedValue_);
 	weapon_->worldtransform_.direction_ = weapon_->throwDirect_;
+	weapon_->safeLaunchTimer_.Start(2.0f);
 }
 
 void ThrownState::Update()
@@ -27,6 +28,8 @@ void ThrownState::Update()
 		weapon_->ChangeRequest(Weapon::StateName::kImpaled);
 		return;
 	}
+
+	weapon_->safeLaunchTimer_.Update();
 
 	// 武器の重力処理
 	if (weapon_->GetIsGravity()) {

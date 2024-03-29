@@ -66,11 +66,11 @@ void ReturnState::EaseUpdate()
 		weapon_->worldtransform_.direction_ = weapon_->worldtransform_.transform_.translate - weapon_->GetTargetPosition();
 	}
 	else {
-		// 座標
-		weapon_->worldtransform_.transform_.translate.x = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.x, relayPosition_.x, 0.02f);
-		weapon_->worldtransform_.transform_.translate.y = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.y, relayPosition_.y, 0.02f);
-		// 方向ベクトル
-		weapon_->worldtransform_.direction_ = weapon_->worldtransform_.transform_.translate - Vector3(relayPosition_.x, relayPosition_.y, 0);
+		//// 座標
+		//weapon_->worldtransform_.transform_.translate.x = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.x, relayPosition_.x, 0.02f);
+		//weapon_->worldtransform_.transform_.translate.y = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.y, relayPosition_.y, 0.02f);
+		//// 方向ベクトル
+		//weapon_->worldtransform_.direction_ = weapon_->worldtransform_.transform_.translate - Vector3(relayPosition_.x, relayPosition_.y, 0);
 	}
 
 }

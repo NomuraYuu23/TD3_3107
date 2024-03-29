@@ -46,11 +46,8 @@ private:
 	Vector2 position2D_ = {};
 	Vector2 scale2D_ = {};
 
-
 	// マテリアル関係
 	std::unique_ptr<Material> material_ = nullptr;
-	int32_t enableLighting_;
-	float shininess_;
 
 };
 

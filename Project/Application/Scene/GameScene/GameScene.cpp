@@ -542,7 +542,9 @@ void GameScene::CollisionUpdate()
 	// プレイヤー
 	collision2DManager_->ListRegister(&player_->circleCollider_);
 	// 武器
-	collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
+	if (!std::holds_alternative<HoldState*>(player_->GetWeapon()->GetNowState())) {
+		collision2DManager_->ListRegister(&player_->GetWeapon()->boxCollider_);
+	}
 	// プレイヤーの足場
 	collision2DManager_->ListRegister(&player_->GetFootCollider()->boxCollider_);
 	

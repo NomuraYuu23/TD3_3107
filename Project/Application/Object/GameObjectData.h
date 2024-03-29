@@ -1,5 +1,7 @@
 #pragma once
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../../Engine/Math/Vector2.h"
+#include "../../Engine/Math/Vector3.h"
 
 class GameObjectData
 {
@@ -46,6 +48,8 @@ private: // データ用構造体クラス
 		float speedRatio_;
 		// 
 		float scaleRate_;
+		// ローカル座標
+		Vector3 localPosition_;
 	};
 
 public:

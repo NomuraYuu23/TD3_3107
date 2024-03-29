@@ -45,6 +45,10 @@ private:
 	Input* input_ = nullptr;
 	// プレイヤーのポインタ
 	Player* player_ = nullptr;
-
+private:
+	// 地上の速度
+	float groundSpeed_ = 0;
+	// 空中の速度
+	float aerialSpeed_ = 0;
 };
 

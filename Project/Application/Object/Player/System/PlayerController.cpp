@@ -9,7 +9,8 @@ void PlayerController::Initialize(Player* player)
 	input_ = Input::GetInstance();
 
 	player_ = player;
-
+	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
 }
 
 void PlayerController::Update()
@@ -26,18 +27,6 @@ void PlayerController::Update()
 	if (input_->TriggerKey(DIK_H)) {
 		player_->ChangeState(std::make_unique<AerialState>());
 	}
-
-	//// 移動入力
-	//if (input_->PushKey(DIK_A)) {
-	//	player_->velocity_.x = -5.f;
-	//}
-	//else if (input_->PushKey(DIK_D)) {
-	//	player_->velocity_.x = 5.f;
-	//}
-	//else {
-	//	player_->velocity_.x = 0;
-	//}
-
 
 #endif // _DEBUG
 
@@ -67,7 +56,7 @@ void PlayerController::ControllerProcess()
 		// 投げ
 		if (input_->TriggerJoystick(kJoystickButtonRB)) {
 			// 投げ入力
-			if (std::holds_alternative<HoldState*>(player_->weapon_->nowState_)) {
+			if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
 				// 右スティックの入力がなければキャンセル
 				if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
 					return;
@@ -81,11 +70,11 @@ void PlayerController::ControllerProcess()
 				}
 			}
 			// 待機に入る
-			else if (std::holds_alternative<ImpaledState*>(player_->weapon_->nowState_)) {
+			else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
 			}
 			// 戻ってくる
-			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->nowState_)) {
+			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 
@@ -104,7 +93,7 @@ void PlayerController::ControllerProcess()
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 
 		// スローモーション
-		if (std::holds_alternative<HoldState*>(player_->weapon_->nowState_)) {
+		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
 			// スロー処理
 			if((stickDirect.x != 0 || stickDirect.y != 0) && !player_->IsRecoil()){
 				// スローの倍率
@@ -120,10 +109,11 @@ void PlayerController::ControllerProcess()
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
+		// 投げる方向ベクトル
 		player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
 
 	}
-
+	// 座標更新
 	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 }
@@ -136,13 +126,12 @@ void PlayerController::AerialMoveProcess()
 	}
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
-	float moveSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
 	bool CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState());
 
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
-		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	}
 }
@@ -155,13 +144,12 @@ void PlayerController::GroundMoveProcess()
 	}
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
-	float moveSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
 	bool CheckAction = std::holds_alternative<GroundState*>(player_->GetNowState());
 
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
-		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * moveSpeed_ * (1.0f / IObject::sPlaySpeed);
+		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * groundSpeed_ * (1.0f / IObject::sPlaySpeed);
 
 		//player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_;
 
@@ -189,11 +177,11 @@ void PlayerController::KeyBoardProcess()
 		if (input_->TriggerKey(DIK_E)) {
 			//player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			// 待機に入る
-			if (std::holds_alternative<ImpaledState*>(player_->weapon_->nowState_)) {
+			if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
 			}
 			// 戻ってくる
-			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->nowState_)) {
+			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 		}

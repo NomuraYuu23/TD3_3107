@@ -1,8 +1,10 @@
 #pragma once
 #include "../IObject.h"
+#include "../GameUtility/TimerLib.h"
 #include "WeaponState/WeaponStateList.h"
 #include "WeaponState/StateList.h"
-#include "../GameUtility/TimerLib.h"
+
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 class Weapon : public IObject
 {
@@ -18,8 +20,6 @@ public: // サブクラス
 		//kCount,
 	};
 
-	// 現在のステート
-	WeaponState nowState_;
 
 public: // 継承
 	/// <summary>
@@ -46,23 +46,7 @@ public: // 継承
 	/// <param name="target"></param>
 	/// <param name="tag"></param>
 	void OnCollision(ColliderParentObject2D target) override;
-	Vector2 GetColliderPosition() override { return boxCollider_.position_; }
-	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
-	Box GetBoxCollider() override { return boxCollider_; }
 
-private:
-	/// <summary>
-	/// ステート変更
-	/// </summary>
-	/// <param name="newState"></param>
-	void ChangeState(std::unique_ptr<IWeaponState> newState);
-
-public: // メンバ関数
-	/// <summary>
-	/// 変更のリクエスト
-	/// </summary>
-	/// <param name="request"></param>
-	void ChangeRequest(Weapon::StateName request);
 
 public: // アクセッサ
 	/// <summary>
@@ -85,15 +69,27 @@ public: // アクセッサ
 	bool GetIsGravity() { return isGravity_; }
 
 	float GetReturnRate() { return returnRate_; }
+	Vector2 GetColliderPosition() override { return boxCollider_.position_; }
+	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
+	Box GetBoxCollider() override { return boxCollider_; }
+	WeaponState GetNowState() { return nowState_; }
+
+	void SetState(WeaponState newState) { nowState_ = newState; }
 
 public: // 外部で行う設定関数
+	/// <summary>
+	/// 変更のリクエスト
+	/// </summary>
+	/// <param name="request"></param>
+	void ChangeRequest(Weapon::StateName request);
+
 	/// <summary>
 	/// 親の設定
 	/// </summary>
 	/// <param name="adress"></param>
 	void SettingParent() {
 		worldtransform_.SetParent(parentAdress_);
-		worldtransform_.transform_.translate = localOffset_;
+		worldtransform_.transform_.translate = GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
 	}
 
 	/// <summary>
@@ -125,30 +121,36 @@ public: // 外部で行う設定関数
 	Vector2 returnDirect_ = {};
 	// 刺さった時の逆ベクトル
 	Vector2 invDirect_ = {};
+	// 刺さらない時間管理
+	TimerLib safeLaunchTimer_;
+private:
+	/// <summary>
+	/// ステート変更
+	/// </summary>
+	/// <param name="newState"></param>
+	void ChangeState(std::unique_ptr<IWeaponState> newState);
 
 private:
 	// ステート
 	std::unique_ptr<IWeaponState> state_;
 	// 親のワールドトランスフォーム
 	WorldTransform* parentAdress_ = nullptr;
-	// 動かすオフセット座標
-	Vector3 localOffset_ = {};
 	// 一回踏んだか確認フラグ
 	bool isTread_ = false;
+	// 重力フラグ
+	bool isGravity_ = false;
 	// 帰ってくるときの座標レート
 	float returnRate_ = 1.0f;
 
 	// タイマーライブラリ
 	TimerLib timer_;
-
-	// 重力フラグ
-	bool isGravity_ = false;
-	// 重力の値
-	float gravityValue_ = 0;
-
+	// コライダーチェック用のフラグ
 	bool isCollisionCheck_ = false;
-
+	// 角度
 	float rotateAngle_ = 0;
+
+	// 現在のステート
+	WeaponState nowState_;
 
 };
 

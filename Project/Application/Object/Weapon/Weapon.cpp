@@ -1,7 +1,6 @@
 #include "Weapon.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Input/Input.h"
-#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../GameUtility/MathUtility.h"
@@ -10,11 +9,11 @@ void Weapon::Initialize(Model* model)
 {
 	// 基底クラスの初期化
 	IObject::Initialize(model);
-	worldtransform_.transform_.translate.x = 2.0f;
-	worldtransform_.usedDirection_ = true;
-	// 親子関係でのオフセット
-	localOffset_ = { 2.0f,0,0 };
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	// 親子関係でのオフセット
+	worldtransform_.transform_.translate = GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
+	worldtransform_.usedDirection_ = true;
 	float scaleRate = globalVariables->GetFloatValue("Weapon", "ScaleRate");
 	//float scaleRate = 2.5f;
 	worldtransform_.transform_.scale = { 1.0f,1.0f,scaleRate };
@@ -27,8 +26,6 @@ void Weapon::Initialize(Model* model)
 
 	// ステート変更
 	ChangeState(std::make_unique<HoldState>());
-	// 重力
-	gravityValue_ = 35.0f;
 	// 戻るレート
 	returnRate_ = 1.3f;
 }
@@ -96,8 +93,6 @@ void Weapon::ImGuiDraw()
 	ImGui::SeparatorText("WorldTransform");
 	// ローカル座標
 	ImGui::DragFloat3("localPos", &worldtransform_.transform_.translate.x, 0.01f, -40.0f, 40.0f);
-	// オフセット
-	ImGui::DragFloat3("localOffset", &localOffset_.x, 0.01f, -40.0f, 40.0f);
 	// サイズ
 	ImGui::DragFloat3("scla", &worldtransform_.transform_.scale.x, 0.01f, 0, 100);
 	// 回転処理
@@ -154,6 +149,11 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	// 投げられてる状態
 	if (std::holds_alternative<ThrownState*>(nowState_))
 	{
+		// 初手の無敵時間的なやつ
+		if (!safeLaunchTimer_.IsEnd()) {
+			return;
+		}
+
 		// 壁・ブロックとの衝突判定
 		if (std::holds_alternative<Terrain*>(target)) {
 			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);

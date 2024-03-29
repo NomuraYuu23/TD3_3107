@@ -11,5 +11,5 @@ void IWeaponState::SetNowState(WeaponState state)
 {
 	// 切り替わるタイミングで呼ぶ
 	// 現在のステートの設定
-	weapon_->nowState_ = state;
+	weapon_->SetState(state);
 }

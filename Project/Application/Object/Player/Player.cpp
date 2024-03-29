@@ -33,18 +33,17 @@ void Player::Initialize(Model* model)
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
 
+	// 武器の親設定
 	weapon_->SettingParent();
 	isGround_ = false;
-	//gravity_ = 35.0f;
 
 }
 
 void Player::Update()
 {
-	
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
-	//velocity_ = {};
+
 	// ステートの更新
 	if (actionState_ && !recoil_.IsActive()) {
 		actionState_->Update();
@@ -70,6 +69,7 @@ void Player::Update()
 
 void Player::Draw(const BaseCamera& camera)
 {
+	// 矢印用の座標
 	Vector3 offset = throwDirect_ * 2.0f;
 	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &const_cast<BaseCamera&>(camera));
 	//screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition(), &camera);
@@ -79,7 +79,7 @@ void Player::Draw(const BaseCamera& camera)
 	if (weapon_) {
 		weapon_->Draw(camera);
 	}
-
+	// 足場のモデル描画
 	if (isDebugDraw_) {
 		footCollider_.DebugDraw(camera);
 	}
@@ -88,38 +88,31 @@ void Player::Draw(const BaseCamera& camera)
 void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
-
+	// ゲームスピード
 	float ratio = IObject::sPlaySpeed;
 	ImGui::DragFloat("playTime", &ratio);
 	sPlaySpeed = ratio;
+	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
-	//ImGui::DragFloat("")
-
-	if (ImGui::Button("Normal")) {
-		sPlaySpeed = 1.0f;
-	}
-
-	if (ImGui::Button("Slow")) {
-		sPlaySpeed = 2.5f;
-	}	
-
+	// 状態の名前取得
+	std::string name = typeid(*actionState_).name();
+	ImGui::Text(name.c_str());
+	// 座標リセット
 	if (ImGui::Button("PosReset")) {
 		worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
 		velocity_ = {};
 		worldtransform_.UpdateMatrix();
 		isGround_ = true;
 	}
-
+	// 足場の描画表示
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
 
-	Vector3 direct = worldtransform_.GetWorldPosition() - prevPosition_;
-	direct = Vector3::Normalize(direct);
-	ImGui::Text("%f : X", std::fabs(direct.x));
-	ImGui::Text("%f : Y", std::fabs(direct.y));
-
-	ImGui::DragFloat("thres", &threshold_y_, 0.01f, 0, 1.0f);
-	int count = this->jumpCombo.GetCount();
+	// ジャンプのコンボ数
+	int count = jumpCombo.GetCount();
 	ImGui::DragInt("ComboCount", &count);
+
+	ImGui::Text("\n");
+	ImGui::SeparatorText("State");
 
 	if (ImGui::BeginTabBar("Param")) {
 
@@ -128,13 +121,26 @@ void Player::ImGuiDraw()
 			float absValue = 30.0f;
 			// 座標
 			ImGui::DragFloat3("translate", &worldtransform_.transform_.translate.x, 0.01f, -absValue, absValue);
+			// 速度
 			ImGui::DragFloat3("velocity", &velocity_.x);
+			// スケール
 			ImGui::DragFloat3("Scale", &worldtransform_.transform_.scale.x);
 		
-			ImGui::DragFloat3("ThrowDirect", &throwDirect_.x, 0.01f, -10, 10);
-			
-			throwDirect_ = throwDirect_.Normalize(throwDirect_);
+			ImGui::EndTabItem();
+		}
+		// コライダー用
+		if (ImGui::BeginTabItem("Collider")) {
+			footCollider_.ImGuiDraw();
 
+			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, 0, 10.0f);
+			ImGui::DragFloat2("ColliderSize", &circleCollider_.scale_.x, 0.01f, 0, 10.0f);
+			ImGui::DragFloat("Radius", &circleCollider_.radius_, 0.01f, 0, 10.0f);
+			ImGui::EndTabItem();
+		}
+
+		// 地上
+		if (ImGui::BeginTabItem("OnGround")) {
+			// 着地フラグ
 			if (ImGui::Button("IsGround")) {
 				if (isGround_) {
 					isGround_ = false;
@@ -147,19 +153,6 @@ void Player::ImGuiDraw()
 
 			ImGui::EndTabItem();
 		}
-		// コライダー用
-		if (ImGui::BeginTabItem("Collider")) {
-			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, 0, 10.0f);
-			ImGui::DragFloat2("ColliderSize", &circleCollider_.scale_.x, 0.01f, 0, 10.0f);
-			ImGui::DragFloat("Radius", &circleCollider_.radius_, 0.01f, 0, 10.0f);
-			ImGui::EndTabItem();
-		}
-
-		// 地上
-		if (ImGui::BeginTabItem("OnGround")) {
-
-			ImGui::EndTabItem();
-		}
 		// 空中
 		if (ImGui::BeginTabItem("Aerial")) {
 
@@ -169,21 +162,6 @@ void Player::ImGuiDraw()
 		// タブバーを終了
 		ImGui::EndTabBar();
 	}
-
-	ImGui::SeparatorText("");
-	// ステート確認
-	if (typeid(*actionState_) == typeid(AerialState)) {
-
-	}
-	else {
-
-	}
-	// どっちかを判断
-	std::string name = typeid(*actionState_).name();
-
-	ImGui::Text(name.c_str());
-
-	footCollider_.ImGuiDraw();
 
 	ImGui::End();
 
@@ -198,36 +176,34 @@ void Player::OnCollision(ColliderParentObject2D target)
 {
 	// 武器との衝突
 	if (std::holds_alternative<Weapon*>(target)) {
-
-		if (std::holds_alternative<HoldState*>(weapon_->nowState_)) {
-			return;
-		}
 		// 壁に刺さっている状態なら
-		else if (std::holds_alternative<ImpaledState*>(weapon_->nowState_) && !weapon_->GetIsTread()) {
-			// 地上か待機状態なら早期
-			if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
-				return;
-			}
+		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->GetIsTread()) {
+			//// 地上か待機状態なら早期
+			//if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
+			//	return;
+			//}
 			
 			// 移動ベクトルが下向きの時にのみ
 			if (velocity_.y < 0 && (!recoil_.IsActive())) {
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
+				// コンボ加算
 				jumpCombo.Add();
-				//ChangeState(std::make_unique<ActionWaitState>());
+
+				// 槍じゃんステートへ
 				ChangeState(std::make_unique<SpearAerialState>());
 			}
 			return;
 		}
 		// 帰ってきてる時の衝突
-		else if (std::holds_alternative<ReturnState*>(weapon_->nowState_)) {
+		else if (std::holds_alternative<ReturnState*>(weapon_->GetNowState())) {
 			//// 着地している場合早期リターン
 			if (std::holds_alternative<GroundState*>(nowState_)) {
 				return;
 			}
 			// 反動生成
 			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
-			throwDirect_ = Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition());
+
 			return;
 		}
 
@@ -263,19 +239,22 @@ void Player::OnCollision(ColliderParentObject2D target)
 			targetPos.y - targetRad.y,	// 下
 		};
 
-		
+		// 衝突したブロックへのベクトル
 		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
 
 		//Vector3 directVector = Vector3::Normalize(velocity_);
 
 		/*if (std::fabs(moveDirect.x) > std::fabs(moveDirect.y)) {*/
 		//if (std::fabs(moveDirect.x) != 0 && velocity_.x != 0) {
+		// 方向ベクトルの大きさ比較
+		// Xの方が大きい場合
 		if(std::fabs(p2tDist.x) > std::fabs(p2tDist.y)){
 			// サイズ分
 			float offset = 0.1f;
 			targetRad.x += offset + circleCollider_.radius_;
 			targetRad.y += offset + circleCollider_.radius_;
 
+			// 左右の判定
 			if (worldtransform_.GetWorldPosition().x < targetPos.x) {
 				// 修正x座標
 				float correctX = minPos.x - (circleCollider_.radius_ + offset);
@@ -287,28 +266,17 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.x = correctX;
 			}
 
-			//// 初期化
-			//if (recoil_.IsActive() && !recoil_.IsAccept()) {
-			//	// 方向
-			//	weapon_->throwDirect_ = Vector3::Normalize(velocity_);
-
-			//	// 受付フラグ
-			//	recoil_.Accept();
-			//	// ここ定数に変更
-			//	velocity_.x *= -1.0f;
-
-			//	weapon_->ChangeRequest(Weapon::StateName::kThrown);
-			//	ChangeState(std::make_unique<SpearAerialState>());
-
-			//}
+			// 反動がなかった時の速度初期化
 			if(!recoil_.IsActive() && !recoil_.IsAccept()){
 				velocity_.x = 0;
 			}
 
+			// 更新
 			worldtransform_.UpdateMatrix();
 
 		}
 		//else if (std::fabs(moveDirect.x) < (std::fabs(moveDirect.y) - threshold_y_)) {
+		// Yの方が大きい場合
 		else if(std::fabs(p2tDist.x) < std::fabs(p2tDist.y)){
 			// 移動文
 			float offset = 0.1f;
@@ -329,18 +297,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.y = correctY;
 			}
 
+			// 更新
 			worldtransform_.UpdateMatrix();
 
-			// ジャンプ中・槍ジャンプ中なら
+			// ジャンプ中・槍ジャンプ中なら着地状態へ
 			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 				ChangeState(std::make_unique<GroundState>());
 			}
 		}
 
 		// 反動のキャンセル
-		if (recoil_.IsActive() && (isGround_)) {
+		if (recoil_.IsActive() && std::holds_alternative<GroundState*>(GetNowState())) {
 			recoil_.CancelRecoil();
 		}
+		// 反動中かつ壁ジャンの受付をしていない場合
 		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
 			// 方向
 			weapon_->throwDirect_ = throwDirect_;
@@ -351,7 +321,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// ここ定数に変更
 			velocity_.x *= -0.25f;
 
+			//velocity_.x *= -1.0f;
+			//recoil_.CreateRecoil(Vector3::Normalize(velocity_));
+
+			// 武器のステートを変更
 			weapon_->ChangeRequest(Weapon::StateName::kThrown);
+			// プレイヤーのステートを変更
 			ChangeState(std::make_unique<SpearAerialState>());
 		}
 
