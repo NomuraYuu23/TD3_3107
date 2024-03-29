@@ -9,12 +9,7 @@ void PlayerFootCollider::Initialize(Model* model, Player* parent)
 	player_ = parent;
 
 	// マテリアル
-	enableLighting_ = 0;
-	shininess_ = 100.0f;
-
 	material_.reset(Material::Create());
-	material_->SetEnableLighting(enableLighting_);
-	material_->SetShininess(shininess_);
 
 	// 行列
 	worldtransform_.Initialize(model_->GetRootNode());
@@ -60,7 +55,11 @@ void PlayerFootCollider::OnCollision(ColliderParentObject2D target)
 		return;
 	}
 	else {
-		player_->jumpCombo.Reset();
+		// コンボリセット
+		if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
+			player_->jumpCombo.Reset();
+		}
+		// 着地フラグ
 		player_->isGround_ = true;
 	}
 

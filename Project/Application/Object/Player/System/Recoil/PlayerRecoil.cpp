@@ -25,6 +25,8 @@ void PlayerRecoil::CreateRecoil(const Vector3& direction)
 	isAccept_ = false;
 	// 反動の値設定・速度設定
 	player_->velocity_ = Vector3::Normalize(direction) * recoilRatio_;
+	// 反動方向のベクトルを投げる方向へ
+	player_->throwDirect_ = Vector3::Normalize(direction);
 
 	// 開始
 	timer_.Start(recoilFrame_);

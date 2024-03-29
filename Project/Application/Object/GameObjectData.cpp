@@ -30,6 +30,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "Gravity", weapon_.gravity_);
 	globalVariables_->AddItem(groupName, "SpeedRatio", weapon_.speedRatio_);
 	globalVariables_->AddItem(groupName, "ScaleRate", weapon_.scaleRate_);
+	globalVariables_->AddItem(groupName, "LocalPosition", weapon_.localPosition_);
 
 	ApplyGlobalVariables(); 
 
@@ -59,5 +60,6 @@ void GameObjectData::ApplyGlobalVariables()
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	weapon_.speedRatio_ = globalVariables_->GetFloatValue(groupName, "SpeedRatio");
 	weapon_.scaleRate_ = globalVariables_->GetFloatValue(groupName, "ScaleRate");
+	weapon_.localPosition_ = globalVariables_->GetVector3Value(groupName, "LocalPosition");
 
 }

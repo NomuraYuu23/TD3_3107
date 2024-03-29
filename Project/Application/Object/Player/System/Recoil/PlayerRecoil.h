@@ -26,10 +26,16 @@ public: // メンバ関数
 	/// </summary>
 	void Update();
 
+public: // 制御関数
 	/// <summary>
 	/// 強制終了関数
 	/// </summary>
 	void CancelRecoil();
+
+	/// <summary>
+	/// 受け付ける処理
+	/// </summary>
+	void Accept() { isAccept_ = true; }
 
 public: // アクセッサ
 	/// <summary>
@@ -38,10 +44,6 @@ public: // アクセッサ
 	/// <returns></returns>
 	bool IsActive() { return timer_.IsActive(); }
 
-	/// <summary>
-	/// 受け付ける処理
-	/// </summary>
-	void Accept() { isAccept_ = true; }
 
 	/// <summary>
 	/// 反動を受け付けたか
