@@ -117,6 +117,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\AudioManager\TitleAudioManager.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\WallJumpState.cpp" />
     <ClCompile Include="Application\Object\Player\System\Combo\ComboCounter.cpp" />
+    <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\ReturnWaitState.cpp" />
     <ClCompile Include="Application\Scene\SelectScene\SelectScene.cpp" />
@@ -127,10 +128,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\UI\UIManager.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
+    <ClCompile Include="Engine\3D\LargeNumberOfObjects.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
     <ClCompile Include="Engine\3D\MeshNumManager.cpp" />
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
     <ClCompile Include="Engine\3D\ModelNode.cpp" />
+    <ClCompile Include="Engine\3D\OneOfManyObjects.cpp" />
     <ClCompile Include="Engine\3D\OutLineData.cpp" />
     <ClCompile Include="Engine\Animation\Animation.cpp" />
     <ClCompile Include="Engine\Animation\AnimationData.cpp" />
@@ -180,6 +183,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Math\Ease.cpp" />
     <ClCompile Include="Engine\Math\Math.cpp" />
+    <ClCompile Include="Engine\Physics\InertiaTensor.cpp" />
+    <ClCompile Include="Engine\Physics\massPoint.cpp" />
+    <ClCompile Include="Engine\Physics\RigidBody.cpp" />
     <ClCompile Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.cpp" />
     <ClCompile Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.cpp" />
     <ClCompile Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp" />
@@ -255,6 +261,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
     <ClInclude Include="Application\Object\Player\ActionState\WallJumpState.h" />
     <ClInclude Include="Application\Object\Player\System\Combo\ComboCounter.h" />
+    <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
+    <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
     <ClInclude Include="Application\Object\Player\System\UI\PlayerUI.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnWaitState.h" />
@@ -271,10 +279,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\2D\DrawLine.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\2D\SpriteForGPU.h" />
+    <ClInclude Include="Engine\3D\LargeNumberOfObjects.h" />
+    <ClInclude Include="Engine\3D\LocalMatrix.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
     <ClInclude Include="Engine\3D\MeshNumManager.h" />
     <ClInclude Include="Engine\3D\ModelLoader.h" />
     <ClInclude Include="Engine\3D\ModelNode.h" />
+    <ClInclude Include="Engine\3D\ModelNodeData.h" />
+    <ClInclude Include="Engine\3D\OneOfManyObjects.h" />
     <ClInclude Include="Engine\3D\OutLineData.h" />
     <ClInclude Include="Engine\Animation\Animation.h" />
     <ClInclude Include="Engine\Animation\AnimationData.h" />
@@ -336,6 +348,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Ease.h" />
     <ClInclude Include="Engine\Math\Math.h" />
     <ClInclude Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.h" />
+    <ClInclude Include="Engine\Physics\InertiaTensor.h" />
+    <ClInclude Include="Engine\Physics\massPoint.h" />
+    <ClInclude Include="Engine\Physics\RigidBody.h" />
     <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\AbstractSceneTransitionFactory.h" />
     <ClInclude Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.h" />
     <ClInclude Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h" />

@@ -6,29 +6,17 @@
 
 void MapManager::Initialize(Model* model)
 {
-	terrainModel_ = model;
-	for (std::list<std::unique_ptr<IObject>>::iterator it = blocks_.begin();
-		it != blocks_.end();++it) {
-		(*it)->Initialize(terrainModel_);
-	}
+
+	LargeNumberOfObjects::Initialize(model);
+
 	InitializePlacement();
 }
 
 void MapManager::Update()
 {
-	for (std::list<std::unique_ptr<IObject>>::iterator it = blocks_.begin();
-		it != blocks_.end(); ++it) {
-		(*it)->Update();
-	}
 
-}
+	LargeNumberOfObjects::Update();
 
-void MapManager::Draw(const BaseCamera& camera)
-{
-	for (std::list<std::unique_ptr<IObject>>::iterator it = blocks_.begin();
-		it != blocks_.end(); ++it) {
-		(*it)->Draw(camera);
-	}
 }
 
 void MapManager::ImGuiDraw()
@@ -43,9 +31,9 @@ void MapManager::ImGuiDraw()
 	ImGui::Separator();
 
 	// ブロック達のImGui
-	for (std::list<std::unique_ptr<IObject>>::iterator it = blocks_.begin();
-		it != blocks_.end(); ++it) {
-		(*it)->ImGuiDraw();
+	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+		static_cast<Terrain*>((*it))->ImGuiDraw();
 	}
 
 	ImGui::End();
@@ -54,43 +42,40 @@ void MapManager::ImGuiDraw()
 
 void MapManager::CollisionRegister(Collision2DManager* collisionManager)
 {
-	for (std::list<std::unique_ptr<IObject>>::iterator it = blocks_.begin();
-		it != blocks_.end(); ++it) {
-		collisionManager->ListRegister(&(*it)->boxCollider_);
+	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+		collisionManager->ListRegister(&static_cast<Terrain*>((*it))->boxCollider_);
 	}
 }
 
 void MapManager::RegisterBlock()
 {
 	//IObject* newBlock =
-	std::unique_ptr<IObject> newBlock;
-	newBlock = std::make_unique<Terrain>();
-	newBlock->Initialize(terrainModel_);
+	OneOfManyObjects* obj = new Terrain();
+	obj->Initialize();
 	// 追加
-	blocks_.push_back(std::move(newBlock));
+	objects_.push_back(std::move(obj));
 }
 
 void MapManager::RegisterBlock(const Vector3& position)
 {
-	std::unique_ptr<IObject> newBlock;
-	newBlock = std::make_unique<Terrain>();
-	newBlock->Initialize(terrainModel_);
-	newBlock->worldtransform_.transform_.translate = position;
+	OneOfManyObjects* obj = new Terrain();
+	obj->Initialize();
+	obj->transform_.translate = position;
 	// 追加
-	blocks_.push_back(std::move(newBlock));
+	objects_.push_back(std::move(obj));
 
 }
 
 void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 {
-	std::unique_ptr<IObject> newBlock;
-	newBlock = std::make_unique<Terrain>();
-	newBlock->Initialize(terrainModel_);
-	newBlock->worldtransform_.transform_.translate = position;
-	newBlock->worldtransform_.transform_.scale = { scale.x,scale.y,1.0f };
-	newBlock->scale2D_ = scale;
+	OneOfManyObjects* obj = new Terrain();
+	obj->Initialize();
+	obj->transform_.translate = position;
+	obj->transform_.scale = { scale.x,scale.y,1.0f };
+	static_cast<Terrain*>(obj)->scale2D_ = scale;
 	// 追加
-	blocks_.push_back(std::move(newBlock));
+	objects_.push_back(std::move(obj));
 }
 
 void MapManager::InitializePlacement()

@@ -273,8 +273,6 @@ void GameScene::Draw() {
 	
 	//Obj
 	player_->Draw(camera_);
-	// ブロック用
-	mapManager_->Draw(camera_);
 
 	// スカイドーム
 	skydome_->Draw(camera_);
@@ -287,11 +285,25 @@ void GameScene::Draw() {
 #endif // _DEBUG
 
 	Model::PostDraw();
-	
-#pragma region アウトライン描画
-	Model::PreDrawOutLine(dxCommon_->GetCommadList());
-	
+
+
+#pragma region 大量のオブジェクト描画
+
+	Model::PreManyModelsDraw(dxCommon_->GetCommadList());
+
+	// ブロック用
+	mapManager_->Draw(camera_);
+
 	Model::PostDraw();
+
+#pragma endregion
+
+#pragma region 線描画
+	DrawLine::PreDraw(dxCommon_->GetCommadList());
+
+	player_->DrawLine(camera_);
+
+	DrawLine::PostDraw();
 
 #pragma endregion
 

@@ -4,10 +4,14 @@
 
 uint32_t Terrain::sSerialNumber_ = 0;
 
-void Terrain::Initialize(Model* model)
+void Terrain::Initialize()
 {
 	// 基底クラスの初期化
-	IObject::Initialize(model);
+	OneOfManyObjects::Initialize();
+
+	// コライダー用の座標・スケール
+	position2D_ = { transform_.translate.x,transform_.translate.y };
+	scale2D_ = { transform_.scale.x * 2.0f, transform_.scale.y * 2.0f };
 
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
@@ -24,14 +28,12 @@ void Terrain::Update()
 {
 
 	// 基底クラスの更新
-	IObject::Update();
+	OneOfManyObjects::Update();
+
+	// 2D更新
+	position2D_ = { worldMatrix_.m[3][0],worldMatrix_.m[3][1]};
 	// コライダー
 	BoxColliderUpdate();
-}
-
-void Terrain::Draw(const BaseCamera& camera)
-{
-	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera));
 }
 
 void Terrain::ImGuiDraw()
@@ -39,7 +41,7 @@ void Terrain::ImGuiDraw()
 	std::string name = "Terrain" + std::to_string(serialNum_);
 	ImGui::SeparatorText(name.c_str());
 	name = name + "Position";
-	ImGui::DragFloat3(name.c_str(), &worldtransform_.transform_.translate.x, 0.01f, -30.0f, 30.0f);
+	ImGui::DragFloat3(name.c_str(), &transform_.translate.x, 0.01f, -30.0f, 30.0f);
 	name = "Terrain" + std::to_string(serialNum_) + "Coll";
 	ImGui::DragFloat2(name.c_str(), &boxCollider_.position_.x);
 
