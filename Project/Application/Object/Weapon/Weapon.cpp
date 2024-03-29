@@ -29,6 +29,7 @@ void Weapon::Initialize(Model* model)
 	ChangeState(std::make_unique<HoldState>());
 	// 戻るレート
 	returnRate_ = 1.3f;
+	dotAngle_ = 0.85f;
 }
 
 void Weapon::Update()
@@ -85,6 +86,8 @@ void Weapon::ImGuiDraw()
 	{
 		ChangeRequest(StateName::kHold);
 	}
+
+	ImGui::DragFloat("dotAngle", &dotAngle_, 0.01f, -1.0f, 1.0f);
 
 	Vector3 direct = worldtransform_.direction_;
 	float angle = MathUtility::CalcAngle(position2D_, { direct.x,direct.y });
@@ -176,7 +179,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		Vector2 direct = targetPos - boxCollider_.position_;
 		float dot = Vector2::Dot({ throwDirect_.x,throwDirect_.y }, Vector2::Normalize(direct));
 		// 内積で移動方向との判定
-		if (dot < 0) {
+		if (dot < dotAngle_) {
 			return;
 		}
 

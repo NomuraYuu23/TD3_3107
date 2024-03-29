@@ -144,5 +144,6 @@ private:
 	// 現在のステート
 	WeaponState nowState_;
 
+	float dotAngle_ = 0;
 };
 
