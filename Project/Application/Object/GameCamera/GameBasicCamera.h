@@ -12,7 +12,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update() override;
+	void Update(float elapsedTime = 0.0f) override;
 
 public:
 	void ImGuiDraw();

@@ -9,7 +9,7 @@ void FollowCamera::Initialize()
 
 }
 
-void FollowCamera::Update()
+void FollowCamera::Update(float elapsedTime)
 {
 	// 追従処理
 	if (targetTransform_) {
@@ -19,7 +19,7 @@ void FollowCamera::Update()
 	}
 
 	// 基底クラス更新
-	BaseCamera::Update();
+	BaseCamera::Update(elapsedTime);
 
 }
 
