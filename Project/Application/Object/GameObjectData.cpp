@@ -31,6 +31,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "SpeedRatio", weapon_.speedRatio_);
 	globalVariables_->AddItem(groupName, "ScaleRate", weapon_.scaleRate_);
 	globalVariables_->AddItem(groupName, "LocalPosition", weapon_.localPosition_);
+	globalVariables_->AddItem(groupName, "AngleDot", weapon_.collisionDot_);
 
 	ApplyGlobalVariables(); 
 
@@ -61,5 +62,6 @@ void GameObjectData::ApplyGlobalVariables()
 	weapon_.speedRatio_ = globalVariables_->GetFloatValue(groupName, "SpeedRatio");
 	weapon_.scaleRate_ = globalVariables_->GetFloatValue(groupName, "ScaleRate");
 	weapon_.localPosition_ = globalVariables_->GetVector3Value(groupName, "LocalPosition");
+	weapon_.collisionDot_ = globalVariables_->GetFloatValue(groupName, "AngleDot"); 
 
 }

@@ -29,7 +29,7 @@ void Weapon::Initialize(Model* model)
 	ChangeState(std::make_unique<HoldState>());
 	// 戻るレート
 	returnRate_ = 1.3f;
-	dotAngle_ = 0.85f;
+	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
 }
 
 void Weapon::Update()

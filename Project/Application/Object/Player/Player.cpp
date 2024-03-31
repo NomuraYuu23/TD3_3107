@@ -300,13 +300,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			// 上向き
 			// 上向きの場合のみ早期
-			if (moveDirect.y > 0) {
+			if (moveDirect.y > 0 && worldtransform_.transform_.translate.y < targetPos.y) {
 				// 修正y座標
 				float correctY = targetPos.y - targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
 			}
 			// 下向き
-			else if (moveDirect.y < 0) {
+			else if (moveDirect.y < 0 && worldtransform_.transform_.translate.y > targetPos.y) {
 				// 修正y座標
 				float correctY = targetPos.y + targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;

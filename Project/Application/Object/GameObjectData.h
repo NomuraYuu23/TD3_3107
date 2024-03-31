@@ -53,6 +53,8 @@ private: // データ用構造体クラス
 		float scaleRate_;
 		// ローカル座標
 		Vector3 localPosition_;
+		// 衝突時の避ける内積の値
+		float collisionDot_;
 	};
 
 public:
