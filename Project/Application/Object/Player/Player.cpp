@@ -333,16 +333,26 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// 受付フラグ
 			recoil_.Accept();
 			recoil_.CancelRecoil();
-			// ここ定数に変更
-			velocity_.x *= -0.25f;
-
-			//velocity_.x *= -1.0f;
-			//recoil_.CreateRecoil(Vector3::Normalize(velocity_));
 
 			// 武器のステートを変更
+			// 先にステート変更しないと速度の初期化が行われるため
 			weapon_->ChangeRequest(Weapon::StateName::kThrown);
 			// プレイヤーのステートを変更
-			ChangeState(std::make_unique<SpearAerialState>());
+			ChangeState(std::make_unique<AerialState>());
+
+			// 壁じゃんの時の値
+			Vector2 power = { 10.0f,40.0f };
+			if (velocity_.x > 0) {
+				//recoil_.CreateRecoil(Vector3::Normalize({ -1,1,0 }));
+				velocity_.x = power.x * -1.0f;
+			}
+			else {
+				//recoil_.CreateRecoil(Vector3::Normalize({ 1,1,0 }));
+				velocity_.x = power.x;
+			}
+
+			velocity_.y = power.y;
+
 		}
 
 	}

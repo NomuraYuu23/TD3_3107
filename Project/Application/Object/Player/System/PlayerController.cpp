@@ -117,7 +117,9 @@ void PlayerController::ControllerProcess()
 
 	}
 	// 座標更新
-	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
+		player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	}
 
 }
 

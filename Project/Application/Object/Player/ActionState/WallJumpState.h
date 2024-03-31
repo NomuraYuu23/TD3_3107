@@ -13,4 +13,7 @@ public:
 	/// </summary>
 	void Update() override;
 
+private:
+	float gravity_;
+
 };

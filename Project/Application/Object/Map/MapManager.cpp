@@ -80,48 +80,59 @@ void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 
 void MapManager::InitializePlacement()
 {
-	//// 横（地面
-	//for (int i = 0; i < 30; i++) {
-	//	RegisterBlock({ 16.0f - 2.0f * (float)i,-4.0f,0 });
-	//}
-	//// 縦壁
-	//for (int i = 0; i < 8; i++) {
-	//	RegisterBlock({ 8.0f, 2.0f * (float)i, 0 });
-	//}
-	//for (int i = 0; i < 8; i++) {
-	//	RegisterBlock({ 10.0f, 2.0f * (float)i, 0 });
-	//}
 
-	//// ２段目
-	//for (int i = 0; i < 8; i++) {
-	//	RegisterBlock({ 2.0f + 2.0f * (float)i,-2.0f,0 });
-	//}
+	float blockSize = 2.0f;
 
 #pragma region 床ブロック
-	for (int i = 0; i < 30; ++i) {
-		RegisterBlock({ (float)i * 2.0f ,-4.0f,0 });
-	}
 
-	//RegisterBlock({ 0,-4.0f,0 }, { 40.0f,1.0f });
+	for (int i = 0; i < 30; ++i) {
+		// 床
+		RegisterBlock({ (float)i * blockSize ,-4.0f,0 });
+	}
 
 #pragma endregion
 
 #pragma region 初期値から左方向の部分と右の壁
 
-	for (int i = 0; i < 14; ++i) {
+	for (int i = 0; i < 20; ++i) {
 		// 左の壁
-		RegisterBlock({ 0.0f,-4.0f + ((float)i * 2.0f),0 });
+		RegisterBlock({ 0.0f,-4.0f + ((float)i * blockSize),0 });
+	}
+
+	for (int i = 0; i < 14; ++i) {
 		// 右の壁
-		RegisterBlock({ 30.0f * 2.0f,-4.0f + ((float)i * 2.0f),0 });
+		RegisterBlock({ 30.0f * blockSize,-4.0f + ((float)i * blockSize),0 });
 	}
 
 	// 壁じゃん用
 	for (int i = 0; i < 8; ++i) {
-		RegisterBlock({ 24.0f * 2.0f, 8.0f + ((float)i * 2.0f),0 });
+		RegisterBlock({ 24.0f * blockSize, 8.0f + ((float)i * blockSize),0 });
 	}
 
-	for (int i = 0; i < 6; ++i) {
-		RegisterBlock({ 30.0f * 2.0f +((float)i * 2.0f), 8.0f + (7 * 2.0f),0});
+	// 壁上
+	for (int i = 0; i < 35; ++i) {
+		RegisterBlock({ 30.0f * blockSize +((float)i * blockSize), 8.0f + (7 * blockSize),0});
+	}
+
+	// 右端の壁
+	for (int i = 0; i < 20; ++i) {
+		RegisterBlock({ 64.0f * blockSize, ((12.0f + (float)i) * blockSize),0 });
+	}
+
+	const int kMaxXNum = 64;
+	const int kMaxYNum = 31;
+
+
+	// 上noY座標 8.0f + (7 * 2.0f)
+	// 端noX座標 65.0f * 2.0f
+
+	// 上の段差
+	for (int i = 0; i < 4; ++i) {
+		RegisterBlock({ 40.0f * blockSize + ((float)i * blockSize), 8.0f + (8 * blockSize),0 });
+	}
+
+	for (int i = 0; i < 4; ++i) {
+		RegisterBlock({ 50.0f * blockSize + ((float)i * blockSize), 8.0f + (8 * blockSize),0 });
 	}
 
 #pragma endregion
