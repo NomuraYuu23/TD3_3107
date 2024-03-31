@@ -9,10 +9,10 @@ void GameBasicCamera::Initialize()
 
 }
 
-void GameBasicCamera::Update()
+void GameBasicCamera::Update(float elapsedTime)
 {
 	// 更新
-	BaseCamera::Update();
+	BaseCamera::Update(elapsedTime);
 
 }
 

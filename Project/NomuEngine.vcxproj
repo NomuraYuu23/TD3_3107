@@ -306,6 +306,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\SwapChain.h" />
     <ClInclude Include="Engine\Camera\CameraForGPU.h" />
+    <ClInclude Include="Engine\Camera\ViewProjectionMatrix.h" />
     <ClInclude Include="Engine\Collider2D\Box.h" />
     <ClInclude Include="Engine\Collider2D\Circle.h" />
     <ClInclude Include="Engine\Collider2D\Collider2D.h" />
