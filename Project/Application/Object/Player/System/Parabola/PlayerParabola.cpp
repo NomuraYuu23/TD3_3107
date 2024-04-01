@@ -2,6 +2,7 @@
 #include "../../../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../../../Engine/Physics/massPoint.h"
 #include "../../../../../Engine/Math/DeltaTime.h"
+#include "../../Player.h"
 
 void PlayerParabola::Initialize()
 {
@@ -22,7 +23,7 @@ void PlayerParabola::Initialize()
 
 }
 
-void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct)
+void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct, Player* player)
 {
 
 	// 初速
@@ -34,7 +35,11 @@ void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct
 	float gravity = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "Gravity");
 	// 重力倍率
 	const uint32_t kGravityMagnification = 50;
-	acceleration.y = (-9.8f * gravity * kGravityMagnification) * kDeltaTime_;
+
+	if (std::holds_alternative<GroundState*>(player->GetNowState())) {
+		acceleration.y = (-9.8f * gravity * kGravityMagnification) * kDeltaTime_;
+	}
+
 
 	// 線の数をリセット
 	numLine_ = 0;

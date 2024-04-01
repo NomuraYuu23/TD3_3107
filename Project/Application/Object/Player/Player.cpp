@@ -66,7 +66,7 @@ void Player::Update()
 	if (isArrowUiDraw_) {
 		parabola_.Update(
 			worldtransform_.GetWorldPosition(),
-			throwDirect_);
+			throwDirect_,this);
 	}
 	else {
 		parabola_.Reset();
