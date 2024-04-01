@@ -1,11 +1,11 @@
 #include "Player.h"
 
 #include "../../Collider2D/CollisionConfig2D.h"
+#include "../../../Engine/Collision2D/Collision2D.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Math/Ease.h"
 #include "../../../Engine/Math/Math.h"
 #include "../ObjectList.h"
-#include "../../../Engine/Collision2D/Collision2D.h"
 #include "../GameUtility/MathUtility.h"
 
 void Player::Initialize(Model* model)
@@ -202,8 +202,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (velocity_.y < 0 && (!recoil_.IsActive())) {
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
-				// コンボ加算
-				jumpCombo.Add();
 
 				// 槍じゃんステートへ
 				ChangeState(std::make_unique<SpearAerialState>());
@@ -328,8 +326,16 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 反動中かつ壁ジャンの受付をしていない場合
 		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
 			// 方向
-			weapon_->throwDirect_ = throwDirect_;
+			//weapon_->throwDirect_ = throwDirect_;
 
+			// 真横投げ
+			if (velocity_.x > 0) {
+				weapon_->throwDirect_ = { 1.0f,0,0 };
+			}
+			else {
+				weapon_->throwDirect_ = { -1.0f,0,0 };
+			}
+			weapon_->worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 			// 受付フラグ
 			recoil_.Accept();
 			recoil_.CancelRecoil();
@@ -338,7 +344,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// 先にステート変更しないと速度の初期化が行われるため
 			weapon_->ChangeRequest(Weapon::StateName::kThrown);
 			// プレイヤーのステートを変更
-			ChangeState(std::make_unique<AerialState>());
+			ChangeState(std::make_unique<SpearAerialState>());
 
 			// 壁じゃんの時の値
 			Vector2 power = { 10.0f,40.0f };

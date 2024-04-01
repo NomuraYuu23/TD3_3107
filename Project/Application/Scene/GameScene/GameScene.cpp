@@ -136,6 +136,10 @@ void GameScene::Initialize() {
 	//countTime_ = 0;
 	player_->Update();
 
+	// 敵管理クラス
+	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyManager_->Initialize(enemyModel_.get());
+
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->Initialize(terrainModel_.get());
@@ -211,6 +215,8 @@ void GameScene::Update() {
 	mapManager_->Update();
 	// プレイヤー
 	player_->Update();
+	// 敵
+	enemyManager_->Update();
 
 	if (player_->isArrowUiDraw_) {
 		arrowSprite_->SetIsInvisible(false);
@@ -293,6 +299,9 @@ void GameScene::Draw() {
 
 	// ブロック用
 	mapManager_->Draw(camera_);
+
+	// 敵
+	enemyManager_->Draw(camera_);
 
 	Model::PostDraw();
 
@@ -402,10 +411,10 @@ void GameScene::ImguiDraw(){
 	//ImGui::DragFloat("SpotCosFalloffStart3", &spotLightDatas_[3].cosFalloffStart, 0.01f);
 
 
-	ImGui::DragFloat2("box_", &boxCenter_.x, 0.1f);
-	ImGui::DragFloat2("box1_", &box1Center_.x, 0.1f);
-	ImGui::DragFloat2("circle_", &circleCenter_.x, 0.1f);
-	ImGui::DragFloat2("circle1_", &circle1Center_.x, 0.1f);
+	//ImGui::DragFloat2("box_", &boxCenter_.x, 0.1f);
+	//ImGui::DragFloat2("box1_", &box1Center_.x, 0.1f);
+	//ImGui::DragFloat2("circle_", &circleCenter_.x, 0.1f);
+	//ImGui::DragFloat2("circle1_", &circle1Center_.x, 0.1f);
 
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::Text("ColliderManagerSize : %d", (int)collision2DManager_->GetColliders().size());
@@ -416,6 +425,8 @@ void GameScene::ImguiDraw(){
 
 	player_->ImGuiDraw();
 
+	// 敵
+	enemyManager_->ImGuiDraw();
 	// スカイドーム
 	skydome_->ImGuiDraw();
 
@@ -487,6 +498,9 @@ void GameScene::ModelCreate()
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
+	
+	// 敵モデル
+	enemyModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 }
 
@@ -563,6 +577,8 @@ void GameScene::CollisionUpdate()
 	
 	// マップ
 	mapManager_->CollisionRegister(collision2DManager_.get(), camera_);
+
+	enemyManager_->CollisionRegister(collision2DManager_.get(), camera_);
 
 	collision2DManager_->CheakAllCollision();
 

@@ -18,6 +18,7 @@ void AerialState::Initialize()
 
 	player_->SetNowState(this);
 	player_->isGround_ = true;
+
 }
 
 void AerialState::Update()
