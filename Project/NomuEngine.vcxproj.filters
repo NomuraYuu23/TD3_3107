@@ -1071,6 +1071,9 @@
     <ClInclude Include="Engine\Camera\ViewProjectionMatrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Object\Enemy\IEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">

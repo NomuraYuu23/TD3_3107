@@ -27,7 +27,7 @@ public:
 	/// コライダーに登録する処理
 	/// </summary>
 	/// <param name="collisionManager"></param>
-	void CollisionRegister(Collision2DManager* collisionManager);
+	void CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera);
 
 private:
 	/// <summary>

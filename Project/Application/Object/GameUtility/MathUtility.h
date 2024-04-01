@@ -35,8 +35,8 @@ public:
 	/// <param name="worldPosition"></param>
 	/// <param name="camera"></param>
 	/// <returns></returns>
-	static bool CheckInScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera);
-	static bool CheckInScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera);
+	static bool CheckOutScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera);
+	static bool CheckOutScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera);
 
 };
 

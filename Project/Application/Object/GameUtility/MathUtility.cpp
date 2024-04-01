@@ -55,7 +55,7 @@ Vector2 MathUtility::WorldToScreen(const Vector3& position, BaseCamera* camera)
     return Vector2(positionReticle.x, positionReticle.y);
 }
 
-bool MathUtility::CheckInScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera)
+bool MathUtility::CheckOutScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera)
 {
     // スクリーン座標
     Vector2 screenPosition = MathUtility::WorldToScreen(worldPosition, &const_cast<BaseCamera&>(camera));
@@ -66,7 +66,7 @@ bool MathUtility::CheckInScreen(const Vector3& worldPosition, const Vector2& off
     return false;
 }
 
-bool MathUtility::CheckInScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera)
+bool MathUtility::CheckOutScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera)
 {
     // スクリーン座標
     Vector2 screenPosition = MathUtility::WorldToScreen(worldPosition, &const_cast<BaseCamera&>(camera));

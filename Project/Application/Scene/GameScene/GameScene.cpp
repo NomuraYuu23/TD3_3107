@@ -408,6 +408,7 @@ void GameScene::ImguiDraw(){
 	ImGui::DragFloat2("circle1_", &circle1Center_.x, 0.1f);
 
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
+	ImGui::Text("ColliderManagerSize : %d", (int)collision2DManager_->GetColliders().size());
 	ImGui::End();
 
 	//Obj
@@ -561,7 +562,7 @@ void GameScene::CollisionUpdate()
 	collision2DManager_->ListRegister(&player_->GetFootCollider()->boxCollider_);
 	
 	// マップ
-	mapManager_->CollisionRegister(collision2DManager_.get());
+	mapManager_->CollisionRegister(collision2DManager_.get(), camera_);
 
 	collision2DManager_->CheakAllCollision();
 

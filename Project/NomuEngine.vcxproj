@@ -246,6 +246,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Object\Enemy\IEnemy.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\Player\ActionState\ActionWaitState.h" />
     <ClInclude Include="Application\Object\GameUtility\CommonConfig.h" />

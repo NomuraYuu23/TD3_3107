@@ -2,6 +2,7 @@
 
 #include "../IObject.h"
 #include "../ObjectList.h"
+#include "../GameUtility/MathUtility.h"
 #include "../../../Engine/2D/ImguiManager.h"
 
 void MapManager::Initialize(Model* model)
@@ -40,11 +41,15 @@ void MapManager::ImGuiDraw()
 
 }
 
-void MapManager::CollisionRegister(Collision2DManager* collisionManager)
+void MapManager::CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera)
 {
 	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
-		collisionManager->ListRegister(&static_cast<Terrain*>((*it))->boxCollider_);
+		float range = 100.0f;
+		if (!MathUtility::CheckOutScreen((*it)->transform_.translate, range, camera)) {
+			collisionManager->ListRegister(&static_cast<Terrain*>((*it))->boxCollider_);
+		}
+
 	}
 }
 

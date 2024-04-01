@@ -62,7 +62,7 @@ void Weapon::Draw(const BaseCamera& camera)
 	{
 		// 画面外に出たら戻るステートに変更
 		float deadLength = 750.0f;
-		if (MathUtility::CheckInScreen(worldtransform_.GetWorldPosition(), deadLength, camera)) {
+		if (MathUtility::CheckOutScreen(worldtransform_.GetWorldPosition(), deadLength, camera)) {
 			ChangeRequest(StateName::kReturn);
 		}
 	}
