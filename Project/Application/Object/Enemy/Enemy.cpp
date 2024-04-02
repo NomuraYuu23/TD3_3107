@@ -26,7 +26,9 @@ void Enemy::Initialize()
 void Enemy::Update()
 {
 
-
+	if (state_) {
+		state_->Update();
+	}
 
 	// 基底クラスの更新
 	OneOfManyObjects::Update();

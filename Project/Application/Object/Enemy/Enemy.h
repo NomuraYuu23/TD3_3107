@@ -1,5 +1,6 @@
 #pragma once
 #include "../IObject.h"
+#include "State/EnemyStateList.h"
 #include "../../../Engine/3D/OneOfManyObjects.h"
 
 class Enemy : public OneOfManyObjects
@@ -34,11 +35,17 @@ public:
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
 
+
+
 private:
 	// シリアルナンバー
 	uint32_t serialNum_ = 0;
 
 	static uint32_t sSerialNumber_;
+
+public:
+	// 状態
+	std::unique_ptr<IEnemyState> state_;
 
 public:
 
@@ -49,5 +56,7 @@ public:
 	// コライダー
 	Box boxCollider_;
 
+	// 速度
+	Vector3 velocity_ = {};
 
 };

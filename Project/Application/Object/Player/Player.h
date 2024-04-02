@@ -149,7 +149,7 @@ private:
 
 	bool isSlowGame_ = false;
 
-	float threshold_y_ = 0.17f;
+	//float threshold_y_ = 0.17f;
 
 	bool isDebugDraw_ = false;
 

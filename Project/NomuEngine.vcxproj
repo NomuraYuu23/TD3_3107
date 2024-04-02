@@ -111,6 +111,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\EnemyGroundState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AerialState.cpp" />
@@ -252,7 +254,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />
+    <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />
     <ClInclude Include="Application\Object\Enemy\State\IEnemyState.h" />
+    <ClInclude Include="Application\Object\Enemy\System\EnemyStateHandler.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\Player\ActionState\ActionWaitState.h" />
     <ClInclude Include="Application\Object\GameUtility\CommonConfig.h" />
