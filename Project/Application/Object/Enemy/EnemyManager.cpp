@@ -47,10 +47,10 @@ void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const
 {
 	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
-		//float range = 100.0f;
-		//if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), range, camera)) {
+		float range = 100.0f;
+		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), range, camera)) {
 			collisionManager->ListRegister(&static_cast<Enemy*>((*it))->boxCollider_);
-		//}
+		}
 
 	}
 }
