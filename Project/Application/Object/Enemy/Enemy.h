@@ -35,7 +35,18 @@ public:
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
 
+public:
+	/// <summary>
+	/// 生成時に呼び出す関数（ここで地上・空中の選択、その際に近接・遠隔の選択も
+	/// </summary>
+	void GenerateSetting();
 
+	/// <summary>
+	/// ステートの初期化
+	/// </summary>
+	/// <param name="newState"></param>
+	/// <param name="attackPattern"></param>
+	void StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t attackPattern);
 
 private:
 	// シリアルナンバー
@@ -43,7 +54,7 @@ private:
 
 	static uint32_t sSerialNumber_;
 
-public:
+private:
 	// 状態
 	std::unique_ptr<IEnemyState> state_;
 

@@ -15,7 +15,7 @@ void Enemy::Initialize()
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
-	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
+	boxCollider_.SetCollisionMask(kCollisionAttributeWeapon);
 
 	// シリアル番号振り
 	serialNum_ = sSerialNumber_;
@@ -25,7 +25,7 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-
+	// 設定した状態の処理
 	if (state_) {
 		state_->Update();
 	}
@@ -46,7 +46,23 @@ void Enemy::ImGuiDraw()
 
 void Enemy::OnCollision(ColliderParentObject2D target)
 {
-
 	target;
+	BoxColliderUpdate();
+}
 
+void Enemy::GenerateSetting()
+{
+
+
+
+}
+
+void Enemy::StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t attackPattern)
+{
+	// ステートの初期化前の情報設定
+	newState->PreInitialize(this, attackPattern);
+	// ステートの初期化
+	newState->Initialize();
+	// ステートの設定
+	state_ = std::move(newState);
 }

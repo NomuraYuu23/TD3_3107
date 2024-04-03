@@ -8,7 +8,7 @@
 class EnemyManager : public LargeNumberOfObjects
 {
 private:
-	enum class EnemyType : int
+	enum class EnemyType : uint32_t
 	{
 		eProximity,	// 近接タイプ
 		eRemote,	// 遠隔タイプ
@@ -48,7 +48,7 @@ private:
 	/// <summary>
 	/// 敵の追加
 	/// </summary>
-	void RegisterEnemy(const Vector3& position);
+	void RegisterEnemy(const Vector3& position, uint32_t typeNum);
 
 	Vector3 resPoint_ = {};
 
