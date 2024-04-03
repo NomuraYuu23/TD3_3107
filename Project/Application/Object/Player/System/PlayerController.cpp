@@ -178,19 +178,7 @@ void PlayerController::GroundMoveProcess()
 		// 移動ベクトルがあるなら
 		if (leftStick.x != 0.0f) {
 			// 走りアニメーションの再生トリガーがfalseの時
-			if (!player_->animation_.GetRunningAnimations()[5]) {
-				// 全アニメーションを一度停止
-				for (size_t i = 0; i < player_->model_->GetNodeAnimationData().size(); i++) {
-					player_->animation_.stopAnimation(static_cast<uint32_t>(i));
-				}
-
-				// 再生開始
-				player_->animation_.startAnimation(static_cast<uint32_t>(5), true);
-			}
-		}
-		else {
-			// アイドルアニメーションの再生トリガーがfalseの時
-			if (!player_->animation_.GetRunningAnimations()[1] && !player_->animation_.GetRunningAnimations()[2]) {
+			if (!player_->animation_.GetRunningAnimations()[1]) {
 				// 全アニメーションを一度停止
 				for (size_t i = 0; i < player_->model_->GetNodeAnimationData().size(); i++) {
 					player_->animation_.stopAnimation(static_cast<uint32_t>(i));
@@ -198,6 +186,18 @@ void PlayerController::GroundMoveProcess()
 
 				// 再生開始
 				player_->animation_.startAnimation(static_cast<uint32_t>(1), true);
+			}
+		}
+		else {
+			// アイドルアニメーションの再生トリガーがfalseの時
+			if (!player_->animation_.GetRunningAnimations()[0] && !player_->animation_.GetRunningAnimations()[4]) {
+				// 全アニメーションを一度停止
+				for (size_t i = 0; i < player_->model_->GetNodeAnimationData().size(); i++) {
+					player_->animation_.stopAnimation(static_cast<uint32_t>(i));
+				}
+
+				// 再生開始
+				player_->animation_.startAnimation(static_cast<uint32_t>(0), true);
 			}
 		}
 

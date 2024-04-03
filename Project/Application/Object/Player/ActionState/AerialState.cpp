@@ -21,7 +21,7 @@ void AerialState::Initialize()
 	}
 
 	// 再生開始
-	player_->animation_.startAnimation(static_cast<uint32_t>(4), false);
+	player_->animation_.startAnimation(static_cast<uint32_t>(2), false);
 
 	player_->SetNowState(this);
 	player_->isGround_ = true;
@@ -58,7 +58,7 @@ void AerialState::Update()
 		}
 
 		// 再生開始
-		player_->animation_.startAnimation(static_cast<uint32_t>(0), true);
+		player_->animation_.startAnimation(static_cast<uint32_t>(3), true);
 	}
 
 	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.01f);

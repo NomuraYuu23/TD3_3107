@@ -15,6 +15,7 @@ void Player::Initialize(Model* model)
 
 	// マテリアル
 	enableLighting_ = false;
+	
 	shininess_ = 100.0f;
 
 	// マテリアル生成
@@ -56,7 +57,7 @@ void Player::Initialize(Model* model)
 		worldtransform_.GetNodeNames());
 
 	// (テスト) アニメーションの開始
-	animation_.startAnimation(1, true);
+	animation_.startAnimation(0, true);
 
 	// 2D用座標・サイズ
 	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
@@ -107,13 +108,7 @@ void Player::Update()
 	}
 
 	// アニメーションの更新
-	for (size_t i = 0; i < animation_.GetRunningAnimations().size(); i++) {
-		// どれか１つでもアニメーションが実行中なら
-		if (animation_.GetRunningAnimations()[static_cast<int>(i)]) {
-			// アニメーションを更新する
-			worldtransform_.SetNodeLocalMatrix(animation_.AnimationUpdate());
-		}
-	}
+	worldtransform_.SetNodeLocalMatrix(animation_.AnimationUpdate());
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -315,7 +310,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 
 			// 再生開始
-			animation_.startAnimation(static_cast<uint32_t>(2), false);
+			animation_.startAnimation(static_cast<uint32_t>(4), false);
 		}
 
 		// 前の座標から現座標へのベクトル

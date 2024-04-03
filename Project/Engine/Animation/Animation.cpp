@@ -112,7 +112,7 @@ std::vector<Matrix4x4> Animation::AnimationUpdate()
 			targetPositions_[i] *= (1.0f / positionAddCount_[i]);
 		}
 		else {
-			targetPositions_[i] = initPositions_[i];
+			targetPositions_[i] = positions_[i];
 		}
 
 		// カウントされている
@@ -120,7 +120,7 @@ std::vector<Matrix4x4> Animation::AnimationUpdate()
 			targetRotations_[i] *= (1.0f / rotationAddCount_[i]);
 		}
 		else {
-			targetRotations_[i] = initRotations_[i];
+			targetRotations_[i] = rotations_[i];
 		}
 
 		// カウントされている
@@ -128,7 +128,7 @@ std::vector<Matrix4x4> Animation::AnimationUpdate()
 			targetScalings_[i] *= (1.0f / scalingAddCount_[i]);
 		}
 		else {
-			targetScalings_[i] = initScalings_[i];
+			targetScalings_[i] = scalings_[i];
 		}
 
 		// 現在値
