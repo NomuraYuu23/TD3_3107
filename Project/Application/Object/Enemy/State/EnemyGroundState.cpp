@@ -17,20 +17,20 @@ void EnemyGroundState::Update()
 
 void EnemyGroundState::MeleeInitialize()
 {
-	enemy_->transform_.translate.y += 5.0f * kDeltaTime_;
+	enemy_->transform_.translate.y += 5.0f * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 }
 
 void EnemyGroundState::MeleeUpdate()
 {
-	enemy_->transform_.translate.x += 5.0f * kDeltaTime_;
+	enemy_->transform_.translate.x += 5.0f * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 }
 
 void EnemyGroundState::RangedInitialize()
 {
-	enemy_->transform_.translate.y -= 5.0f * kDeltaTime_;
+	enemy_->transform_.translate.y -= 5.0f * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 }
 
 void EnemyGroundState::RangedUpdate()
 {
-	enemy_->transform_.translate.x -= 5.0f * kDeltaTime_;
+	enemy_->transform_.translate.x -= 5.0f * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 }

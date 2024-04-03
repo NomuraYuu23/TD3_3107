@@ -10,10 +10,10 @@ protected:
 	/// <summary>
 	/// 攻撃パターン
 	/// </summary>
-	enum AttackPattern
+	enum class AttackPattern : uint32_t
 	{
-		eMelee,	 // 近距離
-		eRanged, // 遠距離
+		kMelee,	 // 近距離
+		kRanged, // 遠距離
 
 		kMaxSize, // 最大値
 	};
@@ -24,7 +24,7 @@ public:
 	/// 0 : 近接
 	/// 1 : 遠距離
 	/// </summary>
-	void PreInitialize(Enemy* enemy,uint32_t pattern);
+	void PreInitialize(Enemy* enemy, AttackPattern pattern);
 	/// <summary>
 	/// 初期化
 	/// </summary>
