@@ -57,6 +57,10 @@ private: // データ用構造体クラス
 		float collisionDot_;
 	};
 
+	struct BossData {
+		float gravity_;
+	};
+
 public:
 	/// <summary>
 	/// シングルトン
