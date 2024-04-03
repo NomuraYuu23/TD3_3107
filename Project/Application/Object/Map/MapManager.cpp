@@ -144,3 +144,9 @@ void MapManager::InitializePlacement()
 
 
 }
+
+void MapManager::InitializeBossMap()
+{
+	float blockSize = 2.0f;
+
+}

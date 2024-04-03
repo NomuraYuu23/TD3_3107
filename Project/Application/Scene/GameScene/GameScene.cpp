@@ -349,6 +349,7 @@ void GameScene::Draw() {
 	// UIマネージャー
 	//uiManager_->Draw();
 	arrowSprite_->Draw();
+	
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -583,9 +584,5 @@ void GameScene::CollisionUpdate()
 	collision2DManager_->CheakAllCollision();
 
 	collision2DDebugDraw_->Clear();
-	//collision2DDebugDraw_->Register(box_.get());
-	//collision2DDebugDraw_->Register(box1_.get());
-	//collision2DDebugDraw_->Register(circle_.get());
-	//collision2DDebugDraw_->Register(circle1_.get());
-	//collision2DDebugDraw_->Register(&player_->circleCollider_);
+
 }

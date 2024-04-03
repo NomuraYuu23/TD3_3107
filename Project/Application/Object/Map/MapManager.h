@@ -37,7 +37,15 @@ private:
 	void RegisterBlock(const Vector3& position);
 	void RegisterBlock(const Vector3& position, const Vector2 scale);
 
+	/// <summary>
+	/// とりあえずのマップ
+	/// </summary>
 	void InitializePlacement();
+
+	/// <summary>
+	/// ボス戦用のマップ配置
+	/// </summary>
+	void InitializeBossMap();
 
 };
 
