@@ -25,6 +25,8 @@ ID3D12PipelineState* Model::sPipelineState[PipelineStateName::kPipelineStateName
 PointLightManager* Model::pointLightManager_ = nullptr;
 //	スポットライトマネージャ
 SpotLightManager* Model::spotLightManager_ = nullptr;
+//	平行光源
+DirectionalLight* Model::directionalLight_ = nullptr;
 
 /// <summary>
 /// 静的初期化
@@ -46,11 +48,11 @@ void Model::StaticInitialize(ID3D12Device* device,
 
 }
 
-/// <summary>
-/// 静的前処理
-/// </summary>
-/// <param name="cmdList">描画コマンドリスト</param>
-void Model::PreDraw(ID3D12GraphicsCommandList* cmdList, PointLightManager* pointLightManager, SpotLightManager* spotLightManager) {
+void Model::PreDraw(
+	ID3D12GraphicsCommandList* cmdList,
+	PointLightManager* pointLightManager, 
+	SpotLightManager* spotLightManager,
+	DirectionalLight* directionalLight) {
 
 	assert(sCommandList == nullptr);
 
@@ -60,11 +62,16 @@ void Model::PreDraw(ID3D12GraphicsCommandList* cmdList, PointLightManager* point
 	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameModel]);//PS0を設定
 	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameModel]);
 
+	// SRV
+	ID3D12DescriptorHeap* ppHeaps[] = { SRVDescriptorHerpManager::descriptorHeap_.Get() };
+	sCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
 	//形状を設定。PS0に設定しているものとは別。
 	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	pointLightManager_ = pointLightManager;
 	spotLightManager_ = spotLightManager;
+	directionalLight_ = directionalLight;
 
 }
 
@@ -78,6 +85,10 @@ void Model::PreParticleDraw(ID3D12GraphicsCommandList* cmdList, const Matrix4x4&
 	//RootSignatureを設定。
 	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameParticle]);//PS0を設定
 	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameParticle]);
+
+	// SRV
+	ID3D12DescriptorHeap* ppHeaps[] = { SRVDescriptorHerpManager::descriptorHeap_.Get() };
+	sCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
 	//形状を設定。PS0に設定しているものとは別。
 	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -103,12 +114,20 @@ void Model::PreDrawOutLine(ID3D12GraphicsCommandList* cmdList) {
 	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameOutLine]);//PS0を設定
 	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameOutLine]);
 
+	// SRV
+	ID3D12DescriptorHeap* ppHeaps[] = { SRVDescriptorHerpManager::descriptorHeap_.Get() };
+	sCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
 	//形状を設定。PS0に設定しているものとは別。
 	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 }
 
-void Model::PreManyModelsDraw(ID3D12GraphicsCommandList* cmdList, PointLightManager* pointLightManager, SpotLightManager* spotLightManager)
+void Model::PreManyModelsDraw(
+	ID3D12GraphicsCommandList* cmdList, 
+	PointLightManager* pointLightManager, 
+	SpotLightManager* spotLightManager,
+	DirectionalLight* directionalLight)
 {
 
 	assert(sCommandList == nullptr);
@@ -119,11 +138,16 @@ void Model::PreManyModelsDraw(ID3D12GraphicsCommandList* cmdList, PointLightMana
 	sCommandList->SetPipelineState(sPipelineState[PipelineStateName::kPipelineStateNameManyModels]);//PS0を設定
 	sCommandList->SetGraphicsRootSignature(sRootSignature[PipelineStateName::kPipelineStateNameManyModels]);
 
+	// SRV
+	ID3D12DescriptorHeap* ppHeaps[] = { SRVDescriptorHerpManager::descriptorHeap_.Get() };
+	sCommandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
 	//形状を設定。PS0に設定しているものとは別。
 	sCommandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	pointLightManager_ = pointLightManager;
 	spotLightManager_ = spotLightManager;
+	directionalLight_ = directionalLight;
 
 }
 
@@ -136,6 +160,7 @@ void Model::PostDraw() {
 
 	pointLightManager_ = nullptr;
 	spotLightManager_ = nullptr;
+	directionalLight_ = nullptr;
 
 }
 
@@ -205,29 +230,35 @@ void Model::Draw(WorldTransform& worldTransform, BaseCamera& camera) {
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, defaultMaterial_->GetMaterialBuff()->GetGPUVirtualAddress());
 
+	// 平行光源
+	if (directionalLight_) {
+		directionalLight_->Draw(sCommandList, 1);
+	}
+
 	// カメラCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(7, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(2, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
 	
 	// ワールドトランスフォーム
-	sCommandList->SetGraphicsRootConstantBufferView(10, worldTransform.GetTransformationMatrixBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(3, worldTransform.GetTransformationMatrixBuff()->GetGPUVirtualAddress());
 	// ビュープロジェクション
-	sCommandList->SetGraphicsRootConstantBufferView(11, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(4, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
 
-	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	// ローカル行列
+	worldTransform.SetGraphicsRootDescriptorTable(sCommandList, 5);
+
+	//テクスチャ
 	for (size_t i = 0; i < modelData_.material.textureFilePaths.size(); ++i) {
-		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2 + static_cast<UINT>(i), textureHandles_[i]);
+		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 6 + static_cast<UINT>(i), textureHandles_[i]);
 	}
 
 	// ポイントライト
 	if (pointLightManager_) {
-		pointLightManager_->Draw(sCommandList, 8);
+		pointLightManager_->Draw(sCommandList, 10);
 	}
 	// スポットライト
 	if (spotLightManager_) {
-		spotLightManager_->Draw(sCommandList, 9);
+		spotLightManager_->Draw(sCommandList, 11);
 	}
-
-	worldTransform.SetGraphicsRootDescriptorTable(sCommandList, 1);
 
 	//描画
 	sCommandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
@@ -250,29 +281,35 @@ void Model::Draw(WorldTransform& worldTransform, BaseCamera& camera, Material* m
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, material->GetMaterialBuff()->GetGPUVirtualAddress());
 
+	// 平行光源
+	if (directionalLight_) {
+		directionalLight_->Draw(sCommandList, 1);
+	}
+
 	// カメラCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(7, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(2, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
 
 	// ワールドトランスフォーム
-	sCommandList->SetGraphicsRootConstantBufferView(10, worldTransform.GetTransformationMatrixBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(3, worldTransform.GetTransformationMatrixBuff()->GetGPUVirtualAddress());
 	// ビュープロジェクション
-	sCommandList->SetGraphicsRootConstantBufferView(11, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(4, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
 
-	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
+	// ローカル行列
+	worldTransform.SetGraphicsRootDescriptorTable(sCommandList, 5);
+
+	//テクスチャ
 	for (size_t i = 0; i < modelData_.material.textureFilePaths.size(); ++i) {
-		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2 + static_cast<UINT>(i), textureHandles_[i]);
+		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 6 + static_cast<UINT>(i), textureHandles_[i]);
 	}
 
 	// ポイントライト
 	if (pointLightManager_) {
-		pointLightManager_->Draw(sCommandList, 8);
+		pointLightManager_->Draw(sCommandList, 10);
 	}
 	// スポットライト
 	if (spotLightManager_) {
-		spotLightManager_->Draw(sCommandList, 9);
+		spotLightManager_->Draw(sCommandList, 11);
 	}
-
-	worldTransform.SetGraphicsRootDescriptorTable(sCommandList, 1);
 
 	//描画
 	sCommandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
@@ -295,27 +332,33 @@ void Model::Draw(WorldTransform& worldTransform, BaseCamera& camera, Material* m
 	//マテリアルCBufferの場所を設定
 	sCommandList->SetGraphicsRootConstantBufferView(0, material->GetMaterialBuff()->GetGPUVirtualAddress());
 
+	// 平行光源
+	if (directionalLight_) {
+		directionalLight_->Draw(sCommandList, 1);
+	}
+
 	// カメラCBufferの場所を設定
-	sCommandList->SetGraphicsRootConstantBufferView(7, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(2, camera.GetWorldPositionBuff()->GetGPUVirtualAddress());
 
 	// ワールドトランスフォーム
-	sCommandList->SetGraphicsRootConstantBufferView(10, worldTransform.GetTransformationMatrixBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(3, worldTransform.GetTransformationMatrixBuff()->GetGPUVirtualAddress());
 	// ビュープロジェクション
-	sCommandList->SetGraphicsRootConstantBufferView(11, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
+	sCommandList->SetGraphicsRootConstantBufferView(4, camera.GetViewProjectionMatriBuff()->GetGPUVirtualAddress());
 
-	//SRVのDescriptorTableの先頭を設定。2はrootParamenter[2]である
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 2, textureHandle);
+	// ローカル行列
+	worldTransform.SetGraphicsRootDescriptorTable(sCommandList, 5);
+
+	//テクスチャ
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 6, textureHandle);
 
 	// ポイントライト
 	if (pointLightManager_) {
-		pointLightManager_->Draw(sCommandList, 8);
+		pointLightManager_->Draw(sCommandList, 10);
 	}
 	// スポットライト
 	if (spotLightManager_) {
-		spotLightManager_->Draw(sCommandList, 9);
+		spotLightManager_->Draw(sCommandList, 11);
 	}
-
-	worldTransform.SetGraphicsRootDescriptorTable(sCommandList, 1);
 
 	//描画
 	sCommandList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
@@ -364,6 +407,10 @@ void Model::Draw(
 	// スポットライト
 	if (spotLightManager_) {
 		spotLightManager_->Draw(sCommandList, 9);
+	}
+	// 平行光源
+	if (directionalLight_) {
+		directionalLight_->Draw(sCommandList, 6);
 	}
 
 	// ワールドトランスフォーム
@@ -419,6 +466,10 @@ void Model::Draw(
 	if (spotLightManager_) {
 		spotLightManager_->Draw(sCommandList, 9);
 	}
+	// 平行光源
+	if (directionalLight_) {
+		directionalLight_->Draw(sCommandList, 6);
+	}
 
 	// ワールドトランスフォーム
 	sCommandList->SetGraphicsRootDescriptorTable(10, transformationMatrixesHandle);
@@ -471,6 +522,10 @@ void Model::Draw(
 	// スポットライト
 	if (spotLightManager_) {
 		spotLightManager_->Draw(sCommandList, 9);
+	}
+	// 平行光源
+	if (directionalLight_) {
+		directionalLight_->Draw(sCommandList, 6);
 	}
 
 	// ワールドトランスフォーム
