@@ -6,7 +6,7 @@ class Enemy;
 
 class IEnemyState
 {
-protected:
+public:
 	/// <summary>
 	/// 攻撃パターン
 	/// </summary>

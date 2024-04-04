@@ -60,7 +60,7 @@ void Enemy::GenerateSetting()
 void Enemy::StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t attackPattern)
 {
 	// ステートの初期化前の情報設定
-	newState->PreInitialize(this, attackPattern);
+	newState->PreInitialize(this, static_cast<IEnemyState::AttackPattern>(attackPattern));
 	// ステートの初期化
 	newState->Initialize();
 	// ステートの設定
