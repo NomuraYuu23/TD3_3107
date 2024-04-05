@@ -5,12 +5,12 @@ void IBoss::Initialize(Model* model)
 	model_ = model;
 
 	// マテリアル
-	enableLighting_ = 0;
-	shininess_ = 100.0f;
+	//enableLighting_ = 0;
+	//shininess_ = 100.0f;
 
 	material_.reset(Material::Create());
-	material_->SetEnableLighting(enableLighting_);
-	material_->SetShininess(shininess_);
+	//material_->SetEnableLighting(enableLighting_);
+	//material_->SetShininess(shininess_);
 
 	// 行列
 	worldtransform_.Initialize(model_->GetRootNode());

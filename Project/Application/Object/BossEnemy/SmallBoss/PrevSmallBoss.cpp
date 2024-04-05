@@ -4,11 +4,15 @@ void PrevSmallBoss::Initialize(Model* model)
 {
 
 	IBoss::Initialize(model);
-
+	worldtransform_.transform_.translate = { 50.0f,20.0f,0 };
 }
 
 void PrevSmallBoss::Update()
 {
+	// 状態の更新
+	if (state_) {
+		state_->Update();
+	}
 
 	// 更新処理
 	IBoss::Update();

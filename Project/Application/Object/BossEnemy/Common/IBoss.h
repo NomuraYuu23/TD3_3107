@@ -2,12 +2,13 @@
 #include "../../../../Engine/3D/Model.h"
 #include "../../../../Engine/Collider2D/ColliderShape2D.h"
 #include "../../GameUtility/CommonConfig.h"
+#include "State/IBossState.h"
 
 class IBoss
 {
 public:
-	IBoss() {};
-	~IBoss() = default;
+	//virtual IBoss() {};
+	virtual ~IBoss() = default;
 
 public:
 	/// <summary>
@@ -42,7 +43,6 @@ public: // アクセッサ
 	/// </summary>
 	/// <returns></returns>
 	virtual Box GetBoxCollider() = 0;
-
 	virtual Vector2 GetColliderPosition() = 0;
 	virtual Vector2 GetColliderSize() = 0;
 protected:
@@ -50,11 +50,6 @@ protected:
 	void BoxColliderUpdate() {
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
-	// サークルコライダーの更新
-	void CircleColliderUpdate() {
-		circleCollider_.Update(position2D_, circleCollider_.radius_);
-	}
-
 public:
 	// モデル
 	Model* model_ = nullptr;
@@ -67,15 +62,26 @@ public:
 
 	// コライダー
 	Box boxCollider_;
-	Circle circleCollider_;
 
 	// マテリアル関係
 	std::unique_ptr<Material> material_ = nullptr;
-	int32_t enableLighting_;
-	float shininess_;
+	//int32_t enableLighting_;
+	//float shininess_;
 	// 速さベクトル
 	Vector3 velocity_ = {};
 
+	// ステート
+	std::unique_ptr<IBossState> state_;
 
+protected:
+	/// <summary>
+	/// ステート変更関数
+	/// </summary>
+	/// <param name="newState"></param>
+	void ChangeState(std::unique_ptr<IBossState> newState) {
+		newState->PreInitialize(this);
+		newState->Initialize();
+		state_ = std::move(newState);
+	}
 
 };
