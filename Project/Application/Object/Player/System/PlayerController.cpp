@@ -74,7 +74,7 @@ void PlayerController::ControllerProcess()
 			}
 			// 待機に入る
 			else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
+				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 			// 戻ってくる
 			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {

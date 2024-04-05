@@ -57,7 +57,7 @@ void PlayerFootCollider::OnCollision(ColliderParentObject2D target)
 	else {
 		// コンボリセット
 		if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
-			player_->jumpCombo.Reset();
+			player_->ResetCombo();
 		}
 		// 着地フラグ
 		player_->isGround_ = true;

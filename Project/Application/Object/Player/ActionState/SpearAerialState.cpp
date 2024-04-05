@@ -18,7 +18,7 @@ void SpearAerialState::Initialize()
 	player_->SetNowState(this);
 	player_->isGround_ = true;
 	// コンボ加算
-	player_->jumpCombo.Add();
+	player_->AddCombo();
 
 }
 

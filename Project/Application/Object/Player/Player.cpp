@@ -28,7 +28,7 @@ void Player::Initialize(Model* model)
 	// 足場クラス
 	footCollider_.Initialize(model, this);
 	// コンボクラス
-	jumpCombo.Reset();
+	jumpCombo_.Reset();
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
@@ -123,7 +123,7 @@ void Player::ImGuiDraw()
 	ImGui::DragFloat2("Screen", &screenPos_.x);
 
 	// ジャンプのコンボ数
-	int count = jumpCombo.GetCount();
+	int count = jumpCombo_.GetCount();
 	ImGui::DragInt("ComboCount", &count);
 
 	ImGui::Text("\n");
@@ -302,21 +302,24 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// 修正y座標
 				float correctY = targetPos.y - targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
+				if (velocity_.y > 0) {
+					velocity_.y = 0;
+				}
 			}
 			// 下向き
 			else if (moveDirect.y < 0 && worldtransform_.transform_.translate.y > targetPos.y) {
 				// 修正y座標
 				float correctY = targetPos.y + targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
+				// ジャンプ中・槍ジャンプ中なら着地状態へ
+				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+					ChangeState(std::make_unique<GroundState>());
+				}
 			}
 
 			// 更新
 			worldtransform_.UpdateMatrix();
 
-			// ジャンプ中・槍ジャンプ中なら着地状態へ
-			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-				ChangeState(std::make_unique<GroundState>());
-			}
 		}
 
 		// 反動のキャンセル
@@ -362,7 +365,42 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 
 	}
+	// 雑魚敵との当たり判定
+	else if (std::holds_alternative<Enemy*>(target)) {
+		// 無敵中なら早期
+		if (invisibleTimer_.IsActive()) {
+			return;
+		}
 
+		// 持ってないかどうか
+		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+			// 持ってるから何か起きる
+
+		}
+		else {
+			// 持ってないから死ぬ
+			isDead_ = true;
+		}
+
+	}
+	// ボス
+	else if (std::holds_alternative<PrevSmallBoss*>(target)) {
+		// 無敵中なら早期
+		if (invisibleTimer_.IsActive()) {
+			return;
+		}
+
+		// 持ってないかどうか
+		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+			// 持ってるから何か起きる
+
+		}
+		else {
+			// 持ってないから死ぬ
+
+		}
+
+	}
 }
 
 void Player::ChangeState(std::unique_ptr<IActionState> newState)

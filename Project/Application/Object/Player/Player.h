@@ -9,19 +9,14 @@
 #include "System/PlayerController.h"
 #include "System/Recoil/PlayerRecoil.h"
 #include "System/Combo/ComboCounter.h"
-#include "PlayerFootCollider.h"
-
 #include "System/Parabola/PlayerParabola.h"
+
+#include "PlayerFootCollider.h"
 
 class Player : public IObject
 {
-private:
-	struct FootCollisionData {
-		Vector2 position_ = {};
-		Vector2 scale_ = {};
-		Box collider_ = {};
-	};
-
+private: // サブクラス
+	// UI
 	struct ArrowUIData {
 		Model* plane_;
 		Vector3 v3Position;
@@ -54,6 +49,7 @@ public: // 継承
 	/// <param name="tag"></param>
 	void OnCollision(ColliderParentObject2D target) override;
 
+public: // アクセッサ
 	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
 	Box GetBoxCollider() override { return boxCollider_; }
@@ -108,53 +104,56 @@ public: // メンバ関数
 	void DrawLine(BaseCamera& baseCamera);
 
 public:
-
+	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
-
+	// スクリーン座標
 	Vector2 screenPos_ = {};
+
+	// コンボ用の呼び出し関数
+	void AddCombo() { jumpCombo_.Add(); }
+	void ResetCombo() { jumpCombo_.Reset(); }
 
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
 	// 武器
 	std::unique_ptr<Weapon> weapon_;
-	// 重力
-	//float gravity_ = 9.8f;
-	// 
 	// 投げる方向
 	Vector3 throwDirect_ = { 1,0,0 };
 	// 前座標
 	Vector3 prevPosition_ = {};
-
+	// 矢印テクスチャ
 	uint32_t arrowTexture_ = 0u;
 
-	PlayerFootCollider footCollider_;
-
+	// 接地フラグ
 	bool isGround_ = false;
-
+	// 矢印描画フラグ
 	bool isArrowUiDraw_ = false;
 
-	// ジャンプ回数カウントクラス
-	ComboCounter jumpCombo;
+	// 足元コライダー
+	PlayerFootCollider footCollider_;
 
-private:
+private: // フラグ
+	// ゲームスピード
+	bool isSlowGame_ = false;
+	// デバッグ用
+	bool isDebugDraw_ = false;
+
+private: // システム
 	// 現状のステート
 	PlayerState nowState_;
 	// 反動管理クラス
 	PlayerRecoil recoil_;
 	// 操作クラス
 	PlayerController controller_;
-
-	ArrowUIData arrow_;
-
-	bool isSlowGame_ = false;
-
-	//float threshold_y_ = 0.17f;
-
-	bool isDebugDraw_ = false;
-
 	// 放物線
 	PlayerParabola parabola_;
+	// 矢印UI
+	ArrowUIData arrow_;
+	// ジャンプ回数カウント
+	ComboCounter jumpCombo_;
 
+	// 無敵タイマー
+	TimerLib invisibleTimer_;
 };
 

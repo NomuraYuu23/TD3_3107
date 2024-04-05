@@ -57,11 +57,11 @@ private: // 管理
 	// タイマー
 	TimerLib timer_;
 	// 反動の時間（フレーム
-	float recoilFrame_;
+	float recoilFrame_ = 0;
 	// 反動の大きさ
-	float recoilRatio_;
+	float recoilRatio_ = 0;
 	// Lerpのレート
-	float lerpRatio_;
+	float lerpRatio_ = 0;
 
 private: // 移動
 	// 加算速さ
@@ -74,7 +74,7 @@ private: // 移動
 private:
 	// 反動を受け付けたか
 	// true = Yes, false = No
-	bool isAccept_;
+	bool isAccept_ = false;
 
 };
 
