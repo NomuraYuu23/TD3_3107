@@ -12,7 +12,17 @@ void EnemyManager::Initialize(Model* model)
 
 void EnemyManager::Update()
 {
+	// フラグによる死亡処理
+	objects_.remove_if([this](OneOfManyObjects* enemy) {
+		if (enemy->IsDead()) {
+			delete enemy;
+			return true;
+		}
+		return false;
+		});
 
+
+	// リストの更新処理
 	LargeNumberOfObjects::Update();
 
 }
@@ -31,6 +41,9 @@ void EnemyManager::ImGuiDraw()
 	}
 
 	ImGui::DragFloat3("pos", &resPoint_.x, 0.01f, -100.0f, 100.0f);
+
+	int size = (int)objects_.size();
+	ImGui::InputInt("Size", &size);
 
 	ImGui::Separator();
 
