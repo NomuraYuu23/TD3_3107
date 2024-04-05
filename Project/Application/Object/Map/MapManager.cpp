@@ -24,18 +24,23 @@ void MapManager::ImGuiDraw()
 {
 
 	ImGui::Begin("BlockManager");
+	// リストの最大値
+	int size = (int)objects_.size();
+	ImGui::InputInt("maxBlockSize", &size);
 
+	ImGui::Separator();
+	// ブロック追加
 	if (ImGui::Button("RegisterBlock")) {
 		RegisterBlock();
 	}
 
-	ImGui::Separator();
+	//ImGui::Separator();
 
-	// ブロック達のImGui
-	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
-		it != objects_.end(); ++it) {
-		static_cast<Terrain*>((*it))->ImGuiDraw();
-	}
+	//// ブロック達のImGui
+	//for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
+	//	it != objects_.end(); ++it) {
+	//	static_cast<Terrain*>((*it))->ImGuiDraw();
+	//}
 
 	ImGui::End();
 

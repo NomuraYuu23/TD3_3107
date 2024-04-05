@@ -22,7 +22,7 @@ void Weapon::Initialize(Model* model)
 
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
-	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
+	boxCollider_.SetCollisionAttribute(kCollisionAttributeWeapon);
 	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
 
 	// ステート変更
@@ -154,7 +154,11 @@ void Weapon::ImGuiDraw()
 
 void Weapon::OnCollision(ColliderParentObject2D target)
 {
-	if (std::holds_alternative<Terrain*>(target)) {
+	//if (std::holds_alternative<Terrain*>(target)) {
+	//	isCollisionCheck_ = true;
+	//	target;
+	//}
+	if (std::holds_alternative<Enemy*>(target)) {
 		isCollisionCheck_ = true;
 		target;
 	}

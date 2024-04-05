@@ -151,7 +151,9 @@ private:
 	// 敵
 	std::unique_ptr<EnemyManager> enemyManager_;
 	std::unique_ptr<Model> enemyModel_;
+	std::unique_ptr<IBoss> bossEnemy_;
 
+	// カメラ
 	std::unique_ptr<GameBasicCamera> gameCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
 

@@ -37,13 +37,13 @@ private:
 
 private:
 	// 終了フレーム
-	float endFrame_;
+	float endFrame_ = 0;
 	// 現在のフレーム
-	float nowFrame_;
+	float nowFrame_ = 0;
 	// 終了フラグ
-	bool isEnd_;
+	bool isEnd_ = false;
 	// 有効フラグ
-	bool isActive_;
+	bool isActive_ = false;
 
 };
 

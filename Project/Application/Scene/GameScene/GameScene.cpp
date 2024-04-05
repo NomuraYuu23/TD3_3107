@@ -140,6 +140,9 @@ void GameScene::Initialize() {
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->Initialize(enemyModel_.get());
 
+	bossEnemy_ = std::make_unique<PrevSmallBoss>();
+	bossEnemy_->Initialize(enemyModel_.get());
+
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->Initialize(terrainModel_.get());
@@ -217,6 +220,7 @@ void GameScene::Update() {
 	player_->Update();
 	// 敵
 	enemyManager_->Update();
+	bossEnemy_->Update();
 
 	if (player_->isArrowUiDraw_) {
 		arrowSprite_->SetIsInvisible(false);
@@ -277,6 +281,7 @@ void GameScene::Draw() {
 	
 	//Obj
 	player_->Draw(camera_);
+	bossEnemy_->Draw(camera_);
 
 	// スカイドーム
 	skydome_->Draw(camera_);
@@ -421,11 +426,13 @@ void GameScene::ImguiDraw(){
 
 	//Obj
 	mapManager_->ImGuiDraw();
-
+	// プレイヤー
 	player_->ImGuiDraw();
-
 	// 敵
 	enemyManager_->ImGuiDraw();
+	// ボス
+	bossEnemy_->ImGuiDraw();
+
 	// スカイドーム
 	skydome_->ImGuiDraw();
 
