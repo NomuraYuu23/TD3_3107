@@ -133,11 +133,14 @@ public:
 	// 足元コライダー
 	PlayerFootCollider footCollider_;
 
+	float floorPrevY_ = 0;
+
 private: // フラグ
 	// ゲームスピード
 	bool isSlowGame_ = false;
 	// デバッグ用
 	bool isDebugDraw_ = false;
+
 
 private: // システム
 	// 現状のステート

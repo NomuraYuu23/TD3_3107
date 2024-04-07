@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../Engine/Camera/BaseCamera.h"
+#include "../GameUtility/TimerLib.h"
 #include "../ObjectList.h"
 
 class FollowCamera : public BaseCamera
@@ -36,5 +37,13 @@ private:
 
 	// カメラのオフセット
 	Vector3 defaultOffset_ = {};
+
+	float minY = 0;
+	float maxY = 0;
+
+	float defaultFovY_ = 0;
+	float nowFovY_ = 0;
+
+	TimerLib correctTimer_;
 
 };

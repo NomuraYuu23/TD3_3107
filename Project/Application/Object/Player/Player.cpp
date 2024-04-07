@@ -47,6 +47,11 @@ void Player::Update()
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
 
+
+	if (floorPrevY_ > worldtransform_.GetWorldPosition().y) {
+		floorPrevY_ = -4.0f;
+	}
+
 	// ステートの更新
 	if (actionState_ && !recoil_.IsActive()) {
 		actionState_->Update();
@@ -119,6 +124,8 @@ void Player::ImGuiDraw()
 	}
 	// 足場の描画表示
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
+
+	ImGui::DragFloat("FloorPos:Y", &floorPrevY_);
 
 	ImGui::DragFloat2("Screen", &screenPos_.x);
 
@@ -304,6 +311,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.y = correctY;
 				if (velocity_.y > 0) {
 					velocity_.y = 0;
+
 				}
 			}
 			// 下向き
@@ -314,6 +322,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// ジャンプ中・槍ジャンプ中なら着地状態へ
 				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 					ChangeState(std::make_unique<GroundState>());
+					floorPrevY_ = targetPos.y;
+
 				}
 			}
 
