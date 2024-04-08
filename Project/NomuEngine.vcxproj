@@ -112,8 +112,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\Common\State\BossWaitState.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\Common\State\IBossState.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\Common\Weapon\IAttackObject.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\PrevSmallBoss.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossMoveState.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
@@ -265,9 +268,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\BossEnemy\Common\IBoss.h" />
     <ClInclude Include="Application\Object\BossEnemy\Common\State\BossWaitState.h" />
     <ClInclude Include="Application\Object\BossEnemy\Common\State\IBossState.h" />
+    <ClInclude Include="Application\Object\BossEnemy\Common\Weapon\IAttackObject.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\PrevSmallBoss.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossMoveState.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossStateList.h" />
+    <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.h" />
+    <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />

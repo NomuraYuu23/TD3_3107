@@ -1,12 +1,12 @@
 #pragma once
-#include "../Common/IBoss.h"
-#include "../Common/Weapon/IAttackObject.h"
-#include <list>
+#include "../../../IObject.h"
+#include "../../Common/Weapon/IAttackObject.h"
 
-class PrevSmallBoss : public IBoss
+
+class WaveAttack : public IAttackObject
 {
 public:
-	PrevSmallBoss() {};
+	WaveAttack() {};
 
 public:
 	/// <summary>
@@ -35,7 +35,7 @@ public:
 	void OnCollision(ColliderParentObject2D target) override;
 
 public: // アクセッサ
-	Box GetBoxCollider() override {
+	Box GetBoxCollider() override{
 		return boxCollider_;
 	}
 	Vector2 GetColliderPosition() override {
@@ -45,8 +45,12 @@ public: // アクセッサ
 		return boxCollider_.scale_;
 	}
 
-public:
-	// 攻撃の飛び道具のリスト
-	std::list<std::unique_ptr<IAttackObject>> attackLists_;
+	void CreateVelocity(const Vector3& direct) {
+		velocity_ = direct;
+		velocity_ *= movePower_;
+	}
 
-};	
+private:
+	Vector3 velocity_ = {};
+	float movePower_ = 0;
+};
