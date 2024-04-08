@@ -42,6 +42,11 @@ float MathUtility::CalcAngle(const Vector2& direction)
     return radians * (180.0f / (float)std::numbers::pi);
 }
 
+float MathUtility::Ratio(float min, float max, float rate)
+{
+    return min + (max - min) * rate;
+}
+
 Vector2 MathUtility::WorldToScreen(const Vector3& position, BaseCamera* camera)
 {
     // ビューポート行列

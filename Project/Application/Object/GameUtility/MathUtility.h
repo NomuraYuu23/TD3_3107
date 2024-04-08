@@ -23,6 +23,15 @@ public:
 	static float CalcAngle(const Vector2& direction);
 
 	/// <summary>
+	/// 割合計算
+	/// </summary>
+	/// <param name="min"></param>
+	/// <param name="max"></param>
+	/// <param name="rate"></param>
+	/// <returns></returns>
+	static float Ratio(float min, float max,float rate);
+
+	/// <summary>
 	/// ワールド座標からスクリーン座標へ
 	/// </summary>
 	/// <param name="position"></param>

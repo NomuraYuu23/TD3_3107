@@ -281,7 +281,7 @@ void GameScene::Draw() {
 	
 	//Obj
 	player_->Draw(camera_);
-	bossEnemy_->Draw(camera_);
+	//bossEnemy_->Draw(camera_);
 
 	// スカイドーム
 	skydome_->Draw(camera_);

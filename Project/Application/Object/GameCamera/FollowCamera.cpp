@@ -9,7 +9,7 @@ void FollowCamera::Initialize()
 	BaseCamera::Initialize();
 
 	defaultOffset_ = { 0,0,-85.0f };
-	minY = 5.0f;
+	minY = 1.0f;
 	maxY = 30.0f;
 	defaultFovY_ = fovY_;
 }
@@ -39,14 +39,17 @@ void FollowCamera::Update(float elapsedTime)
 		float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
 		float newSize = std::clamp(length, minY, maxY);
 		if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
-			float pars = newSize / maxY;
-			//SetFovY(std::clamp(pars, 0.45f, 0.65f));
-
-			nowFovY_ = 0.45f + (0.65f - 0.45f) * pars;
+			// 割合計算
+			float rate = newSize / maxY;
+			//rate = std::clamp(rate, 0.3f, 1.0f);
+			//nowFovY_ = std::clamp(rate, 0.45f, 0.65f);
+			//nowFovY_ = std::clamp(pars, 0.45f, 0.65f);
+			nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
 
 			SetFovY(nowFovY_);
 			// タイマーセット
-			correctTimer_.Start(20);
+			float returnTime = 10.0f;
+			correctTimer_.Start(returnTime);
 		}
 		else {
 			// 視野角の戻す際に滑らかにする処理
@@ -76,6 +79,9 @@ void FollowCamera::ImGuiDraw()
 	ImGui::DragFloat3("playerWorld", &worldPlayer.x);
 	Vector2 screenPlayer = MathUtility::WorldToScreen(player_->worldtransform_.GetWorldPosition(), this);
 	ImGui::DragFloat2("playerScreen", &screenPlayer.x);
+
+	ImGui::DragFloat("Min", &minY, 0.01f, 0, 20.0f);
+	ImGui::DragFloat("Max", &maxY, 0.01f, 0, 100.0f);
 
 	ImGui::DragFloat("FovY", &fovY_);
 	float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
