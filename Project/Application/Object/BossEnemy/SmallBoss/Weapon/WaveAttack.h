@@ -35,9 +35,9 @@ public:
 	void OnCollision(ColliderParentObject2D target) override;
 
 public: // アクセッサ
-	Box GetBoxCollider() override{
-		return boxCollider_;
-	}
+	//Box GetBoxCollider() override{
+	//	return boxCollider_;
+	//}
 	Vector2 GetColliderPosition() override {
 		return boxCollider_.position_;
 	}

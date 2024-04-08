@@ -15,7 +15,6 @@ public: // サブクラス
 	/// </summary>
 	struct ComputeParameters
 	{
-
 		uint32_t threadIdOffsetX; // スレッドのオフセットX
 		uint32_t threadIdTotalX; // スレッドの総数X
 		uint32_t threadIdOffsetY; // スレッドのオフセットY
@@ -24,10 +23,10 @@ public: // サブクラス
 		uint32_t threadIdTotalZ; // スレッドの総数Z
 		float padding[2]; // パディング
 		Vector4 clearColor; // クリアするときの色
-		float threshold; // しきい値
+		float threshold; // 明度のしきい値
 		int32_t kernelSize; // カーネルサイズ
 		float sigma; // 標準偏差
-
+		float time; // 時間
 	};
 
 	/// <summary>
@@ -40,7 +39,12 @@ public: // サブクラス
 		kPipelineIndexGaussianBlurHorizontal, // ガウスブラー水平
 		kPipelineIndexGaussianBlurVertical, // ガウスブラー垂直
 		kPipelineIndexBrightnessThreshold, // 明度分け
-		kPipelineIndexAdd, // 加算
+		kPipelineIndexBlurAdd, // ブラー用加算
+		kPipelineIndexOverwrite, // 上書き
+		kPipelineIndexRTTCorrection, // レンダーターゲット画像の修正
+		kPipelineIndexMotionBlur, // モーションブラー
+		kPipliineIndexWhiteNoise, // ホワイトノイズ
+		kPipliineIndexScanLine, // 走査線
 		kPipelineIndexOfCount // 数を数える用
 	};
 
@@ -55,7 +59,12 @@ private: // 定数
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainGaussianBlurHorizontal"}, // ガウスブラー水平
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainGaussianBlurVertical"}, // ガウスブラー垂直
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainBrightnessThreshold"}, // 明度分け
-		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainAdd"}, // 加算
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainBlurAdd"}, // ブラー用加算
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainOverwrite"}, // 上書き
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainRTTCorrection"}, // レンダーターゲット画像の修正
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainMotionBlur"}, // モーションブラー
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainWhiteNoise"}, // ホワイトノイズ
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainScanLine"} // 走査線
 	};
 	
 	// 画像の幅
@@ -86,7 +95,7 @@ public: // 関数
 	/// <summary>
 	/// 編集する画像取得
 	/// </summary>
-	/// <param name="index"></param>
+	/// <param name="index">番号</param>
 	/// <returns></returns>
 	TextureUAV* GetEditTextures(uint32_t index) { return editTextures_[index].get(); }
 
@@ -106,23 +115,19 @@ public: // 関数
 	/// </summary>
 	/// <param name="commandList">コマンドリスト</param>
 	/// <param name="editTextureIndex">編集する画像番号</param>
-	/// <param name="color">色</param>
 	void ClearCommand(
 		ID3D12GraphicsCommandList* commandList,
-		uint32_t editTextureIndex,
-		const Vector4& color = { 0.1f, 0.25f, 0.5f, 1.0f });
+		uint32_t editTextureIndex);
 
 	/// <summary>
 	/// 二値化
 	/// </summary>
 	/// <param name="commandList">コマンドリスト</param>
 	/// <param name="editTextureIndex">編集する画像番号</param>
-	/// <param name="threshold">しきい値</param>
 	/// <param name="copyGPUHandle">二値化する画像のGPUハンドル</param>
 	void BinaryThresholdCommand(
 		ID3D12GraphicsCommandList* commandList,
 		uint32_t editTextureIndex, 
-		float threshold,
 		const CD3DX12_GPU_DESCRIPTOR_HANDLE& binaryThresholdGPUHandle);
 
 
@@ -131,14 +136,10 @@ public: // 関数
 	/// </summary>
 	/// <param name="commandList">コマンドリスト</param>
 	/// <param name="editTextureIndex">編集する画像番号</param>
-	/// <param name="kernelSize">カーネルサイズ</param>
-	/// <param name="sigma">標準偏差</param>
 	/// <param name="gaussianBluGPUHandle">ガウスブラーをかける画像のGPUハンドル</param>
 	void GaussianBlurCommand(
 		ID3D12GraphicsCommandList* commandList,
 		uint32_t editTextureIndex,
-		int32_t kernelSize,
-		float sigma,
 		const CD3DX12_GPU_DESCRIPTOR_HANDLE& gaussianBluGPUHandle);
 
 	/// <summary>
@@ -146,17 +147,70 @@ public: // 関数
 	/// </summary>
 	/// <param name="commandList">コマンドリスト</param>
 	/// <param name="editTextureIndex">編集する画像番号</param>
-	/// <param name="kernelSize">カーネルサイズ</param>
-	/// <param name="sigma">標準偏差</param>
-	/// <param name="threshold">しきい値</param>
 	/// <param name="bloomGPUHandle">ブルームをかける画像のGPUハンドル</param>
 	void BloomCommand(
 		ID3D12GraphicsCommandList* commandList,
 		uint32_t editTextureIndex,
-		int32_t kernelSize,
-		float sigma,
-		float threshold,
 		const CD3DX12_GPU_DESCRIPTOR_HANDLE& bloomGPUHandle);
+
+	/// <summary>
+	/// 画像上書き
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="addGPUHandle0">合成する画像のGPUハンドル0</param>
+	/// <param name="addGPUHandle1">合成する画像のGPUハンドル1</param>
+	void OverwriteCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& addGPUHandle0,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& addGPUHandle1);
+
+	/// <summary>
+	/// レンダーターゲット画像の修正（クリアカラーを{0.0f,0.0f,0.0f,0.0f}に変更する）
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="textureGPUHandle">画像のGPUハンドル</param>
+	void RTTCorrectionCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& textureGPUHandle);
+
+	/// <summary>
+	/// モーションブラー
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="motionBlurGPUHandle">画像のGPUハンドル</param>
+	/// <param name="velocityBuff">速度バッファ</param>
+	void MotionBlurCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& motionBlurGPUHandle,
+		ID3D12Resource* velocityBuff);
+
+	/// <summary>
+	/// ホワイトノイズ
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="whiteNoizeGPUHandle">画像のGPUハンドル</param>
+	void WhiteNoizeCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& whiteNoizeGPUHandle);
+
+	/// <summary>
+	/// 走査線
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="whiteNoizeGPUHandle">画像のGPUハンドル</param>
+	void ScanLineCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& scanLineGPUHandle);
 
 private: // 関数
 
@@ -179,6 +233,38 @@ private: // 関数
 	/// パイプライン作成
 	/// </summary>
 	void CreatePipline();
+
+public: // アクセッサ
+
+	/// <summary>
+	/// クリアするときの色設定
+	/// </summary>
+	/// <param name="color">クリアするときの色</param>
+	void SetClearColor(const Vector4& clearColor) { computeParametersMap_->clearColor = clearColor; }
+
+	/// <summary>
+	/// 明度のしきい値設定
+	/// </summary>
+	/// <param name="threshold">明度のしきい値</param>
+	void SetThreshold(float threshold) { computeParametersMap_->threshold = threshold; }
+
+	/// <summary>
+	/// カーネルサイズ設定
+	/// </summary>
+	/// <param name="kernelSize">カーネルサイズ</param>
+	void SetKernelSize(int32_t kernelSize) { computeParametersMap_->kernelSize = kernelSize; }
+
+	/// <summary>
+	/// 標準偏差設定
+	/// </summary>
+	/// <param name="sigma">標準偏差</param>
+	void SetSigma(float sigma) { computeParametersMap_->sigma = sigma; }
+
+	/// <summary>
+	/// 時間設定
+	/// </summary>
+	/// <param name="time">時間</param>
+	void SetTime(float time) { computeParametersMap_->time = time; }
 
 private: // 変数
 

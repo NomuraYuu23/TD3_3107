@@ -9,3 +9,5 @@ inline static constexpr uint32_t kCollisionAttributeWeapon = 0b1 << 1;
 inline static constexpr uint32_t kCollisionAttributeEnemy = 0b1 << 2;
 // 地形ブロック
 inline static constexpr uint32_t kCollisionAttributeTerrain = 0b1 << 3;
+// レイ
+inline static constexpr uint32_t kCollisionAttributeRay = 0b1 << 4;

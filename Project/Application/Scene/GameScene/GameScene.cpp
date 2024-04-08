@@ -573,6 +573,7 @@ void GameScene::CollisionUpdate()
 
 	collision2DManager_->ListClear();
 	// プレイヤー
+	collision2DManager_->ListRegister(&player_->cameraRay_.directRay_);
 	collision2DManager_->ListRegister(&player_->circleCollider_);
 	// 武器
 	if (!std::holds_alternative<HoldState*>(player_->GetWeapon()->GetNowState())) {

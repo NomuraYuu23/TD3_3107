@@ -40,6 +40,10 @@ void Player::Initialize(Model* model)
 	// 放物線
 	parabola_.Initialize();
 
+	// レイ
+	rayLength_ = -100.0f;
+	cameraRay_.Initialize(this);
+	
 }
 
 void Player::Update()
@@ -76,13 +80,14 @@ void Player::Update()
 	else {
 		parabola_.Reset();
 	}
-
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
 	CircleColliderUpdate();
 	// 足元のコライダー
 	footCollider_.Update();
+	// レイ
+	cameraRay_.Update();
 }
 
 void Player::Draw(const BaseCamera& camera)
@@ -126,6 +131,7 @@ void Player::ImGuiDraw()
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
 
 	ImGui::DragFloat("FloorPos:Y", &floorPrevY_);
+	ImGui::DragFloat("RayLength", &rayLength_, -500.0f, 500.0f);
 
 	ImGui::DragFloat2("Screen", &screenPos_.x);
 
@@ -322,7 +328,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// ジャンプ中・槍ジャンプ中なら着地状態へ
 				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 					ChangeState(std::make_unique<GroundState>());
-					floorPrevY_ = worldtransform_.GetWorldPosition().y;
+					//floorPrevY_ = worldtransform_.GetWorldPosition().y;
 
 				}
 			}

@@ -2,6 +2,7 @@
 #include "../IObject.h"
 #include "../Weapon/Weapon.h"
 #include "../GameUtility/TimerLib.h"
+#include "../../../Engine/Collider2D/Segment2D.h"
 #include "../../../Engine/Input/Input.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
@@ -10,6 +11,7 @@
 #include "System/Recoil/PlayerRecoil.h"
 #include "System/Combo/ComboCounter.h"
 #include "System/Parabola/PlayerParabola.h"
+#include "System/CameraRay/CameraRay.h"
 
 #include "PlayerFootCollider.h"
 
@@ -134,6 +136,10 @@ public:
 	PlayerFootCollider footCollider_;
 
 	float floorPrevY_ = 0;
+
+	float rayLength_ = 0;
+
+	CameraRay cameraRay_;
 
 private: // フラグ
 	// ゲームスピード

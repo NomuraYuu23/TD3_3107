@@ -13,15 +13,25 @@ struct ComputeParameters {
 	float32_t threshold; // しきい値
 	int32_t kernelSize; // カーネルサイズ
 	float32_t sigma; // 標準偏差
+	float32_t time; // 時間
 };
 
 // 定数データ
 ConstantBuffer<ComputeParameters> gComputeConstants : register(b0);
-// ソースR
+
+// 速度データ
+struct VelocityParameters {
+	float32_t2 values; // 値
+};
+
+// 速度データ
+ConstantBuffer<VelocityParameters> gVelocityConstants: register(b1);
+
+// ソース0
 Texture2D<float32_t4> sourceImage0 : register(t0);
-// ソースI
+// ソース1
 Texture2D<float32_t4> sourceImage1 : register(t1);
-// 行先R
+// 行先
 RWTexture2D<float32_t4> destinationImage0 : register(u0);
 
 void Copy(float32_t2 index) {
@@ -263,29 +273,261 @@ void mainBrightnessThreshold(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
-void Add(float32_t2 index) {
+void BlurAdd(float32_t2 index) {
 
-	float3 input1 = sourceImage0[index].rgb;
-	float3 input2 = sourceImage1[index].rgb;
+	float32_t3 input1 = sourceImage0[index].rgb;
+	float32_t3 input2 = sourceImage1[index].rgb;
 
 	float32_t alphaSum = sourceImage0[index].a + sourceImage1[index].a;
-	float32_t a1 = sourceImage0[index].a / alphaSum;
-	float32_t a2 = sourceImage1[index].a / alphaSum;
 
-	float3 col = input1 * a1 + input2 * a2;
+	if (alphaSum == 0.0f) {
+		destinationImage0[index] = float32_t4(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+	else {
+		float32_t a1 = sourceImage0[index].a / alphaSum;
+		float32_t a2 = sourceImage1[index].a / alphaSum;
 
-	destinationImage0[index] = float4(col, min(alphaSum, 1.0f));
+		float32_t3 col = input1 * a1 + input2 * a2;
+		destinationImage0[index] = float32_t4(col, min(alphaSum, 1.0f));
+	}
 
 }
 
 [numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
-void mainAdd(uint32_t3 dispatchId : SV_DispatchThreadID)
+void mainBlurAdd(uint32_t3 dispatchId : SV_DispatchThreadID)
 {
 
 	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
 		dispatchId.y < gComputeConstants.threadIdTotalY) {
 
-		Add(dispatchId.xy);
+		BlurAdd(dispatchId.xy);
+
+	}
+
+}
+
+void Overwrite(float32_t2 index) {
+
+	float32_t4 input = sourceImage1[index];
+	float32_t4 output = sourceImage0[index];
+
+	if (input.a == 1.0f) {
+		destinationImage0[index] = input;
+	}
+	else if (input.a == 0.0f) {
+		destinationImage0[index] = output;
+	}
+	else {
+		
+		float32_t alphaOut = 1.0f - input.a;
+
+		alphaOut = min(alphaOut, output.a);
+
+		destinationImage0[index] = input;
+
+		if (output.a != 0.0f) {
+			float32_t a = min(alphaOut / output.a, 1.0f);
+
+			float32_t4 color =
+				float32_t4(
+					output.r * a,
+					output.g * a,
+					output.b * a,
+					alphaOut);
+
+			destinationImage0[index] += color;
+
+		}
+
+	}
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainOverwrite(uint32_t3 dispatchId : SV_DispatchThreadID)
+{
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		Overwrite(dispatchId.xy);
+
+	}
+
+}
+
+void RTTCorrection(float32_t2 index) {
+
+
+	float32_t4 output = sourceImage0[index];
+
+	if (output.r == gComputeConstants.clearColor.r &&
+		output.g == gComputeConstants.clearColor.g && 
+		output.b == gComputeConstants.clearColor.b &&
+		output.a == gComputeConstants.clearColor.a) {
+		output = float32_t4(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainRTTCorrection(uint32_t3 dispatchId : SV_DispatchThreadID)
+{
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		RTTCorrection(dispatchId.xy);
+
+	}
+
+}
+
+void MotionBlur(float32_t2 index) {
+
+	// 入力色
+	float32_t4 input = { 0.0f,0.0f,0.0f,0.0f };
+
+	// 出力色
+	float32_t4 output = { 0.0f,0.0f,0.0f,0.0f };
+
+	// 一時的なインデックス
+	float32_t2 indexTmp = { 0.0f,0.0f };
+
+	// 重み
+	float32_t weight = 0.0f;
+
+	// 重み合計
+	float32_t weightSum = 0.0f;
+
+	// 速度
+	float32_t x = gVelocityConstants.values.x;
+	float32_t y = gVelocityConstants.values.y;
+
+	//y = ax;
+	// x != 0 
+	float32_t coefficient = 0.0f;
+
+	float32_t2 dir = float32_t2(0.0f, 0.0f);
+	if (x != 0) {
+		coefficient = y / x;
+		dir.x = x;
+		dir.y = dir.x * coefficient * -1.0f;
+	}
+	else if (y != 0.0f) {
+		dir.x = 0.0f;
+		dir.y = y * -1.0f;
+	}
+	else {
+		destinationImage0[index] = sourceImage0[index];
+		return;
+	}
+
+	for (int32_t i = 0; i < gComputeConstants.kernelSize / 2; i++) {
+
+		// インデックス
+		indexTmp = index;
+
+		indexTmp.x += float32_t(i) * dir.x;
+		indexTmp.y += float32_t(i) * dir.y;
+		if ((indexTmp.x < 0.0f) || (indexTmp.y < 0.0f)) {
+			continue;
+		}
+
+		input = sourceImage0[indexTmp];
+
+		// 重み確認
+		weight = Gauss(float32_t(i), gComputeConstants.sigma) + Gauss(float32_t(i) + 1.0f, gComputeConstants.sigma);
+
+		// 色確認
+		if ((input.a != 0.0f) ||
+			(i == 0)) {
+			// outputに加算
+			output += input * weight;
+			// 重みの合計に加算
+			weightSum += weight;
+		}
+	}
+
+
+	// 重みの合計分割る
+	output *= (1.0f / weightSum);
+
+	// 代入
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainMotionBlur(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		MotionBlur(dispatchId.xy);
+
+	}
+
+}
+
+void WhiteNoise(float32_t2 index) {
+
+	float32_t4 output = sourceImage0[index];
+
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	float32_t noise = frac(sin(dot(texcoord * gComputeConstants.time, float32_t2(8.7819f, 3.255f))) * 437.645) - 0.5f;
+
+	output.rgb += noise;
+
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainWhiteNoise(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		WhiteNoise(dispatchId.xy);
+
+	}
+
+}
+
+void ScanLine(float32_t2 index) {
+
+	float32_t4 output = sourceImage0[index];
+
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	float32_t sinv = sin(texcoord.y * 2.0f + gComputeConstants.time * -0.1f);
+	float32_t steped = step(0.99f, sinv * sinv);
+
+	output.rgb -= (1.0f - steped) * abs(sin(texcoord.y * 50.0f + gComputeConstants.time)) * 0.05f;
+
+	output.rgb -= (1.0f - steped) * abs(sin(texcoord.y * 100.0f - gComputeConstants.time * 2.0f)) * 0.08f;
+
+	output.rgb += steped * 0.1f;
+
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainScanLine(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		ScanLine(dispatchId.xy);
 
 	}
 

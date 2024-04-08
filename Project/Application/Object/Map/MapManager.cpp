@@ -156,7 +156,7 @@ void MapManager::InitializeBossMap()
 	float blockSize = 2.0f;
 #pragma region 床ブロック
 
-	for (int i = 0; i < 60; ++i) {
+	for (int i = 0; i < 10; ++i) {
 		// 床
 		RegisterBlock({ (float)i * blockSize ,-4.0f,0 });
 	}

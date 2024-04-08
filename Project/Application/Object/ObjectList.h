@@ -6,6 +6,7 @@
 // プレイヤー
 #include "Player/Player.h"
 #include "Player/PlayerFootCollider.h"
+#include "Player/System/CameraRay/CameraRay.h"
 #include "Weapon/Weapon.h"
 
 // 敵

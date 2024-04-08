@@ -44,7 +44,10 @@ public: // アクセッサ
 	/// コライダーの取得
 	/// </summary>
 	/// <returns></returns>
-	virtual Box GetBoxCollider() = 0;
+	Box GetBoxCollider() {
+		return boxCollider_;
+	}
+
 	virtual Vector2 GetColliderPosition() = 0;
 	virtual Vector2 GetColliderSize() = 0;
 protected:
