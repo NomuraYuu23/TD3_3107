@@ -131,6 +131,26 @@ bool Collision2D::IsCollision(const Circle& circle1, const Circle& circle2)
 
 }
 
+bool Collision2D::IsCollision(const Segment2D& segment1, const Segment2D& segment2)
+{
+
+	Vector2 s1 = Vector2::Subtract(Vector2::Add(segment1.origin_, segment1.length_), segment1.origin_);
+	Vector2 s2 = Vector2::Subtract(segment2.origin_, segment1.origin_);
+
+	float s = Vector2::Cross(s1, s2);
+
+	Vector2 t1 = Vector2::Subtract(Vector2::Add(segment1.origin_, segment1.length_), segment1.origin_);
+	Vector2 t2 = Vector2::Subtract(Vector2::Add(segment2.origin_, segment2.length_), segment1.origin_);
+
+	float t = Vector2::Cross(t1, t2);
+
+	if (s * t < 0.0f) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Collision2D::IsCollision(const Box& box, const Circle& circle)
 {
 	
@@ -227,4 +247,142 @@ bool Collision2D::IsCollision(const Box& box, const Circle& circle)
 bool Collision2D::IsCollision(const Circle& circle, const Box& box)
 {
 	return IsCollision(box, circle);
+}
+
+bool Collision2D::IsCollision(const Box& box, const Segment2D& segment)
+{
+
+	float thata = box.rotation_ * static_cast<float>(std::numbers::pi) / 180.0f;
+	Matrix3x3 boxRotationMatrix = Matrix3x3::MakeRotateMatrix(thata);
+
+	std::vector<Vector2> b1Point;
+
+	Vector2 b1LeftTop = {
+		-box.scale_.x / 2.0f,
+		-box.scale_.y / 2.0f };
+
+	b1LeftTop = Matrix3x3::Transform(b1LeftTop, boxRotationMatrix);
+	b1LeftTop += box.position_;
+	b1Point.push_back(b1LeftTop);
+
+	Vector2 b1RightTop = {
+		+box.scale_.x / 2.0f,
+		-box.scale_.y / 2.0f };
+
+	b1RightTop = Matrix3x3::Transform(b1RightTop, boxRotationMatrix);
+	b1RightTop += box.position_;
+	b1Point.push_back(b1RightTop);
+
+	Vector2 b1RightBottom = {
+		+box.scale_.x / 2.0f,
+		+box.scale_.y / 2.0f };
+
+	b1RightBottom = Matrix3x3::Transform(b1RightBottom, boxRotationMatrix);
+	b1RightBottom += box.position_;
+	b1Point.push_back(b1RightBottom);
+
+	Vector2 b1LeftBottom = {
+		-box.scale_.x / 2.0f,
+		+box.scale_.y / 2.0f };
+
+	b1LeftBottom = Matrix3x3::Transform(b1LeftBottom, boxRotationMatrix);
+	b1LeftBottom += box.position_;
+	b1Point.push_back(b1LeftBottom);
+
+	Segment2D segmentTmp;	
+	for (uint32_t i = 0; i < 4; ++i) {
+		segmentTmp.origin_ = b1Point[i];
+		if (i == 3) {
+			segmentTmp.length_ = b1Point[0] - b1Point[3];
+		}
+		else {
+			segmentTmp.length_ = b1Point[i + 1] - b1Point[i];
+		}
+
+		Vector2 v1 = Vector2::Subtract(Vector2::Add(segmentTmp.origin_, segmentTmp.length_), segmentTmp.origin_);
+		Vector2 v2 = Vector2::Subtract(segment.origin_, segmentTmp.origin_);
+
+		float v = Vector2::Cross(v1, v2);
+
+		if (v < 0.0f) {
+			break;
+		}
+
+		if (i == 3) {
+			return true;
+		}
+
+	}
+
+	for (uint32_t i = 0; i < 4; ++i) {
+		segmentTmp.origin_ = b1Point[i];
+		if (i == 3) {
+			segmentTmp.length_ = b1Point[0] - b1Point[3];
+		}
+		else {
+			segmentTmp.length_ = b1Point[i + 1] - b1Point[i];
+		}
+
+		Vector2 v1 = Vector2::Subtract(Vector2::Add(segmentTmp.origin_, segmentTmp.length_), segmentTmp.origin_);
+		Vector2 v2 = Vector2::Subtract(Vector2::Add(segment.origin_, segment.length_), segmentTmp.origin_);
+
+		float v = Vector2::Cross(v1, v2);
+
+		if (v < 0.0f) {
+			break;
+		}
+
+		if (i == 3) {
+			return true;
+		}
+
+	}
+
+	return false;
+
+}
+
+bool Collision2D::IsCollision(const Segment2D& segment, const Box& box)
+{
+	return IsCollision(box, segment);
+}
+
+bool Collision2D::IsCollision(const Circle& circle, const Segment2D& segment)
+{
+
+	Vector2 endPos = Vector2::Add(segment.origin_, segment.length_);
+
+	Vector2 centerFromOrigin = Vector2::Subtract(circle.position_, segment.origin_);
+	Vector2 endPosFromOrigin = Vector2::Subtract(endPos, segment.origin_);
+	Vector2 centerFromEndPos = Vector2::Subtract(circle.position_, endPos);
+
+	// 線分と円の中心の最短の長さ
+	float length = Vector2::Cross(Vector2::Normalize(endPosFromOrigin), centerFromOrigin);
+
+	// 当たっていない
+	if (length > circle.radius_) {
+		return false;
+	}
+
+	// 線分内に円があるか調べる
+	float a = Vector2::Dot(centerFromOrigin, endPosFromOrigin);
+	float b = Vector2::Dot(centerFromEndPos, endPosFromOrigin);
+	
+	if (a * b < 0.0f) {
+		return true;
+	}
+
+	// 線分の末端が円の範囲内か調べる
+	if ((Vector2::Length(centerFromOrigin) < circle.radius_) ||
+		(Vector2::Length(centerFromEndPos) < circle.radius_)) {
+		return true;
+	}
+
+	return false;
+
+}
+
+bool Collision2D::IsCollision(const Segment2D& segment, const Circle& circle)
+{
+	return IsCollision(circle, segment);
 }

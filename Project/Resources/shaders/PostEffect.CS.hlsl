@@ -13,6 +13,7 @@ struct ComputeParameters {
 	float32_t threshold; // しきい値
 	int32_t kernelSize; // カーネルサイズ
 	float32_t sigma; // 標準偏差
+	float32_t time; // 時間
 };
 
 // 定数データ
@@ -272,7 +273,7 @@ void mainBrightnessThreshold(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
-void Add(float32_t2 index) {
+void BlurAdd(float32_t2 index) {
 
 	float32_t3 input1 = sourceImage0[index].rgb;
 	float32_t3 input2 = sourceImage1[index].rgb;
@@ -293,13 +294,13 @@ void Add(float32_t2 index) {
 }
 
 [numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
-void mainBloomAdd(uint32_t3 dispatchId : SV_DispatchThreadID)
+void mainBlurAdd(uint32_t3 dispatchId : SV_DispatchThreadID)
 {
 
 	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
 		dispatchId.y < gComputeConstants.threadIdTotalY) {
 
-		Add(dispatchId.xy);
+		BlurAdd(dispatchId.xy);
 
 	}
 
@@ -466,6 +467,67 @@ void mainMotionBlur(uint32_t3 dispatchId : SV_DispatchThreadID) {
 		dispatchId.y < gComputeConstants.threadIdTotalY) {
 
 		MotionBlur(dispatchId.xy);
+
+	}
+
+}
+
+void WhiteNoise(float32_t2 index) {
+
+	float32_t4 output = sourceImage0[index];
+
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	float32_t noise = frac(sin(dot(texcoord * gComputeConstants.time, float32_t2(8.7819f, 3.255f))) * 437.645) - 0.5f;
+
+	output.rgb += noise;
+
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainWhiteNoise(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		WhiteNoise(dispatchId.xy);
+
+	}
+
+}
+
+void ScanLine(float32_t2 index) {
+
+	float32_t4 output = sourceImage0[index];
+
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	float32_t sinv = sin(texcoord.y * 2.0f + gComputeConstants.time * -0.1f);
+	float32_t steped = step(0.99f, sinv * sinv);
+
+	output.rgb -= (1.0f - steped) * abs(sin(texcoord.y * 50.0f + gComputeConstants.time)) * 0.05f;
+
+	output.rgb -= (1.0f - steped) * abs(sin(texcoord.y * 100.0f - gComputeConstants.time * 2.0f)) * 0.08f;
+
+	output.rgb += steped * 0.1f;
+
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainScanLine(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		ScanLine(dispatchId.xy);
 
 	}
 
