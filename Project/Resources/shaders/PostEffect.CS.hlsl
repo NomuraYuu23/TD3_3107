@@ -1,5 +1,7 @@
 #include "PostEffect.hlsli"
 
+#include "PostEffectCalc.CS.hlsl"
+
 // 定数データ
 struct ComputeParameters {
 
@@ -9,11 +11,28 @@ struct ComputeParameters {
 	uint32_t threadIdTotalY; // スレッドの総数Y
 	uint32_t threadIdOffsetZ; // スレッドのオフセットZ
 	uint32_t threadIdTotalZ; // スレッドの総数Z
+	
 	float32_t4 clearColor; // クリアするときの色
+	
 	float32_t threshold; // しきい値
+	
 	int32_t kernelSize; // カーネルサイズ
 	float32_t sigma; // 標準偏差
+	
 	float32_t time; // 時間
+	
+	float32_t2 rShift; // Rずらし
+	float32_t2 gShift; // Gずらし
+	float32_t2 bShift; // Bずらし
+	
+	float32_t distortion; // 歪み
+	
+	float32_t vignetteSize; // ビネットの大きさ
+
+	float32_t horzGlitchPase; //水平
+	float32_t vertGlitchPase; //垂直
+	float32_t glitchStepValue; // グリッチのステップ値
+
 };
 
 // 定数データ
@@ -480,7 +499,7 @@ void WhiteNoise(float32_t2 index) {
 		index.x / gComputeConstants.threadIdTotalX,
 		index.y / gComputeConstants.threadIdTotalY);
 
-	float32_t noise = frac(sin(dot(texcoord * gComputeConstants.time, float32_t2(8.7819f, 3.255f))) * 437.645) - 0.5f;
+	float32_t noise = Noise(texcoord * gComputeConstants.time) - 0.5f;
 
 	output.rgb += noise;
 
@@ -528,6 +547,137 @@ void mainScanLine(uint32_t3 dispatchId : SV_DispatchThreadID) {
 		dispatchId.y < gComputeConstants.threadIdTotalY) {
 
 		ScanLine(dispatchId.xy);
+
+	}
+
+}
+
+void RGBShift(float32_t2 index) {
+
+
+	float32_t4 output = { 0.0f,0.0f,0.0f,0.0f };
+
+	output.r = sourceImage0[index + gComputeConstants.rShift].r;
+	output.g = sourceImage0[index + gComputeConstants.gShift].g;
+	output.b = sourceImage0[index + gComputeConstants.bShift].b;
+	output.a = sourceImage0[index].a;
+
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainRGBShift(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		RGBShift(dispatchId.xy);
+
+	}
+
+}
+
+void BarrelCurved(float32_t2 index) {
+
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	texcoord -= float32_t2(0.5f, 0.5f);
+	float32_t distPower = pow(length(texcoord), gComputeConstants.distortion);
+	texcoord *= float32_t2(distPower, distPower);
+	texcoord += float32_t2(0.5f, 0.5f);
+
+	float32_t2 newIndex = float32_t2(
+		texcoord.x * gComputeConstants.threadIdTotalX,
+		texcoord.y * gComputeConstants.threadIdTotalY);
+
+	destinationImage0[index] = sourceImage0[newIndex];
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainBarrelCurved(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		BarrelCurved(dispatchId.xy);
+
+	}
+
+}
+
+void Vignette(float32_t2 index) {
+
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	float32_t vignette = length(float32_t2(0.5f, 0.5f) - texcoord);
+
+	vignette = clamp(vignette - gComputeConstants.vignetteSize, 0.0f, 1.0f);
+
+	destinationImage0[index] = sourceImage0[index];
+	destinationImage0[index].rgb -= vignette;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainVignette(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		Vignette(dispatchId.xy);
+
+	}
+
+}
+
+void Glitch(float32_t2 index) {
+
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	float32_t horzNoise = Noise(
+		float32_t2(
+			floor((texcoord.y) / gComputeConstants.horzGlitchPase) * gComputeConstants.horzGlitchPase,
+			gComputeConstants.time * 0.2f));
+
+	float32_t vertNoise = Noise(
+		float32_t2(
+			floor((texcoord.x) / gComputeConstants.vertGlitchPase) * gComputeConstants.vertGlitchPase,
+			gComputeConstants.time * 0.1f));
+
+	float32_t horzGlitchStrength = horzNoise / gComputeConstants.glitchStepValue;
+
+	float32_t vertGlitchStrength = vertNoise / gComputeConstants.glitchStepValue;
+
+	horzGlitchStrength = vertGlitchStrength * 2.0f - 1.0f;
+	vertGlitchStrength = horzGlitchStrength * 2.0f - 1.0f;
+
+	float32_t horz = step(horzNoise, gComputeConstants.glitchStepValue) * horzGlitchStrength;
+	float32_t vert = step(vertNoise, gComputeConstants.glitchStepValue * 2.0f) * vertGlitchStrength;
+
+	float32_t sinv = sin(texcoord.y * 2.0f - gComputeConstants.time * -0.1f);
+	float32_t steped = 1.0f - step(0.99f, sinv * sinv);
+	float32_t timeFrac = steped * step(0.8f, frac(gComputeConstants.time));
+
+	float32_t2 newIndex = index + timeFrac * (horz + vert);
+
+	destinationImage0[index] = sourceImage0[newIndex];
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainGlitch(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		Glitch(dispatchId.xy);
 
 	}
 
