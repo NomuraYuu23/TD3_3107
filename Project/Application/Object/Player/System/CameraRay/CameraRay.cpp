@@ -18,7 +18,8 @@ void CameraRay::Update()
 	// 地面
 	player_->floorPrevY_ = minPositionY_;
 	// レイの更新
-	direct_ = { /*player_->rayLength_*/0,player_->rayLength_ };
+	//direct_ = { /*player_->rayLength_*/0,player_->rayLength_ };
+	direct_ = { 0,player_->rayLength_ };
 	directRay_.Update(player_->position2D_, direct_);
 
 	//minPositionY_ = 0.1f;
@@ -36,8 +37,9 @@ void CameraRay::OnCollision(ColliderParentObject2D target)
 			targetPos = a->GetColliderPosition();
 			}, target);
 
-		minPositionY_ = targetPos.y;
-
+		if (player_->worldtransform_.GetWorldPosition().y > targetPos.y) {
+			minPositionY_ = targetPos.y;
+		}
 		//if (minPositionY_ == 0.1f) {
 		//	minPositionY_ = targetPos.y;
 		//}

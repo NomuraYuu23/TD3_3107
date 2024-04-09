@@ -10,8 +10,8 @@ void MapManager::Initialize(Model* model)
 
 	LargeNumberOfObjects::Initialize(model);
 
-	//InitializePlacement();
-	InitializeBossMap();
+	InitializePlacement();
+	//InitializeBossMap();
 }
 
 void MapManager::Update()
