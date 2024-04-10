@@ -52,7 +52,7 @@ void MapManager::CollisionRegister(Collision2DManager* collisionManager, const B
 	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
 		float range = 100.0f;
-		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), range, camera)) {
+		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
 			collisionManager->ListRegister(&static_cast<Terrain*>((*it))->boxCollider_);
 		}
 
