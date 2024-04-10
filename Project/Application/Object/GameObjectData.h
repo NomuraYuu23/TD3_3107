@@ -31,6 +31,9 @@ private: // データ用構造体クラス
 		float aerialAcceleration_;
 		// 反動情報
 		RecoilData recoil;
+
+		// 画面外から戻ってくる際の画面外の距離
+		float deadLength_;
 	};
 	// 共通の情報
 	struct CommonData {
@@ -50,6 +53,12 @@ private: // データ用構造体クラス
 		float scaleRate_;
 		// ローカル座標
 		Vector3 localPosition_;
+		// 衝突時の避ける内積の値
+		float collisionDot_;
+	};
+
+	struct BossData {
+		float gravity_;
 	};
 
 public:

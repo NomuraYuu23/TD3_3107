@@ -109,12 +109,27 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\Common\State\BossWaitState.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\Common\State\IBossState.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\Common\Weapon\IAttackObject.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\SmallBoss\PrevSmallBoss.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossMoveState.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.cpp" />
+    <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
+    <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
+    <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\EnemyGroundState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AerialState.cpp" />
     <ClCompile Include="Application\AudioManager\ClearAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\GameAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\TitleAudioManager.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\WallJumpState.cpp" />
+    <ClCompile Include="Application\Object\Player\System\CameraRay\CameraRay.cpp" />
     <ClCompile Include="Application\Object\Player\System\Combo\ComboCounter.cpp" />
     <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
@@ -252,6 +267,22 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
+    <ClInclude Include="Application\Object\BossEnemy\Common\IBoss.h" />
+    <ClInclude Include="Application\Object\BossEnemy\Common\State\BossWaitState.h" />
+    <ClInclude Include="Application\Object\BossEnemy\Common\State\IBossState.h" />
+    <ClInclude Include="Application\Object\BossEnemy\Common\Weapon\IAttackObject.h" />
+    <ClInclude Include="Application\Object\BossEnemy\SmallBoss\PrevSmallBoss.h" />
+    <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossMoveState.h" />
+    <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossStateList.h" />
+    <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.h" />
+    <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
+    <ClInclude Include="Application\Object\Enemy\Enemy.h" />
+    <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
+    <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
+    <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />
+    <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />
+    <ClInclude Include="Application\Object\Enemy\State\IEnemyState.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\Player\ActionState\ActionWaitState.h" />
     <ClInclude Include="Application\Object\GameUtility\CommonConfig.h" />
@@ -265,11 +296,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider2D\CollisionConfig2D.h" />
     <ClInclude Include="Application\Collider\ColliderParentObject.h" />
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\GroundState.h" />
     <ClInclude Include="Application\Object\Player\ActionState\WallJumpState.h" />
+    <ClInclude Include="Application\Object\Player\System\CameraRay\CameraRay.h" />
     <ClInclude Include="Application\Object\Player\System\Combo\ComboCounter.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
-    <ClInclude Include="Application\Object\Player\System\UI\PlayerUI.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnWaitState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\StateList.h" />
@@ -417,7 +449,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\Player.h" />
     <ClInclude Include="Application\Object\Weapon\Weapon.h" />
     <ClInclude Include="Application\Object\Player\ActionState\IActionState.h" />
-    <ClInclude Include="Application\Object\Player\ActionState\GroundState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\IWeaponState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\HoldState.h" />
     <ClInclude Include="Application\Object\IObject.h" />

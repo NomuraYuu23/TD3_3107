@@ -136,6 +136,13 @@ void GameScene::Initialize() {
 	//countTime_ = 0;
 	player_->Update();
 
+	// 敵管理クラス
+	enemyManager_ = std::make_unique<EnemyManager>();
+	enemyManager_->Initialize(enemyModel_.get());
+
+	bossEnemy_ = std::make_unique<PrevSmallBoss>();
+	bossEnemy_->Initialize(enemyModel_.get());
+
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->Initialize(terrainModel_.get());
@@ -211,6 +218,9 @@ void GameScene::Update() {
 	mapManager_->Update();
 	// プレイヤー
 	player_->Update();
+	// 敵
+	enemyManager_->Update();
+	bossEnemy_->Update();
 
 	if (player_->isArrowUiDraw_) {
 		arrowSprite_->SetIsInvisible(false);
@@ -271,6 +281,7 @@ void GameScene::Draw() {
 	
 	//Obj
 	player_->Draw(camera_);
+	bossEnemy_->Draw(camera_);
 
 	// スカイドーム
 	skydome_->Draw(camera_);
@@ -291,6 +302,9 @@ void GameScene::Draw() {
 
 	// ブロック用
 	mapManager_->Draw(camera_);
+
+	// 敵
+	enemyManager_->Draw(camera_);
 
 	Model::PostDraw();
 
@@ -338,6 +352,7 @@ void GameScene::Draw() {
 	// UIマネージャー
 	//uiManager_->Draw();
 	arrowSprite_->Draw();
+	
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -400,18 +415,23 @@ void GameScene::ImguiDraw(){
 	//ImGui::DragFloat("SpotCosFalloffStart3", &spotLightDatas_[3].cosFalloffStart, 0.01f);
 
 
-	ImGui::DragFloat2("box_", &boxCenter_.x, 0.1f);
-	ImGui::DragFloat2("box1_", &box1Center_.x, 0.1f);
-	ImGui::DragFloat2("circle_", &circleCenter_.x, 0.1f);
-	ImGui::DragFloat2("circle1_", &circle1Center_.x, 0.1f);
+	//ImGui::DragFloat2("box_", &boxCenter_.x, 0.1f);
+	//ImGui::DragFloat2("box1_", &box1Center_.x, 0.1f);
+	//ImGui::DragFloat2("circle_", &circleCenter_.x, 0.1f);
+	//ImGui::DragFloat2("circle1_", &circle1Center_.x, 0.1f);
 
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
+	ImGui::Text("ColliderManagerSize : %d", (int)collision2DManager_->GetColliders().size());
 	ImGui::End();
 
 	//Obj
 	mapManager_->ImGuiDraw();
-
+	// プレイヤー
 	player_->ImGuiDraw();
+	// 敵
+	enemyManager_->ImGuiDraw();
+	// ボス
+	bossEnemy_->ImGuiDraw();
 
 	// スカイドーム
 	skydome_->ImGuiDraw();
@@ -484,6 +504,9 @@ void GameScene::ModelCreate()
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
+	
+	// 敵モデル
+	enemyModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 }
 
@@ -550,6 +573,7 @@ void GameScene::CollisionUpdate()
 
 	collision2DManager_->ListClear();
 	// プレイヤー
+	collision2DManager_->ListRegister(&player_->cameraRay_.directRay_);
 	collision2DManager_->ListRegister(&player_->circleCollider_);
 	// 武器
 	if (!std::holds_alternative<HoldState*>(player_->GetWeapon()->GetNowState())) {
@@ -559,14 +583,12 @@ void GameScene::CollisionUpdate()
 	collision2DManager_->ListRegister(&player_->GetFootCollider()->boxCollider_);
 	
 	// マップ
-	mapManager_->CollisionRegister(collision2DManager_.get());
+	mapManager_->CollisionRegister(collision2DManager_.get(), camera_);
+
+	enemyManager_->CollisionRegister(collision2DManager_.get(), camera_);
 
 	collision2DManager_->CheakAllCollision();
 
 	collision2DDebugDraw_->Clear();
-	//collision2DDebugDraw_->Register(box_.get());
-	//collision2DDebugDraw_->Register(box1_.get());
-	//collision2DDebugDraw_->Register(circle_.get());
-	//collision2DDebugDraw_->Register(circle1_.get());
-	//collision2DDebugDraw_->Register(&player_->circleCollider_);
+
 }

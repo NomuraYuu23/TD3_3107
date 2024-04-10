@@ -27,7 +27,7 @@ public:
 	/// コライダーに登録する処理
 	/// </summary>
 	/// <param name="collisionManager"></param>
-	void CollisionRegister(Collision2DManager* collisionManager);
+	void CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera);
 
 private:
 	/// <summary>
@@ -37,7 +37,15 @@ private:
 	void RegisterBlock(const Vector3& position);
 	void RegisterBlock(const Vector3& position, const Vector2 scale);
 
+	/// <summary>
+	/// とりあえずのマップ
+	/// </summary>
 	void InitializePlacement();
+
+	/// <summary>
+	/// ボス戦用のマップ配置
+	/// </summary>
+	void InitializeBossMap();
 
 };
 

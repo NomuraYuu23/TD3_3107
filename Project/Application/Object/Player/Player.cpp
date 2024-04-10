@@ -1,11 +1,11 @@
 #include "Player.h"
 
 #include "../../Collider2D/CollisionConfig2D.h"
+#include "../../../Engine/Collision2D/Collision2D.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Math/Ease.h"
 #include "../../../Engine/Math/Math.h"
 #include "../ObjectList.h"
-#include "../../../Engine/Collision2D/Collision2D.h"
 #include "../GameUtility/MathUtility.h"
 
 void Player::Initialize(Model* model)
@@ -28,7 +28,7 @@ void Player::Initialize(Model* model)
 	// 足場クラス
 	footCollider_.Initialize(model, this);
 	// コンボクラス
-	jumpCombo.Reset();
+	jumpCombo_.Reset();
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
@@ -40,12 +40,21 @@ void Player::Initialize(Model* model)
 	// 放物線
 	parabola_.Initialize();
 
+	// レイ
+	rayLength_ = -100.0f;
+	cameraRay_.Initialize(this);
+	
 }
 
 void Player::Update()
 {
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
+
+
+	//if (floorPrevY_ > worldtransform_.GetWorldPosition().y) {
+	//	floorPrevY_ = -4.0f;
+	//}
 
 	// ステートの更新
 	if (actionState_ && !recoil_.IsActive()) {
@@ -66,18 +75,19 @@ void Player::Update()
 	if (isArrowUiDraw_) {
 		parabola_.Update(
 			worldtransform_.GetWorldPosition(),
-			throwDirect_);
+			throwDirect_,this);
 	}
 	else {
 		parabola_.Reset();
 	}
-
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
 	CircleColliderUpdate();
 	// 足元のコライダー
 	footCollider_.Update();
+	// レイ
+	cameraRay_.Update();
 }
 
 void Player::Draw(const BaseCamera& camera)
@@ -120,8 +130,13 @@ void Player::ImGuiDraw()
 	// 足場の描画表示
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
 
+	ImGui::DragFloat("FloorPos:Y", &floorPrevY_);
+	ImGui::DragFloat("RayLength", &rayLength_, -500.0f, 500.0f);
+
+	ImGui::DragFloat2("Screen", &screenPos_.x);
+
 	// ジャンプのコンボ数
-	int count = jumpCombo.GetCount();
+	int count = jumpCombo_.GetCount();
 	ImGui::DragInt("ComboCount", &count);
 
 	ImGui::Text("\n");
@@ -200,8 +215,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (velocity_.y < 0 && (!recoil_.IsActive())) {
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
-				// コンボ加算
-				jumpCombo.Add();
 
 				// 槍じゃんステートへ
 				ChangeState(std::make_unique<SpearAerialState>());
@@ -298,25 +311,31 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			// 上向き
 			// 上向きの場合のみ早期
-			if (moveDirect.y > 0) {
+			if (moveDirect.y > 0 && worldtransform_.transform_.translate.y < targetPos.y) {
 				// 修正y座標
 				float correctY = targetPos.y - targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
+				if (velocity_.y > 0) {
+					velocity_.y = 0;
+
+				}
 			}
 			// 下向き
-			else if (moveDirect.y < 0) {
+			else if (moveDirect.y < 0 && worldtransform_.transform_.translate.y > targetPos.y) {
 				// 修正y座標
 				float correctY = targetPos.y + targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
+				// ジャンプ中・槍ジャンプ中なら着地状態へ
+				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+					ChangeState(std::make_unique<GroundState>());
+					//floorPrevY_ = worldtransform_.GetWorldPosition().y;
+
+				}
 			}
 
 			// 更新
 			worldtransform_.UpdateMatrix();
 
-			// ジャンプ中・槍ジャンプ中なら着地状態へ
-			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-				ChangeState(std::make_unique<GroundState>());
-			}
 		}
 
 		// 反動のキャンセル
@@ -326,25 +345,78 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 反動中かつ壁ジャンの受付をしていない場合
 		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
 			// 方向
-			weapon_->throwDirect_ = throwDirect_;
+			//weapon_->throwDirect_ = throwDirect_;
 
+			// 真横投げ
+			if (velocity_.x > 0) {
+				weapon_->throwDirect_ = { 1.0f,0,0 };
+			}
+			else {
+				weapon_->throwDirect_ = { -1.0f,0,0 };
+			}
+			weapon_->worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 			// 受付フラグ
 			recoil_.Accept();
 			recoil_.CancelRecoil();
-			// ここ定数に変更
-			velocity_.x *= -0.25f;
-
-			//velocity_.x *= -1.0f;
-			//recoil_.CreateRecoil(Vector3::Normalize(velocity_));
 
 			// 武器のステートを変更
+			// 先にステート変更しないと速度の初期化が行われるため
 			weapon_->ChangeRequest(Weapon::StateName::kThrown);
 			// プレイヤーのステートを変更
 			ChangeState(std::make_unique<SpearAerialState>());
+
+			// 壁じゃんの時の値
+			Vector2 power = { 10.0f,40.0f };
+			if (velocity_.x > 0) {
+				//recoil_.CreateRecoil(Vector3::Normalize({ -1,1,0 }));
+				velocity_.x = power.x * -1.0f;
+			}
+			else {
+				//recoil_.CreateRecoil(Vector3::Normalize({ 1,1,0 }));
+				velocity_.x = power.x;
+			}
+
+			velocity_.y = power.y;
+
 		}
 
 	}
+	// 雑魚敵との当たり判定
+	else if (std::holds_alternative<Enemy*>(target)) {
+		// 無敵中なら早期
+		if (invisibleTimer_.IsActive()) {
+			return;
+		}
 
+		// 持ってないかどうか
+		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+			// 持ってるから何か起きる
+
+		}
+		else {
+			// 持ってないから死ぬ
+			isDead_ = true;
+		}
+
+	}
+	// ボス
+	else if (std::holds_alternative<PrevSmallBoss*>(target)) {
+		// 無敵中なら早期
+		if (invisibleTimer_.IsActive()) {
+			return;
+		}
+
+		// 持ってないかどうか
+		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+			// 持ってるから何か起きる
+
+		}
+		else {
+			// 持ってないから死ぬ
+
+		}
+
+	}
 }
 
 void Player::ChangeState(std::unique_ptr<IActionState> newState)

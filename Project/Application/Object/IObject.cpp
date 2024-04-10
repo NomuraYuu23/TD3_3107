@@ -22,6 +22,8 @@ void IObject::Initialize(Model* model)
 	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
 	scale2D_ = { worldtransform_.transform_.scale.x * 2.0f, worldtransform_.transform_.scale.y * 2.0f };
 
+	// 死亡フラグの初期化
+	isDead_ = false;
 }
 
 void IObject::Update()

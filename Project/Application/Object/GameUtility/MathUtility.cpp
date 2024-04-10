@@ -42,6 +42,11 @@ float MathUtility::CalcAngle(const Vector2& direction)
     return radians * (180.0f / (float)std::numbers::pi);
 }
 
+float MathUtility::Ratio(float min, float max, float rate)
+{
+    return min + (max - min) * rate;
+}
+
 Vector2 MathUtility::WorldToScreen(const Vector3& position, BaseCamera* camera)
 {
     // ビューポート行列
@@ -53,4 +58,26 @@ Vector2 MathUtility::WorldToScreen(const Vector3& position, BaseCamera* camera)
     Vector3 positionReticle = Matrix4x4::Transform(position, matViewProjectionViewport);
    
     return Vector2(positionReticle.x, positionReticle.y);
+}
+
+bool MathUtility::CheckOutScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera)
+{
+    // スクリーン座標
+    Vector2 screenPosition = MathUtility::WorldToScreen(worldPosition, &const_cast<BaseCamera&>(camera));
+    Vector2 deadZone = { (float)WinApp::kWindowWidth + std::fabsf(offset.x), (float)WinApp::kWindowHeight + std::fabsf(offset.y) };
+    if ((screenPosition.x > deadZone.x || screenPosition.x < -std::fabsf(offset.x)) || (screenPosition.y > deadZone.y || screenPosition.y < -std::fabsf(offset.y))) {
+        return true;
+    }
+    return false;
+}
+
+bool MathUtility::CheckOutScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera)
+{
+    // スクリーン座標
+    Vector2 screenPosition = MathUtility::WorldToScreen(worldPosition, &const_cast<BaseCamera&>(camera));
+    Vector2 deadZone = { (float)WinApp::kWindowWidth + std::fabsf(offset), (float)WinApp::kWindowHeight + std::fabsf(offset) };
+    if ((screenPosition.x > deadZone.x || screenPosition.x < -std::fabsf(offset)) || (screenPosition.y > deadZone.y || screenPosition.y < -std::fabsf(offset))) {
+        return true;
+    }
+    return false;
 }

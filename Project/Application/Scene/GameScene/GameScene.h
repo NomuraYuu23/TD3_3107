@@ -12,10 +12,11 @@
 #include "../../ShadowManager/ShadowManager.h"
 
 //#include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
-//#include "../../Object/Player/Player.h"	// プレイヤー
-#include "../../Object/GameObjectData.h"
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
+#include "../../Object/GameObjectData.h"
 #include "../../Object/GameCamera/GameBasicCamera.h"
+
+#include "../../Object/Enemy/EnemyManager.h"
 
 #include "../../../Engine/Light/DirectionalLight/DirectionalLight.h" // 平行光源
 #include "../../../Engine/Light/PointLight/PointLightManager.h" // 点光源
@@ -137,24 +138,22 @@ private:
 	// Collision2DDebugDraw
 	std::unique_ptr<Collision2DDebugDraw> collision2DDebugDraw_;
 	std::array<uint32_t, Collision2DDebugDraw::kTexutureNameOfCount> collision2DDebugDrawTextures_;
-
-	std::unique_ptr<Box> box_;
-	Vector2 boxCenter_;
-	std::unique_ptr<Box> box1_;
-	Vector2 box1Center_;
-	std::unique_ptr<Circle> circle_;
-	Vector2 circleCenter_;
-	std::unique_ptr<Circle> circle1_;
-	Vector2 circle1Center_;
 	
+	// プレイヤー
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Model> playerModel_;
-
 	std::unique_ptr<Model> weaponModel_;
 
+	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;
 	std::unique_ptr<Model> terrainModel_;
 
+	// 敵
+	std::unique_ptr<EnemyManager> enemyManager_;
+	std::unique_ptr<Model> enemyModel_;
+	std::unique_ptr<IBoss> bossEnemy_;
+
+	// カメラ
 	std::unique_ptr<GameBasicCamera> gameCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
 

@@ -22,7 +22,30 @@ public:
 
 	static float CalcAngle(const Vector2& direction);
 
+	/// <summary>
+	/// 割合計算
+	/// </summary>
+	/// <param name="min"></param>
+	/// <param name="max"></param>
+	/// <param name="rate"></param>
+	/// <returns></returns>
+	static float Ratio(float min, float max,float rate);
+
+	/// <summary>
+	/// ワールド座標からスクリーン座標へ
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="camera"></param>
+	/// <returns></returns>
 	static Vector2 WorldToScreen(const Vector3& position, BaseCamera* camera);
+	/// <summary>
+	/// 画面内かチェックする関数
+	/// </summary>
+	/// <param name="worldPosition"></param>
+	/// <param name="camera"></param>
+	/// <returns></returns>
+	static bool CheckOutScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera);
+	static bool CheckOutScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera);
 
 };
 

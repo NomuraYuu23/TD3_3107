@@ -1,6 +1,7 @@
 #include "Collision2DManager.h"
 #include "Collision2D.h"
 #include "../../Application/Object/ObjectList.h"
+#include "../../Application/Collider2D/CollisionConfig2D.h"
 
 void Collision2DManager::Initialize()
 {
@@ -57,15 +58,39 @@ void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderS
 		if (a->GetCollisionAttribute() == b->GetCollisionAttribute()) {
 			return;
 		}
+		//if (a->GetCollisionAttribute() == kCollisionAttributeRay || b->GetCollisionAttribute() == kCollisionAttributeRay) {
+		//	return;
+		//}
+		//if (b->GetCollisionAttribute() == kCollisionAttributeRay) {
+		//	return;
+		//}
 
 		if (Collision2D::IsCollision(*a, *b)) {
-			// 衝突処理
-			std::visit([=](const auto& x, const auto& y) {
+			if (a->GetCollisionAttribute() == kCollisionAttributeRay) {
+				// 衝突処理
+				std::visit([=](const auto& x, const auto& y) {
 
-				x->OnCollision(y);
-				y->OnCollision(x);
+					x->OnCollision(y);
 
-				}, a->GetParentObject(), b->GetParentObject());
+					}, a->GetParentObject(), b->GetParentObject());
+			}
+			else if (b->GetCollisionAttribute() == kCollisionAttributeRay) {
+				// 衝突処理
+				std::visit([=](const auto& x, const auto& y) {
+
+					y->OnCollision(x);
+
+					}, a->GetParentObject(), b->GetParentObject());
+			}
+			else {
+				// 衝突処理
+				std::visit([=](const auto& x, const auto& y) {
+
+					x->OnCollision(y);
+					y->OnCollision(x);
+
+					}, a->GetParentObject(), b->GetParentObject());
+			}
 		}
 		}, colliderA, colliderB);
 

@@ -47,14 +47,22 @@ public: // アクセッサ
 
 	virtual Vector2 GetColliderPosition() = 0;
 	virtual Vector2 GetColliderSize() = 0;
+
+	// 死亡フラグ取得
+	bool IsDead() { return isDead_; }
+
 protected:
+	// ボックスコライダー更新
 	void BoxColliderUpdate() {
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
-
+	// サークルコライダー更新
 	void CircleColliderUpdate() {
 		circleCollider_.Update(position2D_, circleCollider_.radius_);
 	}
+
+	// 死亡フラグ
+	bool isDead_ = false;
 
 public:
 	// モデル
@@ -76,6 +84,7 @@ public:
 	float shininess_;
 	// 速さベクトル
 	Vector3 velocity_ = {};
+
 
 };
 

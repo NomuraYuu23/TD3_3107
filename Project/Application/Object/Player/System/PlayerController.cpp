@@ -72,20 +72,20 @@ void PlayerController::ControllerProcess()
 				player_->weapon_->throwDirect_ = player_->throwDirect_;
 				player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
 			}
-			// 待機に入る
+			// 刺さってる→戻ってくる
 			else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
+				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
-			// 戻ってくる
+			// 待機→戻ってくる
 			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 
 		}
 		// 戻ってくる入力
-		if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-		}
+		//if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+		//	player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+		//}
 
 		if (player_->IsRecoil()) {
 			player_->isArrowUiDraw_ = true;
@@ -117,7 +117,9 @@ void PlayerController::ControllerProcess()
 
 	}
 	// 座標更新
-	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
+		player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	}
 
 }
 
@@ -165,7 +167,7 @@ void PlayerController::GroundMoveProcess()
 
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない
-		if (input_->TriggerJoystick(kJoystickButtonA)) {
+		if (input_->TriggerJoystick(kJoystickButtonLB)) {
 			// 切り替え
 			player_->ChangeState(std::make_unique<AerialState>());
 			return;

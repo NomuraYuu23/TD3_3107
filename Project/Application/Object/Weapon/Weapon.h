@@ -115,8 +115,6 @@ public: // 外部で行う設定関数
 	Vector2 returnDirect_ = {};
 	// 刺さった時の逆ベクトル
 	Vector2 invDirect_ = {};
-	// 刺さらない時間管理
-	TimerLib safeLaunchTimer_;
 private:
 	/// <summary>
 	/// ステート変更
@@ -146,5 +144,6 @@ private:
 	// 現在のステート
 	WeaponState nowState_;
 
+	float dotAngle_ = 0;
 };
 

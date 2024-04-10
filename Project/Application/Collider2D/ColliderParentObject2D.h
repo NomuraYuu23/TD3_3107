@@ -2,12 +2,20 @@
 #include <variant>
 
 class Sample;
-class Player;
-class Weapon;
-class Enemy;
 class SampleObject;
-class IObject;
-class Terrain;
-class PlayerFootCollider;
 
-using ColliderParentObject2D = std::variant<Player*, IObject*, Weapon*, Terrain*, PlayerFootCollider*>;
+// プレイヤー
+class Player;
+class PlayerFootCollider;
+class CameraRay;
+class Weapon;
+
+// 地形
+class Terrain;
+
+// 敵
+class Enemy;
+// 仮の名前
+class PrevSmallBoss;
+
+using ColliderParentObject2D = std::variant<Terrain*, Player*, PlayerFootCollider*, CameraRay*, Weapon*, Enemy*, PrevSmallBoss*>;

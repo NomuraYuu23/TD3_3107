@@ -18,6 +18,7 @@ void AerialState::Initialize()
 
 	player_->SetNowState(this);
 	player_->isGround_ = true;
+
 }
 
 void AerialState::Update()
@@ -44,13 +45,12 @@ void AerialState::Update()
 	//	}
 	//}
 
-	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.01f);
+	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.005f);
 	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 
 	// 移動処理
-	//player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	//player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	player_->worldtransform_.transform_.translate += player_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x * 2.0f) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 }

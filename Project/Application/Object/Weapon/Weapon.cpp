@@ -22,13 +22,14 @@ void Weapon::Initialize(Model* model)
 
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
-	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
+	boxCollider_.SetCollisionAttribute(kCollisionAttributeWeapon);
 	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
 
 	// ステート変更
 	ChangeState(std::make_unique<HoldState>());
 	// 戻るレート
 	returnRate_ = 1.3f;
+	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
 }
 
 void Weapon::Update()
@@ -57,7 +58,14 @@ void Weapon::Update()
 
 void Weapon::Draw(const BaseCamera& camera)
 {
-
+	if (std::holds_alternative<ThrownState*>(nowState_))
+	{
+		// 画面外に出たら戻るステートに変更
+		float deadLength = 750.0f;
+		if (MathUtility::CheckOutScreen(worldtransform_.GetWorldPosition(), deadLength, camera)) {
+			ChangeRequest(StateName::kReturn);
+		}
+	}
 	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera));
 
 }
@@ -78,6 +86,8 @@ void Weapon::ImGuiDraw()
 	{
 		ChangeRequest(StateName::kHold);
 	}
+
+	ImGui::DragFloat("dotAngle", &dotAngle_, 0.01f, -1.0f, 1.0f);
 
 	Vector3 direct = worldtransform_.direction_;
 	float angle = MathUtility::CalcAngle(position2D_, { direct.x,direct.y });
@@ -144,7 +154,11 @@ void Weapon::ImGuiDraw()
 
 void Weapon::OnCollision(ColliderParentObject2D target)
 {
-	if (std::holds_alternative<Terrain*>(target)) {
+	//if (std::holds_alternative<Terrain*>(target)) {
+	//	isCollisionCheck_ = true;
+	//	target;
+	//}
+	if (std::holds_alternative<Enemy*>(target)) {
 		isCollisionCheck_ = true;
 		target;
 	}
@@ -156,11 +170,6 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	// 投げられてる状態
 	if (std::holds_alternative<ThrownState*>(nowState_))
 	{
-		//// 初手の無敵時間的なやつ
-		//if (!safeLaunchTimer_.IsEnd()) {
-		//	return;
-		//}
-		
 		// プレイヤーとの
 		if (std::holds_alternative<Player*>(target)) {
 			return;
@@ -174,7 +183,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		Vector2 direct = targetPos - boxCollider_.position_;
 		float dot = Vector2::Dot({ throwDirect_.x,throwDirect_.y }, Vector2::Normalize(direct));
 		// 内積で移動方向との判定
-		if (dot < 0) {
+		if (dot < dotAngle_) {
 			return;
 		}
 

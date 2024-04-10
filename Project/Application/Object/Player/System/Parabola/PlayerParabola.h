@@ -2,6 +2,8 @@
 #include <cstdint>
 #include "../../../../../Engine/2D/DrawLine.h"
 
+class Player;
+
 class PlayerParabola
 {
 
@@ -11,7 +13,7 @@ public:
 
 	void Update(
 		const Vector3& playerPosition,
-		const Vector3& direct);
+		const Vector3& direct, Player* player);
 
 	void Reset();
 

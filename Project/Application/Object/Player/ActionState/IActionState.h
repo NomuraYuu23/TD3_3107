@@ -24,7 +24,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	virtual void Update() = 0;
+	virtual void Update();
 
 public:
 	/// <summary>
