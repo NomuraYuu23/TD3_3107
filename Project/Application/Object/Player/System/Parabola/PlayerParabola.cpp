@@ -58,7 +58,10 @@ void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct
 		// ループを終了するか確認
 		// 地面についたか
 		if (endPositions_[i].y <= -2.5f) {
-			endPositions_[i].y = -2.5f;
+
+			float t = std::fabsf(-2.5f - startPositions_[i].y) / std::fabsf(endPositions_[i].y - startPositions_[i].y);
+
+			endPositions_[i] = (endPositions_[i] - startPositions_[i]) * t + startPositions_[i];
 			break;
 		}
 	}
