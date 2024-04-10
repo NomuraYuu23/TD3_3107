@@ -13,7 +13,7 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-private:
+private: 
 	// 引き寄せのタイマー
 	TimerLib attractTimer_;
 	// 開始座標
