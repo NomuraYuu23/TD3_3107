@@ -33,6 +33,11 @@ struct ComputeParameters {
 	float32_t vertGlitchPase; //垂直
 	float32_t glitchStepValue; // グリッチのステップ値
 
+	int32_t radialBlurSamples; // 放射状ブラーのサンプル回数
+	float32_t2 radialBlurCenter; // 放射状ブラーの中心座標
+	float32_t radialBlurStrength; // 放射状ブラーの広がる強さ
+	float32_t radialBlurMask; // 放射状ブラーが適用されないサイズ
+
 };
 
 // 定数データ
@@ -46,6 +51,19 @@ struct VelocityParameters {
 // 速度データ
 ConstantBuffer<VelocityParameters> gVelocityConstants: register(b1);
 
+// 衝撃波データ
+struct ShockWaveParameters {
+
+	float32_t2 center; // 中心
+	float32_t distortion; // 歪み
+	float32_t radius; // 半径
+	float32_t thickness; // 厚み
+
+};
+
+// 衝撃波データ
+ConstantBuffer<ShockWaveParameters> gShockWaveConstants: register(b2);
+
 // ソース0
 Texture2D<float32_t4> sourceImage0 : register(t0);
 // ソース1
@@ -53,6 +71,7 @@ Texture2D<float32_t4> sourceImage1 : register(t1);
 // 行先
 RWTexture2D<float32_t4> destinationImage0 : register(u0);
 
+// コピー
 void Copy(float32_t2 index) {
 
 	destinationImage0[index] = sourceImage0[index];
@@ -72,6 +91,7 @@ void mainCopy(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// クリア(グリーン)
 void Clear(float32_t2 index) {
 
 	destinationImage0[index] = gComputeConstants.clearColor;
@@ -91,6 +111,7 @@ void mainClear(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// 明度の高いところを白で書き込む、それ以外は黒を書き込む
 void BinaryThreshold(float32_t2 index) {
 
 	float32_t3 input = sourceImage0[index].rgb;
@@ -118,12 +139,7 @@ void mainBinaryThreshold(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
-float32_t Gauss(float32_t i, float32_t sigma) {
-
-	return 1.0f / (2.0f * PI * sigma * sigma) * exp(-(i * i) / (2.0f * sigma * sigma));
-
-}
-
+// ガウシアンブラー
 void GaussianBlur(float32_t2 index, float32_t2 dir) {
 
 	// 出力色
@@ -190,6 +206,7 @@ void mainGaussianBlurVertical(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// ブルーム
 void Bloom(float32_t2 index, float32_t2 dir) {
 
 	// 入力色
@@ -265,6 +282,7 @@ void mainBloomVertical(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// 明度の高いところをその色で書き込む、それ以外は透明を書き込む
 void BrightnessThreshold(float32_t2 index) {
 
 	float32_t4 input = sourceImage0[index];
@@ -292,6 +310,7 @@ void mainBrightnessThreshold(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// ブラー画像との合成
 void BlurAdd(float32_t2 index) {
 
 	float32_t3 input1 = sourceImage0[index].rgb;
@@ -325,6 +344,7 @@ void mainBlurAdd(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// 画像の上に画像を書き込む
 void Overwrite(float32_t2 index) {
 
 	float32_t4 input = sourceImage1[index];
@@ -375,6 +395,7 @@ void mainOverwrite(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// レンダーターゲット画像の書き込まれていない部分を透明に
 void RTTCorrection(float32_t2 index) {
 
 
@@ -404,6 +425,7 @@ void mainRTTCorrection(uint32_t3 dispatchId : SV_DispatchThreadID)
 
 }
 
+// モーションブラー
 void MotionBlur(float32_t2 index) {
 
 	// 入力色
@@ -491,6 +513,7 @@ void mainMotionBlur(uint32_t3 dispatchId : SV_DispatchThreadID) {
 
 }
 
+// ホワイトノイズ
 void WhiteNoise(float32_t2 index) {
 
 	float32_t4 output = sourceImage0[index];
@@ -519,6 +542,7 @@ void mainWhiteNoise(uint32_t3 dispatchId : SV_DispatchThreadID) {
 
 }
 
+// 走査線
 void ScanLine(float32_t2 index) {
 
 	float32_t4 output = sourceImage0[index];
@@ -552,6 +576,7 @@ void mainScanLine(uint32_t3 dispatchId : SV_DispatchThreadID) {
 
 }
 
+// RGBずらし
 void RGBShift(float32_t2 index) {
 
 
@@ -578,6 +603,7 @@ void mainRGBShift(uint32_t3 dispatchId : SV_DispatchThreadID) {
 
 }
 
+// 樽状湾曲
 void BarrelCurved(float32_t2 index) {
 
 	float32_t2 texcoord = float32_t2(
@@ -608,6 +634,7 @@ void mainBarrelCurved(uint32_t3 dispatchId : SV_DispatchThreadID) {
 
 }
 
+// ビネット
 void Vignette(float32_t2 index) {
 
 	float32_t2 texcoord = float32_t2(
@@ -635,6 +662,7 @@ void mainVignette(uint32_t3 dispatchId : SV_DispatchThreadID) {
 
 }
 
+// グリッチ
 void Glitch(float32_t2 index) {
 
 	float32_t2 texcoord = float32_t2(
@@ -678,6 +706,104 @@ void mainGlitch(uint32_t3 dispatchId : SV_DispatchThreadID) {
 		dispatchId.y < gComputeConstants.threadIdTotalY) {
 
 		Glitch(dispatchId.xy);
+
+	}
+
+}
+
+// 放射状ブラー
+void RadialBlur(float32_t2 index) {
+
+	// 出力色
+	float32_t4 output = { 0.0f,0.0f,0.0f,0.0f };
+
+	// uv
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+
+	// 中心を基準にした位置
+	float32_t2 position = texcoord - gComputeConstants.radialBlurCenter;
+
+	// 中心からの距離
+	float32_t distance = length(position);
+	float32_t factor = gComputeConstants.radialBlurStrength / float32_t(gComputeConstants.radialBlurSamples) * distance;
+	
+	// ブラーが適用されない範囲を計算, 0.1の範囲をぼかす
+	factor *= smoothstep(gComputeConstants.radialBlurMask - 0.1f, gComputeConstants.radialBlurMask, distance);
+	
+	// 新しいインデックス
+	float32_t2 newIndex = float32_t2(0.0f, 0.0f);
+	// サンプル分回す
+	for (int32_t i = 0; i < gComputeConstants.radialBlurSamples; ++i) {
+		float32_t uvOffset = 1.0f - factor * float32_t(i);
+		newIndex = position * uvOffset + gComputeConstants.radialBlurCenter;
+		newIndex.x *= gComputeConstants.threadIdTotalX;
+		newIndex.y *= gComputeConstants.threadIdTotalY;
+		output += sourceImage0[newIndex];
+	}
+
+	// 平均を求める
+	output /= float32_t(gComputeConstants.radialBlurSamples);
+	// 出力
+	destinationImage0[index] = output;
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainRadialBlur(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		RadialBlur(dispatchId.xy);
+
+	}
+
+}
+
+// 衝撃波
+void ShockWave(float32_t2 index) {
+
+	// uv
+	float32_t2 texcoord = float32_t2(
+		index.x / gComputeConstants.threadIdTotalX,
+		index.y / gComputeConstants.threadIdTotalY);
+	
+	// 比率
+	float32_t ratio = float32_t(gComputeConstants.threadIdTotalY) / float32_t(gComputeConstants.threadIdTotalX);
+
+	// テクスチャ比率に依存しない真円
+	float32_t2 scaleUV = (texcoord - float32_t2(0.5f, 0.0f)) / float32_t2(ratio, 1.0f) + float32_t2(0.5f, 0.0f);
+
+	// 中心を基準にした位置
+	float32_t2 position = scaleUV - gShockWaveConstants.center;
+
+	// マスク
+	float32_t mask =
+		(1.0f - smoothstep(gShockWaveConstants.radius - 0.1f, gShockWaveConstants.radius, length(position))) *
+		smoothstep(gShockWaveConstants.radius - gShockWaveConstants.thickness - 0.1f, gShockWaveConstants.radius - gShockWaveConstants.thickness, length(position));
+
+	// 歪み
+	float32_t2 distortion = normalize(position) * gShockWaveConstants.distortion * mask;
+	
+	// 新しいインデックス
+	float32_t2 newIndex = texcoord - distortion;
+	newIndex.x *= gComputeConstants.threadIdTotalX;
+	newIndex.y *= gComputeConstants.threadIdTotalY;
+	
+	// 出力
+	destinationImage0[index] = sourceImage0[newIndex];
+
+}
+
+[numthreads(THREAD_X, THREAD_Y, THREAD_Z)]
+void mainShockWave(uint32_t3 dispatchId : SV_DispatchThreadID) {
+
+	if (dispatchId.x < gComputeConstants.threadIdTotalX &&
+		dispatchId.y < gComputeConstants.threadIdTotalY) {
+
+		ShockWave(dispatchId.xy);
 
 	}
 

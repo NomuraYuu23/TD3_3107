@@ -40,6 +40,11 @@ public: // サブクラス
 		float vertGlitchPase; // グリッチの垂直
 		float glitchStepValue; // グリッチのステップ値
 
+		int32_t radialBlurSamples; // 放射状ブラーのサンプル回数
+		Vector2 radialBlurCenter; // 放射状ブラーの中心座標
+		float radialBlurStrength; // 放射状ブラーの広がる強さ
+		float radialBlurMask; // 放射状ブラーが適用されないサイズ
+
 	};
 
 	/// <summary>
@@ -62,6 +67,8 @@ public: // サブクラス
 		kPipliineIndexBarrelCurved, // 樽状湾曲
 		kPipliineIndexVignette, // ビネット
 		kPipliineIndexGlitch, // グリッチ
+		kPipliineIndexRadialBlur, // 放射状ブラー
+		kPipliineIndexShockWave, // 衝撃波
 		kPipelineIndexOfCount // 数を数える用
 	};
 
@@ -85,7 +92,9 @@ private: // 定数
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainRGBShift"}, // RGBずらし
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainBarrelCurved"}, // 樽状湾曲
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainVignette"}, // ビネット
-		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainGlitch"} // グリッチ
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainGlitch"}, // グリッチ
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainRadialBlur"}, // 放射状ブラー
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainShockWave"}, // 衝撃波
 	};
 	
 	// 画像の幅
@@ -112,6 +121,11 @@ public: // 関数
 	/// 初期化
 	/// </summary>
 	void Initialize();
+
+	/// <summary>
+	/// imGui描画
+	/// </summary>
+	void ImGuiDraw();
 
 	/// <summary>
 	/// 編集する画像取得
@@ -277,6 +291,30 @@ public: // 関数
 		uint32_t editTextureIndex,
 		const CD3DX12_GPU_DESCRIPTOR_HANDLE& glitchGPUHandle);
 
+	/// <summary>
+	/// 放射状ブラー
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="radialBlurGPUHandle">画像のGPUハンドル</param>
+	void RadialBlurCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& radialBlurGPUHandle);
+
+	/// <summary>
+	/// 衝撃波
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="radialBlurGPUHandle">画像のGPUハンドル</param>
+	/// <param name="shockWaveBuff">衝撃波バッファ</param>
+	void ShockWaveCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& shockWaveGPUHandle,
+		ID3D12Resource* shockWaveBuff);
+
 private: // 関数
 
 	/// <summary>
@@ -378,6 +416,30 @@ public: // アクセッサ
 	/// </summary>
 	/// <param name="glitchStepValue">グリッチのステップ値</param>
 	void SetGlitchStepValue(float glitchStepValue) { computeParametersMap_->glitchStepValue = glitchStepValue; }
+
+	/// <summary>
+	/// 放射状ブラーのサンプル回数設定
+	/// </summary>
+	/// <param name="radialBlurSamples">放射状ブラーのサンプル回数</param>
+	void SetRadialBlurSamples(int32_t radialBlurSamples) { computeParametersMap_->radialBlurSamples = radialBlurSamples; }
+
+	/// <summary>
+	/// 中心座標設定
+	/// </summary>
+	/// <param name="radialBlurCenter">中心座標</param>
+	void SetRadialBlurCenter(const Vector2& radialBlurCenter) { computeParametersMap_->radialBlurCenter = radialBlurCenter; }
+
+	/// <summary>
+	/// ブラーの広がる強さ設定
+	/// </summary>
+	/// <param name="radialBlurStrength">ブラーの広がる強さ</param>
+	void SetRadialBlurStrength(float radialBlurStrength) { computeParametersMap_->radialBlurStrength = radialBlurStrength; }
+
+	/// <summary>
+	/// 放射状ブラーが適用されないサイズ設定
+	/// </summary>
+	/// <param name="radialBlurMask">放射状ブラーが適用されないサイズ</param>
+	void SetRadialBlurMask(float radialBlurMask) { computeParametersMap_->radialBlurMask = radialBlurMask; }
 
 private: // 変数
 
