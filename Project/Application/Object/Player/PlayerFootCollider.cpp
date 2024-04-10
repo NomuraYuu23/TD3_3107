@@ -36,6 +36,7 @@ void PlayerFootCollider::Update()
 	position2D_ = { worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y};
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0);
 
+	// 接地フラグの初期化
 	player_->isGround_ = false;
 
 }
