@@ -8,7 +8,8 @@ void FollowCamera::Initialize()
 	// 基底クラス初期化
 	BaseCamera::Initialize();
 
-	defaultOffset_ = { 0,0,-85.0f };
+	// 初期値の設定
+	defaultOffset_ = { 0,5.0f,-85.0f };
 	minY = 1.0f;
 	maxY = 30.0f;
 	defaultFovY_ = fovY_;
@@ -20,25 +21,14 @@ void FollowCamera::Update(float elapsedTime)
 	if (targetTransform_) {
 
 		transform_.translate = targetTransform_->transform_.translate + defaultOffset_;
-		// X,Z座標
-		transform_.translate.x = targetTransform_->transform_.translate.x + defaultOffset_.x;
-		transform_.translate.z = targetTransform_->transform_.translate.z + defaultOffset_.z;
 	
-		//Vector2 screenPosition = MathUtility::WorldToScreen(player_->worldtransform_.GetWorldPosition(), this);
-
-		//if (screenPosition.y > 330) {
-		//	transform_.translate.y = 0;
-		//}
-		//else {
-		//	transform_.translate.y = targetTransform_->transform_.translate.y + defaultOffset_.y;
-		//}
-
 	}
 
+	// 拡縮処理
 	if (player_) {
 		float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
 		float newSize = std::clamp(length, minY, maxY);
-		if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
+		if (/*!std::holds_alternative<GroundState*>(player_->GetNowState())*/ !player_->isGround_) {
 			// 割合計算
 			float rate = newSize / maxY;
 			//rate = std::clamp(rate, 0.3f, 1.0f);

@@ -141,6 +141,12 @@ void PlayerController::AerialMoveProcess()
 		// 左右移動
 		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
+		if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+			// 切り替え
+			player_->ChangeState(std::make_unique<AttractState>());
+			return;
+		}
+
 	}
 }
 
@@ -161,7 +167,7 @@ void PlayerController::GroundMoveProcess()
 
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない
-		if (input_->TriggerJoystick(kJoystickButtonLB)) {
+		if ((input_->TriggerJoystick(kJoystickButtonLB) || input_->TriggerJoystick(kJoystickButtonA)) && player_->isGround_) {
 			// 切り替え
 			player_->ChangeState(std::make_unique<AerialState>());
 			return;

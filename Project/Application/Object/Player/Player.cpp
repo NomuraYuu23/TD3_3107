@@ -90,7 +90,7 @@ void Player::Draw(const BaseCamera& camera)
 	// 矢印用の座標
 	Vector3 offset = throwDirect_ * 2.0f;
 	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &const_cast<BaseCamera&>(camera));
-	//screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition(), &camera);
+
 	// プレイヤーの描画
 	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera),material_.get());
 	// 武器の描画
@@ -204,9 +204,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->IsTread()) {			
 			// 移動ベクトルが下向きの時にのみ
 			if (velocity_.y < 0 && (!recoil_.IsActive()) && !isOneStepOn_) {
-				//ChangeState(std::make_unique<ActionWaitState>());
-				//isOneStepOn_ = true;
-				
+				// 引き寄せ中の衝突をリターン
+				if (std::holds_alternative<AttractState*>(GetNowState())) {
+					return;
+				}
+
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
 				// 槍じゃんステートへ
@@ -261,10 +263,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 衝突したブロックへのベクトル
 		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
 
-		//Vector3 directVector = Vector3::Normalize(velocity_);
-
-		/*if (std::fabs(moveDirect.x) > std::fabs(moveDirect.y)) {*/
-		//if (std::fabs(moveDirect.x) != 0 && velocity_.x != 0) {
 		// 方向ベクトルの大きさ比較
 		// Xの方が大きい場合
 		if(std::fabs(p2tDist.x) > std::fabs(p2tDist.y)){
@@ -294,7 +292,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 			worldtransform_.UpdateMatrix();
 
 		}
-		//else if (std::fabs(moveDirect.x) < (std::fabs(moveDirect.y) - threshold_y_)) {
 		// Yの方が大きい場合
 		else if(std::fabs(p2tDist.x) < std::fabs(p2tDist.y)){
 			// 移動文
@@ -308,7 +305,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// 修正y座標
 				float correctY = targetPos.y - targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
-				if (velocity_.y > 0) {
+				if (velocity_.y > 0 && (!isGround_)) {
 					velocity_.y = 0;
 
 				}
