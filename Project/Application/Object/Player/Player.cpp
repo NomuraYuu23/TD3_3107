@@ -328,6 +328,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		}
 
+		if (std::holds_alternative<AttractState*>(nowState_)) {
+			Vector3 newDirect = weapon_->worldtransform_.GetWorldPosition() - worldtransform_.GetWorldPosition();
+			ChangeState(std::make_unique<AerialState>());
+			velocity_ = Vector3::Normalize(newDirect) * -15.0f;
+			return;
+		}
+
 		// 反動のキャンセル
 		if (recoil_.IsActive() && std::holds_alternative<GroundState*>(GetNowState())) {
 			recoil_.CancelRecoil();

@@ -116,6 +116,9 @@ void Weapon::ImGuiDraw()
 	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
 	// オイラー角
 	ImGui::DragFloat3("Rotation", &worldtransform_.transform_.rotate.x);
+
+	ImGui::Checkbox("isDirect", &worldtransform_.usedDirection_);
+
 	// どっちかを判断
 	std::string name = typeid(*state_).name();
 

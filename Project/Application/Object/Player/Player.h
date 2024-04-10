@@ -150,7 +150,7 @@ private: // フラグ
 	bool isDebugDraw_ = false;
 
 
-public: // システム
+private: // システム
 	// 現状のステート
 	PlayerState nowState_;
 	// 反動管理クラス

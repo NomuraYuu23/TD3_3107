@@ -183,10 +183,9 @@ void PlayerController::WaitKeyProcess()
 		return;
 	}
 	// 移動ベクトルが下向きの時にのみ
-	if (input_->TriggerJoystick(kJoystickButtonLB) && (!player_->recoil_.IsActive())) {
+	if (input_->TriggerJoystick(kJoystickButtonLB) && (!player_->IsRecoil())) {
 		// 踏む際の武器設定
 		player_->weapon_->TreadSetting();
-
 		// 槍じゃんステートへ
 		player_->ChangeState(std::make_unique<SpearAerialState>());
 	}

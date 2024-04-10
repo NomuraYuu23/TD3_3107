@@ -23,7 +23,6 @@ void ReturnState::Update()
 	// 終了処理
 	if (isEnd_) {
 		weapon_->ChangeRequest(Weapon::StateName::kHold);
-		//weapon_->ChangeState(std::make_unique<HoldState>());
 		return;
 	}
 
@@ -64,6 +63,7 @@ void ReturnState::EaseUpdate()
 		weapon_->worldtransform_.transform_.translate.y = MathUtility::Lerp(weapon_->worldtransform_.transform_.translate.y, weapon_->GetTargetPosition().y, lerp_t);
 		// 角度
 		weapon_->worldtransform_.direction_ = weapon_->worldtransform_.transform_.translate - weapon_->GetTargetPosition();
+		//weapon_->worldtransform_.transform_.rotate.y += 0.003f;
 	}
 	else {
 		//// 座標

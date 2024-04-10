@@ -32,7 +32,11 @@ void AttractState::Update()
 	// 引き寄せ終了分岐
 	if (attractTimer_.IsEnd()) {
 		float ratio = 15.0f;
+		// 速度計算
 		player_->velocity_.x = jumpDirection_.x * (ratio);
+		// 武器の回転
+		player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
+		// 槍じゃん状態へ
 		player_->ChangeState(std::make_unique<SpearAerialState>());
 	}
 	// 継続
