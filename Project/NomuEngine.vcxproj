@@ -128,6 +128,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\AudioManager\ClearAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\GameAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\TitleAudioManager.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\AttractState.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\WallJumpState.cpp" />
     <ClCompile Include="Application\Object\Player\System\CameraRay\CameraRay.cpp" />
     <ClCompile Include="Application\Object\Player\System\Combo\ComboCounter.cpp" />
@@ -296,6 +297,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider2D\CollisionConfig2D.h" />
     <ClInclude Include="Application\Collider\ColliderParentObject.h" />
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\AttractState.h" />
     <ClInclude Include="Application\Object\Player\ActionState\GroundState.h" />
     <ClInclude Include="Application\Object\Player\ActionState\WallJumpState.h" />
     <ClInclude Include="Application\Object\Player\System\CameraRay\CameraRay.h" />

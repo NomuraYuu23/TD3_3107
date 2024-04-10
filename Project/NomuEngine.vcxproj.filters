@@ -171,6 +171,7 @@
     <ClCompile Include="Application\Object\Player\ActionState\SpearAerialState.cpp" />
     <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
     <ClCompile Include="Application\Object\Player\System\CameraRay\CameraRay.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\AttractState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -371,6 +372,7 @@
     <ClInclude Include="Application\Object\Player\PlayerFootCollider.h" />
     <ClInclude Include="Application\Object\GameObjectData.h" />
     <ClInclude Include="Application\Object\Player\System\CameraRay\CameraRay.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\AttractState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

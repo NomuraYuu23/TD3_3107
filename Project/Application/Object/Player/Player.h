@@ -131,6 +131,8 @@ public:
 	bool isGround_ = false;
 	// 矢印描画フラグ
 	bool isArrowUiDraw_ = false;
+	// 一度踏んだかのフラグ
+	bool isOneStepOn_ = false;
 
 	// 足元コライダー
 	PlayerFootCollider footCollider_;
@@ -148,7 +150,7 @@ private: // フラグ
 	bool isDebugDraw_ = false;
 
 
-private: // システム
+public: // システム
 	// 現状のステート
 	PlayerState nowState_;
 	// 反動管理クラス

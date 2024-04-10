@@ -44,7 +44,12 @@ void FollowCamera::Update(float elapsedTime)
 			//rate = std::clamp(rate, 0.3f, 1.0f);
 			//nowFovY_ = std::clamp(rate, 0.45f, 0.65f);
 			//nowFovY_ = std::clamp(pars, 0.45f, 0.65f);
-			nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
+			if (minY > length) {
+				nowFovY_ = 0.45f;
+			}
+			else {
+				nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
+			}
 
 			SetFovY(nowFovY_);
 			// タイマーセット

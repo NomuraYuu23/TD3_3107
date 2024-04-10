@@ -51,11 +51,6 @@ void Player::Update()
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
 
-
-	//if (floorPrevY_ > worldtransform_.GetWorldPosition().y) {
-	//	floorPrevY_ = -4.0f;
-	//}
-
 	// ステートの更新
 	if (actionState_ && !recoil_.IsActive()) {
 		actionState_->Update();
@@ -183,7 +178,8 @@ void Player::ImGuiDraw()
 		}
 		// 空中
 		if (ImGui::BeginTabItem("Aerial")) {
-
+			// レイ
+			cameraRay_.ImGuiDraw();
 			ImGui::EndTabItem();
 		}
 
@@ -205,17 +201,14 @@ void Player::OnCollision(ColliderParentObject2D target)
 	// 武器との衝突
 	if (std::holds_alternative<Weapon*>(target)) {
 		// 壁に刺さっている状態なら
-		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->IsTread()) {
-			//// 地上か待機状態なら早期
-			//if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
-			//	return;
-			//}
-			
+		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->IsTread()) {			
 			// 移動ベクトルが下向きの時にのみ
-			if (velocity_.y < 0 && (!recoil_.IsActive())) {
+			if (velocity_.y < 0 && (!recoil_.IsActive()) && !isOneStepOn_) {
+				//ChangeState(std::make_unique<ActionWaitState>());
+				//isOneStepOn_ = true;
+				
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
-
 				// 槍じゃんステートへ
 				ChangeState(std::make_unique<SpearAerialState>());
 			}

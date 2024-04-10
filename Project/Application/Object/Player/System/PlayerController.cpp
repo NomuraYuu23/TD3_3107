@@ -51,6 +51,9 @@ void PlayerController::ControllerProcess()
 		// 空中処理
 		AerialMoveProcess();
 
+		// 待機処理
+		WaitKeyProcess();
+
 		//---どの状態でも行える操作---//
 
 		// 投げ
@@ -156,15 +159,6 @@ void PlayerController::GroundMoveProcess()
 		// 左右移動
 		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * groundSpeed_ * (1.0f / IObject::sPlaySpeed);
 
-		//player_->velocity_.x += (float)leftStick.x / SHRT_MAX * moveSpeed_ * kDeltaTime_;
-
-		//if (player_->velocity_.x >= 10.0f) {
-		//	player_->velocity_.x = 10.0f;
-		//}
-		//else if (player_->velocity_.x <= -10.0f) {
-		//	player_->velocity_.x = -10.0f;
-		//}
-
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない
 		if (input_->TriggerJoystick(kJoystickButtonLB)) {
@@ -173,6 +167,25 @@ void PlayerController::GroundMoveProcess()
 			return;
 		}
 	}
+}
+
+void PlayerController::WaitKeyProcess()
+{
+	Vector2 leftStick = input_->GetLeftAnalogstick();
+	bool CheckAction = std::holds_alternative<ActionWaitState*>(player_->GetNowState());
+	if (!CheckAction) {
+		return;
+	}
+	// 移動ベクトルが下向きの時にのみ
+	if (input_->TriggerJoystick(kJoystickButtonLB) && (!player_->recoil_.IsActive())) {
+		// 踏む際の武器設定
+		player_->weapon_->TreadSetting();
+
+		// 槍じゃんステートへ
+		player_->ChangeState(std::make_unique<SpearAerialState>());
+	}
+	return;
+
 }
 
 void PlayerController::KeyBoardProcess()

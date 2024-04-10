@@ -10,6 +10,9 @@ void GroundState::Initialize()
 
 	player_->velocity_ = {};
 	fallPower_ = -(1.0f/1.0f);
+
+	// 槍を踏んだかのフラグ
+	player_->isOneStepOn_ = false;
 }
 
 void GroundState::Update()
