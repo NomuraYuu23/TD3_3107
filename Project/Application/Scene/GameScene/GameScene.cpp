@@ -463,6 +463,7 @@ void GameScene::DebugCameraUpdate()
 		}
 	}
 
+#endif
 	// カメラの処理
 	if (isDebugCameraActive_) {
 		// デバッグカメラの更新
@@ -481,7 +482,6 @@ void GameScene::DebugCameraUpdate()
 		// 
 		camera_.Update();
 	}
-#endif
 
 }
 

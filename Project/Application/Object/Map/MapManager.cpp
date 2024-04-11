@@ -140,8 +140,13 @@ void MapManager::InitializePlacement()
 		RegisterBlock({ blockSize * 4.0f,6.0f + ((float)i * blockSize),0 });
 	}
 	// 上床
-	for (int i = 0; i < 54; ++i) {
+	for (int i = 0; i < 57; ++i) {
 		RegisterBlock({ blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 });
+	}
+
+	// 壁じゃん
+	for (int i = 0; i < 12; ++i) {
+		RegisterBlock({ blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 });
 	}
 
 #pragma endregion
