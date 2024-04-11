@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -133,6 +133,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\System\Combo\ComboCounter.cpp" />
     <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
+    <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\ReturnWaitState.cpp" />
     <ClCompile Include="Application\Scene\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Application\Scene\TitleScene\TitleScene.cpp" />
@@ -303,6 +304,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />
+    <ClInclude Include="Application\Object\Weapon\WeaponState\FreeFallState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnWaitState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\StateList.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\WeaponStateList.h" />

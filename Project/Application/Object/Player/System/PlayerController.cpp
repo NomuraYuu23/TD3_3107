@@ -141,11 +141,11 @@ void PlayerController::AerialMoveProcess()
 		// 左右移動
 		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
-		if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-			// 切り替え
-			player_->ChangeState(std::make_unique<AttractState>());
-			return;
-		}
+		//if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+		//	// 切り替え
+		//	player_->ChangeState(std::make_unique<AttractState>());
+		//	return;
+		//}
 
 	}
 }

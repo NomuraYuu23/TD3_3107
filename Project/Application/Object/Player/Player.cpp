@@ -205,7 +205,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// 移動ベクトルが下向きの時にのみ
 			if (velocity_.y < 0 && (!recoil_.IsActive()) && !isOneStepOn_) {
 				// 引き寄せ中の衝突をリターン
-				if (std::holds_alternative<AttractState*>(GetNowState())) {
+				if (std::holds_alternative<AttractState*>(nowState_)) {
+					weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
+					//float ratio = 15.0f;
+					//// 速度計算
+					//velocity_.x = jumpDirection_.x * (ratio);
+					//ChangeState(std::make_unique<SpearAerialState>());
 					return;
 				}
 
@@ -227,7 +232,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			return;
 		}
-
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
@@ -343,14 +347,25 @@ void Player::OnCollision(ColliderParentObject2D target)
 		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
 			// 方向
 			//weapon_->throwDirect_ = throwDirect_;
+			// X軸
+			if (std::fabs(p2tDist.x) > std::fabs(p2tDist.y)) {
+				if (velocity_.x > 0) {
+					weapon_->throwDirect_ = { 1.0f,0,0 };
+				}
+				else {
+					weapon_->throwDirect_ = { -1.0f,0,0 };
+				}
+			}
+			// Y軸
+			else if (std::fabs(p2tDist.x) < std::fabs(p2tDist.y)) {
+				if (velocity_.y > 0) {
+					weapon_->throwDirect_ = { 0,-1.0f,0 };
+				}
+				else {
+					weapon_->throwDirect_ = { 0,1.0f,0 };
+				}
+			}
 
-			// 真横投げ
-			if (velocity_.x > 0) {
-				weapon_->throwDirect_ = { 1.0f,0,0 };
-			}
-			else {
-				weapon_->throwDirect_ = { -1.0f,0,0 };
-			}
 			weapon_->worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 			// 受付フラグ
 			recoil_.Accept();

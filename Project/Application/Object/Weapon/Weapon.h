@@ -17,6 +17,7 @@ public: // サブクラス
 		kImpaled,	// 刺さっている
 		kReturn,	// 帰ってきてる
 		kWait,		// 壁での待機時間
+		kFreeFall,	// 自由落下
 		//kCount,
 	};
 
