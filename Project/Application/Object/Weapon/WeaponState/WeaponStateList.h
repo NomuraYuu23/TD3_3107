@@ -15,3 +15,5 @@
 #include "ReturnState.h"
 // 返ってくる直前の待機状態
 #include "ReturnWaitState.h"
+// 引き寄せの自由落下
+#include "FreeFallState.h"
