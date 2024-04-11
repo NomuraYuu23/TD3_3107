@@ -131,6 +131,8 @@ public:
 	bool isGround_ = false;
 	// 矢印描画フラグ
 	bool isArrowUiDraw_ = false;
+	// 一度踏んだかのフラグ
+	bool isOneStepOn_ = false;
 
 	// 足元コライダー
 	PlayerFootCollider footCollider_;

@@ -21,6 +21,8 @@ public:
 	/// </summary>
 	/// <param name="target"></param>
 	void OnCollision(ColliderParentObject2D target);
+
+	void ImGuiDraw();
 public:
 	Segment2D GetSegment() { return directRay_; }
 	Vector2 GetColliderPosition() { return { 0,0 }; }

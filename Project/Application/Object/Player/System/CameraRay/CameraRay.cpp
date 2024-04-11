@@ -6,7 +6,7 @@
 void CameraRay::Initialize(Player* player)
 {
 	player_ = player;
-	direct_ = { 0,player_->rayLength_};
+	direct_ = { player_->rayLength_,0};
 	directRay_.Initialize(player_->position2D_, direct_, this);
 	directRay_.SetCollisionAttribute(kCollisionAttributeRay);
 	directRay_.SetCollisionMask(kCollisionAttributeTerrain);
@@ -18,11 +18,9 @@ void CameraRay::Update()
 	// 地面
 	player_->floorPrevY_ = minPositionY_;
 	// レイの更新
-	//direct_ = { /*player_->rayLength_*/0,player_->rayLength_ };
-	direct_ = { 0,player_->rayLength_ };
+	direct_ = { 0, player_->rayLength_ };
 	directRay_.Update(player_->position2D_, direct_);
 
-	//minPositionY_ = 0.1f;
 }
 
 void CameraRay::OnCollision(ColliderParentObject2D target)
@@ -47,4 +45,14 @@ void CameraRay::OnCollision(ColliderParentObject2D target)
 		//	minPositionY_ = targetPos.y;
 		//}
 	}
+}
+
+void CameraRay::ImGuiDraw()
+{
+
+	ImGui::DragFloat2("RayDirectPos", &direct_.x);
+	Vector2 p2d = direct_ - player_->position2D_;
+	p2d.x = 0;
+	ImGui::DragFloat2("RayDirection", &p2d.x);
+
 }

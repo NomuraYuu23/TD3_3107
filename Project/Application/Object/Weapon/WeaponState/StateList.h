@@ -8,6 +8,7 @@ class ThrownState;
 class ImpaledState;
 class ReturnState;
 class ReturnWaitState;
+class FreeFallState;
 
 // ステートの名前
-using WeaponState = std::variant<IWeaponState*, HoldState*, ThrownState*, ImpaledState*, ReturnState*, ReturnWaitState*>;
+using WeaponState = std::variant<IWeaponState*, HoldState*, ThrownState*, ImpaledState*, ReturnState*, ReturnWaitState*, FreeFallState*>;

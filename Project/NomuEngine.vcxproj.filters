@@ -34,7 +34,6 @@
     <ClCompile Include="Application\AudioManager\ClearAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\GameAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\TitleAudioManager.cpp" />
-    <ClCompile Include="Application\Object\Player\ActionState\WallJumpState.cpp" />
     <ClCompile Include="Application\Object\Player\System\Combo\ComboCounter.cpp" />
     <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
@@ -171,6 +170,8 @@
     <ClCompile Include="Application\Object\Player\ActionState\SpearAerialState.cpp" />
     <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
     <ClCompile Include="Application\Object\Player\System\CameraRay\CameraRay.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\AttractState.cpp" />
+    <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -203,7 +204,6 @@
     <ClInclude Include="Application\Collider\ColliderParentObject.h" />
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
     <ClInclude Include="Application\Object\Player\ActionState\GroundState.h" />
-    <ClInclude Include="Application\Object\Player\ActionState\WallJumpState.h" />
     <ClInclude Include="Application\Object\Player\System\Combo\ComboCounter.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
@@ -371,6 +371,8 @@
     <ClInclude Include="Application\Object\Player\PlayerFootCollider.h" />
     <ClInclude Include="Application\Object\GameObjectData.h" />
     <ClInclude Include="Application\Object\Player\System\CameraRay\CameraRay.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\AttractState.h" />
+    <ClInclude Include="Application\Object\Weapon\WeaponState\FreeFallState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

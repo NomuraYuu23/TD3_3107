@@ -36,6 +36,10 @@ public:
 	void GroundMoveProcess();
 
 	/// <summary>
+	/// 槍に乗った待機状態の操作
+	/// </summary>
+	void WaitKeyProcess();
+	/// <summary>
 	/// キーボード操作処理
 	/// </summary>
 	void KeyBoardProcess();

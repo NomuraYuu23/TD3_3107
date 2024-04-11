@@ -3,37 +3,30 @@
 
 void GroundState::Initialize()
 {
-	moveSpeed_ = 6.0f;
+	// ステートの設定
 	player_->SetNowState(this);
 
-	SetIsFall(true);
+	//SetIsFall(true);
 
 	player_->velocity_ = {};
+
+	moveSpeed_ = 6.0f;
 	fallPower_ = -(1.0f/1.0f);
+
+	// 槍を踏んだかのフラグ
+	player_->isOneStepOn_ = false;
 }
 
 void GroundState::Update()
 {
-	// 仮の重力
-	// 落下中か
-	//if (isFall_) {
-	//	player_->worldtransform_.transform_.translate.y += (-9.0f) * kDeltaTime_;
-	//}
-	//if (player_->worldtransform_.transform_.translate.y <= 0) {
-	//	player_->worldtransform_.transform_.translate.y = 0;
-	//	player_->velocity_.y = 0;
-	//}
-	//else {
-
-	//}
-
+	// 接地していない場合
 	if (!player_->isGround_) {
 		player_->velocity_.y += fallPower_ + (kGravity) * kDeltaTime_;
 		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	}
 
+	// 速度制限
 	if (player_->velocity_.y <= -40.0f) {
 		player_->velocity_.y = -40.0f;
 	}
-
 }

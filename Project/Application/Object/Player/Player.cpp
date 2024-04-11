@@ -51,11 +51,6 @@ void Player::Update()
 	// 前フレームの座標
 	prevPosition_ = worldtransform_.GetWorldPosition();
 
-
-	//if (floorPrevY_ > worldtransform_.GetWorldPosition().y) {
-	//	floorPrevY_ = -4.0f;
-	//}
-
 	// ステートの更新
 	if (actionState_ && !recoil_.IsActive()) {
 		actionState_->Update();
@@ -95,7 +90,7 @@ void Player::Draw(const BaseCamera& camera)
 	// 矢印用の座標
 	Vector3 offset = throwDirect_ * 2.0f;
 	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &const_cast<BaseCamera&>(camera));
-	//screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition(), &camera);
+
 	// プレイヤーの描画
 	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera),material_.get());
 	// 武器の描画
@@ -183,7 +178,8 @@ void Player::ImGuiDraw()
 		}
 		// 空中
 		if (ImGui::BeginTabItem("Aerial")) {
-
+			// レイ
+			cameraRay_.ImGuiDraw();
 			ImGui::EndTabItem();
 		}
 
@@ -205,17 +201,21 @@ void Player::OnCollision(ColliderParentObject2D target)
 	// 武器との衝突
 	if (std::holds_alternative<Weapon*>(target)) {
 		// 壁に刺さっている状態なら
-		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->IsTread()) {
-			//// 地上か待機状態なら早期
-			//if (std::holds_alternative<GroundState*>(nowState_) || std::holds_alternative<ActionWaitState*>(nowState_)) {
-			//	return;
-			//}
-			
+		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->IsTread()) {			
 			// 移動ベクトルが下向きの時にのみ
-			if (velocity_.y < 0 && (!recoil_.IsActive())) {
+			if (velocity_.y < 0 && (!recoil_.IsActive()) && !isOneStepOn_) {
+				// 引き寄せ中の衝突をリターン
+				if (std::holds_alternative<AttractState*>(nowState_)) {
+					weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
+					//float ratio = 15.0f;
+					//// 速度計算
+					//velocity_.x = jumpDirection_.x * (ratio);
+					//ChangeState(std::make_unique<SpearAerialState>());
+					return;
+				}
+
 				// 踏む際の武器設定
 				weapon_->TreadSetting();
-
 				// 槍じゃんステートへ
 				ChangeState(std::make_unique<SpearAerialState>());
 			}
@@ -232,7 +232,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			return;
 		}
-
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
@@ -268,10 +267,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 衝突したブロックへのベクトル
 		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
 
-		//Vector3 directVector = Vector3::Normalize(velocity_);
-
-		/*if (std::fabs(moveDirect.x) > std::fabs(moveDirect.y)) {*/
-		//if (std::fabs(moveDirect.x) != 0 && velocity_.x != 0) {
 		// 方向ベクトルの大きさ比較
 		// Xの方が大きい場合
 		if(std::fabs(p2tDist.x) > std::fabs(p2tDist.y)){
@@ -301,7 +296,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 			worldtransform_.UpdateMatrix();
 
 		}
-		//else if (std::fabs(moveDirect.x) < (std::fabs(moveDirect.y) - threshold_y_)) {
 		// Yの方が大きい場合
 		else if(std::fabs(p2tDist.x) < std::fabs(p2tDist.y)){
 			// 移動文
@@ -315,7 +309,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// 修正y座標
 				float correctY = targetPos.y - targetRad.y;
 				worldtransform_.transform_.translate.y = correctY;
-				if (velocity_.y > 0) {
+				if (velocity_.y > 0 && (!isGround_)) {
 					velocity_.y = 0;
 
 				}
@@ -338,6 +332,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		}
 
+		if (std::holds_alternative<AttractState*>(nowState_)) {
+			Vector3 newDirect = weapon_->worldtransform_.GetWorldPosition() - worldtransform_.GetWorldPosition();
+			ChangeState(std::make_unique<AerialState>());
+			velocity_ = Vector3::Normalize(newDirect) * -15.0f;
+			return;
+		}
+
 		// 反動のキャンセル
 		if (recoil_.IsActive() && std::holds_alternative<GroundState*>(GetNowState())) {
 			recoil_.CancelRecoil();
@@ -346,14 +347,25 @@ void Player::OnCollision(ColliderParentObject2D target)
 		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
 			// 方向
 			//weapon_->throwDirect_ = throwDirect_;
+			// X軸
+			if (std::fabs(p2tDist.x) > std::fabs(p2tDist.y)) {
+				if (velocity_.x > 0) {
+					weapon_->throwDirect_ = { 1.0f,0,0 };
+				}
+				else {
+					weapon_->throwDirect_ = { -1.0f,0,0 };
+				}
+			}
+			// Y軸
+			else if (std::fabs(p2tDist.x) < std::fabs(p2tDist.y)) {
+				if (velocity_.y > 0) {
+					weapon_->throwDirect_ = { 0,-1.0f,0 };
+				}
+				else {
+					weapon_->throwDirect_ = { 0,1.0f,0 };
+				}
+			}
 
-			// 真横投げ
-			if (velocity_.x > 0) {
-				weapon_->throwDirect_ = { 1.0f,0,0 };
-			}
-			else {
-				weapon_->throwDirect_ = { -1.0f,0,0 };
-			}
 			weapon_->worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 			// 受付フラグ
 			recoil_.Accept();

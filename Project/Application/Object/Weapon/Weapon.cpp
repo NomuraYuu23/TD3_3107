@@ -116,6 +116,9 @@ void Weapon::ImGuiDraw()
 	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
 	// オイラー角
 	ImGui::DragFloat3("Rotation", &worldtransform_.transform_.rotate.x);
+
+	ImGui::Checkbox("isDirect", &worldtransform_.usedDirection_);
+
 	// どっちかを判断
 	std::string name = typeid(*state_).name();
 
@@ -203,7 +206,38 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			return;
 		}
 	}
+	else if (std::holds_alternative<FreeFallState*>(nowState_)) {
+		// プレイヤーとの
+		if (!std::holds_alternative<Terrain*>(target)) {
+			return;
+		}
+		else {
+			if (velocity_.y < 0) {
+				if (worldtransform_.direction_.x >= 0.85f && worldtransform_.direction_.x <= 1.0f) {
+					worldtransform_.direction_.x = 0.7f;
+				}
+				else if (worldtransform_.direction_.x <= -0.85f && worldtransform_.direction_.x >= -1.0f) {
+					worldtransform_.direction_.x = -0.7f;
+				}
+				ChangeRequest(Weapon::StateName::kImpaled);
+			}
+			
+			return;
+		}
+	}
+	//else if (std::holds_alternative<ImpaledState*>(nowState_)) {
+	//	if (std::holds_alternative<Player*>(target)) {
+	//		Player** playerPtr = std::get_if<Player*>(&target);
+	//		if (playerPtr != nullptr) {
+	//			Player* player = *playerPtr;
 
+	//			if (std::holds_alternative<AttractState*>(player->GetNowState())) {
+	//				ChangeRequest(Weapon::StateName::kFreeFall);
+	//			}
+	//		}
+
+	//	}
+	//}
 }
 
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
@@ -237,6 +271,9 @@ void Weapon::ChangeRequest(Weapon::StateName request)
 		break;
 	case Weapon::StateName::kWait:
 		ChangeState(std::make_unique<ReturnWaitState>());
+		break;
+	case Weapon::StateName::kFreeFall:
+		ChangeState(std::make_unique<FreeFallState>());
 		break;
 	}
 }
