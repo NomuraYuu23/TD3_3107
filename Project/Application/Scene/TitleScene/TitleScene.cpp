@@ -40,6 +40,9 @@ void TitleScene::Initialize()
 	//アウトライン
 	outline_.Initialize();
 	outline_.Map();
+
+	requestSceneNo = kGame;
+
 }
 
 void TitleScene::Update()
