@@ -172,6 +172,8 @@
     <ClCompile Include="Application\Object\Player\System\CameraRay\CameraRay.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AttractState.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
+    <ClCompile Include="Engine\3D\FogManager.cpp" />
+    <ClCompile Include="Engine\PostEffect\ShockWaveManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -373,6 +375,10 @@
     <ClInclude Include="Application\Object\Player\System\CameraRay\CameraRay.h" />
     <ClInclude Include="Application\Object\Player\ActionState\AttractState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\FreeFallState.h" />
+    <ClInclude Include="Engine\3D\FogManager.h" />
+    <ClInclude Include="Engine\3D\FogData.h" />
+    <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
+    <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
