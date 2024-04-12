@@ -49,11 +49,11 @@ void MapManager::ImGuiDraw()
 
 void MapManager::CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera)
 {
-	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
 		float range = 100.0f;
 		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
-			collisionManager->ListRegister(&static_cast<Terrain*>((*it))->boxCollider_);
+			collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
 		}
 
 	}
@@ -62,7 +62,7 @@ void MapManager::CollisionRegister(Collision2DManager* collisionManager, const B
 void MapManager::RegisterBlock()
 {
 	//IObject* newBlock =
-	OneOfManyObjects* obj = new Terrain();
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
 	obj->Initialize();
 	// 追加
 	objects_.push_back(std::move(obj));
@@ -70,7 +70,8 @@ void MapManager::RegisterBlock()
 
 void MapManager::RegisterBlock(const Vector3& position)
 {
-	OneOfManyObjects* obj = new Terrain();
+
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
 	obj->Initialize();
 	obj->transform_.translate = position;
 	// 追加
@@ -80,11 +81,12 @@ void MapManager::RegisterBlock(const Vector3& position)
 
 void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 {
-	OneOfManyObjects* obj = new Terrain();
+
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
 	obj->Initialize();
 	obj->transform_.translate = position;
 	obj->transform_.scale = { scale.x,scale.y,1.0f };
-	static_cast<Terrain*>(obj)->scale2D_ = scale;
+	static_cast<Terrain*>(obj.get())->scale2D_ = scale;
 	// 追加
 	objects_.push_back(std::move(obj));
 }

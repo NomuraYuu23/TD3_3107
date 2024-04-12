@@ -13,9 +13,9 @@ void EnemyManager::Initialize(Model* model)
 void EnemyManager::Update()
 {
 	// フラグによる死亡処理
-	objects_.remove_if([this](OneOfManyObjects* enemy) {
+	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
 		if (enemy->IsDead()) {
-			delete enemy;
+			enemy.reset();
 			return true;
 		}
 		return false;
@@ -48,9 +48,10 @@ void EnemyManager::ImGuiDraw()
 	ImGui::Separator();
 
 	// ブロック達のImGui
-	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
+
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
-		static_cast<Enemy*>((*it))->ImGuiDraw();
+		static_cast<Enemy*>((it->get()))->ImGuiDraw();
 	}
 
 	ImGui::End();
@@ -58,11 +59,12 @@ void EnemyManager::ImGuiDraw()
 
 void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera)
 {
-	for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
+
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
 		float range = 100.0f;
 		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), range, camera)) {
-			collisionManager->ListRegister(&static_cast<Enemy*>((*it))->boxCollider_);
+			collisionManager->ListRegister(&static_cast<Enemy*>((it->get()))->boxCollider_);
 		}
 
 	}
@@ -70,11 +72,12 @@ void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const
 
 void EnemyManager::RegisterEnemy(const Vector3& position, uint32_t typeNum)
 {
-	OneOfManyObjects* obj = new Enemy();
+
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
 	obj->Initialize();
 	obj->transform_.translate = position;
 	// 初期化
-	static_cast<Enemy*>(obj)->StateInitialize(std::make_unique<EnemyGroundState>(), typeNum);
+	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), typeNum);
 	
 	// 追加
 	objects_.push_back(std::move(obj));
