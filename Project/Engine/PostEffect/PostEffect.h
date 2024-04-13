@@ -53,6 +53,8 @@ public: // サブクラス
 		Vector2 paraSize; // パラの大きさ
 		Vector2 paraPosition; // パラの位置
 
+		float magnificationER; // 拡大縮小倍率
+
 	};
 
 	/// <summary>
@@ -78,6 +80,10 @@ public: // サブクラス
 		kPipliineIndexRadialBlur, // 放射状ブラー
 		kPipliineIndexShockWave, // 衝撃波
 		kPipliineIndexFlarePara, // フレア パラ
+		kPipliineIndexReduction, // 縮小
+		kPipliineIndexExpansion, // 拡大(縮小したものをもとに戻す)
+		kPipliineIndexGrayScale, // グレイスケール
+		kPipliineIndexSepia, // セピア
 		kPipelineIndexOfCount // 数を数える用
 	};
 
@@ -105,6 +111,10 @@ private: // 定数
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainRadialBlur"}, // 放射状ブラー
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainShockWave"}, // 衝撃波
 		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainFlarePara"}, // フレア パラ
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainReduction"}, // 縮小
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainExpansion"}, // 拡大(縮小したものをもとに戻す)
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainGrayScale"}, // グレイスケール
+		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainSepia"}, // セピア
 	};
 	
 	// 画像の幅
@@ -336,6 +346,49 @@ public: // 関数
 		uint32_t editTextureIndex,
 		const CD3DX12_GPU_DESCRIPTOR_HANDLE& flareParaGPUHandle);
 
+	/// <summary>
+	/// 縮小
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="reductionGPUHandle">画像のGPUハンドル</param>
+	void ReductionCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& reductionGPUHandle);
+
+	/// <summary>
+	/// 拡大
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="expansionGPUHandle">画像のGPUハンドル</param>
+	void ExpansionCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& expansionGPUHandle);
+
+	/// <summary>
+	/// グレイスケール
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="grayScaleGPUHandle">画像のGPUハンドル</param>
+	void GrayScaleCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& grayScaleGPUHandle);
+
+	/// <summary>
+	/// セピア
+	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
+	/// <param name="editTextureIndex">編集する画像番号</param>
+	/// <param name="sepiaGPUHandle">画像のGPUハンドル</param>
+	void SepiaCommand(
+		ID3D12GraphicsCommandList* commandList,
+		uint32_t editTextureIndex,
+		const CD3DX12_GPU_DESCRIPTOR_HANDLE& sepiaGPUHandle);
 
 private: // 関数
 
@@ -499,6 +552,11 @@ public: // アクセッサ
 	/// <param name="paraPosition">パラの位置</param>
 	void SetParaPosition(const Vector2& paraPosition) { computeParametersMap_->paraPosition = paraPosition; }
 
+	/// <summary>
+	/// 拡大縮小倍率設定
+	/// </summary>
+	/// <param name="magnificationER">拡大縮小倍率</param>
+	void SetMagnificationER(float magnificationER) { computeParametersMap_->magnificationER = magnificationER; }
 
 private: // 変数
 
@@ -512,7 +570,7 @@ private: // 変数
 	std::unique_ptr<TextureUAV> editTextures_[8];
 
 	// 内部編集画像
-	std::unique_ptr<TextureUAV> internalEditTextures_[8];
+	std::unique_ptr<TextureUAV> internalEditTextures_[3];
 
 	//computeParameters用のリソースを作る。
 	Microsoft::WRL::ComPtr<ID3D12Resource> computeParametersBuff_;
