@@ -21,11 +21,17 @@ public:
 	/// </summary>
 	void Update();
 
+private: // 外付け機器の処理（大枠
 	/// <summary>
 	/// コントローラー操作処理
 	/// </summary>
 	void ControllerProcess();
+	/// <summary>
+	/// キーボード操作処理
+	/// </summary>
+	void KeyBoardProcess();
 
+private: // ステートごとの処理
 	/// <summary>
 	/// 空中での操作
 	/// </summary>
@@ -39,10 +45,13 @@ public:
 	/// 槍に乗った待機状態の操作
 	/// </summary>
 	void WaitKeyProcess();
+
+
+private: // 操作内容関数
 	/// <summary>
-	/// キーボード操作処理
+	/// 投げの処理
 	/// </summary>
-	void KeyBoardProcess();
+	void ThrownProcess();
 
 private:
 	// インプットクラス

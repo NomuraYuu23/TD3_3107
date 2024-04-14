@@ -56,35 +56,9 @@ void PlayerController::ControllerProcess()
 
 		//---どの状態でも行える操作---//
 
-		// 投げ
-		if (input_->TriggerJoystick(kJoystickButtonRB)) {
-			// 投げ入力
-			if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
-				// 右スティックの入力がなければキャンセル
-				if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
-					return;
-				}
-				// 地上で投げた場合は槍の重力フラグをオン
-				if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
-					player_->weapon_->SetIsGravity(true);
-				}
-				else {
-					player_->weapon_->SetIsGravity(false);
-				}
-				// 方向
-				player_->weapon_->throwDirect_ = player_->throwDirect_;
-				player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
-			}
-			// 刺さってる→戻ってくる
-			else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			}
-			// 待機→戻ってくる
-			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			}
+		// 投げ処理
+		ThrownProcess();
 
-		}
 		// 戻ってくる入力
 		//if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
 		//	player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
@@ -191,6 +165,38 @@ void PlayerController::WaitKeyProcess()
 	}
 	return;
 
+}
+
+void PlayerController::ThrownProcess()
+{
+	if (input_->TriggerJoystick(kJoystickButtonRB)) {
+		// 投げ入力
+		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
+			// 右スティックの入力がなければキャンセル
+			if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
+				return;
+			}
+			// 地上で投げた場合は槍の重力フラグをオン
+			if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
+				player_->weapon_->SetIsGravity(true);
+			}
+			else {
+				player_->weapon_->SetIsGravity(false);
+			}
+			// 方向
+			player_->weapon_->throwDirect_ = player_->throwDirect_;
+			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
+		}
+		// 刺さってる→戻ってくる
+		else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+		}
+		// 待機→戻ってくる
+		else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
+			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+		}
+
+	}
 }
 
 void PlayerController::KeyBoardProcess()
