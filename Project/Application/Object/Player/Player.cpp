@@ -202,23 +202,30 @@ void Player::OnCollision(ColliderParentObject2D target)
 	if (std::holds_alternative<Weapon*>(target)) {
 		// 壁に刺さっている状態なら
 		if (std::holds_alternative<ImpaledState*>(weapon_->GetNowState()) && !weapon_->IsTread()) {			
-			// 移動ベクトルが下向きの時にのみ
-			if (velocity_.y < 0 && (!recoil_.IsActive()) && !isOneStepOn_) {
-				// 引き寄せ中の衝突をリターン
-				if (std::holds_alternative<AttractState*>(nowState_)) {
-					weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
-					//float ratio = 15.0f;
-					//// 速度計算
-					//velocity_.x = jumpDirection_.x * (ratio);
-					//ChangeState(std::make_unique<SpearAerialState>());
+			// 引き寄せ中の衝突をリターン
+			if (std::holds_alternative<AttractState*>(nowState_)) {
+				// 引き寄せの
+				if (worldtransform_.GetWorldPosition().x > weapon_->worldtransform_.GetWorldPosition().x) {
+					weapon_->velocity_.x = -1.0f;
+				}
+				else {
+					weapon_->velocity_.x = 1.0f;
+				}
+				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
+				return;
+			}
+			else {
+				// 移動ベクトルが下向きの時にのみ
+				if (velocity_.y < 0 && (!recoil_.IsActive()) && !isOneStepOn_) {
+
+					// 踏む際の武器設定
+					weapon_->TreadSetting();
+					// 槍じゃんステートへ
+					ChangeState(std::make_unique<SpearAerialState>());
 					return;
 				}
-
-				// 踏む際の武器設定
-				weapon_->TreadSetting();
-				// 槍じゃんステートへ
-				ChangeState(std::make_unique<SpearAerialState>());
 			}
+
 			return;
 		}
 		// 帰ってきてる時の衝突
