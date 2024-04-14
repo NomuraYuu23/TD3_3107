@@ -113,7 +113,7 @@ void Weapon::ImGuiDraw()
 	// サイズ
 	ImGui::DragFloat3("scla", &worldtransform_.transform_.scale.x, 0.01f, 0, 100);
 	// 回転処理
-	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
+	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x, 0.01f, -360.0f, 360.0f);
 	// オイラー角
 	ImGui::DragFloat3("Rotation", &worldtransform_.transform_.rotate.x);
 
@@ -212,13 +212,32 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			return;
 		}
 		else {
+			// 落下中
 			if (velocity_.y < 0) {
-				if (worldtransform_.direction_.x >= 0.85f && worldtransform_.direction_.x <= 1.0f) {
-					worldtransform_.direction_.x = 0.7f;
+				// 角度修正
+				if (std::fabsf(worldtransform_.direction_.x) >= 0.85f && std::fabsf(worldtransform_.direction_.x) <= 1.0f) {
+					if (worldtransform_.direction_.x > 0) {
+						worldtransform_.direction_.x = 0.7f;
+					}
+					else {
+						worldtransform_.direction_.x = -0.7f;
+					}
+					// 対象の情報取得
+					Vector2 targetPos = {};
+					Vector2 targetRadius = {};
+
+					std::visit([&](const auto& a) {
+						targetPos = a->GetColliderPosition();
+						targetRadius = a->GetColliderSize();
+						}, target);
+
+					// 座標修正
+					if (targetPos.y + targetRadius.y > worldtransform_.GetWorldPosition().y && (targetPos.x+ targetRadius.x> worldtransform_.GetWorldPosition().x && targetPos.x - targetRadius.x < worldtransform_.GetWorldPosition().x)) {
+						worldtransform_.transform_.translate.y = targetPos.y + targetRadius.y;
+					}
+
 				}
-				else if (worldtransform_.direction_.x <= -0.85f && worldtransform_.direction_.x >= -1.0f) {
-					worldtransform_.direction_.x = -0.7f;
-				}
+				// ステート変更
 				ChangeRequest(Weapon::StateName::kImpaled);
 			}
 			
@@ -230,12 +249,10 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	//		Player** playerPtr = std::get_if<Player*>(&target);
 	//		if (playerPtr != nullptr) {
 	//			Player* player = *playerPtr;
-
 	//			if (std::holds_alternative<AttractState*>(player->GetNowState())) {
 	//				ChangeRequest(Weapon::StateName::kFreeFall);
 	//			}
 	//		}
-
 	//	}
 	//}
 }
