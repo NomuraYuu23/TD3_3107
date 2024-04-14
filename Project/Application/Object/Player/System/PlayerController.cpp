@@ -45,14 +45,14 @@ void PlayerController::ControllerProcess()
 	player_->isArrowUiDraw_ = false;
 
 	if (input_->GetJoystickConnected()) {
-		// 地上処理
-		GroundMoveProcess();
+		// 待機処理
+		WaitKeyProcess();
 
 		// 空中処理
 		AerialMoveProcess();
 
-		// 待機処理
-		WaitKeyProcess();
+		// 地上処理
+		GroundMoveProcess();
 
 		//---どの状態でも行える操作---//
 
@@ -134,7 +134,7 @@ void PlayerController::AerialMoveProcess()
 	}
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
-	bool CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState());
+	bool CheckAction = (std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()));
 
 	// 地上にいる場合
 	if (CheckAction) {
