@@ -7,6 +7,14 @@
 /// </summary>
 class Terrain : public OneOfManyObjects
 {
+private:
+	//種類
+	enum BlockType
+	{
+		kTerrain,
+		kObstacle,
+	};
+
 public:
 	/// <summary>
 	/// 初期化
@@ -51,6 +59,9 @@ public:
 
 	// コライダー
 	Box boxCollider_;
+
+	// 地面か障害物か
+	uint32_t typeNumber_;
 
 };
 

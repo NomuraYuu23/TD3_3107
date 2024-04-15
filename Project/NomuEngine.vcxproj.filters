@@ -373,6 +373,7 @@
     <ClInclude Include="Engine\3D\FogData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
+    <ClInclude Include="Application\Object\Player\System\CameraRay\RayContactRecord.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
