@@ -116,6 +116,10 @@ public: // 外部で行う設定関数
 	Vector2 returnDirect_ = {};
 	// 刺さった時の逆ベクトル
 	Vector2 invDirect_ = {};
+
+	// 引き寄せの最初の衝突しない時間
+	TimerLib attractInvTimer_;
+
 private:
 	/// <summary>
 	/// ステート変更

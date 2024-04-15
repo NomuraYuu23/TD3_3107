@@ -46,6 +46,7 @@ void Weapon::Update()
 
 	// タイマー
 	timer_.Update();
+	attractInvTimer_.Update();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -213,7 +214,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		}
 		else {
 			// 落下中
-			if (velocity_.y < 0) {
+			if (!attractInvTimer_.IsActive()) {
 				// 角度修正
 				if (std::fabsf(worldtransform_.direction_.x) >= 0.85f && std::fabsf(worldtransform_.direction_.x) <= 1.0f) {
 					if (worldtransform_.direction_.x > 0) {

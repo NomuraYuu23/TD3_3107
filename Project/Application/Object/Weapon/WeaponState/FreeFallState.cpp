@@ -14,6 +14,9 @@ void FreeFallState::Initialize()
 	// 速度設定
 	weapon_->velocity_.x = weapon_->velocity_.x * valueX;
 	weapon_->velocity_.y = 40.0f;
+
+	// 最初の衝突を回避する時間
+	weapon_->attractInvTimer_.Start(5.0f);
 }
 
 void FreeFallState::Update()
