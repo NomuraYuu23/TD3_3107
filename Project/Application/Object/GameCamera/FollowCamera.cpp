@@ -28,7 +28,7 @@ void FollowCamera::Update(float elapsedTime)
 	if (player_) {
 		float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
 		float newSize = std::clamp(length, minY, maxY);
-		if (/*!std::holds_alternative<GroundState*>(player_->GetNowState())*/ !player_->isGround_) {
+		//if (/*!std::holds_alternative<GroundState*>(player_->GetNowState())*/ !player_->isGround_) {
 			// 割合計算
 			float rate = newSize / maxY;
 			//rate = std::clamp(rate, 0.3f, 1.0f);
@@ -45,17 +45,17 @@ void FollowCamera::Update(float elapsedTime)
 			// タイマーセット
 			float returnTime = 10.0f;
 			correctTimer_.Start(returnTime);
-		}
-		else {
-			// 視野角の戻す際に滑らかにする処理
-			if (correctTimer_.IsActive()) {
-				float fov = Ease::Easing(Ease::EaseName::Lerp, nowFovY_, defaultFovY_, correctTimer_.GetNowFrame());
-				SetFovY(fov);
-			}
-			// タイマー更新
-			correctTimer_.Update();
+		//}
+		//else {
+		//	// 視野角の戻す際に滑らかにする処理
+		//	if (correctTimer_.IsActive()) {
+		//		float fov = Ease::Easing(Ease::EaseName::Lerp, nowFovY_, defaultFovY_, correctTimer_.GetNowFrame());
+		//		SetFovY(fov);
+		//	}
+		//	// タイマー更新
+		//	correctTimer_.Update();
 
-		}
+		//}
 
 
 	}

@@ -29,12 +29,6 @@ void MapManager::ImGuiDraw()
 	int size = (int)objects_.size();
 	ImGui::InputInt("maxBlockSize", &size);
 
-	ImGui::Separator();
-	// ブロック追加
-	if (ImGui::Button("RegisterBlock")) {
-		RegisterBlock();
-	}
-
 	//ImGui::Separator();
 
 	//// ブロック達のImGui
@@ -52,20 +46,13 @@ void MapManager::CollisionRegister(Collision2DManager* collisionManager, const B
 	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
 		float range = 100.0f;
+
+
 		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
 			collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
 		}
 
 	}
-}
-
-void MapManager::RegisterBlock()
-{
-	//IObject* newBlock =
-	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
-	obj->Initialize();
-	// 追加
-	objects_.push_back(std::move(obj));
 }
 
 void MapManager::RegisterBlock(const Vector3& position)
@@ -91,6 +78,29 @@ void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 	objects_.push_back(std::move(obj));
 }
 
+void MapManager::RegisterTerrainBlock(const Vector3& position)
+{
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
+	obj->Initialize();
+	obj->transform_.translate = position;
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kTerrain;
+	// 追加
+	objects_.push_back(std::move(obj));
+
+}
+
+void MapManager::RegisterObstacleBlock(const Vector3& position)
+{
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
+	obj->Initialize();
+	obj->transform_.translate = position;
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kObstacle;
+	// 追加
+	objects_.push_back(std::move(obj));
+}
+
 void MapManager::InitializePlacement()
 {
 
@@ -102,35 +112,44 @@ void MapManager::InitializePlacement()
 	// 上noY座標 8.0f + (7 * 2.0f)
 	// 端noX座標 65.0f * 2.0f
 
+	uint32_t typeNum = static_cast<uint32_t>(Terrain::BlockType::kTerrain);
+	Vector3 position = {};
+
 #pragma region 周りのブロック
 	// 床・天井
 	for (int i = 0; i < 64; ++i) {
 		// 床
-		RegisterBlock({ (float)i * blockSize,-4.0f,0 });
+		position = Vector3({ (float)i * blockSize,-4.0f,0 });
+		(this->*registerFuncs[typeNum])(position);
 		// 天
-		RegisterBlock({ (float)i * blockSize, 58.0f,0 });
+		position = Vector3({ (float)i * blockSize, 58.0f,0 });
+		(this->*registerFuncs[typeNum])(position);
 	}
 
 	// 端壁
 	for (int i = 0; i < 32; ++i) {
 		// 左
-		RegisterBlock({ 0.0f,-4.0f + ((float)i * blockSize),0 });
+		position = Vector3({ 0.0f,-4.0f + ((float)i * blockSize),0 });
+		(this->*registerFuncs[typeNum])(position);
 		// 右
-		RegisterBlock({ (float)kMaxXNum * blockSize, -4.0f + ((float)i * blockSize),0 });
+		position = Vector3({ (float)kMaxXNum * blockSize, -4.0f + ((float)i * blockSize),0 });
+		(this->*registerFuncs[typeNum])(position);
 	}
 
 
 	// 最初の段差
 	for (int y = 0; y < 2; ++y) {
 		for (int x = 0; x < 44; ++x) {
-			RegisterBlock({ (float)(kMaxXNum - 44) * blockSize +(float)x * blockSize, -2.0f + ((float)y * blockSize),0 });
+			position = Vector3({ (float)(kMaxXNum - 44) * blockSize + (float)x * blockSize, -2.0f + ((float)y * blockSize),0 });
+			(this->*registerFuncs[typeNum])(position);
 		}
 	}
 
 	// 次の段差
 	for (int y = 0; y < 2; ++y) {
 		for (int x = 0; x < 30; ++x) {
-			RegisterBlock({ (float)(kMaxXNum - 30) * blockSize + (float)x * blockSize, 2.0f + ((float)y * blockSize),0 });
+			position = Vector3({ (float)(kMaxXNum - 30) * blockSize + (float)x * blockSize, 2.0f + ((float)y * blockSize),0 });
+			(this->*registerFuncs[typeNum])(position);
 		}
 	}
 
@@ -139,27 +158,29 @@ void MapManager::InitializePlacement()
 #pragma region リスの周辺
 	// 壁じゃん
 	for (int i = 0; i < 18; ++i) {
-		RegisterBlock({ blockSize * 4.0f,6.0f + ((float)i * blockSize),0 });
+		position = { blockSize * 4.0f,6.0f + ((float)i * blockSize),0 };
+		(this->*registerFuncs[typeNum])(position);
 	}
 	// 上床
 	for (int i = 0; i < 57; ++i) {
-		RegisterBlock({ blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 });
+		position = { blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 };
+		(this->*registerFuncs[typeNum])(position);
 	}
 
 	// 壁じゃん
 	for (int i = 0; i < 12; ++i) {
-		RegisterBlock({ blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 });
+		position = { blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 };
+		(this->*registerFuncs[typeNum])(position);
 	}
 
 #pragma endregion
 
 #pragma region 空中の障害物
-
+	typeNum = static_cast<uint32_t>(Terrain::BlockType::kObstacle);
 	for (int i = 0; i < 4; ++i) {
-		RegisterBlock({ (40 * blockSize) + (float)i * blockSize ,9 * blockSize,0 });
-		RegisterBlock({ (50 * blockSize) + (float)i * blockSize ,9 * blockSize,0 });
+		(this->*registerFuncs[typeNum])(Vector3({ (40 * blockSize) + (float)i * blockSize ,9 * blockSize,0 }));
+		(this->*registerFuncs[typeNum])(Vector3({ (50 * blockSize) + (float)i * blockSize ,9 * blockSize,0 }));
 	}
-	
 #pragma endregion
 
 

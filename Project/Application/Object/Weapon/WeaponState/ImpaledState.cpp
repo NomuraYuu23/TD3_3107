@@ -6,6 +6,10 @@ void ImpaledState::Initialize()
 	// 終了までのカウント開始
 	//StartEasing(120);
 	SetNowState(this);
+	// 親子関係を解消し、ワールド座標を適応
+	weapon_->worldtransform_.transform_.translate = weapon_->worldtransform_.GetWorldPosition();
+	weapon_->worldtransform_.parent_ = nullptr;
+	weapon_->worldtransform_.UpdateMatrix();
 }
 
 void ImpaledState::Update()

@@ -7,12 +7,14 @@
 /// </summary>
 class Terrain : public OneOfManyObjects
 {
-private:
+public:
 	//種類
-	enum BlockType
+	enum class BlockType : uint32_t
 	{
-		kTerrain,
-		kObstacle,
+		kNone,	// 当たり判定に入れない
+		kTerrain,	// 地形ブロック（カメラに作用するブロック
+		kObstacle,	// 障害物ブロック（カメラに作用しないブロック
+		kMaxSize,
 	};
 
 public:
@@ -61,7 +63,7 @@ public:
 	Box boxCollider_;
 
 	// 地面か障害物か
-	uint32_t typeNumber_;
+	BlockType typeNumber_ = BlockType::kTerrain;
 
 };
 
