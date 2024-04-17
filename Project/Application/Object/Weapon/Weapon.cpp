@@ -125,6 +125,27 @@ void Weapon::ImGuiDraw()
 
 	ImGui::Text(name.c_str());
 
+	ImGui::Separator();
+	std::string stateName;
+	switch (hitBlockType_)
+	{
+	case Terrain::BlockType::kNone:
+		stateName = "kNone";
+		break;
+	case Terrain::BlockType::kTerrain:
+		stateName = "kTerrain";
+		break;
+	case Terrain::BlockType::kObstacle:
+		stateName = "kObstacle";
+		break;
+	case Terrain::BlockType::kWall:
+		stateName = "kWall";
+		break;
+	case Terrain::BlockType::kMaxSize:
+		stateName = "kMaxSize";
+		break;
+	}
+	ImGui::Text(stateName.c_str());
 
 	if (ImGui::BeginTabBar("State")) {
 		if (ImGui::BeginTabItem("Thrown")) {
@@ -193,6 +214,11 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 
 		// 壁・ブロックとの衝突判定
 		if (std::holds_alternative<Terrain*>(target)) {
+			// ポインタに
+			Terrain** terrainPtr = std::get_if<Terrain*>(&target);
+			// タイプ
+			hitBlockType_ = (*terrainPtr)->typeNumber_;
+
 			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;

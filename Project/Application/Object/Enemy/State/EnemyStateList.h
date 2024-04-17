@@ -4,3 +4,4 @@
 
 #include "EnemyAerialState.h"
 #include "EnemyGroundState.h"
+#include "EnemyWaitState.h"

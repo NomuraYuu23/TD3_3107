@@ -14,6 +14,7 @@ public:
 		kNone,	// 当たり判定に入れない
 		kTerrain,	// 地形ブロック（カメラに作用するブロック
 		kObstacle,	// 障害物ブロック（カメラに作用しないブロック
+		kWall,		// 壁のブロック
 		kMaxSize,
 	};
 

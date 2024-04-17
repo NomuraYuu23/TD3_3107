@@ -101,6 +101,17 @@ void MapManager::RegisterObstacleBlock(const Vector3& position)
 	objects_.push_back(std::move(obj));
 }
 
+void MapManager::RegisterWallBlock(const Vector3& position)
+{
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
+	obj->Initialize();
+	obj->transform_.translate = position;
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kWall;
+	// 追加
+	objects_.push_back(std::move(obj));
+}
+
 void MapManager::InitializePlacement()
 {
 
@@ -127,6 +138,7 @@ void MapManager::InitializePlacement()
 	}
 
 	// 端壁
+	typeNum = static_cast<uint32_t>(Terrain::BlockType::kWall);
 	for (int i = 0; i < 32; ++i) {
 		// 左
 		position = Vector3({ 0.0f,-4.0f + ((float)i * blockSize),0 });
@@ -138,6 +150,7 @@ void MapManager::InitializePlacement()
 
 
 	// 最初の段差
+	typeNum = static_cast<uint32_t>(Terrain::BlockType::kTerrain);
 	for (int y = 0; y < 2; ++y) {
 		for (int x = 0; x < 44; ++x) {
 			position = Vector3({ (float)(kMaxXNum - 44) * blockSize + (float)x * blockSize, -2.0f + ((float)y * blockSize),0 });
@@ -156,17 +169,18 @@ void MapManager::InitializePlacement()
 #pragma endregion
 
 #pragma region リスの周辺
-	// 壁じゃん
-	for (int i = 0; i < 18; ++i) {
-		position = { blockSize * 4.0f,6.0f + ((float)i * blockSize),0 };
-		(this->*registerFuncs[typeNum])(position);
-	}
 	// 上床
 	for (int i = 0; i < 57; ++i) {
 		position = { blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 };
 		(this->*registerFuncs[typeNum])(position);
 	}
 
+	typeNum = static_cast<uint32_t>(Terrain::BlockType::kWall);
+	// 壁じゃん
+	for (int i = 0; i < 18; ++i) {
+		position = { blockSize * 4.0f,6.0f + ((float)i * blockSize),0 };
+		(this->*registerFuncs[typeNum])(position);
+	}
 	// 壁じゃん
 	for (int i = 0; i < 12; ++i) {
 		position = { blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 };

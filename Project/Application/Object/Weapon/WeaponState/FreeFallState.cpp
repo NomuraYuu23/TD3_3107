@@ -27,7 +27,7 @@ void FreeFallState::Update()
 	weapon_->velocity_.y += (kGravity * 8.0f) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// 回転
-	weapon_->worldtransform_.direction_ = rotateVector(weapon_->worldtransform_.direction_, (3.14f / 18.0f));
+	weapon_->worldtransform_.direction_ = rotateVector(weapon_->worldtransform_.direction_, (3.14f / 24.0f));
 
 	// 座標移動
 	weapon_->worldtransform_.transform_.translate += weapon_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);

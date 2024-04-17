@@ -4,6 +4,8 @@
 #include "WeaponState/WeaponStateList.h"
 #include "WeaponState/StateList.h"
 
+#include "../Map/Terrain.h"
+
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 class Weapon : public IObject
@@ -119,6 +121,8 @@ public: // 外部で行う設定関数
 
 	// 引き寄せの最初の衝突しない時間
 	TimerLib attractInvTimer_;
+
+	Terrain::BlockType hitBlockType_ = Terrain::BlockType::kNone;
 
 private:
 	/// <summary>

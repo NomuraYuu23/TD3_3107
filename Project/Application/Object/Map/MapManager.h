@@ -49,6 +49,12 @@ private:
 	void RegisterObstacleBlock(const Vector3& position);
 
 	/// <summary>
+	/// 壁
+	/// </summary>
+	/// <param name="position"></param>
+	void RegisterWallBlock(const Vector3& position);
+
+	/// <summary>
 	/// とりあえずのマップ
 	/// </summary>
 	void InitializePlacement();
@@ -62,7 +68,8 @@ private:
 	void(MapManager::* registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kMaxSize)])(const Vector3&) = {
 		&MapManager::RegisterBlock,
 		&MapManager::RegisterTerrainBlock,
-		&MapManager::RegisterObstacleBlock
+		&MapManager::RegisterObstacleBlock,
+		&MapManager::RegisterWallBlock
 	};
 
 };
