@@ -7,7 +7,7 @@ void EnemyManager::Initialize(Model* model)
 {
 	LargeNumberOfObjects::Initialize(model);
 
-
+	RegisterEnemy({ 40.0f,10.0f,0 }, 0);
 }
 
 void EnemyManager::Update()
@@ -62,10 +62,10 @@ void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const
 
 	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
-		float range = 100.0f;
-		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), range, camera)) {
+		//float range = 100.0f;
+		//if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), range, camera)) {
 			collisionManager->ListRegister(&static_cast<Enemy*>((it->get()))->boxCollider_);
-		}
+		//}
 
 	}
 }

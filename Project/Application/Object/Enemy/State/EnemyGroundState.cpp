@@ -4,6 +4,7 @@
 
 void EnemyGroundState::Initialize()
 {
+	enemy_->SetState(this);
 	// 行動の初期化
 	(this->*actionFuncs_[attackPattern_].initFunc_)();
 }
@@ -33,4 +34,16 @@ void EnemyGroundState::RangedInitialize()
 void EnemyGroundState::RangedUpdate()
 {
 	enemy_->transform_.translate.x -= 5.0f * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+}
+
+void EnemyGroundState::MoveUpdate()
+{
+	if (enemy_->GetIsGround()) {
+
+	}
+	else {
+
+	}
+
+
 }

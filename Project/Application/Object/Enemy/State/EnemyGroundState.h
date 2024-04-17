@@ -21,6 +21,9 @@ private:
 	// 遠距離
 	void RangedInitialize() override;
 	void RangedUpdate() override;
+private:
+
+	void MoveUpdate();
 
 private:
 	// 行動の関数ポインタを持たせた配列

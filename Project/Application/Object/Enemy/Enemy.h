@@ -35,6 +35,8 @@ public:
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
 
+	bool GetIsGround() { return isGround_; }
+
 public:
 	/// <summary>
 	/// 生成時に呼び出す関数（ここで地上・空中の選択、その際に近接・遠隔の選択も
@@ -48,12 +50,27 @@ public:
 	/// <param name="attackPattern"></param>
 	void StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t attackPattern);
 
+	//void ChangeRequest()
+
+	void SetState(IEnemyState* state) {
+		judState_ = state;
+	}
+
+private:
+
+	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern);
+
+	
+
 private:
 	// シリアルナンバー
 	uint32_t serialNum_ = 0;
 
 	static uint32_t sSerialNumber_;
 
+	EnemyState judState_;
+
+	bool isGround_ = false;
 private:
 	// 状態
 	std::unique_ptr<IEnemyState> state_;

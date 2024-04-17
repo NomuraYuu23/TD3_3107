@@ -223,6 +223,11 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;
 		}
+		else if (std::holds_alternative<Enemy*>(target)) {
+			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
+			ChangeRequest(Weapon::StateName::kImpaled);
+			return;
+		}
 	}
 	// 返ってくる状態
 	else if (std::holds_alternative<ReturnState*>(nowState_))

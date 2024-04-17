@@ -23,6 +23,7 @@ void Enemy::Initialize()
 	serialNum_ = sSerialNumber_;
 	sSerialNumber_++;
 
+	isDead_ = false;
 }
 
 void Enemy::Update()
@@ -45,6 +46,7 @@ void Enemy::ImGuiDraw()
 {
 	std::string name = "Enemy" + std::to_string(serialNum_);
 	ImGui::Begin(name.c_str());
+	ImGui::Text("%d", isDead_);
 
 	ImGui::End();
 
@@ -71,15 +73,17 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 	// 武器の場合
 	else if (std::holds_alternative<Weapon*>(target)) {
 
-		// 武器のポインタにキャスト
-		Weapon** weaponPtr = std::get_if<Weapon*>(&target);
-		if (weaponPtr != nullptr) {
-			Weapon* weapon = *weaponPtr;
-			if (std::holds_alternative<ThrownState*>(weapon->GetNowState())) {
-				isDead_ = true;
+		//// 武器のポインタにキャスト
+		Weapon** weapon = std::get_if<Weapon*>(&target);
+		if (std::holds_alternative<ImpaledState*>((*weapon)->GetNowState())) {
+			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
+				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
 			}
 		}
-		
+		else {
+			isDead_ = true;
+		}
+
 	}
 	// それ以外
 	else {
@@ -101,5 +105,19 @@ void Enemy::StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t atta
 	// ステートの初期化
 	newState->Initialize();
 	// ステートの設定
+	state_ = std::move(newState);
+}
+
+void Enemy::ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern)
+{
+	if (pattern == IEnemyState::AttackPattern::kMaxSize) {
+		newState->PreInitialize(this);
+	}
+	else {
+		newState->PreInitialize(this, pattern);
+	}
+
+	newState->Initialize();
+
 	state_ = std::move(newState);
 }
