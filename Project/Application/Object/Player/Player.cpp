@@ -274,6 +274,21 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 衝突したブロックへのベクトル
 		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
 
+
+		// 最小・最大値
+		Vector2 plMin = { worldtransform_.GetWorldPosition().x - scale2D_.x,worldtransform_.GetWorldPosition().y - scale2D_.y };
+		Vector2 plMax = { worldtransform_.GetWorldPosition().x + scale2D_.x,worldtransform_.GetWorldPosition().y + scale2D_.y };
+
+		// 四頂点
+		IObject::FourTop player4Point = IObject::GenerateFourTop(plMin, plMax);
+
+		if (velocity_.x > 0) {
+			
+		}
+		else if (velocity_.x < 0) {
+
+		}
+
 		// 方向ベクトルの大きさ比較
 		// Xの方が大きい場合
 		if(std::fabs(p2tDist.x) > std::fabs(p2tDist.y)){
@@ -333,10 +348,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 				}
 			}
-
 			// 更新
 			worldtransform_.UpdateMatrix();
-
 		}
 
 		if (std::holds_alternative<AttractState*>(nowState_)) {

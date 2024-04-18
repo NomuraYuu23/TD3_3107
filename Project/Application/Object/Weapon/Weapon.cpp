@@ -276,17 +276,21 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			return;
 		}
 	}
-	//else if (std::holds_alternative<ImpaledState*>(nowState_)) {
-	//	if (std::holds_alternative<Player*>(target)) {
-	//		Player** playerPtr = std::get_if<Player*>(&target);
-	//		if (playerPtr != nullptr) {
-	//			Player* player = *playerPtr;
-	//			if (std::holds_alternative<AttractState*>(player->GetNowState())) {
-	//				ChangeRequest(Weapon::StateName::kFreeFall);
-	//			}
-	//		}
-	//	}
-	//}
+	else if (std::holds_alternative<ImpaledState*>(nowState_)) {
+		if (std::holds_alternative<Enemy*>(target)) {
+
+			if (isTread_) {
+				ChangeRequest(Weapon::StateName::kFreeFall);
+			}
+			Player** player = std::get_if<Player*>(&target);			
+			if (player != nullptr) {
+				//Player* player = *playerPtr;
+				if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
+					ChangeRequest(Weapon::StateName::kFreeFall);
+				}
+			}
+		}
+	}
 }
 
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)

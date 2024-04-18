@@ -1,4 +1,5 @@
 #include "MapManager.h"
+#include <fstream>
 
 #include "../IObject.h"
 #include "../ObjectList.h"
@@ -49,7 +50,9 @@ void MapManager::CollisionRegister(Collision2DManager* collisionManager, const B
 
 
 		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
-			collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
+			if (static_cast<Terrain*>(it->get())->typeNumber_ != Terrain::BlockType::kNone) {
+				collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
+			}
 		}
 
 	}
@@ -73,7 +76,10 @@ void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 	obj->Initialize();
 	obj->transform_.translate = position;
 	obj->transform_.scale = { scale.x,scale.y,1.0f };
-	static_cast<Terrain*>(obj.get())->scale2D_ = scale;
+	// サイズの設定
+	static_cast<Terrain*>(obj.get())->scale2D_ = { scale.x * 2.0f, scale.y * 2.0f };
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kTerrain;
 	// 追加
 	objects_.push_back(std::move(obj));
 }
@@ -154,42 +160,64 @@ void MapManager::InitializePlacement()
 	for (int y = 0; y < 2; ++y) {
 		for (int x = 0; x < 44; ++x) {
 			position = Vector3({ (float)(kMaxXNum - 44) * blockSize + (float)x * blockSize, -2.0f + ((float)y * blockSize),0 });
-			(this->*registerFuncs[typeNum])(position);
+			// 当たり判定に追加（左端
+			if (x == 0) {
+				(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+			}
+			// 下の段は登録しない
+			else if (y != 0) {
+				(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+			}
+			// 上の段は登録
+			else {
+				(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kNone)])(position);
+			}
 		}
 	}
 
 	// 次の段差
-	for (int y = 0; y < 2; ++y) {
-		for (int x = 0; x < 30; ++x) {
-			position = Vector3({ (float)(kMaxXNum - 30) * blockSize + (float)x * blockSize, 2.0f + ((float)y * blockSize),0 });
-			(this->*registerFuncs[typeNum])(position);
-		}
-	}
+	//for (int y = 0; y < 2; ++y) {
+	//	for (int x = 0; x < 30; ++x) {
+	//		position = Vector3({ (float)(kMaxXNum - 30) * blockSize + (float)x * blockSize, 2.0f + ((float)y * blockSize),0 });
+	//		
+	//		if (x == 0) {
+	//			(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+	//		}
+	//		else if (y == 0) {
+	//			(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kNone)])(position);
+	//		}
+	//		else {
+	//			(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+	//		}
+	//	}
+	//}
 
 #pragma endregion
 
-#pragma region リスの周辺
-	// 上床
-	for (int i = 0; i < 57; ++i) {
-		position = { blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 };
-		(this->*registerFuncs[typeNum])(position);
-	}
-
-	typeNum = static_cast<uint32_t>(Terrain::BlockType::kWall);
-	// 壁じゃん
-	for (int i = 0; i < 18; ++i) {
-		position = { blockSize * 4.0f,6.0f + ((float)i * blockSize),0 };
-		(this->*registerFuncs[typeNum])(position);
-	}
-	// 壁じゃん
-	for (int i = 0; i < 12; ++i) {
-		position = { blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 };
-		(this->*registerFuncs[typeNum])(position);
-	}
-
-#pragma endregion
+//#pragma region リスの周辺
+//	// 上床
+//	for (int i = 0; i < 57; ++i) {
+//		position = { blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 };
+//		(this->*registerFuncs[typeNum])(position);
+//	}
+//
+//	typeNum = static_cast<uint32_t>(Terrain::BlockType::kWall);
+//	// 壁じゃん
+//	for (int i = 0; i < 18; ++i) {
+//		position = { blockSize * 4.0f,6.0f + ((float)i * blockSize),0 };
+//		(this->*registerFuncs[typeNum])(position);
+//	}
+//	// 壁じゃん
+//	for (int i = 0; i < 12; ++i) {
+//		position = { blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 };
+//		(this->*registerFuncs[typeNum])(position);
+//	}
+//
+//#pragma endregion
 
 #pragma region 空中の障害物
+	//RegisterBlock({ 50.0f,30.0f,0 }, { 20.0f,1.0f });
+
 	typeNum = static_cast<uint32_t>(Terrain::BlockType::kObstacle);
 	for (int i = 0; i < 4; ++i) {
 		(this->*registerFuncs[typeNum])(Vector3({ (40 * blockSize) + (float)i * blockSize ,9 * blockSize,0 }));
@@ -260,5 +288,13 @@ void MapManager::InitializeBossMap()
 	}
 
 #pragma endregion
+
+}
+
+void MapManager::LoadMapData(const std::string& filePath)
+{
+	// 読み込み
+	//std::ifstream file{ filePath };
+	filePath;
 
 }

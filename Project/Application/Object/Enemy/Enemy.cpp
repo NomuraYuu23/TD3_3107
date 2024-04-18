@@ -24,10 +24,12 @@ void Enemy::Initialize()
 	sSerialNumber_++;
 
 	isDead_ = false;
+	isGround_ = false;
 }
 
 void Enemy::Update()
 {
+	prevPosition_ = { transform_.translate.x,transform_.translate.y };
 	// 設定した状態の処理
 	if (state_) {
 		state_->Update();
@@ -45,10 +47,12 @@ void Enemy::Update()
 void Enemy::ImGuiDraw()
 {
 	std::string name = "Enemy" + std::to_string(serialNum_);
-	ImGui::Begin(name.c_str());
+	//ImGui::Begin(name.c_str());
+	ImGui::SeparatorText(name.c_str());
+	ImGui::DragFloat3("WorldPosition", &transform_.translate.x);
 	ImGui::Text("%d", isDead_);
 
-	ImGui::End();
+	//ImGui::End();
 
 }
 
@@ -61,13 +65,10 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		Player** playerPtr = std::get_if<Player*>(&target);
 		if (playerPtr != nullptr) {
 			Player* player = *playerPtr;
-
-
 			if (std::holds_alternative<HoldState*>(player->GetWeapon()->GetNowState())) {
 				// こいつ吹っ飛ぶ処理をここに
 				//transform_.translate.y += 1;
 			}
-
 		}
 	}
 	// 武器の場合
@@ -84,6 +85,32 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			isDead_ = true;
 		}
 
+	}
+	else if (std::holds_alternative<Terrain*>(target)) {
+
+		Vector2 targetPos = {};
+		Vector2 targetRad = {};
+		// 対象の情報取得
+		std::visit([&](const auto& a) {
+			targetPos = a->GetColliderPosition();
+			targetRad = a->GetColliderSize();
+			}, target);
+
+		if (std::fabsf(velocity_.x) > 0) {
+			velocity_.x *= -1.0f;
+		}
+		
+		if (std::fabsf(velocity_.y) > 0) {
+			//velocity_.y *= -1.0f;
+			isGround_ = true;
+			velocity_.y = 0;
+			if (targetPos.y > prevPosition_.y) {
+				transform_.translate.y = targetPos.y - targetRad.y;
+			}
+			else if (targetPos.y < prevPosition_.y) {
+				transform_.translate.y = targetPos.y + targetRad.y;
+			}
+		}
 	}
 	// それ以外
 	else {

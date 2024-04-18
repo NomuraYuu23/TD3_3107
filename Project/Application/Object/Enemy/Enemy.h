@@ -35,7 +35,7 @@ public:
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
 
-	bool GetIsGround() { return isGround_; }
+	bool IsGround() { return isGround_; }
 
 public:
 	/// <summary>
@@ -80,6 +80,8 @@ public:
 	// コライダー用の座標・スケール
 	Vector2 position2D_ = {};
 	Vector2 scale2D_ = {};
+
+	Vector2 prevPosition_ = {};
 
 	// コライダー
 	Box boxCollider_;

@@ -10,6 +10,28 @@ public:
 	~IObject() = default;
 
 	static float sPlaySpeed;
+public:
+	
+	struct FourTop {
+		Vector2 leftTop, rightTop, leftBottom, rightBottom;
+	};
+
+	/// <summary>
+	/// 四点の生成関数
+	/// </summary>
+	/// <param name="minV2"></param>
+	/// <param name="maxV2"></param>
+	/// <returns></returns>
+	FourTop GenerateFourTop(Vector2 minV2, Vector2 maxV2) {
+		FourTop result;
+
+		result.leftTop = { minV2.x,maxV2.y };
+		result.rightTop = { maxV2.x,maxV2.y };
+		result.leftTop = { minV2.x,maxV2.y };
+		result.leftBottom = { minV2.x,minV2.y };
+
+		return result;
+	}
 
 public:
 	/// <summary>

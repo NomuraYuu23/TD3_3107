@@ -63,6 +63,10 @@ private:
 	/// ボス戦用のマップ配置
 	/// </summary>
 	void InitializeBossMap();
+
+
+	void LoadMapData(const std::string& filePath);
+
 private:
 	// マップのオブジェクト登録用の関数ポインタ
 	void(MapManager::* registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kMaxSize)])(const Vector3&) = {
