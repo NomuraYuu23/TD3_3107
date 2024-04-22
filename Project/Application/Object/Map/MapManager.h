@@ -8,6 +8,8 @@
 
 class MapManager : public LargeNumberOfObjects
 {
+public:
+	uint32_t blockTexture_ = 0u;
 
 public:
 	/// <summary>

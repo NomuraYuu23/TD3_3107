@@ -145,8 +145,9 @@ void GameScene::Initialize() {
 
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();
+	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	mapManager_->Initialize(terrainModel_.get());
-
+	
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
