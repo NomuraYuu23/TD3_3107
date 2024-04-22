@@ -64,6 +64,11 @@ private:
 	/// </summary>
 	void InitializeBossMap();
 
+	/// <summary>
+	/// マップチップ使わない法
+	/// </summary>
+	void InitializeLongPatternMap();
+
 
 	void LoadMapData(const std::string& filePath);
 

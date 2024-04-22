@@ -25,6 +25,10 @@ private: // サブクラス
 		float offsetLength;
 	};
 
+	Vector2 up = { 1.0f,1.0f };
+	Vector2 tag = { -1.0f,1.0f };
+	Vector2 perVec = { up.x,up.y * -1.0f };
+
 public: // 継承
 	/// <summary>
 	/// 初期化

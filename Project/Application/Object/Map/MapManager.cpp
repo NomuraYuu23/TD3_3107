@@ -11,8 +11,9 @@ void MapManager::Initialize(Model* model)
 
 	LargeNumberOfObjects::Initialize(model);
 
-	InitializePlacement();
+	//InitializePlacement();
 	//InitializeBossMap();
+	InitializeLongPatternMap();
 }
 
 void MapManager::Update()
@@ -49,11 +50,11 @@ void MapManager::CollisionRegister(Collision2DManager* collisionManager, const B
 		float range = 100.0f;
 
 
-		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
+		//if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
 			if (static_cast<Terrain*>(it->get())->typeNumber_ != Terrain::BlockType::kNone) {
 				collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
 			}
-		}
+		//}
 
 	}
 }
@@ -216,7 +217,9 @@ void MapManager::InitializePlacement()
 //#pragma endregion
 
 #pragma region 空中の障害物
-	//RegisterBlock({ 50.0f,30.0f,0 }, { 20.0f,1.0f });
+	RegisterBlock({ 20.0f,4.0f,0 }, { 20.0f,1.0f });
+
+	RegisterBlock({ 35.0f,8.0f,0 }, { 20.0f,1.0f });
 
 	typeNum = static_cast<uint32_t>(Terrain::BlockType::kObstacle);
 	for (int i = 0; i < 4; ++i) {
@@ -288,6 +291,20 @@ void MapManager::InitializeBossMap()
 	}
 
 #pragma endregion
+
+}
+
+void MapManager::InitializeLongPatternMap()
+{
+	// スケールの値が半径
+
+	// 床
+	RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,1.0f });
+
+	// 縦壁
+	//RegisterBlock({ 0.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
+
+	RegisterBlock({ 120.0f - 1.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
 
 }
 
