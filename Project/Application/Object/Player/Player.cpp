@@ -43,6 +43,10 @@ void Player::Initialize(Model* model)
 	// レイ
 	rayLength_ = -100.0f;
 	cameraRay_.Initialize(this);
+
+	// プレイヤーと槍をつなぐ線
+	connectingSpearLine_.reset(DrawLine::Create());
+	connectingSpearLineColor_ = { 0.8f,0.0f,0.8f,1.0f };
 	
 }
 
@@ -480,9 +484,16 @@ void Player::ChangeState(std::unique_ptr<IActionState> newState)
 	actionState_ = std::move(newState);
 }
 
-void Player::DrawLine(BaseCamera& baseCamera)
+void Player::DrawLines(BaseCamera& baseCamera)
 {
 
 	parabola_.Draw(baseCamera);
+
+	connectingSpearLine_->Draw(
+		worldtransform_.GetWorldPosition(),
+		weapon_->worldtransform_.GetWorldPosition(),
+		connectingSpearLineColor_,
+		connectingSpearLineColor_,
+		baseCamera);
 
 }

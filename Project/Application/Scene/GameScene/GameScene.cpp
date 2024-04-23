@@ -314,7 +314,7 @@ void GameScene::Draw() {
 #pragma region 線描画
 	DrawLine::PreDraw(dxCommon_->GetCommadList());
 
-	player_->DrawLine(camera_);
+	player_->DrawLines(camera_);
 
 	DrawLine::PostDraw();
 
