@@ -27,6 +27,8 @@ void Player::Initialize(Model* model)
 	recoil_.Initialize(this);
 	// 足場クラス
 	footCollider_.Initialize(model, this);
+	// 補正クラス
+	correctSystem_.Initialize(this);
 	// コンボクラス
 	jumpCombo_.Reset();
 
