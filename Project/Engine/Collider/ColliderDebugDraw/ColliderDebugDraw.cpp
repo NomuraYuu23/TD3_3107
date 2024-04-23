@@ -8,7 +8,7 @@ void ColliderDebugDraw::Initialize(const std::vector<Model*> models, Material* m
 
 	material_ = material;
 
-	TransformStructure uvTransform = {
+	EulerTransform uvTransform = {
 	{1.0f,1.0f,1.0f},
 	{0.0f,0.0f,0.0f},
 	{0.0f,0.0f,0.0f},
@@ -61,19 +61,19 @@ void ColliderDebugDraw::Draw(BaseCamera& camera)
 		return;
 	}
 
-	// 球
-	for (Sphere* sphere : spheres_) {
-		models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(sphere->worldTransform_, camera, material_);
-	}
+	//// 球
+	//for (Sphere* sphere : spheres_) {
+	//	models_[static_cast<size_t>(ModelNo::kSphere)]->Draw(sphere->worldTransform_, camera, material_);
+	//}
 
-	// AABB
-	for (AABB* aabb : aabbs_) {
-		models_[static_cast<size_t>(ModelNo::kAABB)]->Draw(aabb->worldTransform_, camera, material_);
-	}
-	// OBB
-	for (OBB* obb : obbs_) {
-		models_[static_cast<size_t>(ModelNo::kOBB)]->Draw(obb->worldTransform_, camera, material_);
-	}
+	//// AABB
+	//for (AABB* aabb : aabbs_) {
+	//	models_[static_cast<size_t>(ModelNo::kAABB)]->Draw(aabb->worldTransform_, camera, material_);
+	//}
+	//// OBB
+	//for (OBB* obb : obbs_) {
+	//	models_[static_cast<size_t>(ModelNo::kOBB)]->Draw(obb->worldTransform_, camera, material_);
+	//}
 
 }
 

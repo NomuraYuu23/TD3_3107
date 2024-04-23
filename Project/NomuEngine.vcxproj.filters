@@ -171,6 +171,12 @@
     <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
     <ClCompile Include="Engine\3D\FogManager.cpp" />
     <ClCompile Include="Engine\PostEffect\ShockWaveManager.cpp" />
+    <ClCompile Include="Engine\ContactRecord\ContactRecord.cpp" />
+    <ClCompile Include="Engine\3D\ModelDraw.cpp" />
+    <ClCompile Include="Engine\Physics\Spring.cpp" />
+    <ClCompile Include="Engine\Physics\String.cpp" />
+    <ClCompile Include="Engine\Physics\StructuralSpring.cpp" />
+    <ClCompile Include="Engine\Animation\LocalMatrixManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -373,6 +379,14 @@
     <ClInclude Include="Engine\3D\FogData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
+    <ClInclude Include="Engine\ContactRecord\ContactRecord.h" />
+    <ClInclude Include="Engine\3D\ModelDraw.h" />
+    <ClInclude Include="Engine\Physics\Spring.h" />
+    <ClInclude Include="Engine\Physics\String.h" />
+    <ClInclude Include="Engine\Physics\StructuralSpring.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrixManager.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrix.h" />
+    <ClInclude Include="Engine\3D\VertexInfluence.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

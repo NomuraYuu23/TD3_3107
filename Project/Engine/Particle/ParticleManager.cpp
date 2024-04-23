@@ -5,6 +5,7 @@
 #include "../Math/DeltaTime.h"
 #include "../../Application/Particle/MakeEmitter.h"
 #include "../base/SRVDescriptorHerpManager.h"
+#include "../3D/ModelDraw.h"
 
 uint32_t ParticleManager::kNumInstanceMax_ = 32768;
 
@@ -78,12 +79,17 @@ void ParticleManager::Update(BaseCamera& camera)
 
 }
 
-void ParticleManager::Draw()
+void ParticleManager::Draw(const Matrix4x4& viewProjectionMatrix)
 {
 
+	Map(viewProjectionMatrix);
+
+	ModelDraw::ParticleDesc desc;
+	desc.particleManager = this;
 	for (uint32_t i = 0; i < kCountofParticleModelIndex; i++) {
 		currentModel_ = i;
-		particleDatas_[i].model_->ParticleDraw();
+		desc.model = particleDatas_[i].model_;
+		ModelDraw::ParticleDraw(desc);
 	}
 
 }
@@ -140,7 +146,7 @@ void ParticleManager::BillBoardUpdate(BaseCamera& camera)
 {
 
 	// 全軸
-	Matrix4x4 backToFrontMatrix = Matrix4x4::MakeRotateXYZMatrix({ 0.0f, 0.0f, 0.0f });
+	Matrix4x4 backToFrontMatrix = Matrix4x4::MakeRotateXYZMatrix({ 0.0f, 3.14f, 0.0f });
 	billBoardMatrix_ = Matrix4x4::Multiply(backToFrontMatrix, camera.GetTransformMatrix());
 	billBoardMatrix_.m[3][0] = 0.0f;
 	billBoardMatrix_.m[3][1] = 0.0f;
@@ -178,7 +184,7 @@ void ParticleManager::BillBoardUpdate(BaseCamera& camera)
 
 }
 
-void ParticleManager::MakeEmitter(const TransformStructure& transform, uint32_t instanceCount,
+void ParticleManager::MakeEmitter(const EulerTransform& transform, uint32_t instanceCount,
 	float frequency, float lifeTime,
 	uint32_t particleModelNum, uint32_t paeticleName, uint32_t emitterName)
 {

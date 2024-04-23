@@ -5,7 +5,7 @@
 #include <d3d12.h>
 #include <memory>
 #include "TransformationMatrix.h"
-#include "LocalMatrix.h"
+#include "../Animation/LocalMatrixManager.h"
 #include "ModelNodeData.h"
 #include "Model.h"
 #include "OneOfManyObjects.h"
@@ -43,7 +43,7 @@ public:
 	/// <summary>
 	/// マッピング
 	/// </summary>
-	void Map();
+	void Map(const Matrix4x4& viewProjectionMatrix);
 
 	/// <summary>
 	/// 描画

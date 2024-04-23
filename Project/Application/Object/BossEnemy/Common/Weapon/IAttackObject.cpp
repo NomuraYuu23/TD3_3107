@@ -22,6 +22,11 @@ void IAttackObject::Initialize(Model* model)
 	serialNum_ = sSerialNumber_;
 	sSerialNumber_++;
 
+	// ローカル行列マネージャー
+	localMatrixManager_ = std::make_unique<LocalMatrixManager>();
+	localMatrixManager_->Initialize(model_->GetRootNode());
+	localMatrixManager_->Map();
+
 }
 
 void IAttackObject::Update()

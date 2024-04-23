@@ -72,5 +72,7 @@ protected: //
 	Model* model_ = nullptr;
 	// マテリアル関係
 	std::unique_ptr<Material> material_ = nullptr;
+	// ローカル行列マネージャー
+	std::unique_ptr<LocalMatrixManager> localMatrixManager_;
 
 };

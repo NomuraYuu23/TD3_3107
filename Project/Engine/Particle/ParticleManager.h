@@ -69,13 +69,13 @@ public: // メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	/// <param name="viewProjection"></param>
-	void Draw();
+	/// <param name="viewProjection">ビュープロジェクション</param>
+	void Draw(const Matrix4x4& viewProjectionMatrix);
 
 	/// <summary>
 	/// マッピング
 	/// </summary>
-	/// <param name="viewProjection"></param>
+	/// <param name="viewProjection">ビュープロジェクション</param>
 	void Map(const Matrix4x4& viewProjectionMatrix);
 
 	/// <summary>
@@ -99,7 +99,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="transform"></param>
 	/// <param name="lifeTime"></param>
-	void MakeEmitter(const TransformStructure& transform, uint32_t instanceCount,
+	void MakeEmitter(const EulerTransform& transform, uint32_t instanceCount,
 		float frequency, float lifeTime,
 		uint32_t particleModelNum, uint32_t paeticleName, uint32_t emitterName);
 

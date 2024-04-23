@@ -34,7 +34,14 @@ void PrevSmallBoss::Update()
 void PrevSmallBoss::Draw(const BaseCamera& camera)
 {
 	// 描画
-	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera));
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.textureHandles;
+	desc.worldTransform;
+	ModelDraw::AnimObjectDraw(desc);
 
 	for (std::list<std::unique_ptr<IAttackObject>>::iterator it = attackLists_.begin(); it != attackLists_.end(); ++it) {
 		// 更新
