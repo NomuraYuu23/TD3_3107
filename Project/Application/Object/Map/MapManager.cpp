@@ -298,13 +298,33 @@ void MapManager::InitializeLongPatternMap()
 {
 	// スケールの値が半径
 
+	//// 床
+	//RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,1.0f });
+
+	//// 縦壁
+	////RegisterBlock({ 0.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
+
+	//RegisterBlock({ 120.0f - 1.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
+
 	// 床
-	RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,1.0f });
+	RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,2.0f });
 
 	// 縦壁
 	//RegisterBlock({ 0.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
 
 	RegisterBlock({ 120.0f - 1.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
+
+	// 真ん中の縦
+	// 右
+	RegisterBlock({ 50.0f,20.0f,0 }, { 2.0f,30.0f });
+	// 左
+	RegisterBlock({ 40.0f,30.0f,0 }, { 2.0f,20.0f });
+
+	// 上の床
+	RegisterBlock({ 70.0f,50.0f - 2.0f,0 }, { 20.0f,2.0f });
+
+
+	RegisterBlock({ 15.0f,5.0f,0 }, { 5.0f,5.0f });
 
 }
 

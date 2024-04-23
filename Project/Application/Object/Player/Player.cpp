@@ -67,7 +67,7 @@ void Player::Update()
 	// 反動クラス
 	recoil_.Update();
 	// 
-	correctSystem_.Update(enemyManager_);
+	//correctSystem_.Update(enemyManager_);
 
 	// 武器の更新
 	if (weapon_) {
@@ -155,10 +155,10 @@ void Player::ImGuiDraw()
 	ImGui::SeparatorText("State");
 
 	if (ImGui::BeginTabBar("Param")) {
+		float absValue = 300.0f;
 
 		// 共通項目
 		if (ImGui::BeginTabItem("Common")) {
-			float absValue = 30.0f;
 			// 座標
 			ImGui::DragFloat3("translate", &worldtransform_.transform_.translate.x, 0.01f, -absValue, absValue);
 			// 速度
@@ -172,7 +172,7 @@ void Player::ImGuiDraw()
 		if (ImGui::BeginTabItem("Collider")) {
 			footCollider_.ImGuiDraw();
 
-			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, 0, 10.0f);
+			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, -absValue, absValue);
 			ImGui::DragFloat2("ColliderSize", &circleCollider_.scale_.x, 0.01f, 0, 10.0f);
 			ImGui::DragFloat("Radius", &circleCollider_.radius_, 0.01f, 0, 10.0f);
 			ImGui::EndTabItem();
