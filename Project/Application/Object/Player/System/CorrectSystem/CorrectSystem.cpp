@@ -58,7 +58,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 
 			// 方向ベクトルを作成
 			direction = Vector3::Normalize(toEnemy);
-			enemyDirection = { direction.x, direction.x };
+			enemyDirection = { direction.x, direction.y };
 
 			// 方向確認
 			leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
