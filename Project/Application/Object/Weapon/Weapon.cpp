@@ -34,6 +34,7 @@ void Weapon::Initialize(Model* model)
 
 void Weapon::Update()
 {
+	isGravity_ = false;
 	// 状態ごとの更新
 	if (state_) {
 		state_->Update();

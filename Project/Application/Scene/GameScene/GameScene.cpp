@@ -301,7 +301,7 @@ void GameScene::Draw() {
 	Model::PreManyModelsDraw(dxCommon_->GetCommadList(), pointLightManager_.get(), spotLightManager_.get(), directionalLight_.get());
 
 	// ブロック用
-	mapManager_->Draw(camera_);
+	mapManager_->Draw(camera_, blockTexture_);
 
 	// 敵
 	enemyManager_->Draw(camera_);
@@ -517,6 +517,8 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/Debug/Box.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
 		TextureManager::Load("Resources/Debug/Circle.png", DirectXCommon::GetInstance(), textureHandleManager_.get())
 	};
+
+	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 

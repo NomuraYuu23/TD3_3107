@@ -12,6 +12,7 @@
 #include "System/Combo/ComboCounter.h"
 #include "System/Parabola/PlayerParabola.h"
 #include "System/CameraRay/CameraRay.h"
+#include "System/CorrectSystem/CorrectSystem.h"
 
 #include "PlayerFootCollider.h"
 
@@ -166,5 +167,8 @@ private: // システム
 
 	// 無敵タイマー
 	TimerLib invisibleTimer_;
+
+	// 補正用システム
+	CorrectSystem correctSystem_;
 };
 

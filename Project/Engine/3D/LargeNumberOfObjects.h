@@ -50,6 +50,7 @@ public:
 	/// </summary>
 	/// <param name="camera">カメラ</param>
 	void Draw(BaseCamera& camera);
+	void Draw(BaseCamera& camera, uint32_t texture);
 
 	/// <summary>
 	/// ノードデータ設定

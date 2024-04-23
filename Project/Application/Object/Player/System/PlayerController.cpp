@@ -89,8 +89,13 @@ void PlayerController::ControllerProcess()
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		// 投げる方向ベクトル
-		player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
+		if (stickDirect.x == 0 && stickDirect.y == 0) {
+			
+		}
+		else {
+			// 投げる方向ベクトル
+			player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
+		}
 
 	}
 	// 座標更新
@@ -186,7 +191,7 @@ void PlayerController::ThrownProcess()
 			}
 			// 地上で投げた場合は槍の重力フラグをオン
 			if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
-				player_->weapon_->SetIsGravity(true);
+				player_->weapon_->SetIsGravity(false);
 			}
 			else {
 				player_->weapon_->SetIsGravity(false);
