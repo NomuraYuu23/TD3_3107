@@ -50,6 +50,12 @@ private:
 	/// </summary>
 	void RegisterEnemy(const Vector3& position, uint32_t typeNum);
 
+	void RegisterEnemy(const Vector3& offset, uint32_t typeNum, const Vector3& parent);
+	void RegisterEnemy(const Vector3& offset, uint32_t typeNum, WorldTransform* parent);
+
+	std::list<WorldTransform> gimmickParents_;
+	WorldTransform testParent;
+
 	Vector3 resPoint_ = {};
 
 };

@@ -137,7 +137,15 @@ void PlayerController::GroundMoveProcess()
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
-		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * groundSpeed_ * (1.0f / IObject::sPlaySpeed);
+		float moveValue = 0;
+		if (leftStick.x > 0) {
+			moveValue = 1.0f;
+		}
+		else if (leftStick.x < 0) {
+			moveValue = -1.0f;
+		}
+		//float moveValue = (float)leftStick.x / SHRT_MAX;
+		player_->velocity_.x = moveValue * groundSpeed_ * (1.0f / IObject::sPlaySpeed);
 
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない

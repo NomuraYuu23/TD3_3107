@@ -35,6 +35,8 @@ void Enemy::Update()
 		state_->Update();
 	}
 
+	//transform_.translate = {}
+
 	// 基底クラスの更新
 	OneOfManyObjects::Update();
 	// 2D更新
