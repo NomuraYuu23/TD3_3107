@@ -63,6 +63,8 @@ public:
 	// コライダー
 	Box boxCollider_;
 
+	uint32_t texture_ = 0u;
+
 	// 地面か障害物か
 	BlockType typeNumber_ = BlockType::kTerrain;
 

@@ -26,6 +26,10 @@ private: // サブクラス
 		float offsetLength;
 	};
 
+	Vector2 up = { 1.0f,1.0f };
+	Vector2 tag = { -1.0f,1.0f };
+	Vector2 perVec = { up.x,up.y * -1.0f };
+
 public: // 継承
 	/// <summary>
 	/// 初期化
@@ -104,7 +108,7 @@ public: // メンバ関数
 	/// 線描画
 	/// </summary>
 	/// <param name="baseCamera">カメラ</param>
-	void DrawLine(BaseCamera& baseCamera);
+	void DrawLines(BaseCamera& baseCamera);
 
 public:
 	// 矢印モデル
@@ -167,6 +171,12 @@ private: // システム
 
 	// 無敵タイマー
 	TimerLib invisibleTimer_;
+
+	// プレイヤーと槍をつなぐ線
+	std::unique_ptr<DrawLine> connectingSpearLine_;
+	// プレイヤーと槍をつなぐ線の色
+	Vector4 connectingSpearLineColor_;
+
 
 	// 補正用システム
 	CorrectSystem correctSystem_;

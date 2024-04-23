@@ -8,6 +8,8 @@
 
 class MapManager : public LargeNumberOfObjects
 {
+public:
+	uint32_t blockTexture_ = 0u;
 
 public:
 	/// <summary>
@@ -63,6 +65,11 @@ private:
 	/// ボス戦用のマップ配置
 	/// </summary>
 	void InitializeBossMap();
+
+	/// <summary>
+	/// マップチップ使わない法
+	/// </summary>
+	void InitializeLongPatternMap();
 
 
 	void LoadMapData(const std::string& filePath);
