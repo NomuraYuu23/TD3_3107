@@ -66,6 +66,8 @@ void Player::Update()
 	controller_.Update();
 	// 反動クラス
 	recoil_.Update();
+	// 
+	correctSystem_.Update(enemyManager_);
 
 	// 武器の更新
 	if (weapon_) {

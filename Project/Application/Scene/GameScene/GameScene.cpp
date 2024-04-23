@@ -134,11 +134,13 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModel_.get());
 	// 更新
 	//countTime_ = 0;
-	player_->Update();
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->Initialize(terrainModel_.get());
+
+	player_->SetEnemyManager(enemyManager_.get());
+	player_->Update();
 
 	bossEnemy_ = std::make_unique<PrevSmallBoss>();
 	bossEnemy_->Initialize(enemyModel_.get());

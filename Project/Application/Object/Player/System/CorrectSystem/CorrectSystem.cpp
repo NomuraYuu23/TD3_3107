@@ -78,6 +78,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 	}
 
 
+	player_->throwDirect_ = targetDirection;
 	// 方向ベクトル
 	//targetDirection;
 

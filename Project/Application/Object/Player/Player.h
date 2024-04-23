@@ -16,6 +16,8 @@
 
 #include "PlayerFootCollider.h"
 
+class EnemyManager;
+
 class Player : public IObject
 {
 private: // サブクラス
@@ -120,6 +122,8 @@ public:
 	void AddCombo() { jumpCombo_.Add(); }
 	void ResetCombo() { jumpCombo_.Reset(); }
 
+	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -147,6 +151,8 @@ public:
 	float rayLength_ = 0;
 
 	CameraRay cameraRay_;
+
+	EnemyManager* enemyManager_;
 
 private: // フラグ
 	// ゲームスピード
