@@ -131,6 +131,19 @@ void LargeNumberOfObjects::Draw(BaseCamera& camera)
 
 }
 
+void LargeNumberOfObjects::Draw(BaseCamera& camera, uint32_t texture)
+{
+	Map();
+
+	model_->Draw(
+		localMatrixesHandleGPU_,
+		transformationMatrixesHandleGPU_,
+		camera,
+		numInstance_,
+		material_.get(),
+		texture);
+}
+
 void LargeNumberOfObjects::SetNodeDatas(const ModelNode& modelNode, int32_t parentIndex)
 {
 

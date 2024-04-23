@@ -89,4 +89,7 @@ public:
 	// 速度
 	Vector3 velocity_ = {};
 
+	// 親の座標
+	Vector3 parentPosition_;
+
 };

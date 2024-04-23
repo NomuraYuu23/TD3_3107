@@ -12,6 +12,7 @@
 #include "System/Combo/ComboCounter.h"
 #include "System/Parabola/PlayerParabola.h"
 #include "System/CameraRay/CameraRay.h"
+#include "System/CorrectSystem/CorrectSystem.h"
 
 #include "PlayerFootCollider.h"
 
@@ -176,5 +177,8 @@ private: // システム
 	// プレイヤーと槍をつなぐ線の色
 	Vector4 connectingSpearLineColor_;
 
+
+	// 補正用システム
+	CorrectSystem correctSystem_;
 };
 

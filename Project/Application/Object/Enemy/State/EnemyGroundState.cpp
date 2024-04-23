@@ -14,7 +14,7 @@ void EnemyGroundState::Update()
 {
 	// 速度処理
 	if (!enemy_->IsGround()) {
-		enemy_->velocity_.y += (kGravity) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		//enemy_->velocity_.y += (kGravity) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 	}
 	else {
 

@@ -37,7 +37,7 @@ void PlayerParabola::Update(const Vector3& playerPosition, const Vector3& direct
 	const uint32_t kGravityMagnification = 50;
 
 	if (std::holds_alternative<GroundState*>(player->GetNowState())) {
-		acceleration.y = (-9.8f * gravity * kGravityMagnification) * kDeltaTime_;
+		//acceleration.y = (-9.8f * gravity * kGravityMagnification) * kDeltaTime_;
 	}
 
 

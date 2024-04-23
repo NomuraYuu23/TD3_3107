@@ -162,4 +162,6 @@ private:
 
 	float countTime_ = 0.0f;
 
+	uint32_t blockTexture_ = 0u;
+
 };
