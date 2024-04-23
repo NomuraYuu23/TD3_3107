@@ -7,7 +7,7 @@ void EnemyManager::Initialize(Model* model)
 {
 	LargeNumberOfObjects::Initialize(model);
 
-	RegisterEnemy({ 50.0f,10.0f,0 }, 0);
+	//RegisterEnemy({ 50.0f,10.0f,0 }, 0);
 	RegisterEnemy({ 75.0f,10.0f,0 }, 0);
 	RegisterEnemy({ 100.0f,10.0f,0 }, 0);
 }

@@ -376,6 +376,7 @@
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
     <ClInclude Include="Application\Object\Player\System\CameraRay\RayContactRecord.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyWaitState.h" />
+    <ClInclude Include="Application\Scene\EditorScene\EditorScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

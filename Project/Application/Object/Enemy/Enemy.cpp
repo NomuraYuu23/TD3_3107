@@ -62,13 +62,13 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 
 	// プレイヤーの場合
 	if (std::holds_alternative<Player*>(target)) {
-		Player** playerPtr = std::get_if<Player*>(&target);
-		if (playerPtr != nullptr) {
-			Player* player = *playerPtr;
-			if (std::holds_alternative<HoldState*>(player->GetWeapon()->GetNowState())) {
-				// こいつ吹っ飛ぶ処理をここに
-				//transform_.translate.y += 1;
-			}
+		Player** player = std::get_if<Player*>(&target);
+		if (player == nullptr) {
+			return;
+		}
+		if (std::holds_alternative<HoldState*>((*player)->GetWeapon()->GetNowState())) {
+			// こいつ吹っ飛ぶ処理をここに
+			//transform_.translate.y += 1;
 		}
 	}
 	// 武器の場合
@@ -137,14 +137,16 @@ void Enemy::StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t atta
 
 void Enemy::ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern)
 {
+	// パターンごとの初期化
+	// この場合MaxSizeを入れるとパターンなしとする
 	if (pattern == IEnemyState::AttackPattern::kMaxSize) {
 		newState->PreInitialize(this);
 	}
 	else {
 		newState->PreInitialize(this, pattern);
 	}
-
+	// ステート初期化
 	newState->Initialize();
-
+	// ステート渡し
 	state_ = std::move(newState);
 }

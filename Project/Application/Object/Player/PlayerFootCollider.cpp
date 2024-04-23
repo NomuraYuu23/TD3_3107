@@ -46,6 +46,8 @@ void PlayerFootCollider::ImGuiDraw()
 
 	ImGui::DragFloat3("footPos", &worldtransform_.transform_.translate.x);
 	ImGui::DragFloat3("footScale", &worldtransform_.transform_.scale.x);
+	Vector3 worldPosition = worldtransform_.GetWorldPosition();
+	ImGui::DragFloat3("WorldPosition", &worldPosition.x);
 	ImGui::DragFloat2("coPos", &position2D_.x);
 	ImGui::DragFloat2("scale2D", &scale2D_.x);
 
@@ -61,8 +63,40 @@ void PlayerFootCollider::OnCollision(ColliderParentObject2D target)
 		if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
 			player_->ResetCombo();
 		}
+		else {
+			return;
+		}
+		Vector2 targetPos = {};
+		Vector2 targetRad = {};
+		// 対象の情報取得
+		std::visit([&](const auto& a) {
+			targetPos = a->GetColliderPosition();
+			targetRad = a->GetColliderSize();
+			}, target);
+		targetRad *= 0.5f;
+		// 右上
+		Vector3 maxPos = {
+			targetPos.x + targetRad.x,	// 右
+			targetPos.y + targetRad.y,	// 上
+		};
+		// 左下
+		Vector3 minPos = {
+			targetPos.x - targetRad.x,	// 左
+			targetPos.y - targetRad.y,	// 下
+		};
+		Vector2 lerpPos = { worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y };
+		Vector2 plMin = { lerpPos.x - scale2D_.x,lerpPos.y - scale2D_.y };
+		Vector2 plMax = { lerpPos.x + scale2D_.x,lerpPos.y + scale2D_.y };
+
+		// 四頂点
+		IObject::FourTop player4Point = IObject::GenerateFourTop(plMin, plMax);
+
+		IObject::CollisionType type = IObject::GetCollisionType(player4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
+
 		// 着地フラグ
-		player_->isGround_ = true;
+		//if (type == IObject::kNone) {
+			player_->isGround_ = true;
+		//}
 	}
 
 }

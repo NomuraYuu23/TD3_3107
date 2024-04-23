@@ -296,29 +296,33 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		IObject::CollisionType type = IObject::GetCollisionType(player4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
 		Vector2 correctPosition = {};
-		float correctValue = 0.1f;
+		float correctValue = 0.15f;
+		// 当たった場所ごと
 		switch (type)
 		{
-		case IObject::kLeftSide:
+		case IObject::kLeftSide:	// 左側
 			// プレイヤーの修正されたX座標を計算
 			correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
-		case IObject::kRightSide:
+		case IObject::kRightSide:	// 右側
 			// プレイヤーの修正されたX座標を計算
 			correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
-		case IObject::kTopSide:
+		case IObject::kTopSide:	// 上側
 			// プレイヤーの修正されたY座標を計算
 			correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
 			worldtransform_.transform_.translate.y = correctPosition.y;
 			velocity_.y = 0;
 
 			break;
-		case IObject::kBottomSide:
+		case IObject::kBottomSide:	// 下側
+			if (velocity_.y == 0) {
+				return;
+			}
 			// プレイヤーの修正されたY座標を計算
 			correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
 			worldtransform_.transform_.translate.y = correctPosition.y;
@@ -329,7 +333,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 			isGround_ = true;
 			//velocity_.y = 0;
 			break;
-		case IObject::kLBPoint:
+
+		case IObject::kLBPoint: // 左下
 			if (moveDirect.y < 0) {
 				// プレイヤーの修正されたY座標を計算
 				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
@@ -340,10 +345,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 				}
 			}
 			break;
-		case IObject::kLTPoint:
+
+		case IObject::kLTPoint:	// 左上
 
 			break;
-		case IObject::kRBPoint:
+
+		case IObject::kRBPoint:	// 右下
 			if (moveDirect.y < 0) {
 				// プレイヤーの修正されたY座標を計算
 				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
@@ -354,20 +361,19 @@ void Player::OnCollision(ColliderParentObject2D target)
 				}
 			}
 			break;
-		case IObject::kRTPoint:
+
+		case IObject::kRTPoint:	// 右上
 
 			break;
-		case IObject::kMultiPoints:
+
+		case IObject::kMultiPoints:	// 大半が衝突している場合
 			correctPosition = Ease::Easing(Ease::EaseName::Lerp, Vector2{ worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y },
 				Vector2{ prevPosition_.x,prevPosition_.y }, 0.15f);
 			worldtransform_.transform_.translate = { correctPosition.x,correctPosition.y,0 };
 
 			break;
-		case IObject::kNone:
-
-			break;
 		}
-
+		// 更新
 		worldtransform_.UpdateMatrix();
 
 		// 座標以外の処理
@@ -384,28 +390,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 		// 反動中かつ壁ジャンの受付をしていない場合
 		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
-			// 方向
-			//weapon_->throwDirect_ = throwDirect_;
-			// X軸
-			//if (std::fabs(p2tDist.x) > std::fabs(p2tDist.y)) {
-			//	if (velocity_.x > 0) {
-			//		weapon_->throwDirect_ = { 1.0f,0,0 };
-			//	}
-			//	else {
-			//		weapon_->throwDirect_ = { -1.0f,0,0 };
-			//	}
-			//}
-			//// Y軸
-			//else if (std::fabs(p2tDist.x) < std::fabs(p2tDist.y)) {
-			//	if (velocity_.y > 0) {
-			//		weapon_->throwDirect_ = { 0,-1.0f,0 };
-			//	}
-			//	else {
-			//		weapon_->throwDirect_ = { 0,1.0f,0 };
-			//	}
-			//}
-
-			weapon_->throwDirect_ = Vector3::Normalize(moveDirect);
+			// 槍の方向
+			if (moveDirect.x > 0) {
+				weapon_->throwDirect_ = { 1.0f,0 };
+			}
+			else {
+				weapon_->throwDirect_ = { -1.0f,0 };
+			}
 			
 			weapon_->worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 			// 受付フラグ

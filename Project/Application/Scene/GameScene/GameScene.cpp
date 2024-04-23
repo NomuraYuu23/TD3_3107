@@ -138,7 +138,7 @@ void GameScene::Initialize() {
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(enemyModel_.get());
+	enemyManager_->Initialize(terrainModel_.get());
 
 	bossEnemy_ = std::make_unique<PrevSmallBoss>();
 	bossEnemy_->Initialize(enemyModel_.get());
@@ -302,7 +302,7 @@ void GameScene::Draw() {
 	Model::PreManyModelsDraw(dxCommon_->GetCommadList(), pointLightManager_.get(), spotLightManager_.get(), directionalLight_.get());
 
 	// ブロック用
-	mapManager_->Draw(camera_);
+	mapManager_->Draw(camera_, mapManager_->blockTexture_);
 
 	// 敵
 	enemyManager_->Draw(camera_);
