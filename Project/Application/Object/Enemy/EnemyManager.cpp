@@ -59,6 +59,7 @@ void EnemyManager::ImGuiDraw()
 	}
 
 	ImGui::DragFloat3("Parent", &testParent.transform_.translate.x, 0.01f, -100.0f, 100.0f);
+	ImGui::DragFloat3("PRot", &testParent.transform_.rotate.x, 0.01f, -100, 100);
 
 	ImGui::DragFloat3("pos", &resPoint_.x, 0.01f, -100.0f, 100.0f);
 

@@ -69,14 +69,14 @@ void Player::Update()
 	}
 
 	// 放物線
-	if (isArrowUiDraw_) {
+	if (throwDirect_.x != 0 || throwDirect_.y != 0) {
 		parabola_.Update(
 			worldtransform_.GetWorldPosition(),
 			throwDirect_,this);
 	}
-	else {
-		parabola_.Reset();
-	}
+	//else {
+	//	parabola_.Reset();
+	//}
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
