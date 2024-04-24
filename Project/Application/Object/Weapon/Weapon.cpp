@@ -35,6 +35,7 @@ void Weapon::Initialize(Model* model)
 void Weapon::Update()
 {
 	isGravity_ = false;
+	isEnemyImpaled_ = false;
 	// 状態ごとの更新
 	if (state_) {
 		state_->Update();
@@ -279,7 +280,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	}
 	else if (std::holds_alternative<ImpaledState*>(nowState_)) {
 		if (std::holds_alternative<Enemy*>(target)) {
-
+			isEnemyImpaled_ = true;
 			if (isTread_) {
 				ChangeRequest(Weapon::StateName::kFreeFall);
 			}

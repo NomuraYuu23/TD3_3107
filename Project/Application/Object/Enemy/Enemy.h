@@ -37,6 +37,8 @@ public:
 
 	bool IsGround() { return isGround_; }
 
+	void MatrixUpdate();
+
 public:
 	/// <summary>
 	/// 生成時に呼び出す関数（ここで地上・空中の選択、その際に近接・遠隔の選択も

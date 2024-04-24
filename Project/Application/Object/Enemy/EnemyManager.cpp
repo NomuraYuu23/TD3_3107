@@ -17,7 +17,7 @@ void EnemyManager::Initialize(Model* model)
 	RegisterEnemy({ 0,-10.0f,0 }, 0, { 20.0f,10.0f });
 
 	testParent.Initialize();
-	testParent.transform_.translate = { 50.0f,15.0f };
+	testParent.transform_.translate = { 0.0f,15.0f };
 
 	RegisterEnemy({ 10.0f,0,0 }, 0, &testParent);
 	RegisterEnemy({ -10.0f,0,0 }, 0, &testParent);

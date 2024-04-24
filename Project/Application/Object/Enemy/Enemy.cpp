@@ -37,8 +37,7 @@ void Enemy::Update()
 
 	//transform_.translate = {}
 
-	// 基底クラスの更新
-	OneOfManyObjects::Update();
+	MatrixUpdate();
 	// 2D更新
 	position2D_ = { worldMatrix_.m[3][0],worldMatrix_.m[3][1] };
 	// コライダー
@@ -79,6 +78,9 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		//// 武器のポインタにキャスト
 		Weapon** weapon = std::get_if<Weapon*>(&target);
 		if (std::holds_alternative<ImpaledState*>((*weapon)->GetNowState())) {
+			if ((*weapon)->IsEnemyImpaled()) {
+				return;
+			}
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
 			}
@@ -118,6 +120,12 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 	else {
 		return;
 	}
+}
+
+void Enemy::MatrixUpdate()
+{
+	// 基底クラスの更新
+	OneOfManyObjects::Update();
 }
 
 void Enemy::GenerateSetting()

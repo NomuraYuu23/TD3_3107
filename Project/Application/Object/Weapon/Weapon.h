@@ -81,6 +81,8 @@ public: // アクセッサ
 
 	void SetState(WeaponState newState) { nowState_ = newState; }
 
+	bool IsEnemyImpaled() { return isEnemyImpaled_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -154,5 +156,7 @@ private:
 	WeaponState nowState_;
 
 	float dotAngle_ = 0;
+
+	bool isEnemyImpaled_ = false;
 };
 

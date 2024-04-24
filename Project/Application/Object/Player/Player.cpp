@@ -16,7 +16,7 @@ void Player::Initialize(Model* model)
 	worldtransform_.transform_.translate = { 4.0f,10.0f,0 };
 
 	// コライダーの初期化
-	circleCollider_.radius_ = 0.95f;
+	circleCollider_.radius_ = 0.985f;
 	circleCollider_.Initialize(position2D_, circleCollider_.radius_, this);
 	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
@@ -74,15 +74,6 @@ void Player::Update()
 		weapon_->Update();
 	}
 
-	// 放物線
-	if (throwDirect_.x != 0 || throwDirect_.y != 0) {
-		parabola_.Update(
-			worldtransform_.GetWorldPosition(),
-			throwDirect_,this);
-	}
-	//else {
-	//	parabola_.Reset();
-	//}
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
@@ -91,6 +82,16 @@ void Player::Update()
 	footCollider_.Update();
 	// レイ
 	cameraRay_.Update();
+
+	// 放物線
+	if (throwDirect_.x != 0 || throwDirect_.y != 0) {
+		parabola_.Update(
+			worldtransform_.GetWorldPosition(),
+			throwDirect_, this);
+	}
+	//else {
+	//	parabola_.Reset();
+	//}
 }
 
 void Player::Draw(const BaseCamera& camera)
@@ -287,11 +288,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
 
 		// capsule用
-		Vector3 lerpPos = Ease::Easing(Ease::EaseName::Lerp, worldtransform_.GetWorldPosition(), prevPosition_, 0.15f);
+		Vector3 lerpPos = Ease::Easing(Ease::EaseName::Lerp, prevPosition_, worldtransform_.GetWorldPosition(), 0.95f);
 
 		// 最小・最大値
-		Vector2 plMin = { lerpPos.x - scale2D_.x,lerpPos.y - scale2D_.y };
-		Vector2 plMax = { lerpPos.x + scale2D_.x,lerpPos.y + scale2D_.y };
+		Vector2 plMin = { lerpPos.x - circleCollider_.radius_,lerpPos.y - circleCollider_.radius_ };
+		Vector2 plMax = { lerpPos.x + circleCollider_.radius_,lerpPos.y + circleCollider_.radius_ };
 
 		// 四頂点
 		IObject::FourTop player4Point = IObject::GenerateFourTop(plMin, plMax);
