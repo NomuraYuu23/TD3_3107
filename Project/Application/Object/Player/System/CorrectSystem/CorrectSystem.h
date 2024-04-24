@@ -26,9 +26,12 @@ private:
 	const float kInitLengthMin_ = 30.0f;
 
 	// 回転幅
-	const float kRotationWidth_ = 0.77f;
+	const float kRotationWidth_ = 0.15f;
 
 	// プレイヤーポインタ
 	Player* player_;
 
+	Vector3 NearEnemyLockOn(EnemyManager* enemyManager);
+
+	bool isInNearArea_ = false;
 };

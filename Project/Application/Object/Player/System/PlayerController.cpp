@@ -37,6 +37,15 @@ void PlayerController::Update()
 
 }
 
+void PlayerController::ImGuiDraw()
+{
+	// 投げる方向
+	Vector2 stickDirect = input_->GetRightAnalogstick();
+	ImGui::DragFloat2("rightStick", &stickDirect.x);
+	Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+	ImGui::DragFloat2("normStick", &normalize.x);
+}
+
 void PlayerController::ControllerProcess()
 {
 	//Vector2 leftStick = input_->GetLeftAnalogstick();
@@ -89,12 +98,12 @@ void PlayerController::ControllerProcess()
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		if (stickDirect.x == 0 && stickDirect.y == 0) {
-			
-		}
-		else {
+		Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+
+		if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
 			// 投げる方向ベクトル
 			player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
+
 		}
 
 	}
@@ -119,12 +128,6 @@ void PlayerController::AerialMoveProcess()
 	if (CheckAction) {
 		// 左右移動
 		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-
-		if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-			// 切り替え
-			player_->ChangeState(std::make_unique<AttractState>());
-			return;
-		}
 
 	}
 }
@@ -210,6 +213,15 @@ void PlayerController::ThrownProcess()
 		}
 
 	}
+	if (input_->TriggerJoystick(kJoystickButtonLB)) {
+		if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState())) &&
+			std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+			// 切り替え
+			player_->ChangeState(std::make_unique<AttractState>());
+			return;
+		}
+	}
+
 }
 
 void PlayerController::KeyBoardProcess()

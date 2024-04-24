@@ -36,6 +36,9 @@ void Weapon::Update()
 {
 	isGravity_ = false;
 	isEnemyImpaled_ = false;
+
+	prevDirect_ = { worldtransform_.direction_.x,worldtransform_.direction_.y };
+
 	// 状態ごとの更新
 	if (state_) {
 		state_->Update();
@@ -266,12 +269,15 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			if (!attractInvTimer_.IsActive()) {
 				// 角度修正
 				if (std::fabsf(worldtransform_.direction_.x) >= 0.85f && std::fabsf(worldtransform_.direction_.x) <= 1.0f) {
-					if (worldtransform_.direction_.x > 0) {
-						worldtransform_.direction_.x = 0.7f;
-					}
-					else {
-						worldtransform_.direction_.x = -0.7f;
-					}
+					//if (worldtransform_.direction_.x > 0) {
+					//	worldtransform_.direction_.x = 0.7f;
+					//}
+					//else {
+					//	worldtransform_.direction_.x = -0.7f;
+					//}
+					Vector3 newDirect = MathUtility::RotateVector(Vector3(prevDirect_.x, prevDirect_.y, 0), (-3.14f / 24.0f) * 2.0f);
+
+					worldtransform_.direction_ = { newDirect.x,newDirect.y };
 					// 対象の情報取得
 					Vector2 targetPos = {};
 					Vector2 targetRadius = {};

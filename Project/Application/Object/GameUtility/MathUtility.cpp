@@ -81,3 +81,15 @@ bool MathUtility::CheckOutScreen(const Vector3& worldPosition, float offset, con
     }
     return false;
 }
+
+Vector3 MathUtility::RotateVector(const Vector3& direct, float theta)
+{
+    float cosTheta = std::cosf(theta);
+    float sinTheta = std::sinf(theta);
+
+    Vector3 result = {};
+    result.x = direct.x * cosTheta - direct.y * sinTheta;
+    result.y = direct.x * sinTheta + direct.y * cosTheta;
+
+    return result;
+}

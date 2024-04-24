@@ -67,7 +67,7 @@ void Player::Update()
 	// 反動クラス
 	recoil_.Update();
 	// 
-	//correctSystem_.Update(enemyManager_);
+	correctSystem_.Update(enemyManager_);
 
 	// 武器の更新
 	if (weapon_) {
@@ -115,6 +115,8 @@ void Player::Draw(const BaseCamera& camera)
 void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
+	controller_.ImGuiDraw();
+
 	// ゲームスピード
 	float ratio = IObject::sPlaySpeed;
 	ImGui::DragFloat("playTime", &ratio);
@@ -555,7 +557,9 @@ void Player::ChangeState(std::unique_ptr<IActionState> newState)
 void Player::DrawLines(BaseCamera& baseCamera)
 {
 
-	parabola_.Draw(baseCamera);
+	if (std::holds_alternative<HoldState*>(weapon_->GetNowState())){
+		parabola_.Draw(baseCamera);
+	}
 
 	connectingSpearLine_->Draw(
 		worldtransform_.GetWorldPosition(),

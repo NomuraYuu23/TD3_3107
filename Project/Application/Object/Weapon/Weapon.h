@@ -121,6 +121,8 @@ public: // 外部で行う設定関数
 	// 刺さった時の逆ベクトル
 	Vector2 invDirect_ = {};
 
+	Vector2 prevDirect_ = {};
+
 	// 引き寄せの最初の衝突しない時間
 	TimerLib attractInvTimer_;
 

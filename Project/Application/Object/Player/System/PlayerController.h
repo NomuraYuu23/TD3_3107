@@ -21,6 +21,8 @@ public:
 	/// </summary>
 	void Update();
 
+	void ImGuiDraw();
+
 private: // 外付け機器の処理（大枠
 	/// <summary>
 	/// コントローラー操作処理

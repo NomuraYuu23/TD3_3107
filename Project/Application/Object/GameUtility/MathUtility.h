@@ -47,5 +47,7 @@ public:
 	static bool CheckOutScreen(const Vector3& worldPosition, const Vector2& offset, const BaseCamera& camera);
 	static bool CheckOutScreen(const Vector3& worldPosition, float offset, const BaseCamera& camera);
 
+	static Vector3 RotateVector(const Vector3& direct, float theta);
+
 };
 

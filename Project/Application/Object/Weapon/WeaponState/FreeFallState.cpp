@@ -27,21 +27,9 @@ void FreeFallState::Update()
 	weapon_->velocity_.y += (kGravity * 12.5f) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// 回転
-	weapon_->worldtransform_.direction_ = rotateVector(weapon_->worldtransform_.direction_, (3.14f / 24.0f));
+	weapon_->worldtransform_.direction_ = MathUtility::RotateVector(weapon_->worldtransform_.direction_, (3.14f / 24.0f));
 
 	// 座標移動
 	weapon_->worldtransform_.transform_.translate += weapon_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
-}
-
-Vector3 FreeFallState::rotateVector(const Vector3& direct, float theta)
-{
-	float cosTheta = std::cosf(theta);
-	float sinTheta = std::sinf(theta);
-
-	Vector3 result = {};
-	result.x = direct.x * cosTheta - direct.y * sinTheta;
-	result.y = direct.x * sinTheta + direct.y * cosTheta;
-
-	return result;
 }

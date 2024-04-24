@@ -1,6 +1,7 @@
 #include "CorrectSystem.h"
 #include "../../Player.h"
 #include "../../../../../Engine/Math/Matrix3x3.h"
+#include "../../../Engine/Input/Input.h"
 
 void CorrectSystem::Initialize(Player* player)
 {
@@ -11,7 +12,30 @@ void CorrectSystem::Initialize(Player* player)
 
 void CorrectSystem::Update(EnemyManager* enemyManager)
 {
+	Input* input = Input::GetInstance();
 
+	Vector2 rightStick = input->GetRightAnalogstick();
+	Vector2 leftStick = input->GetLeftAnalogstick();
+	Vector3 nearDirect = NearEnemyLockOn(enemyManager);
+	if (rightStick.x != 0 || rightStick.y != 0) {
+
+	}
+	else if (/*(nearDirect.x != 0 || nearDirect.y != 0)*/isInNearArea_ && std::holds_alternative<HoldState*>(player_->GetWeapon()->GetNowState())) {
+		player_->throwDirect_ = nearDirect;
+	}
+	else if (leftStick.x != 0 || leftStick.y != 0) {
+		Vector2 normalLeft = Vector2::Normalize(leftStick);
+		player_->throwDirect_.x = normalLeft.x;
+	}
+
+	// 方向ベクトル
+	//targetDirection;
+	//player_->throwDirect_;
+	isInNearArea_ = false;
+}
+
+Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
+{
 	// プレイヤーのワールドポジション
 	Vector3 playerPos = player_->worldtransform_.GetWorldPosition();
 	// エネミーのワールドポジション
@@ -44,7 +68,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 	// ループ文
 	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = enemyManager->GetObjects()->begin();
 	for (; itr != enemyManager->GetObjects()->end(); ++itr) {
-		
+
 		// エネミーをとってくる
 		OneOfManyObjects* obj = itr->get();
 		// エネミーのポジションをとる
@@ -55,7 +79,6 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		length = Vector3::Length(toEnemy);
 		// 長さが短いか確認
 		if (length < lengthMin) {
-
 			// 方向ベクトルを作成
 			direction = Vector3::Normalize(toEnemy);
 			enemyDirection = { direction.x, direction.y };
@@ -66,6 +89,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 
 			if (leftCross * rightCross <= 0.0f) {
 
+				isInNearArea_ = true;
 				// 目指す方向ベクトルを更新
 				targetDirection = direction;
 				// 現在の最小の長さを更新
@@ -76,10 +100,5 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		}
 
 	}
-
-
-	player_->throwDirect_ = targetDirection;
-	// 方向ベクトル
-	//targetDirection;
-
+	return targetDirection;
 }
