@@ -14,7 +14,7 @@ void ReturnState::Initialize()
 
 	//StartEasing(30);
 	startPosition_ = weapon_->worldtransform_.transform_.translate;
-	lerp_t = 0.2f;
+	lerp_t = 0.3f;
 	CreateRelayPoint();
 }
 
