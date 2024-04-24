@@ -286,11 +286,10 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 衝突したブロックへのベクトル
 		Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
 
+		// capsule用
 		Vector3 lerpPos = Ease::Easing(Ease::EaseName::Lerp, worldtransform_.GetWorldPosition(), prevPosition_, 0.15f);
 
 		// 最小・最大値
-		//Vector2 plMin = { worldtransform_.GetWorldPosition().x - scale2D_.x,worldtransform_.GetWorldPosition().y - scale2D_.y };
-		//Vector2 plMax = { worldtransform_.GetWorldPosition().x + scale2D_.x,worldtransform_.GetWorldPosition().y + scale2D_.y };
 		Vector2 plMin = { lerpPos.x - scale2D_.x,lerpPos.y - scale2D_.y };
 		Vector2 plMax = { lerpPos.x + scale2D_.x,lerpPos.y + scale2D_.y };
 
@@ -307,18 +306,21 @@ void Player::OnCollision(ColliderParentObject2D target)
 		float correctValue = 0.1f;
 		switch (type)
 		{
+		// 左側
 		case IObject::kLeftSide:
 			// プレイヤーの修正されたX座標を計算
 			correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
+		// 右側
 		case IObject::kRightSide:
 			// プレイヤーの修正されたX座標を計算
 			correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
+		// 上側
 		case IObject::kTopSide:
 			// プレイヤーの修正されたY座標を計算
 			correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
@@ -326,6 +328,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			velocity_.y = 0;
 
 			break;
+		// 下側
 		case IObject::kBottomSide:
 			// プレイヤーの修正されたY座標を計算
 			correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
@@ -335,36 +338,100 @@ void Player::OnCollision(ColliderParentObject2D target)
 				ChangeState(std::make_unique<GroundState>());
 			}
 			isGround_ = true;
-			//velocity_.y = 0;
 			break;
+
+		///---一点のみの衝突---///
+#pragma region 左下
 		case IObject::kLBPoint:
-			if (moveDirect.y < 0) {
-				// プレイヤーの修正されたY座標を計算
-				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
-				worldtransform_.transform_.translate.y = correctPosition.y;
-				// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
-				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-					ChangeState(std::make_unique<GroundState>());
+			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
+				if (moveDirect.y < 0) {
+					// プレイヤーの修正されたY座標を計算
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+						ChangeState(std::make_unique<GroundState>());
+					}
 				}
 			}
+			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
+				// プレイヤーの修正されたX座標を計算
+				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
+				worldtransform_.transform_.translate.x = correctPosition.x;
+				velocity_.x = 0;
+			}
 			break;
+#pragma endregion
+
+#pragma region 左上
 		case IObject::kLTPoint:
-
-			break;
-		case IObject::kRBPoint:
-			if (moveDirect.y < 0) {
-				// プレイヤーの修正されたY座標を計算
-				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
-				worldtransform_.transform_.translate.y = correctPosition.y;
-				// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
-				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-					ChangeState(std::make_unique<GroundState>());
+			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
+				if (moveDirect.y < 0) {
+					// プレイヤーの修正されたY座標を計算
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+						ChangeState(std::make_unique<GroundState>());
+					}
 				}
 			}
-			break;
-		case IObject::kRTPoint:
+			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
+				// プレイヤーの修正されたX座標を計算
+				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
+				worldtransform_.transform_.translate.x = correctPosition.x;
+				velocity_.x = 0;
+			}
 
 			break;
+#pragma endregion
+
+#pragma region 右下
+		case IObject::kRBPoint:
+			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
+				if (moveDirect.y < 0) {
+					// プレイヤーの修正されたY座標を計算
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+						ChangeState(std::make_unique<GroundState>());
+					}
+				}
+			}
+			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
+				// プレイヤーの修正されたX座標を計算
+				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
+				worldtransform_.transform_.translate.x = correctPosition.x;
+				velocity_.x = 0;
+			}
+			break;
+#pragma endregion
+
+#pragma region 右上
+		case IObject::kRTPoint:
+			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
+				if (moveDirect.y < 0) {
+					// プレイヤーの修正されたY座標を計算
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+						ChangeState(std::make_unique<GroundState>());
+					}
+				}
+			}
+			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
+				// プレイヤーの修正されたX座標を計算
+				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
+				worldtransform_.transform_.translate.x = correctPosition.x;
+				velocity_.x = 0;
+			}
+
+			break;
+#pragma endregion
+
+			///---（３点以上）---///
 		case IObject::kMultiPoints:
 			correctPosition = Ease::Easing(Ease::EaseName::Lerp, Vector2{ worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y },
 				Vector2{ prevPosition_.x,prevPosition_.y }, 0.15f);
@@ -376,6 +443,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			break;
 		}
 
+		// 更新
 		worldtransform_.UpdateMatrix();
 
 		// 座標以外の処理
