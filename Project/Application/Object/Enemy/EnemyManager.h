@@ -61,6 +61,10 @@ private:
 	std::list<EnemyEmitter> enemyEmitters_;
 	WorldTransform testParent;
 
+	WorldTransform emitters_[3];
+
+	std::list<WorldTransform> enemyEmitterTest_;
+
 	Vector3 resPoint_ = {};
 
 };

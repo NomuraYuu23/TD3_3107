@@ -24,6 +24,7 @@ void ThrownState::Initialize()
 		velocity_.y = weapon_->throwDirect_.y * (speedValue_ * 2.0f);
 	}
 	weapon_->worldtransform_.direction_ = weapon_->throwDirect_;
+	weapon_->throwInvTimer_.Start(1.0f);
 	//weapon_->safeLaunchTimer_.Start(2.0f);
 }
 

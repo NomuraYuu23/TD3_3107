@@ -13,7 +13,7 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { 4.0f,10.0f,0 };
+	worldtransform_.transform_.translate = { -70.0f,10.0f,0 };
 
 	// コライダーの初期化
 	circleCollider_.radius_ = 0.985f;
@@ -223,11 +223,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// 引き寄せ中の衝突をリターン
 			if (std::holds_alternative<AttractState*>(nowState_)) {
 				// 引き寄せの
+				float value = 3.0f;
 				if (worldtransform_.GetWorldPosition().x > weapon_->worldtransform_.GetWorldPosition().x) {
-					weapon_->velocity_.x = -1.0f;
+					weapon_->velocity_.x = -1.0f * value;
 				}
 				else {
-					weapon_->velocity_.x = 1.0f;
+					weapon_->velocity_.x = 1.0f * value;
 				}
 				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 				return;
@@ -367,14 +368,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 #pragma region 左上
 		case IObject::kLTPoint:
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
-				if (moveDirect.y < 0) {
+				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
 					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
-					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
-					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-						ChangeState(std::make_unique<GroundState>());
-					}
+					velocity_.y = 0;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
@@ -412,14 +410,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 #pragma region 右上
 		case IObject::kRTPoint:
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
-				if (moveDirect.y < 0) {
+				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
 					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
-					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
-					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-						ChangeState(std::make_unique<GroundState>());
-					}
+					velocity_.y = 0;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {

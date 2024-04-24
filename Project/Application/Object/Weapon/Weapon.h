@@ -124,6 +124,9 @@ public: // 外部で行う設定関数
 	// 引き寄せの最初の衝突しない時間
 	TimerLib attractInvTimer_;
 
+	// 投げの最初の衝突無効処理
+	TimerLib throwInvTimer_;
+
 	Terrain::BlockType hitBlockType_ = Terrain::BlockType::kNone;
 
 private:

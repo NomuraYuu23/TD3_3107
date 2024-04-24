@@ -307,7 +307,7 @@ void GameScene::Draw() {
 	mapManager_->Draw(camera_, blockTexture_);
 
 	// 敵
-	enemyManager_->Draw(camera_);
+	enemyManager_->Draw(camera_, enemyTexture_);
 
 	Model::PostDraw();
 
@@ -522,6 +522,7 @@ void GameScene::TextureLoad()
 	};
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	enemyTexture_ = TextureManager::Load("Resources/default/red2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 

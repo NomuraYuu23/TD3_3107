@@ -13,7 +13,7 @@ void Enemy::Initialize()
 	// コライダー用の座標・スケール
 	position2D_ = { transform_.translate.x,transform_.translate.y };
 	scale2D_ = { transform_.scale.x, transform_.scale.y };
-
+	scale2D_ = { 2.0f,2.0f };
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
@@ -51,6 +51,7 @@ void Enemy::ImGuiDraw()
 	//ImGui::Begin(name.c_str());
 	ImGui::SeparatorText(name.c_str());
 	ImGui::DragFloat3("WorldPosition", &transform_.translate.x);
+	ImGui::DragFloat2("scale", &scale2D_.x);
 	ImGui::Text("%d", isDead_);
 
 	//ImGui::End();

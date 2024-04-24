@@ -31,13 +31,13 @@ void MapManager::ImGuiDraw()
 	int size = (int)objects_.size();
 	ImGui::InputInt("maxBlockSize", &size);
 
-	//ImGui::Separator();
+	ImGui::Separator();
 
-	//// ブロック達のImGui
-	//for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
-	//	it != objects_.end(); ++it) {
-	//	static_cast<Terrain*>((*it))->ImGuiDraw();
-	//}
+	// ブロック達のImGui
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+		static_cast<Terrain*>(it->get())->ImGuiDraw();
+	}
 
 	ImGui::End();
 
@@ -309,22 +309,34 @@ void MapManager::InitializeLongPatternMap()
 	// 床
 	RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,2.0f });
 
-	// 縦壁
-	//RegisterBlock({ 0.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
-
-	RegisterBlock({ 120.0f - 1.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
-
 	// 真ん中の縦
 	// 右
-	RegisterBlock({ 50.0f,20.0f,0 }, { 2.0f,30.0f });
+	RegisterBlock({ 50.0f,28.0f,0 }, { 2.0f,30.0f });
 	// 左
-	RegisterBlock({ 40.0f,30.0f,0 }, { 2.0f,20.0f });
+	RegisterBlock({ 40.0f,40.0f,0 }, { 2.0f,30.0f });
 
 	// 上の床
-	RegisterBlock({ 70.0f,50.0f - 2.0f,0 }, { 20.0f,2.0f });
+	RegisterBlock({ 87.0f,56.0f,0 }, { 35.0f,2.0f });
 
 
-	RegisterBlock({ 15.0f,5.0f,0 }, { 5.0f,5.0f });
+	// ブロック
+	RegisterBlock({ 17.5f,12.5f,0 }, { 6.0f,1.0f });
+
+	// 右下の奴ら
+	RegisterBlock({ 90.0f,8.0f,0 }, { 6.0f,1.0f });
+	RegisterBlock({ 110.0f,16.0f,0 }, { 6.0f,1.0f });
+
+	RegisterBlock({ 90.0f,24.0f,0 }, { 6.0f,1.0f });
+	RegisterBlock({ 110.0f,32.0f,0 }, { 6.0f,1.0f });
+
+
+	// 左端縦
+	RegisterBlock({ -78.0f,50.0f - 2.0f,0 }, { 2.0f,50.0f });
+	// 右端壁
+	RegisterBlock({ 120.0f - 1.0f,50.0f - 2.0f,0 }, { 1.0f,50.0f });
+
+	// 天井
+	RegisterBlock({ 20.0f,98.0f,0 }, { 100.0f,2.0f });
 
 }
 
