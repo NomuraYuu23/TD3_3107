@@ -189,6 +189,9 @@ void GameScene::Update() {
 	}
 
 #endif
+	if (input_->TriggerKey(DIK_L)) {
+		requestSceneNo = kTitle;
+	}
 
 	if (requestSceneNo == kClear || requestSceneNo == kTitle || isBeingReset_) {
 		resetScene_ = false;
