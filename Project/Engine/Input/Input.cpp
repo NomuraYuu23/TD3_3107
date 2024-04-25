@@ -509,12 +509,22 @@ Vector2 Input::XGetRightAnalogstick()
 
 	Vector2 sThumbR = { float(xJoystickState_.Gamepad.sThumbRX), float(-xJoystickState_.Gamepad.sThumbRY) };
 
-	if (sThumbR.x < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
-		sThumbR.x > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+	float DeadZone = 2000;
+
+	//if (sThumbR.x < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE && 
+	//	sThumbR.x > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+	//	sThumbR.x = 0.0f;
+	//}
+	//if (sThumbR.y < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+	//	sThumbR.y > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+	//	sThumbR.y = 0.0f;
+	//}
+	if (sThumbR.x < DeadZone &&
+		sThumbR.x > -DeadZone) {
 		sThumbR.x = 0.0f;
 	}
-	if (sThumbR.y < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
-		sThumbR.y > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+	if (sThumbR.y < DeadZone &&
+		sThumbR.y > -DeadZone) {
 		sThumbR.y = 0.0f;
 	}
 

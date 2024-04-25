@@ -81,23 +81,31 @@ void PlayerController::ControllerProcess()
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 
-		// スローモーション
-		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
-			// スロー処理
-			if((stickDirect.x != 0 || stickDirect.y != 0) && !player_->IsRecoil()){
+		//// スローモーション
+		//if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
+		// スロー処理
+		Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+		float deadZoneValue = 0.25f;
+		if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
+			!player_->IsRecoil()) {
+			if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
 				// スローの倍率
 				player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 				// UI表示
 				player_->isArrowUiDraw_ = true;
 			}
-			// 通常
 			else {
 				player_->sPlaySpeed = 1.0f;
 			}
 		}
+		// 通常
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
+		//}
+		//else {
+		//	player_->sPlaySpeed = 1.0f;
+		//}
 		Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 
 		if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
@@ -205,7 +213,9 @@ void PlayerController::ThrownProcess()
 		}
 		// 刺さってる→戻ってくる
 		else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			if (!std::holds_alternative<AttractState*>(player_->GetNowState())) {
+				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
 		}
 		// 待機→戻ってくる
 		else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
@@ -214,11 +224,12 @@ void PlayerController::ThrownProcess()
 
 	}
 	if (input_->TriggerJoystick(kJoystickButtonLB)) {
-		if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState())) &&
-			std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+		if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
 			// 切り替え
-			player_->ChangeState(std::make_unique<AttractState>());
-			return;
+			if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+				player_->ChangeState(std::make_unique<AttractState>());
+				return;
+			}
 		}
 	}
 
