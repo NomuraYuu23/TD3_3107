@@ -92,7 +92,14 @@ void Player::Draw(const BaseCamera& camera)
 	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &const_cast<BaseCamera&>(camera));
 
 	// プレイヤーの描画
-	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera),material_.get());
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.worldTransform = &worldtransform_;
+	ModelDraw::AnimObjectDraw(desc);
+
 	// 武器の描画
 	if (weapon_) {
 		weapon_->Draw(camera);

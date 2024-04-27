@@ -13,7 +13,7 @@ public:
 
 	void Update();
 
-	void Draw(BaseCamera camera);
+	void Draw(const BaseCamera& camera);
 
 	void ImGuiDraw();
 
@@ -48,6 +48,9 @@ private:
 	int32_t enableLighting_;
 
 	float shininess_;
+
+	// ローカル行列
+	std::unique_ptr<LocalMatrixManager> localMatrixManager_ = nullptr;
 
 };
 

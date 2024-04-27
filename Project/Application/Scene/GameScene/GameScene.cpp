@@ -114,8 +114,8 @@ void GameScene::Initialize() {
 
 	collision2DDebugDraw_ = std::make_unique<Collision2DDebugDraw>();
 	collision2DDebugDraw_->Initialize(dxCommon_->GetDevice(), collision2DDebugDrawTextures_,
-		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateNameCollision2DDebugDraw].Get(),
-		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateNameCollision2DDebugDraw].Get());
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexCollision2DDebugDraw].Get(),
+		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexCollision2DDebugDraw].Get());
 
 
 	// プレイヤーの初期化
@@ -275,7 +275,15 @@ void GameScene::Draw() {
 
 #pragma endregion
 
-	Model::PreDraw(dxCommon_->GetCommadList(), pointLightManager_.get(), spotLightManager_.get(), directionalLight_.get());
+	ModelDraw::PreDrawDesc preDrawDesc;
+	preDrawDesc.commandList = dxCommon_->GetCommadList();
+	preDrawDesc.directionalLight = directionalLight_.get();
+	preDrawDesc.fogManager = FogManager::GetInstance();
+	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexAnimObject;
+	preDrawDesc.pointLightManager = pointLightManager_.get();
+	preDrawDesc.spotLightManager = spotLightManager_.get();
+
+	ModelDraw::PreDraw(preDrawDesc);
 
 	//3Dオブジェクトはここ
 	
@@ -293,12 +301,13 @@ void GameScene::Draw() {
 
 #endif // _DEBUG
 
-	Model::PostDraw();
+	ModelDraw::PostDraw();
 
 
 #pragma region 大量のオブジェクト描画
 
-	Model::PreManyModelsDraw(dxCommon_->GetCommadList(), pointLightManager_.get(), spotLightManager_.get(), directionalLight_.get());
+	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexManyAnimObjects;
+	ModelDraw::PreDraw(preDrawDesc);
 
 	// ブロック用
 	mapManager_->Draw(camera_);
@@ -306,7 +315,7 @@ void GameScene::Draw() {
 	// 敵
 	enemyManager_->Draw(camera_);
 
-	Model::PostDraw();
+	ModelDraw::PostDraw();
 
 #pragma endregion
 
@@ -320,7 +329,9 @@ void GameScene::Draw() {
 #pragma endregion
 
 #pragma region パーティクル描画
-	Model::PreParticleDraw(dxCommon_->GetCommadList(), camera_.GetViewProjectionMatrix());
+
+	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexParticle;
+	ModelDraw::PreDraw(preDrawDesc);
 
 	//光源
 	directionalLight_->Draw(dxCommon_->GetCommadList(), 6);
@@ -328,7 +339,7 @@ void GameScene::Draw() {
 	// パーティクルはここ
 	//particleManager_->Draw();
 
-	Model::PostDraw();
+	ModelDraw::PostDraw();
 
 #pragma endregion
 

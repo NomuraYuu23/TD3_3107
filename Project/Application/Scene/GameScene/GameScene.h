@@ -9,7 +9,6 @@
 #include "../../AudioManager/GameAudioManager.h"
 #include "../../Skydome/Skydome.h"
 #include "../../../Engine/3D/OutLineData.h"
-#include "../../ShadowManager/ShadowManager.h"
 
 //#include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード

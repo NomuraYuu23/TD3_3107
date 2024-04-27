@@ -24,6 +24,11 @@ void IObject::Initialize(Model* model)
 
 	// 死亡フラグの初期化
 	isDead_ = false;
+
+	// ローカル行列マネージャー
+	localMatrixManager_ = std::make_unique<LocalMatrixManager>();
+	localMatrixManager_->Initialize(model_->GetRootNode());
+
 }
 
 void IObject::Update()

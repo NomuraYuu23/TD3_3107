@@ -3,6 +3,7 @@
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../Engine/3D/ModelDraw.h"
 
 TitleScene::~TitleScene()
 {
@@ -27,7 +28,7 @@ void TitleScene::Initialize()
 	audioManager_->Initialize();
 
 	// ビュープロジェクション
-	TransformStructure baseCameraTransform = {
+	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
 		0.0f,0.0f,0.0f,
 		0.0f, 0.0f, -35.0f };
@@ -86,7 +87,15 @@ void TitleScene::Draw()
 
 #pragma endregion
 
-	Model::PreDraw(dxCommon_->GetCommadList());
+	ModelDraw::PreDrawDesc preDrawDesc;
+	preDrawDesc.commandList = dxCommon_->GetCommadList();
+	preDrawDesc.directionalLight = nullptr;
+	preDrawDesc.fogManager = FogManager::GetInstance();
+	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexAnimObject;
+	preDrawDesc.pointLightManager = nullptr;
+	preDrawDesc.spotLightManager = nullptr;
+
+	ModelDraw::PreDraw(preDrawDesc);
 
 	//3Dオブジェクトはここ
 
@@ -95,10 +104,8 @@ void TitleScene::Draw()
 		skydome_->Draw(camera_);
 	}
 
-	Model::PostDraw();
-	Model::PreDrawOutLine(dxCommon_->GetCommadList());
+	ModelDraw::PostDraw();
 
-	Model::PostDraw();
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
