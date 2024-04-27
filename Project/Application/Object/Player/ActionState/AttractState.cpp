@@ -31,9 +31,9 @@ void AttractState::Update()
 
 	// 引き寄せ終了分岐
 	if (attractTimer_.IsEnd()) {
-		float ratio = 15.0f;
+		float ratio = 7.5f;
 		// 速度計算
-		player_->velocity_.x = jumpDirection_.x * (ratio);
+		player_->velocity_.x = jumpDirection_.x * (ratio) * -1.0f;
 		// 武器の回転
 		player_->weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 		// 槍じゃん状態へ

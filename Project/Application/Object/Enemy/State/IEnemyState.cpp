@@ -10,6 +10,12 @@ void IEnemyState::PreInitialize(Enemy* enemy, AttackPattern pattern)
 	attackPattern_ = static_cast<uint32_t>(pattern);
 }
 
+void IEnemyState::PreInitialize(Enemy* enemy)
+{
+	// 対象の設定
+	enemy_ = enemy;
+}
+
 void IEnemyState::Update()
 {
 

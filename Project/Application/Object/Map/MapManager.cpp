@@ -1,4 +1,5 @@
 #include "MapManager.h"
+#include <fstream>
 
 #include "../IObject.h"
 #include "../ObjectList.h"
@@ -10,8 +11,9 @@ void MapManager::Initialize(Model* model)
 
 	LargeNumberOfObjects::Initialize(model);
 
-	InitializePlacement();
+	//InitializePlacement();
 	//InitializeBossMap();
+	InitializeLongPatternMap();
 }
 
 void MapManager::Update()
@@ -30,18 +32,12 @@ void MapManager::ImGuiDraw()
 	ImGui::InputInt("maxBlockSize", &size);
 
 	ImGui::Separator();
-	// ブロック追加
-	if (ImGui::Button("RegisterBlock")) {
-		RegisterBlock();
+
+	// ブロック達のImGui
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+		static_cast<Terrain*>(it->get())->ImGuiDraw();
 	}
-
-	//ImGui::Separator();
-
-	//// ブロック達のImGui
-	//for (std::list<OneOfManyObjects*>::iterator it = objects_.begin();
-	//	it != objects_.end(); ++it) {
-	//	static_cast<Terrain*>((*it))->ImGuiDraw();
-	//}
 
 	ImGui::End();
 
@@ -52,20 +48,15 @@ void MapManager::CollisionRegister(Collision2DManager* collisionManager, const B
 	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
 		it != objects_.end(); ++it) {
 		float range = 100.0f;
-		if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
-			collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
-		}
+
+
+		//if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
+			if (static_cast<Terrain*>(it->get())->typeNumber_ != Terrain::BlockType::kNone) {
+				collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
+			}
+		//}
 
 	}
-}
-
-void MapManager::RegisterBlock()
-{
-	//IObject* newBlock =
-	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
-	obj->Initialize();
-	// 追加
-	objects_.push_back(std::move(obj));
 }
 
 void MapManager::RegisterBlock(const Vector3& position)
@@ -86,7 +77,44 @@ void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 	obj->Initialize();
 	obj->transform_.translate = position;
 	obj->transform_.scale = { scale.x,scale.y,1.0f };
-	static_cast<Terrain*>(obj.get())->scale2D_ = scale;
+	// サイズの設定
+	static_cast<Terrain*>(obj.get())->scale2D_ = { scale.x * 2.0f, scale.y * 2.0f };
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kTerrain;
+	// 追加
+	objects_.push_back(std::move(obj));
+}
+
+void MapManager::RegisterTerrainBlock(const Vector3& position)
+{
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
+	obj->Initialize();
+	obj->transform_.translate = position;
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kTerrain;
+	// 追加
+	objects_.push_back(std::move(obj));
+
+}
+
+void MapManager::RegisterObstacleBlock(const Vector3& position)
+{
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
+	obj->Initialize();
+	obj->transform_.translate = position;
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kObstacle;
+	// 追加
+	objects_.push_back(std::move(obj));
+}
+
+void MapManager::RegisterWallBlock(const Vector3& position)
+{
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
+	obj->Initialize();
+	obj->transform_.translate = position;
+	// タイプの設定
+	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kWall;
 	// 追加
 	objects_.push_back(std::move(obj));
 }
@@ -102,64 +130,102 @@ void MapManager::InitializePlacement()
 	// 上noY座標 8.0f + (7 * 2.0f)
 	// 端noX座標 65.0f * 2.0f
 
+	uint32_t typeNum = static_cast<uint32_t>(Terrain::BlockType::kTerrain);
+	Vector3 position = {};
+
 #pragma region 周りのブロック
 	// 床・天井
 	for (int i = 0; i < 64; ++i) {
 		// 床
-		RegisterBlock({ (float)i * blockSize,-4.0f,0 });
+		position = Vector3({ (float)i * blockSize,-4.0f,0 });
+		(this->*registerFuncs[typeNum])(position);
 		// 天
-		RegisterBlock({ (float)i * blockSize, 58.0f,0 });
+		position = Vector3({ (float)i * blockSize, 58.0f,0 });
+		(this->*registerFuncs[typeNum])(position);
 	}
 
 	// 端壁
+	typeNum = static_cast<uint32_t>(Terrain::BlockType::kWall);
 	for (int i = 0; i < 32; ++i) {
 		// 左
-		RegisterBlock({ 0.0f,-4.0f + ((float)i * blockSize),0 });
+		position = Vector3({ 0.0f,-4.0f + ((float)i * blockSize),0 });
+		(this->*registerFuncs[typeNum])(position);
 		// 右
-		RegisterBlock({ (float)kMaxXNum * blockSize, -4.0f + ((float)i * blockSize),0 });
+		position = Vector3({ (float)kMaxXNum * blockSize, -4.0f + ((float)i * blockSize),0 });
+		(this->*registerFuncs[typeNum])(position);
 	}
 
 
 	// 最初の段差
+	typeNum = static_cast<uint32_t>(Terrain::BlockType::kTerrain);
 	for (int y = 0; y < 2; ++y) {
 		for (int x = 0; x < 44; ++x) {
-			RegisterBlock({ (float)(kMaxXNum - 44) * blockSize +(float)x * blockSize, -2.0f + ((float)y * blockSize),0 });
+			position = Vector3({ (float)(kMaxXNum - 44) * blockSize + (float)x * blockSize, -2.0f + ((float)y * blockSize),0 });
+			// 当たり判定に追加（左端
+			if (x == 0) {
+				(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+			}
+			// 下の段は登録しない
+			else if (y != 0) {
+				(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+			}
+			// 上の段は登録
+			else {
+				(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kNone)])(position);
+			}
 		}
 	}
 
 	// 次の段差
-	for (int y = 0; y < 2; ++y) {
-		for (int x = 0; x < 30; ++x) {
-			RegisterBlock({ (float)(kMaxXNum - 30) * blockSize + (float)x * blockSize, 2.0f + ((float)y * blockSize),0 });
-		}
-	}
+	//for (int y = 0; y < 2; ++y) {
+	//	for (int x = 0; x < 30; ++x) {
+	//		position = Vector3({ (float)(kMaxXNum - 30) * blockSize + (float)x * blockSize, 2.0f + ((float)y * blockSize),0 });
+	//		
+	//		if (x == 0) {
+	//			(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+	//		}
+	//		else if (y == 0) {
+	//			(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kNone)])(position);
+	//		}
+	//		else {
+	//			(this->*registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kTerrain)])(position);
+	//		}
+	//	}
+	//}
 
 #pragma endregion
 
-#pragma region リスの周辺
-	// 壁じゃん
-	for (int i = 0; i < 18; ++i) {
-		RegisterBlock({ blockSize * 4.0f,6.0f + ((float)i * blockSize),0 });
-	}
-	// 上床
-	for (int i = 0; i < 57; ++i) {
-		RegisterBlock({ blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 });
-	}
-
-	// 壁じゃん
-	for (int i = 0; i < 12; ++i) {
-		RegisterBlock({ blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 });
-	}
-
-#pragma endregion
+//#pragma region リスの周辺
+//	// 上床
+//	for (int i = 0; i < 57; ++i) {
+//		position = { blockSize * 4.0f + (float)i * blockSize,6.0f + (17 * blockSize),0 };
+//		(this->*registerFuncs[typeNum])(position);
+//	}
+//
+//	typeNum = static_cast<uint32_t>(Terrain::BlockType::kWall);
+//	// 壁じゃん
+//	for (int i = 0; i < 18; ++i) {
+//		position = { blockSize * 4.0f,6.0f + ((float)i * blockSize),0 };
+//		(this->*registerFuncs[typeNum])(position);
+//	}
+//	// 壁じゃん
+//	for (int i = 0; i < 12; ++i) {
+//		position = { blockSize * 4.0f + blockSize * 56 ,16.0f + ((float)i * blockSize),0 };
+//		(this->*registerFuncs[typeNum])(position);
+//	}
+//
+//#pragma endregion
 
 #pragma region 空中の障害物
+	RegisterBlock({ 20.0f,4.0f,0 }, { 20.0f,1.0f });
 
+	RegisterBlock({ 35.0f,8.0f,0 }, { 20.0f,1.0f });
+
+	typeNum = static_cast<uint32_t>(Terrain::BlockType::kObstacle);
 	for (int i = 0; i < 4; ++i) {
-		RegisterBlock({ (40 * blockSize) + (float)i * blockSize ,9 * blockSize,0 });
-		RegisterBlock({ (50 * blockSize) + (float)i * blockSize ,9 * blockSize,0 });
+		(this->*registerFuncs[typeNum])(Vector3({ (40 * blockSize) + (float)i * blockSize ,9 * blockSize,0 }));
+		(this->*registerFuncs[typeNum])(Vector3({ (50 * blockSize) + (float)i * blockSize ,9 * blockSize,0 }));
 	}
-	
 #pragma endregion
 
 
@@ -225,5 +291,59 @@ void MapManager::InitializeBossMap()
 	}
 
 #pragma endregion
+
+}
+
+void MapManager::InitializeLongPatternMap()
+{
+	// スケールの値が半径
+
+	//// 床
+	//RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,1.0f });
+
+	//// 縦壁
+	////RegisterBlock({ 0.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
+
+	//RegisterBlock({ 120.0f - 1.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
+
+	// 床
+	RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,2.0f });
+
+	// 真ん中の縦
+	// 右
+	RegisterBlock({ 50.0f,28.0f,0 }, { 2.0f,30.0f });
+	// 左
+	RegisterBlock({ 40.0f,40.0f,0 }, { 2.0f,30.0f });
+
+	// 上の床
+	RegisterBlock({ 87.0f,56.0f,0 }, { 35.0f,2.0f });
+
+
+	// ブロック
+	RegisterBlock({ 17.5f,12.5f,0 }, { 6.0f,1.0f });
+
+	// 右下の奴ら
+	RegisterBlock({ 90.0f,8.0f,0 }, { 6.0f,1.0f });
+	RegisterBlock({ 110.0f,16.0f,0 }, { 6.0f,1.0f });
+
+	RegisterBlock({ 90.0f,24.0f,0 }, { 6.0f,1.0f });
+	RegisterBlock({ 110.0f,32.0f,0 }, { 6.0f,1.0f });
+
+
+	// 左端縦
+	RegisterBlock({ -78.0f,50.0f - 2.0f,0 }, { 2.0f,50.0f });
+	// 右端壁
+	RegisterBlock({ 120.0f - 1.0f,50.0f - 2.0f,0 }, { 1.0f,50.0f });
+
+	// 天井
+	RegisterBlock({ 20.0f,98.0f,0 }, { 100.0f,2.0f });
+
+}
+
+void MapManager::LoadMapData(const std::string& filePath)
+{
+	// 読み込み
+	//std::ifstream file{ filePath };
+	filePath;
 
 }

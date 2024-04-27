@@ -29,6 +29,12 @@ void CameraRay::OnCollision(ColliderParentObject2D target)
 		return;
 	}
 	else {
+		Terrain** terrain = std::get_if<Terrain*>(&target);
+		// 障害物なら早期
+		if ((*terrain)->typeNumber_ == Terrain::BlockType::kObstacle) {
+			return;
+		}
+
 		Vector2 targetPos = {};
 		// 対象の情報取得
 		std::visit([&](const auto& a) {

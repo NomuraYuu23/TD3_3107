@@ -58,6 +58,12 @@ void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderS
 		if (a->GetCollisionAttribute() == b->GetCollisionAttribute()) {
 			return;
 		}
+
+		if ((a->GetCollisionAttribute() == kCollisionAttributeEnemy && b->GetCollisionAttribute() == kCollisionAttributeTerrain) ||
+			(a->GetCollisionAttribute() == kCollisionAttributeTerrain && b->GetCollisionAttribute() == kCollisionAttributeEnemy)) {
+			return;
+		}
+
 		//if (a->GetCollisionAttribute() == kCollisionAttributeRay || b->GetCollisionAttribute() == kCollisionAttributeRay) {
 		//	return;
 		//}

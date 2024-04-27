@@ -176,6 +176,8 @@
     <ClCompile Include="Engine\Physics\String.cpp" />
     <ClCompile Include="Engine\Physics\StructuralSpring.cpp" />
     <ClCompile Include="Engine\Animation\LocalMatrixManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
+    <ClCompile Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -385,6 +387,9 @@
     <ClInclude Include="Engine\Animation\LocalMatrixManager.h" />
     <ClInclude Include="Engine\Animation\LocalMatrix.h" />
     <ClInclude Include="Engine\3D\VertexInfluence.h" />
+    <ClInclude Include="Application\Object\Player\System\CameraRay\RayContactRecord.h" />
+    <ClInclude Include="Application\Object\Enemy\State\EnemyWaitState.h" />
+    <ClInclude Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

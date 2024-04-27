@@ -4,6 +4,8 @@
 #include "WeaponState/WeaponStateList.h"
 #include "WeaponState/StateList.h"
 
+#include "../Map/Terrain.h"
+
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 class Weapon : public IObject
@@ -79,6 +81,8 @@ public: // アクセッサ
 
 	void SetState(WeaponState newState) { nowState_ = newState; }
 
+	bool IsEnemyImpaled() { return isEnemyImpaled_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -116,6 +120,17 @@ public: // 外部で行う設定関数
 	Vector2 returnDirect_ = {};
 	// 刺さった時の逆ベクトル
 	Vector2 invDirect_ = {};
+
+	Vector2 prevDirect_ = {};
+
+	// 引き寄せの最初の衝突しない時間
+	TimerLib attractInvTimer_;
+
+	// 投げの最初の衝突無効処理
+	TimerLib throwInvTimer_;
+
+	Terrain::BlockType hitBlockType_ = Terrain::BlockType::kNone;
+
 private:
 	/// <summary>
 	/// ステート変更
@@ -146,5 +161,7 @@ private:
 	WeaponState nowState_;
 
 	float dotAngle_ = 0;
+
+	bool isEnemyImpaled_ = false;
 };
 

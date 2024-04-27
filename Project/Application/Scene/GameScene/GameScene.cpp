@@ -134,19 +134,22 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModel_.get());
 	// 更新
 	//countTime_ = 0;
-	player_->Update();
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(enemyModel_.get());
+	enemyManager_->Initialize(terrainModel_.get());
+
+	player_->SetEnemyManager(enemyManager_.get());
+	player_->Update();
 
 	bossEnemy_ = std::make_unique<PrevSmallBoss>();
 	bossEnemy_->Initialize(enemyModel_.get());
 
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();
+	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	mapManager_->Initialize(terrainModel_.get());
-
+	
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
@@ -186,6 +189,9 @@ void GameScene::Update() {
 	}
 
 #endif
+	if (input_->TriggerKey(DIK_L)) {
+		requestSceneNo = kTitle;
+	}
 
 	if (requestSceneNo == kClear || requestSceneNo == kTitle || isBeingReset_) {
 		resetScene_ = false;
@@ -310,10 +316,10 @@ void GameScene::Draw() {
 	ModelDraw::PreDraw(preDrawDesc);
 
 	// ブロック用
-	mapManager_->Draw(camera_);
+	mapManager_->Draw(camera_, blockTexture_);
 
 	// 敵
-	enemyManager_->Draw(camera_);
+	enemyManager_->Draw(camera_, enemyTexture_);
 
 	ModelDraw::PostDraw();
 
@@ -322,7 +328,7 @@ void GameScene::Draw() {
 #pragma region 線描画
 	DrawLine::PreDraw(dxCommon_->GetCommadList());
 
-	player_->DrawLine(camera_);
+	player_->DrawLines(camera_);
 
 	DrawLine::PostDraw();
 
@@ -528,6 +534,9 @@ void GameScene::TextureLoad()
 		TextureManager::Load("Resources/Debug/Box.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
 		TextureManager::Load("Resources/Debug/Circle.png", DirectXCommon::GetInstance(), textureHandleManager_.get())
 	};
+
+	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	enemyTexture_ = TextureManager::Load("Resources/default/red2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 

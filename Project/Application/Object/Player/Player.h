@@ -12,8 +12,11 @@
 #include "System/Combo/ComboCounter.h"
 #include "System/Parabola/PlayerParabola.h"
 #include "System/CameraRay/CameraRay.h"
+#include "System/CorrectSystem/CorrectSystem.h"
 
 #include "PlayerFootCollider.h"
+
+class EnemyManager;
 
 class Player : public IObject
 {
@@ -24,6 +27,10 @@ private: // サブクラス
 		Vector3 v3Position;
 		float offsetLength;
 	};
+
+	Vector2 up = { 1.0f,1.0f };
+	Vector2 tag = { -1.0f,1.0f };
+	Vector2 perVec = { up.x,up.y * -1.0f };
 
 public: // 継承
 	/// <summary>
@@ -103,7 +110,7 @@ public: // メンバ関数
 	/// 線描画
 	/// </summary>
 	/// <param name="baseCamera">カメラ</param>
-	void DrawLine(BaseCamera& baseCamera);
+	void DrawLines(BaseCamera& baseCamera);
 
 public:
 	// 矢印モデル
@@ -114,6 +121,8 @@ public:
 	// コンボ用の呼び出し関数
 	void AddCombo() { jumpCombo_.Add(); }
 	void ResetCombo() { jumpCombo_.Reset(); }
+
+	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
 public:
 	// ステート
@@ -143,6 +152,8 @@ public:
 
 	CameraRay cameraRay_;
 
+	EnemyManager* enemyManager_;
+
 private: // フラグ
 	// ゲームスピード
 	bool isSlowGame_ = false;
@@ -166,5 +177,14 @@ private: // システム
 
 	// 無敵タイマー
 	TimerLib invisibleTimer_;
+
+	// プレイヤーと槍をつなぐ線
+	std::unique_ptr<DrawLine> connectingSpearLine_;
+	// プレイヤーと槍をつなぐ線の色
+	Vector4 connectingSpearLineColor_;
+
+
+	// 補正用システム
+	CorrectSystem correctSystem_;
 };
 

@@ -25,6 +25,10 @@ public:
 	/// 1 : 遠距離
 	/// </summary>
 	void PreInitialize(Enemy* enemy, AttackPattern pattern);
+
+
+	void PreInitialize(Enemy* enemy);
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -36,12 +40,12 @@ public:
 
 protected: // それぞれの行動関数
 	// 近距離
-	virtual void MeleeInitialize() = 0;
-	virtual void MeleeUpdate() = 0;
+	virtual void MeleeInitialize() {};
+	virtual void MeleeUpdate() {};
 
 	// 遠距離
-	virtual void RangedUpdate() = 0;
-	virtual void RangedInitialize() = 0;
+	virtual void RangedUpdate() {};
+	virtual void RangedInitialize() {};
 
 protected:
 	// 関数ポインタの構造体

@@ -143,6 +143,23 @@ void LargeNumberOfObjects::Draw(BaseCamera& camera)
 
 }
 
+void LargeNumberOfObjects::Draw(BaseCamera& camera, uint32_t texture)
+{
+
+	Map(camera.GetViewProjectionMatrix());
+
+	ModelDraw::ManyAnimObjectsDesc desc;
+	desc.camera = &camera;
+	desc.localMatrixesHandle = &localMatrixesHandleGPU_;
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.numInstance = numInstance_;
+	//desc.textureHandles;
+	desc.transformationMatrixesHandle = &transformationMatrixesHandleGPU_;
+	ModelDraw::ManyAnimObjectsDraw(desc);
+
+}
+
 void LargeNumberOfObjects::SetNodeDatas(const ModelNode& modelNode, int32_t parentIndex)
 {
 

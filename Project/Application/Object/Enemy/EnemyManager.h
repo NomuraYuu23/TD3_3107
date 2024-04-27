@@ -50,6 +50,21 @@ private:
 	/// </summary>
 	void RegisterEnemy(const Vector3& position, uint32_t typeNum);
 
+	void RegisterEnemy(const Vector3& offset, uint32_t typeNum, const Vector3& parent);
+	void RegisterEnemy(const Vector3& offset, uint32_t typeNum, WorldTransform* parent);
+
+	struct EnemyEmitter {
+		WorldTransform worldTransform;
+		float distance;
+		uint32_t maxCount;
+	};
+	std::list<EnemyEmitter> enemyEmitters_;
+	WorldTransform testParent;
+
+	WorldTransform emitters_[3];
+
+	std::list<WorldTransform> enemyEmitterTest_;
+
 	Vector3 resPoint_ = {};
 
 };

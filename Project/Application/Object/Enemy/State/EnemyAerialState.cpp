@@ -1,7 +1,9 @@
 #include "EnemyAerialState.h"
+#include "../Enemy.h"
 
 void EnemyAerialState::Initialize()
 {
+	enemy_->SetState(this);
 	// 行動の初期化
 	(this->*actionFuncs_[attackPattern_].initFunc_)();
 }

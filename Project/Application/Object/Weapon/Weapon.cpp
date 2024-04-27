@@ -34,6 +34,11 @@ void Weapon::Initialize(Model* model)
 
 void Weapon::Update()
 {
+	isGravity_ = false;
+	isEnemyImpaled_ = false;
+
+	prevDirect_ = { worldtransform_.direction_.x,worldtransform_.direction_.y };
+
 	// 状態ごとの更新
 	if (state_) {
 		state_->Update();
@@ -46,6 +51,8 @@ void Weapon::Update()
 
 	// タイマー
 	timer_.Update();
+	attractInvTimer_.Update();
+	throwInvTimer_.Update();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -121,7 +128,7 @@ void Weapon::ImGuiDraw()
 	// サイズ
 	ImGui::DragFloat3("scla", &worldtransform_.transform_.scale.x, 0.01f, 0, 100);
 	// 回転処理
-	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x, 0.1f, -360.0f, 360.0f);
+	ImGui::DragFloat3("RotateDirect", &worldtransform_.direction_.x, 0.01f, -360.0f, 360.0f);
 	// オイラー角
 	ImGui::DragFloat3("Rotation", &worldtransform_.transform_.rotate.x);
 
@@ -132,6 +139,27 @@ void Weapon::ImGuiDraw()
 
 	ImGui::Text(name.c_str());
 
+	ImGui::Separator();
+	std::string stateName;
+	switch (hitBlockType_)
+	{
+	case Terrain::BlockType::kNone:
+		stateName = "kNone";
+		break;
+	case Terrain::BlockType::kTerrain:
+		stateName = "kTerrain";
+		break;
+	case Terrain::BlockType::kObstacle:
+		stateName = "kObstacle";
+		break;
+	case Terrain::BlockType::kWall:
+		stateName = "kWall";
+		break;
+	case Terrain::BlockType::kMaxSize:
+		stateName = "kMaxSize";
+		break;
+	}
+	ImGui::Text(stateName.c_str());
 
 	if (ImGui::BeginTabBar("State")) {
 		if (ImGui::BeginTabItem("Thrown")) {
@@ -191,15 +219,40 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		std::visit([&](const auto& a) {
 			targetPos = a->GetColliderPosition();
 			}, target);
-		Vector2 direct = targetPos - boxCollider_.position_;
-		float dot = Vector2::Dot({ throwDirect_.x,throwDirect_.y }, Vector2::Normalize(direct));
-		// 内積で移動方向との判定
-		if (dot < dotAngle_) {
-			return;
-		}
+		//Vector2 direct = targetPos - boxCollider_.position_;
+		//float dot = Vector2::Dot({ throwDirect_.x,throwDirect_.y }, Vector2::Normalize(direct));
+		//// 内積で移動方向との判定
+		//if (dot < dotAngle_) {
+		//	return;
+		//}
+
+		//Vector2 terrainVector = { worldtransform_.GetWorldPosition().x,targetPos.y };
+		//terrainVector = terrainVector - Vector2(worldtransform_.GetWorldPosition().x, worldtransform_.GetWorldPosition().y);
+		//if ((terrainVector.y > 0 && throwDirect_.y < 0) || (terrainVector.y < 0 && throwDirect_.y > 0)) {
+		//	return;
+		//}
+		//terrainVector = { targetPos.x, worldtransform_.GetWorldPosition().y };
+		//terrainVector = terrainVector - Vector2(worldtransform_.GetWorldPosition().x, worldtransform_.GetWorldPosition().y);
+		//if ((terrainVector.x > 0 && throwDirect_.x < 0) || (terrainVector.x < 0 && throwDirect_.x > 0)) {
+		//	return;
+		//}
 
 		// 壁・ブロックとの衝突判定
 		if (std::holds_alternative<Terrain*>(target)) {
+
+			if (throwInvTimer_.IsActive()) {
+				return;
+			}
+			// ポインタに
+			Terrain** terrainPtr = std::get_if<Terrain*>(&target);
+			// タイプ
+			hitBlockType_ = (*terrainPtr)->typeNumber_;
+
+			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
+			ChangeRequest(Weapon::StateName::kImpaled);
+			return;
+		}
+		else if (std::holds_alternative<Enemy*>(target)) {
 			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;
@@ -220,32 +273,56 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			return;
 		}
 		else {
-			if (velocity_.y < 0) {
-				if (worldtransform_.direction_.x >= 0.85f && worldtransform_.direction_.x <= 1.0f) {
-					worldtransform_.direction_.x = 0.7f;
+			// 落下中
+			if (!attractInvTimer_.IsActive()) {
+				// 角度修正
+				if (std::fabsf(worldtransform_.direction_.x) >= 0.85f && std::fabsf(worldtransform_.direction_.x) <= 1.0f) {
+					//if (worldtransform_.direction_.x > 0) {
+					//	worldtransform_.direction_.x = 0.7f;
+					//}
+					//else {
+					//	worldtransform_.direction_.x = -0.7f;
+					//}
+					Vector3 newDirect = MathUtility::RotateVector(Vector3(prevDirect_.x, prevDirect_.y, 0), (-3.14f / 24.0f) * 2.0f);
+
+					worldtransform_.direction_ = { newDirect.x,newDirect.y };
+					// 対象の情報取得
+					Vector2 targetPos = {};
+					Vector2 targetRadius = {};
+
+					std::visit([&](const auto& a) {
+						targetPos = a->GetColliderPosition();
+						targetRadius = a->GetColliderSize();
+						}, target);
+
+					// 座標修正
+					if (targetPos.y + targetRadius.y > worldtransform_.GetWorldPosition().y && (targetPos.x+ targetRadius.x> worldtransform_.GetWorldPosition().x && targetPos.x - targetRadius.x < worldtransform_.GetWorldPosition().x)) {
+						worldtransform_.transform_.translate.y = targetPos.y + targetRadius.y;
+					}
+
 				}
-				else if (worldtransform_.direction_.x <= -0.85f && worldtransform_.direction_.x >= -1.0f) {
-					worldtransform_.direction_.x = -0.7f;
-				}
+				// ステート変更
 				ChangeRequest(Weapon::StateName::kImpaled);
 			}
 			
 			return;
 		}
 	}
-	//else if (std::holds_alternative<ImpaledState*>(nowState_)) {
-	//	if (std::holds_alternative<Player*>(target)) {
-	//		Player** playerPtr = std::get_if<Player*>(&target);
-	//		if (playerPtr != nullptr) {
-	//			Player* player = *playerPtr;
-
-	//			if (std::holds_alternative<AttractState*>(player->GetNowState())) {
-	//				ChangeRequest(Weapon::StateName::kFreeFall);
-	//			}
-	//		}
-
-	//	}
-	//}
+	else if (std::holds_alternative<ImpaledState*>(nowState_)) {
+		if (std::holds_alternative<Enemy*>(target)) {
+			isEnemyImpaled_ = true;
+			if (isTread_) {
+				ChangeRequest(Weapon::StateName::kFreeFall);
+			}
+			Player** player = std::get_if<Player*>(&target);			
+			if (player != nullptr) {
+				//Player* player = *playerPtr;
+				if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
+					ChangeRequest(Weapon::StateName::kFreeFall);
+				}
+			}
+		}
+	}
 }
 
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)

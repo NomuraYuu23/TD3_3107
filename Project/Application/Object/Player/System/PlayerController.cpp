@@ -37,6 +37,15 @@ void PlayerController::Update()
 
 }
 
+void PlayerController::ImGuiDraw()
+{
+	// 投げる方向
+	Vector2 stickDirect = input_->GetRightAnalogstick();
+	ImGui::DragFloat2("rightStick", &stickDirect.x);
+	Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+	ImGui::DragFloat2("normStick", &normalize.x);
+}
+
 void PlayerController::ControllerProcess()
 {
 	//Vector2 leftStick = input_->GetLeftAnalogstick();
@@ -45,46 +54,20 @@ void PlayerController::ControllerProcess()
 	player_->isArrowUiDraw_ = false;
 
 	if (input_->GetJoystickConnected()) {
-		// 地上処理
-		GroundMoveProcess();
+		// 待機処理
+		WaitKeyProcess();
 
 		// 空中処理
 		AerialMoveProcess();
 
-		// 待機処理
-		WaitKeyProcess();
+		// 地上処理
+		GroundMoveProcess();
 
 		//---どの状態でも行える操作---//
 
-		// 投げ
-		if (input_->TriggerJoystick(kJoystickButtonRB)) {
-			// 投げ入力
-			if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
-				// 右スティックの入力がなければキャンセル
-				if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
-					return;
-				}
-				// 地上で投げた場合は槍の重力フラグをオン
-				if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
-					player_->weapon_->SetIsGravity(true);
-				}
-				else {
-					player_->weapon_->SetIsGravity(false);
-				}
-				// 方向
-				player_->weapon_->throwDirect_ = player_->throwDirect_;
-				player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
-			}
-			// 刺さってる→戻ってくる
-			else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			}
-			// 待機→戻ってくる
-			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			}
+		// 投げ処理
+		ThrownProcess();
 
-		}
 		// 戻ってくる入力
 		//if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
 		//	player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
@@ -98,25 +81,38 @@ void PlayerController::ControllerProcess()
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 
-		// スローモーション
-		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
-			// スロー処理
-			if((stickDirect.x != 0 || stickDirect.y != 0) && !player_->IsRecoil()){
+		//// スローモーション
+		//if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
+		// スロー処理
+		Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+		float deadZoneValue = 0.25f;
+		if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
+			!player_->IsRecoil()) {
+			if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
 				// スローの倍率
 				player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 				// UI表示
 				player_->isArrowUiDraw_ = true;
 			}
-			// 通常
 			else {
 				player_->sPlaySpeed = 1.0f;
 			}
 		}
+		// 通常
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		// 投げる方向ベクトル
-		player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
+		//}
+		//else {
+		//	player_->sPlaySpeed = 1.0f;
+		//}
+		Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+
+		if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
+			// 投げる方向ベクトル
+			player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
+
+		}
 
 	}
 	// 座標更新
@@ -134,18 +130,12 @@ void PlayerController::AerialMoveProcess()
 	}
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
-	bool CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState());
+	bool CheckAction = (std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()));
 
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
 		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-
-		//if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-		//	// 切り替え
-		//	player_->ChangeState(std::make_unique<AttractState>());
-		//	return;
-		//}
 
 	}
 }
@@ -163,7 +153,15 @@ void PlayerController::GroundMoveProcess()
 	// 地上にいる場合
 	if (CheckAction) {
 		// 左右移動
-		player_->velocity_.x = (float)leftStick.x / SHRT_MAX * groundSpeed_ * (1.0f / IObject::sPlaySpeed);
+		float moveValue = 0;
+		if (leftStick.x > 0) {
+			moveValue = 1.0f;
+		}
+		else if (leftStick.x < 0) {
+			moveValue = -1.0f;
+		}
+		//float moveValue = (float)leftStick.x / SHRT_MAX;
+		player_->velocity_.x = moveValue * groundSpeed_ * (1.0f / IObject::sPlaySpeed);
 
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない
@@ -190,6 +188,50 @@ void PlayerController::WaitKeyProcess()
 		player_->ChangeState(std::make_unique<SpearAerialState>());
 	}
 	return;
+
+}
+
+void PlayerController::ThrownProcess()
+{
+	if (input_->TriggerJoystick(kJoystickButtonRB)) {
+		// 投げ入力
+		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
+			// 右スティックの入力がなければキャンセル
+			if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
+				return;
+			}
+			// 地上で投げた場合は槍の重力フラグをオン
+			if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
+				player_->weapon_->SetIsGravity(false);
+			}
+			else {
+				player_->weapon_->SetIsGravity(false);
+			}
+			// 方向
+			player_->weapon_->throwDirect_ = player_->throwDirect_;
+			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
+		}
+		// 刺さってる→戻ってくる
+		else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+			if (!std::holds_alternative<AttractState*>(player_->GetNowState())) {
+				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
+		}
+		// 待機→戻ってくる
+		else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
+			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+		}
+
+	}
+	if (input_->TriggerJoystick(kJoystickButtonLB)) {
+		if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
+			// 切り替え
+			if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+				player_->ChangeState(std::make_unique<AttractState>());
+				return;
+			}
+		}
+	}
 
 }
 
