@@ -109,8 +109,8 @@ public: // メンバ関数
 	/// <summary>
 	/// 線描画
 	/// </summary>
-	/// <param name="baseCamera">カメラ</param>
-	void DrawLines(BaseCamera& baseCamera);
+	/// <param name="drawLine">線描画クラス</param>
+	void DrawLinesMap(DrawLine* drawLine);
 
 public:
 	// 矢印モデル
@@ -178,13 +178,11 @@ private: // システム
 	// 無敵タイマー
 	TimerLib invisibleTimer_;
 
-	// プレイヤーと槍をつなぐ線
-	std::unique_ptr<DrawLine> connectingSpearLine_;
 	// プレイヤーと槍をつなぐ線の色
 	Vector4 connectingSpearLineColor_;
 
-
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
 };
 

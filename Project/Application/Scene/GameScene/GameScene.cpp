@@ -224,6 +224,7 @@ void GameScene::Update() {
 	mapManager_->Update();
 	// プレイヤー
 	player_->Update();
+	player_->DrawLinesMap(drawLine_);
 	// 敵
 	enemyManager_->Update();
 	//bossEnemy_->Update();
@@ -333,8 +334,6 @@ void GameScene::Draw() {
 #pragma endregion
 
 #pragma region 線描画
-
-	//player_->DrawLines(camera_);
 
 	drawLine_->Draw(dxCommon_->GetCommadList(), camera_);
 

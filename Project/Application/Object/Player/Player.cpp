@@ -45,10 +45,6 @@ void Player::Initialize(Model* model)
 	// レイ
 	rayLength_ = -100.0f;
 	cameraRay_.Initialize(this);
-
-	// プレイヤーと槍をつなぐ線
-	connectingSpearLine_.reset(DrawLine::Create());
-	connectingSpearLineColor_ = { 0.8f,0.0f,0.8f,1.0f };
 	
 }
 
@@ -561,18 +557,21 @@ void Player::ChangeState(std::unique_ptr<IActionState> newState)
 	actionState_ = std::move(newState);
 }
 
-void Player::DrawLines(BaseCamera& baseCamera)
+void Player::DrawLinesMap(DrawLine* drawLine)
 {
 
 	if (std::holds_alternative<HoldState*>(weapon_->GetNowState())){
-		parabola_.Draw(baseCamera);
+		parabola_.DrawMap(drawLine);
 	}
 
-	connectingSpearLine_->Draw(
-		worldtransform_.GetWorldPosition(),
-		weapon_->worldtransform_.GetWorldPosition(),
-		connectingSpearLineColor_,
-		connectingSpearLineColor_,
-		baseCamera);
+	LineForGPU lineForGPU;
+
+	// 色
+	lineForGPU.color[0] = connectingSpearLineColor_;
+	lineForGPU.color[1] = connectingSpearLineColor_;
+
+	lineForGPU.position[0] = worldtransform_.GetWorldPosition();
+	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
+	drawLine->Map(lineForGPU);
 
 }
