@@ -81,31 +81,30 @@ void PlayerController::ControllerProcess()
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 
-		//// スローモーション
-		//if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
-		// スロー処理
-		Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
-		float deadZoneValue = 0.25f;
-		if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
-			!player_->IsRecoil()) {
-			if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
-				// スローの倍率
-				player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
-				// UI表示
-				player_->isArrowUiDraw_ = true;
+		// スローモーション
+		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
+			// スロー処理
+			Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+			float deadZoneValue = 0.25f;
+			if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
+				!player_->IsRecoil()) {
+				if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
+					// スローの倍率
+					player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
+					// UI表示
+					player_->isArrowUiDraw_ = true;
+				}
+				else {
+					player_->sPlaySpeed = 1.0f;
+				}
 			}
 			else {
 				player_->sPlaySpeed = 1.0f;
 			}
 		}
-		// 通常
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		//}
-		//else {
-		//	player_->sPlaySpeed = 1.0f;
-		//}
 		Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 
 		if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {

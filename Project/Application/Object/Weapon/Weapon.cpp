@@ -233,7 +233,71 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		if (std::holds_alternative<Terrain*>(target)) {
 
 			if (throwInvTimer_.IsActive()) {
-				return;
+
+				Vector2 targetPos = {};
+				Vector2 targetRad = {};
+				// 対象の情報取得
+				std::visit([&](const auto& a) {
+					targetPos = a->GetColliderPosition();
+					targetRad = a->GetColliderSize();
+					}, target);
+				targetRad *= 0.5f;
+				// 右上
+				Vector3 maxPos = {
+					targetPos.x + targetRad.x,	// 右
+					targetPos.y + targetRad.y,	// 上
+				};
+				// 左下
+				Vector3 minPos = {
+					targetPos.x - targetRad.x,	// 左
+					targetPos.y - targetRad.y,	// 下
+				};
+
+				// 衝突したブロックへのベクトル
+				Vector2 p2tDist = { targetPos.x - worldtransform_.GetWorldPosition().x,targetPos.y - worldtransform_.GetWorldPosition().y };
+
+				// capsule用
+				Vector3 weaponPosition = worldtransform_.GetWorldPosition();
+				// 最小・最大値
+				float maxSize = (boxCollider_.scale_.x > boxCollider_.scale_.y) ? boxCollider_.scale_.x : boxCollider_.scale_.y;
+				Vector2 weaponMin = { weaponPosition.x - maxSize,weaponPosition.y - maxSize };
+				Vector2 weaponMax = { weaponPosition.x + maxSize,weaponPosition.y + maxSize };
+
+				// 四頂点
+				IObject::FourTop player4Point = IObject::GenerateFourTop(weaponMin, weaponMax);
+ 				IObject::CollisionType type = IObject::GetCollisionType(player4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
+
+				if ((worldtransform_.direction_.y > 0) && type == IObject::CollisionType::kBottomSide) {
+					return;
+				}
+				else if ((worldtransform_.direction_.y < 0) && type == IObject::CollisionType::kTopSide) {
+					return;
+				}
+				else if ((worldtransform_.direction_.x < 0) && type == IObject::CollisionType::kRightSide) {
+					return;
+				}
+				else if ((worldtransform_.direction_.x > 0) && type == IObject::CollisionType::kLeftSide) {
+					return;
+				}
+
+				if (worldtransform_.direction_.y < 0 &&
+					((type == IObject::CollisionType::kRTPoint) || (type == IObject::CollisionType::kLTPoint))) {
+					return;
+				}
+				else if (worldtransform_.direction_.y > 0 &&
+					((type == IObject::CollisionType::kRBPoint) || (type == IObject::CollisionType::kLBPoint))) {
+					return;
+				}
+				else if (worldtransform_.direction_.x > 0 &&
+					((type == IObject::CollisionType::kLTPoint) || (type == IObject::CollisionType::kLBPoint))) {
+					return;
+				}
+				else if (worldtransform_.direction_.x < 0 &&
+					((type == IObject::CollisionType::kRBPoint) || (type == IObject::CollisionType::kRTPoint))) {
+					return;
+				}
+
+
 			}
 			// ポインタに
 			Terrain** terrainPtr = std::get_if<Terrain*>(&target);
