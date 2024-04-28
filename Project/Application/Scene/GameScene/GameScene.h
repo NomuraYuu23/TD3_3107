@@ -164,4 +164,6 @@ private:
 	uint32_t blockTexture_ = 0u;
 	uint32_t enemyTexture_ = 0u;
 
+	std::vector<UINT> tmpTextures_;
+
 };

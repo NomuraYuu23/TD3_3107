@@ -315,22 +315,28 @@ void GameScene::Draw() {
 	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexManyAnimObjects;
 	ModelDraw::PreDraw(preDrawDesc);
 
+	tmpTextures_.clear();
+	tmpTextures_.push_back(blockTexture_);
+
 	// ブロック用
-	mapManager_->Draw(camera_, blockTexture_);
+	mapManager_->Draw(camera_, &tmpTextures_);
+
+
+	tmpTextures_.clear();
+	tmpTextures_.push_back(enemyTexture_);
 
 	// 敵
-	enemyManager_->Draw(camera_, enemyTexture_);
+	enemyManager_->Draw(camera_, &tmpTextures_);
 
 	ModelDraw::PostDraw();
 
 #pragma endregion
 
 #pragma region 線描画
-	DrawLine::PreDraw(dxCommon_->GetCommadList());
 
-	player_->DrawLines(camera_);
+	//player_->DrawLines(camera_);
 
-	DrawLine::PostDraw();
+	drawLine_->Draw(dxCommon_->GetCommadList(), camera_);
 
 #pragma endregion
 
