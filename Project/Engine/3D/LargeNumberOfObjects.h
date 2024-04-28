@@ -50,7 +50,6 @@ public:
 	/// </summary>
 	/// <param name="camera">カメラ</param>
 	void Draw(BaseCamera& camera);
-	void Draw(BaseCamera& camera, uint32_t texture);
 
 	/// <summary>
 	/// ノードデータ設定
@@ -68,12 +67,6 @@ public:
 	/// </summary>
 	/// <param name="object">オブジェクト</param>
 	void AddObject(OneOfManyObjects* object);
-
-	/// <summary>
-	/// オブジェクトの参照
-	/// </summary>
-	/// <returns></returns>
-	std::list<std::unique_ptr<OneOfManyObjects>>* GetObjects() { return &objects_; }
 
 protected: // トランスフォーム関係
 
