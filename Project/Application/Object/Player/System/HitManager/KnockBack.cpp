@@ -7,7 +7,7 @@
 void KnockBack::Initialize(Player* player)
 {
 	player_ = player;
-	knockBackPower_ = { 20.0f,20.0f,0 };
+	knockBackPower_ = { 40.0f,40.0f,0 };
 }
 
 void KnockBack::CreateKnockBack(const Vector3& direction)
@@ -18,7 +18,7 @@ void KnockBack::CreateKnockBack(const Vector3& direction)
 	}
 	player_->velocity_ = { moveDirection_.x * knockBackPower_.x,moveDirection_.y * knockBackPower_.y,0 };
 
-	AcceptTimer_.Start(10.0f);
+	AcceptTimer_.Start(30.0f);
 }
 
 void KnockBack::Update()
@@ -29,7 +29,7 @@ void KnockBack::Update()
 
 	// 移動ベクトルの処理
 	// 反動の速度ベクトルを計算	
-	float ratio = 0.001f;
+	float ratio = 0.005f;
 	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, ratio);
 	player_->velocity_.y = MathUtility::Lerp(player_->velocity_.y, 0, ratio);
 

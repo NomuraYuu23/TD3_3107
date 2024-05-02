@@ -227,6 +227,9 @@ void PlayerController::ThrownProcess()
 			}
 		}
 		else if (std::holds_alternative<FreeFallState*>(player_->weapon_->GetNowState())) {
+			if (!player_->IsCanReturn()) {
+				return;
+			}
 			if (player_->IsFreeFallTimerEnd()) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}

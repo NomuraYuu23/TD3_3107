@@ -353,13 +353,13 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			if (isTread_) {
 				ChangeRequest(Weapon::StateName::kFreeFall);
 			}
-			Player** player = std::get_if<Player*>(&target);			
-			if (player != nullptr) {
-				//Player* player = *playerPtr;
-				if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
-					ChangeRequest(Weapon::StateName::kFreeFall);
-				}
-			}
+			//Player** player = std::get_if<Player*>(&target);			
+			//if (player != nullptr) {
+			//	//Player* player = *playerPtr;
+			//	if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
+			//		ChangeRequest(Weapon::StateName::kFreeFall);
+			//	}
+			//}
 		}
 	}
 }

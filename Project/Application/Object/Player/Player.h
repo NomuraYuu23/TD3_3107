@@ -125,6 +125,8 @@ public:
 	/// </summary>
 	/// <param name="isDead"></param>
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
+	bool IsCanReturn() { return !knockBackSystem_.AcceptActive() && !recoil_.IsActive(); }
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;

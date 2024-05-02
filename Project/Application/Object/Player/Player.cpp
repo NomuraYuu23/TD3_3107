@@ -132,6 +132,8 @@ void Player::ImGuiDraw()
 	sPlaySpeed = ratio;
 	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
+	int tex = IsCanReturn();
+	ImGui::Text("%d : RetunCan", tex);
 	// 状態の名前取得
 	std::string name = typeid(*actionState_).name();
 	ImGui::Text(name.c_str());
