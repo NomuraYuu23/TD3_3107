@@ -61,6 +61,25 @@ void EditorScene::Initialize()
 
 void EditorScene::Update()
 {
+#ifdef _DEBUG
+	ImguiDraw();
+
+	if (input_->TriggerKey(DIK_LSHIFT)) {
+		requestSceneNo = kGame;
+	}
+
+#endif
+
+	//光源
+	DirectionalLightData directionalLightData;
+	directionalLightData.color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData.direction = Vector3::Normalize(direction);
+	directionalLightData.intencity = intencity;
+	directionalLight_->Update(directionalLightData);
+
+	pointLightManager_->Update(pointLightDatas_);
+	spotLightManager_->Update(spotLightDatas_);
+
 	// デバッグカメラ
 	DebugCameraUpdate();
 
