@@ -38,17 +38,27 @@ private: // データ用構造体クラス
 		float invAerialRatio_;
 	};
 
+	struct healthData {
+		// 最大体力
+		int32_t hp_;
+		// 無敵時間
+		float invTimer_;
+	};
+
 	// プレイヤーの情報
 	struct PlayerData {
-
+		// ジャンプデータ
 		JumpData jumpData_;
-
+		// 移動データ
 		MoveData moveData_;
 		// 反動情報
 		RecoilData recoil;
 
 		// 画面外から戻ってくる際の画面外の距離
 		float deadLength_;
+	
+		// 体力データ
+		healthData hpData_;
 	};
 	// 共通の情報
 	struct CommonData {

@@ -8,3 +8,4 @@
 #include "Combo/ComboCounter.h"
 #include "Parabola/PlayerParabola.h"
 #include "Recoil/PlayerRecoil.h"
+#include "HitManager/PlayerHitManager.h"

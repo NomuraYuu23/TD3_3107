@@ -7,13 +7,6 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 #include "ActionState/ActionStateList.h"
-//#include "System/PlayerController.h"
-//#include "System/Recoil/PlayerRecoil.h"
-//#include "System/Combo/ComboCounter.h"
-//#include "System/Parabola/PlayerParabola.h"
-//#include "System/CameraRay/CameraRay.h"
-//#include "System/CorrectSystem/CorrectSystem.h"
-
 #include "System/PlayerSystemList.h"
 
 #include "PlayerFootCollider.h"
@@ -127,7 +120,11 @@ public:
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
 	bool IsFreeFallTimerEnd() { return fallTimer_.IsEnd(); }
-
+	/// <summary>
+	/// 死亡フラグの設定
+	/// </summary>
+	/// <param name="isDead"></param>
+	void SetIsDead(bool isDead) { isDead_ = isDead; }
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -180,9 +177,8 @@ private: // システム
 	ComboCounter jumpCombo_;
 	// 自由落下の武器を回収するためのシステム
 	FreeFallTimer fallTimer_;
-
-	// 無敵タイマー
-	TimerLib invisibleTimer_;
+	// HP管理クラス
+	PlayerHitManager hpManager_;
 
 	// プレイヤーと槍をつなぐ線
 	std::unique_ptr<DrawLine> connectingSpearLine_;

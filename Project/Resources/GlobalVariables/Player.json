@@ -2,6 +2,8 @@
     "Player": {
         "AerialAcceleration": 20.0,
         "Gravity": 8.0,
+        "HitInvisibleFrame": 15.0,
+        "HitPoint": 10,
         "HorizontalPower": 10.0,
         "MoveSpeed": 10.0,
         "NormalJumpPower": 40.0,

@@ -28,6 +28,9 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "RecoilRatio", player_.recoil.ratio_);
 	globalVariables_->AddItem(groupName, "RecoilLerpRatio", player_.recoil.lerpRatio_);
 
+	globalVariables_->AddItem(groupName, "HitPoint", player_.hpData_.hp_);
+	globalVariables_->AddItem(groupName, "HitInvisibleFrame", player_.hpData_.invTimer_);
+
 	groupName = "Weapon";
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
@@ -63,6 +66,9 @@ void GameObjectData::ApplyGlobalVariables()
 	player_.recoil.time_ = globalVariables_->GetFloatValue(groupName, "RecoilFrame");
 	player_.recoil.ratio_ = globalVariables_->GetFloatValue(groupName, "RecoilRatio");
 	player_.recoil.lerpRatio_ = globalVariables_->GetFloatValue(groupName, "RecoilLerpRatio");
+
+	player_.hpData_.hp_ = globalVariables_->GetIntValue(groupName, "HitPoint");
+	player_.hpData_.invTimer_ = globalVariables_->GetFloatValue(groupName, "HitInvisibleFrame");
 
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");

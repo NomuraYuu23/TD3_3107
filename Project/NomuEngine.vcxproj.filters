@@ -175,6 +175,7 @@
     <ClCompile Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\KnockBackState.cpp" />
     <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
+    <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -382,6 +383,7 @@
     <ClInclude Include="Application\Object\Player\ActionState\KnockBackState.h" />
     <ClInclude Include="Application\Object\Player\System\FreeFall\FreeFallTimer.h" />
     <ClInclude Include="Application\Object\Player\System\PlayerSystemList.h" />
+    <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
