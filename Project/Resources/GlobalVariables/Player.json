@@ -1,12 +1,16 @@
 {
     "Player": {
-        "AerialAcceleration": 7.5,
+        "AerialAcceleration": 20.0,
         "Gravity": 8.0,
+        "HitInvisibleFrame": 15.0,
+        "HitPoint": 10,
+        "HorizontalPower": 10.0,
         "MoveSpeed": 10.0,
-        "NormalJumpPower": 35.0,
+        "NormalJumpPower": 40.0,
         "RecoilFrame": 20.0,
         "RecoilLerpRatio": 0.05000000074505806,
         "RecoilRatio": 60.0,
-        "SpearJumpPower": 42.5
+        "SpearJumpPower": 47.5,
+        "inverceRatio": 5.0
     }
 }

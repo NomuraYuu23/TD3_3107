@@ -27,6 +27,8 @@ void PlayerController::Update()
 	if (input_->TriggerKey(DIK_H)) {
 		player_->ChangeState(std::make_unique<AerialState>());
 	}
+	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
 
 #endif // _DEBUG
 
@@ -81,31 +83,30 @@ void PlayerController::ControllerProcess()
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 
-		//// スローモーション
-		//if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
-		// スロー処理
-		Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
-		float deadZoneValue = 0.25f;
-		if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
-			!player_->IsRecoil()) {
-			if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
-				// スローの倍率
-				player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
-				// UI表示
-				player_->isArrowUiDraw_ = true;
+		// スローモーション
+		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
+			// スロー処理
+			Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+			float deadZoneValue = 0.25f;
+			if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
+				!player_->IsRecoil()) {
+				if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
+					// スローの倍率
+					player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
+					// UI表示
+					player_->isArrowUiDraw_ = true;
+				}
+				else {
+					player_->sPlaySpeed = 1.0f;
+				}
 			}
 			else {
 				player_->sPlaySpeed = 1.0f;
 			}
 		}
-		// 通常
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		//}
-		//else {
-		//	player_->sPlaySpeed = 1.0f;
-		//}
 		Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 
 		if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
@@ -131,11 +132,19 @@ void PlayerController::AerialMoveProcess()
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
 	bool CheckAction = (std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()));
-
-	// 地上にいる場合
+	float ratio = GlobalVariables::GetInstance()->GetFloatValue("Player", "inverceRatio");
+	// 空中にいる場合
 	if (CheckAction) {
 		// 左右移動
-		player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		if (player_->velocity_.x > 0 && (leftStick.x / SHRT_MAX) < 0) {
+			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * (aerialSpeed_ * ratio) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		}
+		else if (player_->velocity_.x < 0 && (leftStick.x / SHRT_MAX) > 0) {
+			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * (aerialSpeed_ * ratio) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		}
+		else {
+			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		}
 
 	}
 }
@@ -214,6 +223,11 @@ void PlayerController::ThrownProcess()
 		// 刺さってる→戻ってくる
 		else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
 			if (!std::holds_alternative<AttractState*>(player_->GetNowState())) {
+				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
+		}
+		else if (std::holds_alternative<FreeFallState*>(player_->weapon_->GetNowState())) {
+			if (player_->IsFreeFallTimerEnd()) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 		}

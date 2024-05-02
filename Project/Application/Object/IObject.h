@@ -25,6 +25,12 @@ public:
 		kRBPoint,
 		// 3点
 		kMultiPoints,
+
+		kLeftBottomSide,
+		kLeftTopSide,
+		kRightBottomSide,
+		kRightTopSide,
+
 		kNone,
 	};
 
@@ -67,7 +73,22 @@ public:
 		}
 		// 複数
 		else if (inSideCount >= 3) {
-			return CollisionType::kMultiPoints;
+			// 左と上
+			if ((isInLT && isInLB) && isInRT) {
+				return CollisionType::kLeftTopSide;
+			}
+			// 左と下
+			else if ((isInLT && isInLB) && isInRB) {
+				return CollisionType::kLeftBottomSide;
+			}
+			// 右と上
+			else if ((isInRT && isInRB) && isInLT) {
+				return CollisionType::kRightTopSide;
+			}
+			// 右と下
+			else if ((isInRT && isInRB) && isInLB) {
+				return CollisionType::kRightBottomSide;
+			}
 		}
 
 		else {

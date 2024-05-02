@@ -9,7 +9,7 @@ void AerialState::Initialize()
 	// jsonデータ
 	const char* groupName = "Player";
 	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue(groupName, "NormalJumpPower");
-	player_->velocity_.x *= 0.5f;
+	//player_->velocity_.x *= 0.5f;
 	
 	//groupName = "Common";
 	
@@ -19,6 +19,8 @@ void AerialState::Initialize()
 	player_->SetNowState(this);
 	player_->isGround_ = true;
 
+	// 速度をこちらの変数に
+	velocity_ = player_->velocity_;
 }
 
 void AerialState::Update()
@@ -45,12 +47,18 @@ void AerialState::Update()
 	//	}
 	//}
 
-	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, 0.005f);
+	//if(pvelocity_.x)
+	//velocity_.x = MathUtility::Lerp(velocity_.x, 0, 0.005f);
+	//velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+
+	//// プレイヤーに渡す
+	//player_->velocity_ = velocity_;
+	float decrValue = 0.001f;
+	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, decrValue);
 	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
-
 	// 移動処理
-	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x * 2.0f) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 }

@@ -29,22 +29,22 @@ void FollowCamera::Update(float elapsedTime)
 		float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
 		float newSize = std::clamp(length, minY, maxY);
 		//if (/*!std::holds_alternative<GroundState*>(player_->GetNowState())*/ !player_->isGround_) {
-			// 割合計算
-			float rate = newSize / maxY;
-			//rate = std::clamp(rate, 0.3f, 1.0f);
-			//nowFovY_ = std::clamp(rate, 0.45f, 0.65f);
-			//nowFovY_ = std::clamp(pars, 0.45f, 0.65f);
-			if (minY > length) {
-				nowFovY_ = 0.45f;
-			}
-			else {
-				nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
-			}
+		// 割合計算
+		float rate = newSize / maxY;
+		//rate = std::clamp(rate, 0.3f, 1.0f);
+		//nowFovY_ = std::clamp(rate, 0.45f, 0.65f);
+		//nowFovY_ = std::clamp(pars, 0.45f, 0.65f);
+		if (minY > length) {
+			nowFovY_ = 0.45f;
+		}
+		else {
+			nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
+		}
 
-			SetFovY(nowFovY_);
-			// タイマーセット
-			float returnTime = 10.0f;
-			correctTimer_.Start(returnTime);
+		SetFovY(nowFovY_);
+		// タイマーセット
+		float returnTime = 10.0f;
+		correctTimer_.Start(returnTime);
 		//}
 		//else {
 		//	// 視野角の戻す際に滑らかにする処理

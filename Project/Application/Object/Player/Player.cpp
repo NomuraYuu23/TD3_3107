@@ -29,6 +29,8 @@ void Player::Initialize(Model* model)
 	footCollider_.Initialize(model, this);
 	// 補正クラス
 	correctSystem_.Initialize(this);
+	// HPクラス
+	hpManager_.Initialize(this);
 	// コンボクラス
 	jumpCombo_.Reset();
 
@@ -64,6 +66,10 @@ void Player::Update()
 	recoil_.Update();
 	// 
 	correctSystem_.Update(enemyManager_);
+	// 落下中の引き寄せタイマークラス
+	fallTimer_.Update();
+	// 無敵時間の処理もするので更新必須
+	hpManager_.Update();
 
 	// 武器の更新
 	if (weapon_) {
@@ -119,7 +125,7 @@ void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
 	controller_.ImGuiDraw();
-
+	hpManager_.ImGuiDraw();
 	// ゲームスピード
 	float ratio = IObject::sPlaySpeed;
 	ImGui::DragFloat("playTime", &ratio);
@@ -235,6 +241,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				else {
 					weapon_->velocity_.x = 1.0f * value;
 				}
+				this->fallTimer_.StartSetting(30.0f);
 				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 				return;
 			}
@@ -246,6 +253,16 @@ void Player::OnCollision(ColliderParentObject2D target)
 					weapon_->TreadSetting();
 					// 槍じゃんステートへ
 					ChangeState(std::make_unique<SpearAerialState>());
+
+					// キャストして方向設定
+					SpearAerialState* state = dynamic_cast<SpearAerialState*>(actionState_.get());
+					
+					Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+					
+					leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
+
+					state->InitializeDirection(leftStick);
+
 					return;
 				}
 			}
@@ -512,9 +529,9 @@ void Player::OnCollision(ColliderParentObject2D target)
 	// 雑魚敵との当たり判定
 	else if (std::holds_alternative<Enemy*>(target)) {
 		// 無敵中なら早期
-		if (invisibleTimer_.IsActive()) {
-			return;
-		}
+		//if (invisibleTimer_.IsActive()) {
+		//	return;
+		//}
 
 		// 持ってないかどうか
 		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
@@ -522,17 +539,16 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		}
 		else {
-			// 持ってないから死ぬ
-			isDead_ = true;
+			hpManager_.OnHit(1);
 		}
 
 	}
 	// ボス
 	else if (std::holds_alternative<PrevSmallBoss*>(target)) {
 		// 無敵中なら早期
-		if (invisibleTimer_.IsActive()) {
-			return;
-		}
+		//if (invisibleTimer_.IsActive()) {
+		//	return;
+		//}
 
 		// 持ってないかどうか
 		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
@@ -540,8 +556,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		}
 		else {
-			// 持ってないから死ぬ
-
+			hpManager_.OnHit(1);
 		}
 
 	}
