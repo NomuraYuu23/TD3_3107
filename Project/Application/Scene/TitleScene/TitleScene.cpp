@@ -41,7 +41,7 @@ void TitleScene::Initialize()
 	outline_.Initialize();
 	outline_.Map();
 
-	requestSceneNo = kGame;
+	requestSceneNo = kEditor;
 
 }
 
