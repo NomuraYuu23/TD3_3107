@@ -7,5 +7,6 @@ enum SceneName {
 	kGame,  // ゲーム
 	kClear, // クリア
 	kTutorial,
+	kEditor, // エディター
 	kCountOfSceneName, // カウント用。使用不可
 };

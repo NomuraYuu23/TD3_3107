@@ -117,6 +117,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossMoveState.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
+    <ClCompile Include="Application\Object\Editor\StageData.cpp" />
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
@@ -140,6 +141,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\ReturnWaitState.cpp" />
+    <ClCompile Include="Application\Scene\EditorScene\EditorScene.cpp" />
     <ClCompile Include="Application\Scene\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Application\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Application\Scene\TutorialScene\TutorialScene.cpp" />
@@ -282,6 +284,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\SmallBossStateList.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
+    <ClInclude Include="Application\Object\Editor\StageData.h" />
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
@@ -318,6 +321,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnWaitState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\StateList.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\WeaponStateList.h" />
+    <ClInclude Include="Application\Scene\EditorScene\EditorScene.h" />
     <ClInclude Include="Application\Scene\SceneName.h" />
     <ClInclude Include="Application\Scene\SelectScene\SelectScene.h" />
     <ClInclude Include="Application\Scene\TitleScene\TitleScene.h" />

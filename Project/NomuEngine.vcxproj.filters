@@ -176,6 +176,8 @@
     <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\KnockBack.cpp" />
+    <ClCompile Include="Application\Object\Editor\StageData.cpp" />
+    <ClCompile Include="Application\Scene\EditorScene\EditorScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -384,6 +386,8 @@
     <ClInclude Include="Application\Object\Player\System\PlayerSystemList.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\KnockBack.h" />
+    <ClInclude Include="Application\Object\Editor\StageData.h" />
+    <ClInclude Include="Application\Scene\EditorScene\EditorScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
