@@ -165,8 +165,6 @@ private: // フラグ
 private: // システム
 	// 現状のステート
 	PlayerState nowState_;
-	// 反動管理クラス
-	PlayerRecoil recoil_;
 	// 操作クラス
 	PlayerController controller_;
 	// 放物線
@@ -177,8 +175,14 @@ private: // システム
 	ComboCounter jumpCombo_;
 	// 自由落下の武器を回収するためのシステム
 	FreeFallTimer fallTimer_;
+
+	//--- オンヒットシステム ---//
+	// 反動管理クラス
+	PlayerRecoil recoil_;
 	// HP管理クラス
 	PlayerHitManager hpManager_;
+	// 敵とぶつかった時のノックバック
+	KnockBack knockBackSystem_;
 
 	// プレイヤーと槍をつなぐ線
 	std::unique_ptr<DrawLine> connectingSpearLine_;

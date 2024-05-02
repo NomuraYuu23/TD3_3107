@@ -44,6 +44,12 @@ public:
 	/// </summary>
 	void ImGuiDraw();
 
+	/// <summary>
+	/// 無敵中か
+	/// </summary>
+	/// <returns></returns>
+	bool InvisibleActive() { return invisibleTimer_.IsActive(); }
+
 private:
 	// 親
 	Player* player_ = nullptr;

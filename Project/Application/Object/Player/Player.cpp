@@ -33,6 +33,7 @@ void Player::Initialize(Model* model)
 	hpManager_.Initialize(this);
 	// コンボクラス
 	jumpCombo_.Reset();
+	knockBackSystem_.Initialize(this);
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
@@ -68,6 +69,8 @@ void Player::Update()
 	controller_.Update();
 	// 反動クラス
 	recoil_.Update();
+	// ノックバック
+	knockBackSystem_.Update();
 	// 
 	correctSystem_.Update(enemyManager_);
 	// 落下中の引き寄せタイマークラス
@@ -529,10 +532,29 @@ void Player::OnCollision(ColliderParentObject2D target)
 		//if (invisibleTimer_.IsActive()) {
 		//	return;
 		//}
+		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
+			return;
+		}
 
 		// 持ってないかどうか
 		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
 			// 持ってるから何か起きる
+			// 反動生成
+			Enemy** enemy = std::get_if<Enemy*>(&target);
+			Vector3 newDirect = {};
+			newDirect.x = worldtransform_.GetWorldPosition().x - (*enemy)->GetWorldPosition().x;
+			newDirect.y = 1.0f;
+			knockBackSystem_.CreateKnockBack(newDirect);
+			// 引き寄せの
+			float value = 3.0f;
+			if (worldtransform_.GetWorldPosition().x > weapon_->worldtransform_.GetWorldPosition().x) {
+				weapon_->velocity_.x = -1.0f * value;
+			}
+			else {
+				weapon_->velocity_.x = 1.0f * value;
+			}
+			this->fallTimer_.StartSetting(30.0f);
+			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 
 		}
 		else {
