@@ -8,7 +8,6 @@
 #include "../../UI/UIManager.h"
 #include "../../AudioManager/GameAudioManager.h"
 #include "../../Skydome/Skydome.h"
-#include "../../../Engine/3D/OutLineData.h"
 
 //#include "../../Object/Sample/SampleObject.h" // サンプルオブジェクト
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
@@ -112,13 +111,6 @@ private:
 	// スカイドーム
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<Model> skydomeModel_;
-
-	//アウトライン仮
-	OutLineData outline_;;
-
-	//影
-	//std::unique_ptr<ShadowManager> shadowManager_;
-	//std::unique_ptr<Model> shadowModel_;
 
 	// サンプルOBJ
 	std::unique_ptr<SampleObject> sampleObj_;

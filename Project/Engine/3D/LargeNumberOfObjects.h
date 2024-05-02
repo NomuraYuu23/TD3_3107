@@ -69,6 +69,7 @@ public:
 	/// <returns></returns>
 	std::list<std::unique_ptr<OneOfManyObjects>>* GetObjects() { return &objects_; }
 
+
 protected: // トランスフォーム関係
 
 	// トランスフォームマトリックス

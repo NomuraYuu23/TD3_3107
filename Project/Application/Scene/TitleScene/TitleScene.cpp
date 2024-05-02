@@ -38,10 +38,6 @@ void TitleScene::Initialize()
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
 
-	//アウトライン
-	outline_.Initialize();
-	outline_.Map();
-
 	requestSceneNo = kGame;
 
 }
@@ -91,7 +87,6 @@ void TitleScene::Draw()
 	preDrawDesc.commandList = dxCommon_->GetCommadList();
 	preDrawDesc.directionalLight = nullptr;
 	preDrawDesc.fogManager = FogManager::GetInstance();
-	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexAnimObject;
 	preDrawDesc.pointLightManager = nullptr;
 	preDrawDesc.spotLightManager = nullptr;
 

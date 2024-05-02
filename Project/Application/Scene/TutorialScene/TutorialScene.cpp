@@ -111,10 +111,6 @@ void TutorialScene::Update() {
 	//パーティクル
 	particleManager_->Update(camera_);
 
-	//アウトライン
-	outline_.Initialize();
-	outline_.Map();
-
 }
 
 /// <summary>

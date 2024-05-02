@@ -7,7 +7,6 @@
 #include "../../../Engine/Collision/CollisionManager.h"
 #include "../../AudioManager/GameAudioManager.h"
 #include "../../Skydome/Skydome.h"
-#include "../../../Engine/3D/OutLineData.h"
 
 class TutorialScene : public IScene
 {
@@ -86,8 +85,5 @@ private:
 	// スカイドーム
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<Model> skydomeModel_;
-
-	//アウトライン仮
-	OutLineData outline_;
 
 };

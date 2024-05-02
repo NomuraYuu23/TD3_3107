@@ -30,14 +30,15 @@ enum DescriptorRangeIndex {
 /// ルートパラメータの名前
 /// </summary>
 enum RootParameterIndex {
-	kRootParameterIndexModel, // モデル
+	kRootParameterIndexAnimModel, // アニメーションモデル
+	kRootParameterIndexNormalModel, // アニメーション無しモデル
 	kRootParameterIndexSprite, // スプライト
 	kRootParameterIndexParticle, // パーティクル
-	kRootParameterIndexOutLine, // アウトライン
 	kRootParameterIndexCollision2DDebugDraw, // コライダーデバッグ2d
 	kRootParameterIndexLine, // 線
 	kRootParameterIndexWindowSprite, // ウィンドウスプライト
-	kRootParameterIndexManyModels, // 多くのオブジェクト
+	kRootParameterIndexManyAnimModels, // たくさんのアニメーションモデル
+	kRootParameterIndexManyNormalModels, // たくさんのアニメーション無しモデル
 	kRootParameterIndexOfCount,
 };
 
@@ -60,9 +61,14 @@ public: // 関数
 private: // 関数
 
 	/// <summary>
-	/// モデル
+	/// アニメーションモデル
 	/// </summary>
-	static void RootParameterInitializeForModel();
+	static void CreateForAnimModel();
+
+	/// <summary>
+	/// アニメーション無しモデル
+	/// </summary>
+	static void CreateForNormalModel();
 
 	/// <summary>
 	/// スプライト
@@ -73,11 +79,6 @@ private: // 関数
 	/// パーティクル
 	/// </summary>	
 	static void RootParameterInitializeForParticle();
-
-	/// <summary>
-	/// アウトライン
-	/// </summary>	
-	static void RootParameterInitializeForOutLine();
 
 	/// <summary>
 	/// コライダーデバッグ2D
@@ -95,9 +96,14 @@ private: // 関数
 	static void RootParameterInitializeForSwapChain();
 
 	/// <summary>
-	/// 多くのオブジェクト
+	/// たくさんのアニメーションモデル
 	/// </summary>
-	static void RootParameterInitializeForManyModels();
+	static void RootParameterInitializeForManyAnimModels();
+
+	/// <summary>
+	/// たくさんのアニメーション無しモデル
+	/// </summary>
+	static void RootParameterInitializeForManyNormalModels();
 
 	/// <summary>
 	/// ディスクリプタレンジの初期化

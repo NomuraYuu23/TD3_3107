@@ -67,14 +67,6 @@ void GameScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
 
-
-	outline_.Initialize();
-	outline_.color_ = { 0.8f,0.4f,0.1f,1.0f };
-
-	//影
-	//shadowManager_ = std::make_unique<ShadowManager>();
-	//shadowManager_->Initialize(shadowModel_.get());
-
 	// 平行光源
 	directionalLight_ = std::make_unique<DirectionalLight>();
 	directionalLight_->Initialize();
@@ -258,9 +250,6 @@ void GameScene::Update() {
 	//パーティクル
 	particleManager_->Update(camera_);
 
-	//アウトライン
-	outline_.Map();
-
 }
 
 /// <summary>
@@ -286,7 +275,6 @@ void GameScene::Draw() {
 	preDrawDesc.commandList = dxCommon_->GetCommadList();
 	preDrawDesc.directionalLight = directionalLight_.get();
 	preDrawDesc.fogManager = FogManager::GetInstance();
-	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexAnimObject;
 	preDrawDesc.pointLightManager = pointLightManager_.get();
 	preDrawDesc.spotLightManager = spotLightManager_.get();
 
@@ -301,27 +289,11 @@ void GameScene::Draw() {
 	// スカイドーム
 	skydome_->Draw(camera_);
 
-#ifdef _DEBUG
-
-	// デバッグ描画
-	//colliderDebugDraw_->Draw(camera_);
-
-#endif // _DEBUG
-
-	ModelDraw::PostDraw();
-
-
-#pragma region 大量のオブジェクト描画
-
-	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexManyAnimObjects;
-	ModelDraw::PreDraw(preDrawDesc);
-
 	tmpTextures_.clear();
 	tmpTextures_.push_back(blockTexture_);
 
 	// ブロック用
 	mapManager_->Draw(camera_, &tmpTextures_);
-
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(enemyTexture_);
@@ -341,16 +313,8 @@ void GameScene::Draw() {
 
 #pragma region パーティクル描画
 
-	preDrawDesc.pipelineStateIndex = ModelDraw::kPipelineStateIndexParticle;
-	ModelDraw::PreDraw(preDrawDesc);
-
-	//光源
-	directionalLight_->Draw(dxCommon_->GetCommadList(), 6);
-
 	// パーティクルはここ
-	//particleManager_->Draw();
-
-	ModelDraw::PostDraw();
+	//particleManager_->Draw(camera_.GetViewProjectionMatrix(), dxCommon_->GetCommadList());
 
 #pragma endregion
 
