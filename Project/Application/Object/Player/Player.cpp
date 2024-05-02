@@ -43,7 +43,7 @@ void Player::Initialize(Model* model)
 
 	// 放物線
 	parabola_.Initialize();
-
+	connectingSpearLineColor_ = { 0.8f, 0.0f, 0.8f, 1.0f };
 	// レイ
 	rayLength_ = -100.0f;
 	cameraRay_.Initialize(this);
