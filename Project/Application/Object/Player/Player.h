@@ -71,6 +71,7 @@ public: // メンバ関数
 	void SetWeapon(std::unique_ptr<Weapon> newWeapon) {
 		weapon_ = std::move(newWeapon);
 		weapon_->SetParentAdress(&worldtransform_);
+		weapon_->SetPlayer(this);
 	}
 
 	/// <summary>
@@ -120,13 +121,18 @@ public:
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
 	bool IsFreeFallTimerEnd() { return fallTimer_.IsEnd(); }
+	bool FreeFallActive() { return fallTimer_.IsActive(); }
+
+	void SetFallTimer() { fallTimer_.StartSetting(30.0f); }
 	/// <summary>
 	/// 死亡フラグの設定
 	/// </summary>
 	/// <param name="isDead"></param>
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
 
-	bool IsCanReturn() { return !knockBackSystem_.AcceptActive() && !recoil_.IsActive(); }
+	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
+
+	void KnockBackOnGround() { knockBackSystem_.SetIsHit(false); }
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;

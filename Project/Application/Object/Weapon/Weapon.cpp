@@ -5,6 +5,7 @@
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../GameUtility/MathUtility.h"
 #include "../ObjectList.h"
+#include "../Player/Player.h"
 
 void Weapon::Initialize(Model* model)
 {
@@ -351,6 +352,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		if (std::holds_alternative<Enemy*>(target)) {
 			isEnemyImpaled_ = true;
 			if (isTread_) {
+				player_->SetFallTimer(); 
 				ChangeRequest(Weapon::StateName::kFreeFall);
 			}
 			//Player** player = std::get_if<Player*>(&target);			

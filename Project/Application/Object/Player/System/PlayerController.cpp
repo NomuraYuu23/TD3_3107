@@ -230,7 +230,7 @@ void PlayerController::ThrownProcess()
 			if (!player_->IsCanReturn()) {
 				return;
 			}
-			if (player_->IsFreeFallTimerEnd()) {
+			if (!player_->FreeFallActive()) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 		}

@@ -8,14 +8,21 @@ void KnockBack::Initialize(Player* player)
 {
 	player_ = player;
 	knockBackPower_ = { 40.0f,40.0f,0 };
+	// フラグ
+	isHit_ = false;
 }
 
 void KnockBack::CreateKnockBack(const Vector3& direction)
 {
+	// 衝突したタイミングでtrue、着地でfalse;
+	isHit_ = true;
+	// 方向
 	moveDirection_ = Vector3::Normalize(direction);
+	// 上に矯正
 	if (moveDirection_.y < 0) {
 		moveDirection_.y *= -1.0f;
 	}
+	// 速度
 	player_->velocity_ = { moveDirection_.x * knockBackPower_.x,moveDirection_.y * knockBackPower_.y,0 };
 
 	AcceptTimer_.Start(30.0f);

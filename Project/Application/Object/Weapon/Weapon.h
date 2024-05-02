@@ -8,6 +8,8 @@
 
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
+class Player;
+
 class Weapon : public IObject
 {
 public: // サブクラス
@@ -50,6 +52,7 @@ public: // 継承
 	/// <param name="tag"></param>
 	void OnCollision(ColliderParentObject2D target) override;
 
+	void SetPlayer(Player* player) { player_ = player; }
 
 public: // アクセッサ
 	/// <summary>
@@ -163,5 +166,7 @@ private:
 	float dotAngle_ = 0;
 
 	bool isEnemyImpaled_ = false;
+
+	Player* player_ = nullptr;
 };
 

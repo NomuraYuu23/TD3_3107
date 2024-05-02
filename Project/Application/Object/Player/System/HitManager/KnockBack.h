@@ -28,6 +28,14 @@ public: // メンバ関数
 	/// <returns></returns>
 	bool AcceptActive() { return AcceptTimer_.IsActive(); }
 
+	/// <summary>
+	/// 着地するタイミングでリセット
+	/// </summary>
+	/// <returns></returns>
+	bool IsHit() { return isHit_; }
+
+	void SetIsHit(bool isHit) { isHit_ = isHit; }
+
 private:
 	// プレイヤー
 	Player* player_ = nullptr;
@@ -37,5 +45,7 @@ private:
 	// とりあえずパワ～～～
 	Vector3 knockBackPower_ = {};
 	Vector3 moveDirection_ = {};
+
+	bool isHit_ = false;
 
 };
