@@ -211,23 +211,6 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		std::visit([&](const auto& a) {
 			targetPos = a->GetColliderPosition();
 			}, target);
-		//Vector2 direct = targetPos - boxCollider_.position_;
-		//float dot = Vector2::Dot({ throwDirect_.x,throwDirect_.y }, Vector2::Normalize(direct));
-		//// 内積で移動方向との判定
-		//if (dot < dotAngle_) {
-		//	return;
-		//}
-
-		//Vector2 terrainVector = { worldtransform_.GetWorldPosition().x,targetPos.y };
-		//terrainVector = terrainVector - Vector2(worldtransform_.GetWorldPosition().x, worldtransform_.GetWorldPosition().y);
-		//if ((terrainVector.y > 0 && throwDirect_.y < 0) || (terrainVector.y < 0 && throwDirect_.y > 0)) {
-		//	return;
-		//}
-		//terrainVector = { targetPos.x, worldtransform_.GetWorldPosition().y };
-		//terrainVector = terrainVector - Vector2(worldtransform_.GetWorldPosition().x, worldtransform_.GetWorldPosition().y);
-		//if ((terrainVector.x > 0 && throwDirect_.x < 0) || (terrainVector.x < 0 && throwDirect_.x > 0)) {
-		//	return;
-		//}
 
 		// 壁・ブロックとの衝突判定
 		if (std::holds_alternative<Terrain*>(target)) {

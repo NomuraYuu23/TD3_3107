@@ -68,6 +68,8 @@ void Player::Update()
 	recoil_.Update();
 	// 
 	correctSystem_.Update(enemyManager_);
+	// 落下中の引き寄せタイマークラス
+	fallTimer_.Update();
 
 	// 武器の更新
 	if (weapon_) {
@@ -232,6 +234,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				else {
 					weapon_->velocity_.x = 1.0f * value;
 				}
+				this->fallTimer_.StartSetting(30.0f);
 				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 				return;
 			}
@@ -243,6 +246,16 @@ void Player::OnCollision(ColliderParentObject2D target)
 					weapon_->TreadSetting();
 					// 槍じゃんステートへ
 					ChangeState(std::make_unique<SpearAerialState>());
+
+					// キャストして方向設定
+					SpearAerialState* state = dynamic_cast<SpearAerialState*>(actionState_.get());
+					
+					Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+					
+					leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
+
+					state->InitializeDirection(leftStick);
+
 					return;
 				}
 			}

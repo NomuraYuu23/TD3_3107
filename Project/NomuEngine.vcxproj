@@ -130,9 +130,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\AudioManager\GameAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\TitleAudioManager.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AttractState.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\KnockBackState.cpp" />
     <ClCompile Include="Application\Object\Player\System\CameraRay\CameraRay.cpp" />
     <ClCompile Include="Application\Object\Player\System\Combo\ComboCounter.cpp" />
     <ClCompile Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.cpp" />
+    <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
     <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
@@ -301,12 +303,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
     <ClInclude Include="Application\Object\Player\ActionState\AttractState.h" />
     <ClInclude Include="Application\Object\Player\ActionState\GroundState.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\KnockBackState.h" />
     <ClInclude Include="Application\Object\Player\System\CameraRay\CameraRay.h" />
-    <ClInclude Include="Application\Object\Player\System\CameraRay\RayContactRecord.h" />
     <ClInclude Include="Application\Object\Player\System\Combo\ComboCounter.h" />
     <ClInclude Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.h" />
+    <ClInclude Include="Application\Object\Player\System\FreeFall\FreeFallTimer.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
+    <ClInclude Include="Application\Object\Player\System\PlayerSystemList.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\FreeFallState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnWaitState.h" />

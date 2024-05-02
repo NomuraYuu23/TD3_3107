@@ -173,6 +173,8 @@
     <ClCompile Include="Engine\PostEffect\ShockWaveManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
     <ClCompile Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.cpp" />
+    <ClCompile Include="Application\Object\Player\ActionState\KnockBackState.cpp" />
+    <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -375,9 +377,11 @@
     <ClInclude Include="Engine\3D\FogData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
-    <ClInclude Include="Application\Object\Player\System\CameraRay\RayContactRecord.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyWaitState.h" />
     <ClInclude Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.h" />
+    <ClInclude Include="Application\Object\Player\ActionState\KnockBackState.h" />
+    <ClInclude Include="Application\Object\Player\System\FreeFall\FreeFallTimer.h" />
+    <ClInclude Include="Application\Object\Player\System\PlayerSystemList.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

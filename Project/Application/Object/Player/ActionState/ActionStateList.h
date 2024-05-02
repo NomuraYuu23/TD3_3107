@@ -9,6 +9,7 @@
 #include "ActionWaitState.h"
 #include "SpearAerialState.h"
 #include "AttractState.h"
+#include "KnockBackState.h"
 
 // ステートの名前
-using PlayerState = std::variant<IActionState*, GroundState*, AerialState*, ActionWaitState*, SpearAerialState*, AttractState*>;
+using PlayerState = std::variant<IActionState*, GroundState*, AerialState*, ActionWaitState*, SpearAerialState*, AttractState*, KnockBackState*>;

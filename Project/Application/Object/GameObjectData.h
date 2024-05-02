@@ -16,8 +16,7 @@ private: // データ用構造体クラス
 		float lerpRatio_;
 	};
 
-	// プレイヤーの情報
-	struct PlayerData {
+	struct JumpData {
 		// 通常のジャンプ量
 		float normalJumpPower_;
 		// 槍ジャンプ
@@ -25,10 +24,26 @@ private: // データ用構造体クラス
 		// 重力
 		float gravity_;
 
+		// 槍じゃんの水平方向の力
+		float horizontalPower_;
+
+	};
+
+	struct MoveData {
 		// 地上の移動量
 		float moveValue_;
 		// 空中の加速度
 		float aerialAcceleration_;
+		// 空中の逆方向慣性のレシオ
+		float invAerialRatio_;
+	};
+
+	// プレイヤーの情報
+	struct PlayerData {
+
+		JumpData jumpData_;
+
+		MoveData moveData_;
 		// 反動情報
 		RecoilData recoil;
 

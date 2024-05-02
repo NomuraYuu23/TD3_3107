@@ -1,7 +1,7 @@
 #pragma once
 #include "IActionState.h"
 
-class AerialState : public IActionState
+class KnockBackState : public IActionState
 {
 public:
 	/// <summary>
@@ -13,12 +13,4 @@ public:
 	/// </summary>
 	void Update() override;
 
-private:
-	float decreeSpeed_ = 2.0f;
-
-	float gravity_ = 0;
-
-	Vector3 velocity_ = {};
-
 };
-

@@ -7,12 +7,14 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 #include "ActionState/ActionStateList.h"
-#include "System/PlayerController.h"
-#include "System/Recoil/PlayerRecoil.h"
-#include "System/Combo/ComboCounter.h"
-#include "System/Parabola/PlayerParabola.h"
-#include "System/CameraRay/CameraRay.h"
-#include "System/CorrectSystem/CorrectSystem.h"
+//#include "System/PlayerController.h"
+//#include "System/Recoil/PlayerRecoil.h"
+//#include "System/Combo/ComboCounter.h"
+//#include "System/Parabola/PlayerParabola.h"
+//#include "System/CameraRay/CameraRay.h"
+//#include "System/CorrectSystem/CorrectSystem.h"
+
+#include "System/PlayerSystemList.h"
 
 #include "PlayerFootCollider.h"
 
@@ -124,6 +126,8 @@ public:
 
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
+	bool IsFreeFallTimerEnd() { return fallTimer_.IsEnd(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -174,6 +178,8 @@ private: // システム
 	ArrowUIData arrow_;
 	// ジャンプ回数カウント
 	ComboCounter jumpCombo_;
+	// 自由落下の武器を回収するためのシステム
+	FreeFallTimer fallTimer_;
 
 	// 無敵タイマー
 	TimerLib invisibleTimer_;
