@@ -44,14 +44,14 @@ void PlayerAnimManager::Update()
 		}
 
 		// 走りアニメーションが再生されていない場合
-		if (!anim_.GetRunningAnimation(Run) && !anim_.GetRunningAnimation(JumpStart) && player_->isGround_) {
+		if (!anim_.GetRunningAnimation(Run) && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(SpearJump) && player_->isGround_) {
 			// 全アニメーション停止
 			StopAnimationAll();
 			// アニメーション再生
 			anim_.StartAnimation(Run, true);
 		}
 	}
-	else if(player_->isGround_ && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(Landing)){
+	else if(player_->isGround_ && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(SpearJump) && !anim_.GetRunningAnimation(Landing)){
 		// 待機アニメーションが再生されていない場合
 		if (!anim_.GetRunningAnimation(Idle)) {
 			// 全アニメーション停止
@@ -62,7 +62,7 @@ void PlayerAnimManager::Update()
 	}
 
 	// 落下中アニメーションが再生されていない場合
-	if (!anim_.GetRunningAnimation(Jumping) && !anim_.GetRunningAnimation(JumpStart) && !player_->isGround_) {
+	if (!anim_.GetRunningAnimation(Jumping) && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(SpearJump) && !player_->isGround_) {
 		// 全アニメーション停止
 		StopAnimationAll();
 		// アニメーション再生
