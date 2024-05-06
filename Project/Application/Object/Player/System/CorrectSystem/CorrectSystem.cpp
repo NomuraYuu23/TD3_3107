@@ -78,9 +78,11 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		player_->throwDirect_ = targetDirect_;
 	}
 	else if (leftStick.x != 0 || leftStick.y != 0) {
-		Vector2 normalLeft = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
+		Vector3 normalize = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX,0 };
+		normalize.y *= -1.0f;
 
-		player_->throwDirect_.x = normalLeft.x;
+		// 仮のアシスト君
+		player_->throwDirect_ = normalize;
 
 	}
 	else {
@@ -263,7 +265,7 @@ Vector3 CorrectSystem::RightStickAssist(EnemyManager* enemyManager, const Vector
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { stickDirect.x, stickDirect.y };
 	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("Player", "RotateWidth");
+	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "AssistWidth");
 	//float rotateWidth = kRotationWidth_;
 	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
 	// 方向確認用の行列(右範囲)

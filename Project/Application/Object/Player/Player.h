@@ -133,7 +133,8 @@ public:
 	bool IsFreeFallTimerEnd() { return fallTimer_.IsEnd(); }
 	bool FreeFallActive() { return fallTimer_.IsActive(); }
 
-	void SetFallTimer() { fallTimer_.StartSetting(30.0f); }
+	void SetFallTimer();
+
 	/// <summary>
 	/// 死亡フラグの設定
 	/// </summary>

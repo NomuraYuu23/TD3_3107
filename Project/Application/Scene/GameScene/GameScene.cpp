@@ -176,6 +176,10 @@ void GameScene::Update() {
 		requestSceneNo = kTitle;
 	}
 
+	if (input_->TriggerKey(DIK_R)) {
+		this->Initialize();
+	}
+
 #endif
 	if (input_->TriggerKey(DIK_L)) {
 		requestSceneNo = kTitle;

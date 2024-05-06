@@ -267,7 +267,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				else {
 					weapon_->velocity_.x = 1.0f * value;
 				}
-				this->fallTimer_.StartSetting(30.0f);
+				SetFallTimer();
 				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 				return;
 			}
@@ -345,11 +345,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		// 四頂点
 		IObject::FourTop player4Point = IObject::GenerateFourTop(plMin, plMax);
-		//IObject::FourTop block4P = IObject::GenerateFourTop({ minPos.x,minPos.y }, {maxPos.x,maxPos.y});
-		//Vector2 perMove = { -velocity_.y,velocity_.x };
-		//// 移動ベクトルの垂線
-		//perMove = Vector2::Normalize(perMove);
-		//float dircDot = Vector2::Dot(perMove, p2tDist);
 
 		IObject::CollisionType type = IObject::GetCollisionType(player4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
 		Vector2 correctPosition = {};
@@ -579,7 +574,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 			else {
 				weapon_->velocity_.x = 1.0f * value;
 			}
-			this->fallTimer_.StartSetting(30.0f);
+			SetFallTimer();
+
 			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 
 		}
@@ -634,4 +630,10 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
 	drawLine->Map(lineForGPU);
 
+}
+
+void Player::SetFallTimer()
+{
+	float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
+	this->fallTimer_.StartSetting(fallTimerFrame);
 }
