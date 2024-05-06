@@ -25,7 +25,8 @@ void KnockBack::CreateKnockBack(const Vector3& direction)
 	// 速度
 	player_->velocity_ = { moveDirection_.x * knockBackPower_.x,moveDirection_.y * knockBackPower_.y,0 };
 
-	AcceptTimer_.Start(30.0f);
+	float frame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
+	AcceptTimer_.Start(frame);
 }
 
 void KnockBack::Update()

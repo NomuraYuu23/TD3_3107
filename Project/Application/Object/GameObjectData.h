@@ -105,6 +105,7 @@ private: // データ用構造体クラス
 		// 補正の幅
 		float assistWidth_;
 
+		float kickBackCooltime_;
 	};
 
 	struct BossData {

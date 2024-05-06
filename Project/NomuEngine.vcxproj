@@ -118,6 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
+    <ClCompile Include="Application\Object\Enemy\EnemyEmitter.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyGroundState.cpp" />

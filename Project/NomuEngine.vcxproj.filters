@@ -177,6 +177,7 @@
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\KnockBack.cpp" />
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
+    <ClCompile Include="Application\Object\Enemy\EnemyEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
