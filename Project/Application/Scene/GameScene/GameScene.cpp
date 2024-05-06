@@ -124,8 +124,8 @@ void GameScene::Initialize() {
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
 	player_->Initialize(playerModel_.get());
-	// ポニテモデルセット
-	player_->SetPonyTail(ponyTailModel_.get());
+	// 紐挙動がバグってるので一旦コメントアウト
+	//player_->SetPonyTail(ponyTailModel_.get());
 
 	// 更新
 	//countTime_ = 0;
