@@ -126,6 +126,7 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Player");
 	controller_.ImGuiDraw();
 	hpManager_.ImGuiDraw();
+	correctSystem_.ImGuiDraw();
 	// ゲームスピード
 	float ratio = IObject::sPlaySpeed;
 	ImGui::DragFloat("playTime", &ratio);

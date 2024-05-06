@@ -112,13 +112,13 @@ void PlayerController::ControllerProcess()
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+		//Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 
-		if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
-			// 投げる方向ベクトル
-			player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
+		//if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
+		//	// 投げる方向ベクトル
+		//	player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
 
-		}
+		//}
 
 	}
 	// 座標更新

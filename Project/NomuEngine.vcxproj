@@ -283,6 +283,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
+    <ClInclude Include="Application\Object\Enemy\EnemyEmitter.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />

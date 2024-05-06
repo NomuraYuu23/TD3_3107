@@ -384,6 +384,7 @@
     <ClInclude Include="Application\Object\Player\System\PlayerSystemList.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\KnockBack.h" />
+    <ClInclude Include="Application\Object\Enemy\EnemyEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
