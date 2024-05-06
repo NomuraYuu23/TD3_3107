@@ -325,11 +325,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		// 四頂点
 		IObject::FourTop player4Point = IObject::GenerateFourTop(plMin, plMax);
-		//IObject::FourTop block4P = IObject::GenerateFourTop({ minPos.x,minPos.y }, {maxPos.x,maxPos.y});
-		//Vector2 perMove = { -velocity_.y,velocity_.x };
-		//// 移動ベクトルの垂線
-		//perMove = Vector2::Normalize(perMove);
-		//float dircDot = Vector2::Dot(perMove, p2tDist);
 
 		IObject::CollisionType type = IObject::GetCollisionType(player4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
 		Vector2 correctPosition = {};

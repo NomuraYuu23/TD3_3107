@@ -78,9 +78,11 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		player_->throwDirect_ = targetDirect_;
 	}
 	else if (leftStick.x != 0 || leftStick.y != 0) {
-		Vector2 normalLeft = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
+		Vector3 normalize = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX,0 };
+		normalize.y *= -1.0f;
 
-		player_->throwDirect_.x = normalLeft.x;
+		// 仮のアシスト君
+		player_->throwDirect_ = normalize;
 
 	}
 	else {
