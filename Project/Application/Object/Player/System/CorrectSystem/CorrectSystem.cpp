@@ -310,5 +310,5 @@ Vector3 CorrectSystem::RightStickAssist(EnemyManager* enemyManager, const Vector
 		}
 	}
 
-	return targetDirection;
+	return Vector3::Normalize(targetDirection);
 }

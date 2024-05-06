@@ -223,6 +223,7 @@ void PlayerController::ThrownProcess()
 			}
 			// 方向
 			player_->weapon_->throwDirect_ = player_->throwDirect_;
+			player_->weapon_->throwDirect_ = Vector3::Normalize(player_->weapon_->throwDirect_);
 			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
 		}
 		// 刺さってる→戻ってくる
