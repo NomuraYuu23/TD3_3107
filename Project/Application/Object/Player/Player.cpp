@@ -247,7 +247,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 				else {
 					weapon_->velocity_.x = 1.0f * value;
 				}
-				this->fallTimer_.StartSetting(30.0f);
+				float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
+				this->fallTimer_.StartSetting(fallTimerFrame);
 				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 				return;
 			}
@@ -559,7 +560,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 			else {
 				weapon_->velocity_.x = 1.0f * value;
 			}
-			this->fallTimer_.StartSetting(30.0f);
+			float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
+			fallTimer_.StartSetting(fallTimerFrame);
 			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 
 		}
