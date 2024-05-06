@@ -15,12 +15,14 @@ void AerialState::Initialize()
 	
 	gravity_ = GlobalVariables::GetInstance()->GetFloatValue(groupName, "Gravity");
 
-
 	player_->SetNowState(this);
 	player_->isGround_ = true;
 
 	// 速度をこちらの変数に
 	velocity_ = player_->velocity_;
+
+	// ジャンプ開始アニメーション
+	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
 }
 
 void AerialState::Update()
