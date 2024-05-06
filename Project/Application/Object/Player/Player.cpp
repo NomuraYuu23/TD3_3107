@@ -247,8 +247,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				else {
 					weapon_->velocity_.x = 1.0f * value;
 				}
-				float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
-				this->fallTimer_.StartSetting(fallTimerFrame);
+				SetFallTimer();
 				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 				return;
 			}
@@ -560,8 +559,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 			else {
 				weapon_->velocity_.x = 1.0f * value;
 			}
-			float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
-			fallTimer_.StartSetting(fallTimerFrame);
+			SetFallTimer();
+
 			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 
 		}
@@ -616,4 +615,10 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
 	drawLine->Map(lineForGPU);
 
+}
+
+void Player::SetFallTimer()
+{
+	float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
+	this->fallTimer_.StartSetting(fallTimerFrame);
 }
