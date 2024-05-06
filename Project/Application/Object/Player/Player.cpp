@@ -48,6 +48,10 @@ void Player::Initialize(Model* model)
 	rayLength_ = -100.0f;
 	cameraRay_.Initialize(this);
 	
+	// アニメーション関連初期化
+	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
+	anim_->Init(this);							   // 初期化
+
 }
 
 void Player::Update()
@@ -94,6 +98,9 @@ void Player::Update()
 	//else {
 	//	parabola_.Reset();
 	//}
+
+	// アニメーション更新
+	anim_->Update();
 }
 
 void Player::Draw(const BaseCamera& camera)

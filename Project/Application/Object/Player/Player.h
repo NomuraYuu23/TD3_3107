@@ -11,6 +11,8 @@
 
 #include "PlayerFootCollider.h"
 
+#include "Anim/PlayerAnimManager.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -161,7 +163,6 @@ private: // フラグ
 	// デバッグ用
 	bool isDebugDraw_ = false;
 
-
 private: // システム
 	// 現状のステート
 	PlayerState nowState_;
@@ -185,6 +186,11 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+private: // アニメーション関連
+
+	// アニメーションマネージャー
+	std::unique_ptr<PlayerAnimManager> anim_;
 
 };
 

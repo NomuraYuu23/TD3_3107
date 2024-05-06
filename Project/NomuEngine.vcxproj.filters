@@ -177,6 +177,7 @@
     <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
+    <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -391,6 +392,7 @@
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
     <ClInclude Include="Engine\2D\LineForGPU.h" />
     <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
+    <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
