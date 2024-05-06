@@ -143,7 +143,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Scene\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Application\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Application\Scene\TutorialScene\TutorialScene.cpp" />
-    <ClCompile Include="Application\ShadowManager\ShadowManager.cpp" />
     <ClCompile Include="Application\UI\UI.cpp" />
     <ClCompile Include="Application\UI\UIManager.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
@@ -152,13 +151,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\FogManager.cpp" />
     <ClCompile Include="Engine\3D\LargeNumberOfObjects.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
-    <ClCompile Include="Engine\3D\MeshNumManager.cpp" />
+    <ClCompile Include="Engine\3D\ModelDraw.cpp" />
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
     <ClCompile Include="Engine\3D\ModelNode.cpp" />
     <ClCompile Include="Engine\3D\OneOfManyObjects.cpp" />
-    <ClCompile Include="Engine\3D\OutLineData.cpp" />
     <ClCompile Include="Engine\Animation\Animation.cpp" />
     <ClCompile Include="Engine\Animation\AnimationData.cpp" />
+    <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
+    <ClCompile Include="Engine\Animation\LocalMatrixManager.cpp" />
     <ClCompile Include="Engine\Animation\NodeAnimationData.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\base\CompileShader.cpp" />
@@ -184,6 +184,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Collision2D\Collision2D.cpp" />
     <ClCompile Include="Engine\Collision2D\Collision2DDebugDraw.cpp" />
     <ClCompile Include="Engine\Collision2D\Collision2DManager.cpp" />
+    <ClCompile Include="Engine\ContactRecord\ContactRecord.cpp" />
     <ClCompile Include="Engine\Light\PointLight\PointLightManager.cpp" />
     <ClCompile Include="Engine\Light\SpotLight\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Line\Line.cpp" />
@@ -209,6 +210,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Physics\InertiaTensor.cpp" />
     <ClCompile Include="Engine\Physics\massPoint.cpp" />
     <ClCompile Include="Engine\Physics\RigidBody.cpp" />
+    <ClCompile Include="Engine\Physics\Spring.cpp" />
+    <ClCompile Include="Engine\Physics\String.cpp" />
+    <ClCompile Include="Engine\Physics\StructuralSpring.cpp" />
     <ClCompile Include="Engine\PostEffect\PostEffect.cpp" />
     <ClCompile Include="Engine\PostEffect\ShockWaveManager.cpp" />
     <ClCompile Include="Engine\PostEffect\Velocity2DData.cpp" />
@@ -323,28 +327,30 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Scene\SelectScene\SelectScene.h" />
     <ClInclude Include="Application\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Application\Scene\TutorialScene\TutorialScene.h" />
-    <ClInclude Include="Application\ShadowManager\ShadowManager.h" />
     <ClInclude Include="Application\UI\UI.h" />
     <ClInclude Include="Application\UI\UIManager.h" />
     <ClInclude Include="Engine\2D\ColorVertexData.h" />
     <ClInclude Include="Engine\2D\DrawLine.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
+    <ClInclude Include="Engine\2D\LineForGPU.h" />
     <ClInclude Include="Engine\2D\SpriteForGPU.h" />
     <ClInclude Include="Engine\2D\SpriteVertex.h" />
     <ClInclude Include="Engine\2D\WindowSprite.h" />
     <ClInclude Include="Engine\3D\FogData.h" />
     <ClInclude Include="Engine\3D\FogManager.h" />
     <ClInclude Include="Engine\3D\LargeNumberOfObjects.h" />
-    <ClInclude Include="Engine\3D\LocalMatrix.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
-    <ClInclude Include="Engine\3D\MeshNumManager.h" />
+    <ClInclude Include="Engine\3D\ModelDraw.h" />
     <ClInclude Include="Engine\3D\ModelLoader.h" />
     <ClInclude Include="Engine\3D\ModelNode.h" />
     <ClInclude Include="Engine\3D\ModelNodeData.h" />
     <ClInclude Include="Engine\3D\OneOfManyObjects.h" />
-    <ClInclude Include="Engine\3D\OutLineData.h" />
+    <ClInclude Include="Engine\3D\VertexInfluence.h" />
     <ClInclude Include="Engine\Animation\Animation.h" />
     <ClInclude Include="Engine\Animation\AnimationData.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrix.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrixManager.h" />
     <ClInclude Include="Engine\Animation\NodeAnimationData.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Engine\base\CompileShader.h" />
@@ -376,6 +382,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Collision2D\Collision2DDebugDraw.h" />
     <ClInclude Include="Engine\Collision2D\Collision2DManager.h" />
     <ClInclude Include="Engine\Collision\CollisionData.h" />
+    <ClInclude Include="Engine\ContactRecord\ContactRecord.h" />
     <ClInclude Include="Engine\Light\PointLight\PointLightData.h" />
     <ClInclude Include="Engine\Light\PointLight\PointLightManager.h" />
     <ClInclude Include="Engine\Light\SpotLight\SpotLightData.h" />
@@ -386,6 +393,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Quaternion.h" />
     <ClInclude Include="Engine\Math\RandomEngine.h" />
     <ClInclude Include="Engine\Math\ShortestDistance.h" />
+    <ClInclude Include="Engine\Particle\EmitterDesc.h" />
     <ClInclude Include="Engine\Particle\IEmitter.h" />
     <ClInclude Include="Engine\Particle\IParticle.h" />
     <ClInclude Include="Engine\Particle\ParticleForGPU.h" />
@@ -408,6 +416,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Physics\InertiaTensor.h" />
     <ClInclude Include="Engine\Physics\massPoint.h" />
     <ClInclude Include="Engine\Physics\RigidBody.h" />
+    <ClInclude Include="Engine\Physics\Spring.h" />
+    <ClInclude Include="Engine\Physics\String.h" />
+    <ClInclude Include="Engine\Physics\StructuralSpring.h" />
     <ClInclude Include="Engine\PostEffect\PostEffect.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
@@ -534,22 +545,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="resources\shaders\Object3d.VS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\OutLine3D.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\OutLine3D.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

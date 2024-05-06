@@ -206,6 +206,8 @@ public:
 	// 速さベクトル
 	Vector3 velocity_ = {};
 
+	// ローカル行列
+	std::unique_ptr<LocalMatrixManager> localMatrixManager_ = nullptr;
 
 };
 

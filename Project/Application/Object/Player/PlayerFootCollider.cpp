@@ -27,6 +27,11 @@ void PlayerFootCollider::Initialize(Model* model, Player* parent)
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	boxCollider_.SetCollisionMask(kCollisionAttributeTerrain);
+
+	// ローカル行列マネージャー
+	localMatrixManager_ = std::make_unique<LocalMatrixManager>();
+	localMatrixManager_->Initialize(model_->GetRootNode());
+
 }
 
 void PlayerFootCollider::Update()
@@ -97,5 +102,13 @@ void PlayerFootCollider::OnCollision(ColliderParentObject2D target)
 
 void PlayerFootCollider::DebugDraw(BaseCamera camera)
 {
-	model_->Draw(worldtransform_, camera, material_.get());
+
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.worldTransform = &worldtransform_;
+	ModelDraw::AnimObjectDraw(desc);
+
 }

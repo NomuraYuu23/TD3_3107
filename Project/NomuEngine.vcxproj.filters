@@ -6,9 +6,6 @@
     <FxCompile Include="Resources\shaders\Line.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Line.VS.hlsl" />
     <FxCompile Include="resources\shaders\Object3d.PS.hlsl" />
-    <FxCompile Include="resources\shaders\Object3d.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\OutLine3D.PS.hlsl" />
-    <FxCompile Include="Resources\shaders\OutLine3D.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Particle.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Particle.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.PS.hlsl" />
@@ -41,7 +38,6 @@
     <ClCompile Include="Application\Scene\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Application\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Application\Scene\TutorialScene\TutorialScene.cpp" />
-    <ClCompile Include="Application\ShadowManager\ShadowManager.cpp" />
     <ClCompile Include="Application\UI\UI.cpp" />
     <ClCompile Include="Application\UI\UIManager.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
@@ -49,11 +45,9 @@
     <ClCompile Include="Engine\2D\WindowSprite.cpp" />
     <ClCompile Include="Engine\3D\LargeNumberOfObjects.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
-    <ClCompile Include="Engine\3D\MeshNumManager.cpp" />
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
     <ClCompile Include="Engine\3D\ModelNode.cpp" />
     <ClCompile Include="Engine\3D\OneOfManyObjects.cpp" />
-    <ClCompile Include="Engine\3D\OutLineData.cpp" />
     <ClCompile Include="Engine\Animation\Animation.cpp" />
     <ClCompile Include="Engine\Animation\AnimationData.cpp" />
     <ClCompile Include="Engine\Animation\NodeAnimationData.cpp" />
@@ -171,11 +165,18 @@
     <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
     <ClCompile Include="Engine\3D\FogManager.cpp" />
     <ClCompile Include="Engine\PostEffect\ShockWaveManager.cpp" />
+    <ClCompile Include="Engine\ContactRecord\ContactRecord.cpp" />
+    <ClCompile Include="Engine\3D\ModelDraw.cpp" />
+    <ClCompile Include="Engine\Physics\Spring.cpp" />
+    <ClCompile Include="Engine\Physics\String.cpp" />
+    <ClCompile Include="Engine\Physics\StructuralSpring.cpp" />
+    <ClCompile Include="Engine\Animation\LocalMatrixManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
     <ClCompile Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.cpp" />
     <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\KnockBack.cpp" />
+    <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -219,7 +220,6 @@
     <ClInclude Include="Application\Scene\SelectScene\SelectScene.h" />
     <ClInclude Include="Application\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Application\Scene\TutorialScene\TutorialScene.h" />
-    <ClInclude Include="Application\ShadowManager\ShadowManager.h" />
     <ClInclude Include="Application\UI\UI.h" />
     <ClInclude Include="Application\UI\UIManager.h" />
     <ClInclude Include="Engine\2D\ColorVertexData.h" />
@@ -229,14 +229,11 @@
     <ClInclude Include="Engine\2D\SpriteVertex.h" />
     <ClInclude Include="Engine\2D\WindowSprite.h" />
     <ClInclude Include="Engine\3D\LargeNumberOfObjects.h" />
-    <ClInclude Include="Engine\3D\LocalMatrix.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
-    <ClInclude Include="Engine\3D\MeshNumManager.h" />
     <ClInclude Include="Engine\3D\ModelLoader.h" />
     <ClInclude Include="Engine\3D\ModelNode.h" />
     <ClInclude Include="Engine\3D\ModelNodeData.h" />
     <ClInclude Include="Engine\3D\OneOfManyObjects.h" />
-    <ClInclude Include="Engine\3D\OutLineData.h" />
     <ClInclude Include="Engine\Animation\Animation.h" />
     <ClInclude Include="Engine\Animation\AnimationData.h" />
     <ClInclude Include="Engine\Animation\NodeAnimationData.h" />
@@ -378,6 +375,14 @@
     <ClInclude Include="Engine\3D\FogData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
+    <ClInclude Include="Engine\ContactRecord\ContactRecord.h" />
+    <ClInclude Include="Engine\3D\ModelDraw.h" />
+    <ClInclude Include="Engine\Physics\Spring.h" />
+    <ClInclude Include="Engine\Physics\String.h" />
+    <ClInclude Include="Engine\Physics\StructuralSpring.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrixManager.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrix.h" />
+    <ClInclude Include="Engine\3D\VertexInfluence.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyWaitState.h" />
     <ClInclude Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.h" />
     <ClInclude Include="Application\Object\Player\System\FreeFall\FreeFallTimer.h" />
@@ -385,6 +390,9 @@
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\KnockBack.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyEmitter.h" />
+    <ClInclude Include="Engine\2D\LineForGPU.h" />
+    <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
+    <ClInclude Include="Engine\Particle\EmitterDesc.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -3,6 +3,7 @@
 #include "../../../../Engine/Collider2D/ColliderShape2D.h"
 #include "../../GameUtility/CommonConfig.h"
 #include "State/IBossState.h"
+#include "../../../../Engine/3D/ModelDraw.h"
 
 class IBoss
 {
@@ -55,6 +56,9 @@ public:
 	Model* model_ = nullptr;
 	// ワールドトランスフォーム
 	WorldTransform worldtransform_;
+
+	// ローカル行列マネージャー
+	std::unique_ptr<LocalMatrixManager> localMatrixManager_ = nullptr;
 
 	// コライダー用の座標・スケール
 	Vector2 position2D_ = {};

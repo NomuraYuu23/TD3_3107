@@ -17,7 +17,7 @@ public:
 
 	void Reset();
 
-	void Draw(BaseCamera& camera);
+	void DrawMap(DrawLine* drawLine);
 
 private:
 
@@ -26,9 +26,6 @@ private:
 
 	// 時間倍率
 	static const uint32_t kTimeMagnification = 5;
-
-	// 線
-	std::array<std::unique_ptr<DrawLine>, kNumLineMax_> drawLines_;
 
 	// 線の数
 	uint32_t numLine_;

@@ -31,7 +31,7 @@ void GameScene::Initialize() {
 	TextureLoad();
 		
 	// ビュープロジェクション
-	TransformStructure baseCameraTransform = {
+	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
 		0.58f,0.0f,0.0f,
 		0.0f, 23.0f, -100.0f };
@@ -43,10 +43,6 @@ void GameScene::Initialize() {
 	particleModel[ParticleModelIndex::kUvChecker] = particleUvcheckerModel_.get();
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
 	particleManager_->ModelCreate(particleModel);
-	TransformStructure emitter = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{-3.0f,0.0f,0.0f} };
-	particleManager_->MakeEmitter(emitter, 1, 0.5f, 300.0f, ParticleModelIndex::kUvChecker, 0, 0);
-	emitter.translate.x = 3.0f;
-	particleManager_->MakeEmitter(emitter, 1, 0.5f, 300.0f, ParticleModelIndex::kCircle, 0, 0);
 
 
 	isDebugCameraActive_ = false;
@@ -66,14 +62,6 @@ void GameScene::Initialize() {
 	// スカイドーム
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
-
-
-	outline_.Initialize();
-	outline_.color_ = { 0.8f,0.4f,0.1f,1.0f };
-
-	//影
-	//shadowManager_ = std::make_unique<ShadowManager>();
-	//shadowManager_->Initialize(shadowModel_.get());
 
 	// 平行光源
 	directionalLight_ = std::make_unique<DirectionalLight>();
@@ -114,8 +102,8 @@ void GameScene::Initialize() {
 
 	collision2DDebugDraw_ = std::make_unique<Collision2DDebugDraw>();
 	collision2DDebugDraw_->Initialize(dxCommon_->GetDevice(), collision2DDebugDrawTextures_,
-		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateNameCollision2DDebugDraw].Get(),
-		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateNameCollision2DDebugDraw].Get());
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexCollision2DDebugDraw].Get(),
+		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexCollision2DDebugDraw].Get());
 
 
 	// プレイヤーの初期化
@@ -224,6 +212,7 @@ void GameScene::Update() {
 	mapManager_->Update();
 	// プレイヤー
 	player_->Update();
+	player_->DrawLinesMap(drawLine_);
 	// 敵
 	enemyManager_->Update();
 	//bossEnemy_->Update();
@@ -257,9 +246,6 @@ void GameScene::Update() {
 	//パーティクル
 	particleManager_->Update(camera_);
 
-	//アウトライン
-	outline_.Map();
-
 }
 
 /// <summary>
@@ -281,7 +267,14 @@ void GameScene::Draw() {
 
 #pragma endregion
 
-	Model::PreDraw(dxCommon_->GetCommadList(), pointLightManager_.get(), spotLightManager_.get(), directionalLight_.get());
+	ModelDraw::PreDrawDesc preDrawDesc;
+	preDrawDesc.commandList = dxCommon_->GetCommadList();
+	preDrawDesc.directionalLight = directionalLight_.get();
+	preDrawDesc.fogManager = FogManager::GetInstance();
+	preDrawDesc.pointLightManager = pointLightManager_.get();
+	preDrawDesc.spotLightManager = spotLightManager_.get();
+
+	ModelDraw::PreDraw(preDrawDesc);
 
 	//3Dオブジェクトはここ
 	
@@ -292,49 +285,32 @@ void GameScene::Draw() {
 	// スカイドーム
 	skydome_->Draw(camera_);
 
-#ifdef _DEBUG
-
-	// デバッグ描画
-	//colliderDebugDraw_->Draw(camera_);
-
-#endif // _DEBUG
-
-	Model::PostDraw();
-
-
-#pragma region 大量のオブジェクト描画
-
-	Model::PreManyModelsDraw(dxCommon_->GetCommadList(), pointLightManager_.get(), spotLightManager_.get(), directionalLight_.get());
+	tmpTextures_.clear();
+	tmpTextures_.push_back(blockTexture_);
 
 	// ブロック用
-	mapManager_->Draw(camera_);
+	mapManager_->Draw(camera_, &tmpTextures_);
+
+	tmpTextures_.clear();
+	tmpTextures_.push_back(enemyTexture_);
 
 	// 敵
-	enemyManager_->Draw(camera_, enemyTexture_);
+	enemyManager_->Draw(camera_, &tmpTextures_);
 
-	Model::PostDraw();
+	ModelDraw::PostDraw();
 
 #pragma endregion
 
 #pragma region 線描画
-	DrawLine::PreDraw(dxCommon_->GetCommadList());
 
-	player_->DrawLines(camera_);
-
-	DrawLine::PostDraw();
+	drawLine_->Draw(dxCommon_->GetCommadList(), camera_);
 
 #pragma endregion
 
 #pragma region パーティクル描画
-	Model::PreParticleDraw(dxCommon_->GetCommadList(), camera_.GetViewProjectionMatrix());
-
-	//光源
-	directionalLight_->Draw(dxCommon_->GetCommadList(), 6);
 
 	// パーティクルはここ
-	//particleManager_->Draw();
-
-	Model::PostDraw();
+	//particleManager_->Draw(camera_.GetViewProjectionMatrix(), dxCommon_->GetCommadList());
 
 #pragma endregion
 

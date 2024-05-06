@@ -20,6 +20,11 @@ void IBoss::Initialize(Model* model)
 	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
 	scale2D_ = { worldtransform_.transform_.scale.x * 2.0f, worldtransform_.transform_.scale.y * 2.0f };
 
+	// ローカル行列マネージャー
+	localMatrixManager_ = std::make_unique<LocalMatrixManager>();
+	localMatrixManager_->Initialize(model_->GetRootNode());
+	localMatrixManager_->Map();
+
 }
 
 void IBoss::Update()
@@ -27,4 +32,5 @@ void IBoss::Update()
 	// 行列・座標更新
 	worldtransform_.UpdateMatrix();
 	position2D_ = { worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y };
+
 }

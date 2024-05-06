@@ -3,6 +3,7 @@
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/Input/Input.h"
 #include "../../Collider2D/CollisionConfig2D.h"
+#include "../../../Engine/3D/ModelDraw.h"
 
 SampleObject::~SampleObject()
 {
@@ -31,6 +32,10 @@ void SampleObject::Initialize(Model* model)
 
 	//this->SetCollisionAttribute(kCollisionAttributeEnemy);
 	//this->SetCollisionMask(kCollisionAttributePlayer);
+
+	// ローカル行列マネージャー
+	localMatrixManager_ = std::make_unique<LocalMatrixManager>();
+	localMatrixManager_->Initialize(model_->GetRootNode());
 
 	RegisteringGlobalVariables();
 
@@ -61,10 +66,16 @@ void SampleObject::Update()
 	//Box::Update(position2D_, scale2D_.x, scale2D_.y);
 }
 
-void SampleObject::Draw(BaseCamera camera)
+void SampleObject::Draw(const BaseCamera& camera)
 {
 
-	model_->Draw(worldtransform_, camera, material_.get());
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.worldTransform = &worldtransform_;
+	ModelDraw::AnimObjectDraw(desc);
 
 }
 

@@ -7,13 +7,6 @@
 void PlayerParabola::Initialize()
 {
 
-	// 線
-	for (uint32_t i = 0; i < kNumLineMax_; ++i) {
-		drawLines_[i].reset(DrawLine::Create());
-		startPositions_[i] = { 0.0f,0.0f,0.0f };
-		endPositions_[i] = { 0.0f,0.0f,0.0f };
-	}
-
 	// 線の数
 	numLine_ = 0;
 
@@ -80,20 +73,21 @@ void PlayerParabola::Reset()
 
 }
 
-void PlayerParabola::Draw(BaseCamera& camera)
+void PlayerParabola::DrawMap(DrawLine* drawLine)
 {
 
-	// 色
-	Vector4 color = { 0.0f,0.8f,0.4f,1.0f };
+	LineForGPU lineForGPU;
 
-	// 描画
+	// 色
+	lineForGPU.color[0] = { 0.0f,0.8f,0.4f,1.0f };
+	lineForGPU.color[1] = { 0.0f,0.8f,0.4f,1.0f };
+	// map
 	for (uint32_t i = 0; i < numLine_; ++i) {
-		drawLines_[i]->Draw(
-			startPositions_[i],
-			endPositions_[i],
-			color,
-			color,
-			camera);
+		
+		lineForGPU.position[0] = startPositions_[i];
+		lineForGPU.position[1] = endPositions_[i];
+		drawLine->Map(lineForGPU);
+
 	}
 
 }

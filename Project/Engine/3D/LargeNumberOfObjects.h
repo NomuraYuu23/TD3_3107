@@ -5,7 +5,7 @@
 #include <d3d12.h>
 #include <memory>
 #include "TransformationMatrix.h"
-#include "LocalMatrix.h"
+#include "../Animation/LocalMatrixManager.h"
 #include "ModelNodeData.h"
 #include "Model.h"
 #include "OneOfManyObjects.h"
@@ -43,20 +43,14 @@ public:
 	/// <summary>
 	/// マッピング
 	/// </summary>
-	void Map();
+	void Map(const Matrix4x4& viewProjectionMatrix);
 
 	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="camera">カメラ</param>
-	void Draw(BaseCamera& camera);
-	void Draw(BaseCamera& camera, uint32_t texture);
-
-	/// <summary>
-	/// ノードデータ設定
-	/// </summary>
-	/// <param name="modelNode">モデルのノード</param>
-	void SetNodeDatas(const ModelNode& modelNode, int32_t parentIndex);
+	/// <param name="textureHnadles">テクスチャハンドル</param>
+	virtual void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles = nullptr);
 
 	/// <summary>
 	/// 死んでるのを削除
@@ -74,6 +68,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	std::list<std::unique_ptr<OneOfManyObjects>>* GetObjects() { return &objects_; }
+
 
 protected: // トランスフォーム関係
 
@@ -96,24 +91,24 @@ protected: // トランスフォーム関係
 
 protected: // モデル関係
 
-	// ローカル行列
-	Microsoft::WRL::ComPtr<ID3D12Resource> localMatrixesBuff_;
-	//書き込むためのアドレスを取得
-	LocalMatrix* localMatrixesMap_{};
-	// CPUハンドル
-	D3D12_CPU_DESCRIPTOR_HANDLE localMatrixesHandleCPU_;
-	// GPUハンドル
-	D3D12_GPU_DESCRIPTOR_HANDLE localMatrixesHandleGPU_;
-	// ディスクリプタヒープの位置
-	uint32_t localMatrixesIndexDescriptorHeap_ = 0;
-	// ノードデータ
-	std::vector<NodeData> nodeDatas_;
+	// ローカル行列マネージャー
+	std::unique_ptr<LocalMatrixManager> localMatrixManager_;
 
 	// モデル
 	Model* model_;
 
 	//	マテリアル
-	std::unique_ptr<Material> material_;
+	//std::unique_ptr<Material> material_;
 
+	//Sprite用のマテリアルリソースを作る
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialsBuff_;
+	//書き込むためのアドレスを取得
+	SRVMaterialData* materialsMap_{};
+	// CPUハンドル
+	D3D12_CPU_DESCRIPTOR_HANDLE materialsHandleCPU_;
+	// GPUハンドル
+	D3D12_GPU_DESCRIPTOR_HANDLE materialsHandleGPU_;
+	// ディスクリプタヒープの位置
+	uint32_t materialsIndexDescriptorHeap_ = 0;
 };
 

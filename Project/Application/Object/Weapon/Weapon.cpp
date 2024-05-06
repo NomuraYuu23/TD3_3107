@@ -74,7 +74,15 @@ void Weapon::Draw(const BaseCamera& camera)
 			ChangeRequest(StateName::kReturn);
 		}
 	}
-	model_->Draw(worldtransform_, const_cast<BaseCamera&>(camera));
+
+
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.worldTransform = &worldtransform_;
+	ModelDraw::AnimObjectDraw(desc);
 
 }
 

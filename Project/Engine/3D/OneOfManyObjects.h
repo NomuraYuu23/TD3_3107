@@ -2,6 +2,7 @@
 #include "TransformStructure.h"
 #include "../Math/Matrix4x4.h"
 #include "../3D/WorldTransform.h"
+#include "MaterialData.h"
 
 class OneOfManyObjects
 {
@@ -39,7 +40,7 @@ public:
 public:
 
 	//トランスフォーム
-	TransformStructure transform_{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
+	EulerTransform transform_{ {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
 	//ワールド行列
 	Matrix4x4 worldMatrix_;
 	// 回転行列
@@ -55,6 +56,9 @@ public:
 
 	// 死んでるか
 	bool isDead_;
+
+	// マテリアルデータ
+	SRVMaterialData materialData_;
 
 };
 
