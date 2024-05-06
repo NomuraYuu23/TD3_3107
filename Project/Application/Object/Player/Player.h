@@ -11,6 +11,8 @@
 
 #include "PlayerFootCollider.h"
 
+#include "Anim/PlayerAnimManager.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -108,6 +110,14 @@ public: // メンバ関数
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
 
+public: // アニメーション関連関数群
+
+	/// <summary>
+	/// アニメーションマネージャーゲッター
+	/// </summary>
+	/// <returns>アニメーションマネージャー</returns>
+	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
+
 public:
 	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
@@ -170,7 +180,6 @@ private: // フラグ
 	// デバッグ用
 	bool isDebugDraw_ = false;
 
-
 private: // システム
 	// 現状のステート
 	PlayerState nowState_;
@@ -198,6 +207,11 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+private: // アニメーション関連
+
+	// アニメーションマネージャー
+	std::unique_ptr<PlayerAnimManager> anim_;
 
 };
 

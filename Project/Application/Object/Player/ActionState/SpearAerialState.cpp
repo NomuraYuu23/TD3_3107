@@ -20,6 +20,9 @@ void SpearAerialState::Initialize()
 	// コンボ加算
 	player_->AddCombo();
 
+	// 槍ジャンアニメーションの再生
+	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::SpearJump);
+
 }
 
 void SpearAerialState::Update()

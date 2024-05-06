@@ -15,6 +15,10 @@ void Player::Initialize(Model* model)
 
 	worldtransform_.transform_.translate = { -70.0f,10.0f,0 };
 
+	// ライティング有効
+	enableLighting_ = EnableLighting::HalfLambert;
+	material_->SetEnableLighting(enableLighting_);
+
 	// コライダーの初期化
 	circleCollider_.radius_ = 0.985f;
 	circleCollider_.Initialize(position2D_, circleCollider_.radius_, this);
@@ -49,6 +53,10 @@ void Player::Initialize(Model* model)
 	rayLength_ = -100.0f;
 	cameraRay_.Initialize(this);
 	
+	// アニメーション関連初期化
+	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
+	anim_->Init(this);							   // 初期化
+
 }
 
 void Player::Update()
@@ -81,6 +89,10 @@ void Player::Update()
 
 	// 基底クラスの更新
 	IObject::Update();
+
+	// アニメーション更新
+	anim_->Update();
+
 	// コライダー
 	CircleColliderUpdate();
 	// 足元のコライダー
@@ -112,7 +124,15 @@ void Player::Draw(const BaseCamera& camera)
 	desc.material = material_.get();
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
-	ModelDraw::AnimObjectDraw(desc);
+
+	if (anim_->GetIsRight()) {
+		ModelDraw::AnimObjectDraw(desc);
+	}
+	else {
+		ModelDraw::AnimInverseObjectDraw(desc);
+	}
+
+	
 
 	// 武器の描画
 	if (weapon_) {
