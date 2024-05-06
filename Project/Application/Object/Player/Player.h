@@ -13,6 +13,8 @@
 
 #include "Anim/PlayerAnimManager.h"
 
+#include "../../../Engine/Physics/String.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -144,6 +146,13 @@ public:
 	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
 
 	void KnockBackOnGround() { knockBackSystem_.SetIsHit(false); }
+
+	/// <summary>
+	/// ポニーテール用のモデルセッター
+	/// </summary>
+	/// <param name="model">モデル</param>
+	void SetPonyTail(Model* model);
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -210,6 +219,11 @@ private: // システム
 	CorrectSystem correctSystem_;
 
 private: // アニメーション関連
+
+	// ポニーテール用紐クラス
+	std::unique_ptr<String> ponytail_;
+	// ポニテ用トランスフォーム
+	WorldTransform ponyTailTransform_;
 
 	// アニメーションマネージャー
 	std::unique_ptr<PlayerAnimManager> anim_;

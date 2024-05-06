@@ -87,6 +87,18 @@ void Player::Update()
 		weapon_->Update();
 	}
 
+	// ポニーテール更新
+	if (ponytail_ != nullptr) {
+		// ポニーテール用トランスフォーム更新
+		ponyTailTransform_.UpdateMatrix();
+
+		//ponytail_->SetAnchor(0, true);
+		// 追従先座標を渡す
+		ponytail_->SetPosition(0, ponyTailTransform_.GetWorldPosition());
+		// 更新
+		ponytail_->Update();
+	}
+
 	// 基底クラスの更新
 	IObject::Update();
 
@@ -132,8 +144,6 @@ void Player::Draw(const BaseCamera& camera)
 		ModelDraw::AnimInverseObjectDraw(desc);
 	}
 
-	
-
 	// 武器の描画
 	if (weapon_) {
 		weapon_->Draw(camera);
@@ -141,6 +151,11 @@ void Player::Draw(const BaseCamera& camera)
 	// 足場のモデル描画
 	if (isDebugDraw_) {
 		footCollider_.DebugDraw(camera);
+	}
+
+	// ポニーテール描画
+	if (ponytail_ != nullptr) {
+		ponytail_->Draw(const_cast<BaseCamera&>(camera));
 	}
 }
 
@@ -241,6 +256,11 @@ void Player::ImGuiDraw()
 		// タブバーを終了
 		ImGui::EndTabBar();
 	}
+
+	ImGui::Text("\n PonyTailTransfporm");
+	ImGui::DragFloat3("Scale", &ponyTailTransform_.transform_.scale.x);
+	ImGui::DragFloat3("Rotate", &ponyTailTransform_.transform_.rotate.x);
+	ImGui::DragFloat3("Translate", &ponyTailTransform_.transform_.translate.x);
 
 	ImGui::End();
 
@@ -636,4 +656,24 @@ void Player::SetFallTimer()
 {
 	float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
 	this->fallTimer_.StartSetting(fallTimerFrame);
+}
+
+void Player::SetPonyTail(Model* model)
+{
+	// ポニテトランスフォーム初期化
+	ponyTailTransform_.Initialize();
+
+	// プレイヤーのトランスフォームに親子付け
+	//ponyTailTransform_.SetParent(&worldtransform_);
+
+	// ポニーテール用紐生成
+	ponytail_ = std::make_unique<String>();
+	// 初期化
+	ponytail_->Initialize(
+		model,
+		ponyTailTransform_.GetWorldPosition(),
+		0.001f,
+		500.0f,
+		2.0f,
+		0.0f);
 }

@@ -179,6 +179,7 @@
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
     <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
+    <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -396,6 +397,7 @@
     <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
     <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
     <ClInclude Include="Engine\Particle\EmitterDesc.h" />
+    <ClInclude Include="Application\Object\BackGround\BackGround.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
