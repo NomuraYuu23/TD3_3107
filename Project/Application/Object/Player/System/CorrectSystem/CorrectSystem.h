@@ -31,11 +31,13 @@ private:
 
 	Vector3 NearEnemyLockOn(EnemyManager* enemyManager);
 
+	Vector3 RightStickAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
+
 	Vector2 prevLeftStick_ = {};
 
 	bool isInNearArea_ = false;
 
-	bool isLock_ = false;
-
 	Vector3 targetDirect_ = {};
+
+	OneOfManyObjects* targetPointer_ = nullptr;
 };

@@ -289,7 +289,7 @@ void GameScene::Draw() {
 	tmpTextures_.push_back(blockTexture_);
 
 	// ブロック用
-	mapManager_->Draw(camera_, &tmpTextures_);
+	mapManager_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(enemyTexture_);
