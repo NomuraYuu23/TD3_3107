@@ -17,5 +17,8 @@
 #include "Map/MapManager.h"
 #include "Map/Terrain.h"
 
+// 背景
+#include "BackGround/BackGround.h"
+
 // カメラ
 #include "GameCamera/FollowCamera.h"
