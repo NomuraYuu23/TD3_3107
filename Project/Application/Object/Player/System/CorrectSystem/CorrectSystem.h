@@ -33,5 +33,7 @@ private:
 
 	Vector3 NearEnemyLockOn(EnemyManager* enemyManager);
 
+	Vector2 prevLeftStick_ = {};
+
 	bool isInNearArea_ = false;
 };

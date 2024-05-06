@@ -22,7 +22,12 @@ void PlayerController::Update()
 
 	// コントローラー用
 	ControllerProcess();
-
+	if (player_->velocity_.x > 0) {
+		player_->isLeft_ = false;
+	}
+	else if (player_->velocity_.x < 0) {
+		player_->isLeft_ = true;
+	}
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_H)) {
 		player_->ChangeState(std::make_unique<AerialState>());

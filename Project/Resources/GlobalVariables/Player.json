@@ -5,11 +5,13 @@
         "HitInvisibleFrame": 15.0,
         "HitPoint": 10,
         "HorizontalPower": 10.0,
+        "InitLength": 30.0,
         "MoveSpeed": 10.0,
         "NormalJumpPower": 40.0,
         "RecoilFrame": 20.0,
         "RecoilLerpRatio": 0.05000000074505806,
         "RecoilRatio": 60.0,
+        "RotateWidth": 0.15000000596046448,
         "SpearJumpPower": 47.5,
         "inverceRatio": 5.0
     }

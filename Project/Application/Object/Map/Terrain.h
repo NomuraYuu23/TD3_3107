@@ -48,6 +48,8 @@ public:
 		boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0.0f);
 	}
 
+	void MaterialUpdate();
+
 private:
 	// シリアルナンバー
 	uint32_t serialNum_ = 0;
@@ -62,6 +64,11 @@ public:
 
 	// コライダー
 	Box boxCollider_;
+
+	// マテリアル関係
+	std::unique_ptr<Material> material_ = nullptr;
+	int32_t enableLighting_;
+	float shininess_;
 
 	uint32_t texture_ = 0u;
 

@@ -278,7 +278,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				return;
 			}
 			// 反動生成
-			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
+			//recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
 
 			return;
 		}

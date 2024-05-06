@@ -307,7 +307,7 @@ void GameScene::Draw() {
 	Model::PreManyModelsDraw(dxCommon_->GetCommadList(), pointLightManager_.get(), spotLightManager_.get(), directionalLight_.get());
 
 	// ブロック用
-	mapManager_->Draw(camera_, blockTexture_);
+	mapManager_->Draw(camera_);
 
 	// 敵
 	enemyManager_->Draw(camera_, enemyTexture_);
@@ -509,7 +509,7 @@ void GameScene::ModelCreate()
 	weaponModel_.reset(Model::Create("Resources/GameObject/SpearB/", "SpearB.obj", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック
-	terrainModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
+	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
 	
 	// 敵モデル
 	enemyModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));

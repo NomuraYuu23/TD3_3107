@@ -31,6 +31,10 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "HitPoint", player_.hpData_.hp_);
 	globalVariables_->AddItem(groupName, "HitInvisibleFrame", player_.hpData_.invTimer_);
 
+	// 補正用
+	globalVariables_->AddItem(groupName, "InitLength", player_.correctData_.InitLength_);
+	globalVariables_->AddItem(groupName, "RotateWidth", player_.correctData_.rotationWidth_);
+
 	groupName = "Weapon";
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
@@ -69,6 +73,10 @@ void GameObjectData::ApplyGlobalVariables()
 
 	player_.hpData_.hp_ = globalVariables_->GetIntValue(groupName, "HitPoint");
 	player_.hpData_.invTimer_ = globalVariables_->GetFloatValue(groupName, "HitInvisibleFrame");
+
+	// 補正用
+	player_.correctData_.InitLength_ = globalVariables_->GetFloatValue(groupName, "InitLength");
+	player_.correctData_.rotationWidth_ = globalVariables_->GetFloatValue(groupName, "RotateWidth");
 
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");

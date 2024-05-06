@@ -145,6 +145,7 @@ public:
 	// 矢印テクスチャ
 	uint32_t arrowTexture_ = 0u;
 
+	bool isLeft_ = false;
 	// 接地フラグ
 	bool isGround_ = false;
 	// 矢印描画フラグ

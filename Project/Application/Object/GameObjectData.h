@@ -16,6 +16,9 @@ private: // データ用構造体クラス
 		float lerpRatio_;
 	};
 
+	/// <summary>
+	/// ジャンプの情報
+	/// </summary>
 	struct JumpData {
 		// 通常のジャンプ量
 		float normalJumpPower_;
@@ -29,6 +32,9 @@ private: // データ用構造体クラス
 
 	};
 
+	/// <summary>
+	/// 移動の情報
+	/// </summary>
 	struct MoveData {
 		// 地上の移動量
 		float moveValue_;
@@ -38,11 +44,24 @@ private: // データ用構造体クラス
 		float invAerialRatio_;
 	};
 
-	struct healthData {
+	/// <summary>
+	/// 体力関係の情報
+	/// </summary>
+	struct HealthData {
 		// 最大体力
 		int32_t hp_;
 		// 無敵時間
 		float invTimer_;
+	};
+
+	/// <summary>
+	/// 補正の情報
+	/// </summary>
+	struct CorrectData {
+		// 角度
+		float rotationWidth_;
+		// 領域範囲
+		float InitLength_;
 	};
 
 	// プレイヤーの情報
@@ -58,7 +77,9 @@ private: // データ用構造体クラス
 		float deadLength_;
 	
 		// 体力データ
-		healthData hpData_;
+		HealthData hpData_;
+
+		CorrectData correctData_;
 	};
 	// 共通の情報
 	struct CommonData {
