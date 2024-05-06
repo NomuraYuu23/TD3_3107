@@ -101,6 +101,10 @@ private: // データ用構造体クラス
 		Vector3 localPosition_;
 		// 衝突時の避ける内積の値
 		float collisionDot_;
+
+		// 補正の幅
+		float assistWidth_;
+
 	};
 
 	struct BossData {

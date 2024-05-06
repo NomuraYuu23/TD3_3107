@@ -263,7 +263,7 @@ Vector3 CorrectSystem::RightStickAssist(EnemyManager* enemyManager, const Vector
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { stickDirect.x, stickDirect.y };
 	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("Player", "RotateWidth");
+	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "AssistWidth");
 	//float rotateWidth = kRotationWidth_;
 	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
 	// 方向確認用の行列(右範囲)
