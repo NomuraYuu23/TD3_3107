@@ -8,6 +8,8 @@
 
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
+#include "Anim/SpearAnimManager.h"
+
 class Player;
 
 class Weapon : public IObject
@@ -85,6 +87,12 @@ public: // アクセッサ
 	void SetState(WeaponState newState) { nowState_ = newState; }
 
 	bool IsEnemyImpaled() { return isEnemyImpaled_; }
+
+	/// <summary>
+	/// アニメーションマネージャーゲッター
+	/// </summary>
+	/// <returns>アニメーションマネージャー</returns>
+	SpearAnimManager* GetAnimManager() { return anim_.get(); }
 
 public: // 外部で行う設定関数
 	/// <summary>
@@ -172,5 +180,11 @@ private:
 	bool isEnemyImpaled_ = false;
 
 	Player* player_ = nullptr;
+
+private: // アニメーション関連
+
+	// 槍用アニメーションマネージャー
+	std::unique_ptr<SpearAnimManager> anim_;
+
 };
 
