@@ -355,21 +355,39 @@ void Player::OnCollision(ColliderParentObject2D target)
 		// 上側
 		case IObject::kTopSide:
 			// プレイヤーの修正されたY座標を計算
-			correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
-			worldtransform_.transform_.translate.y = correctPosition.y;
-			velocity_.y = 0;
+			if (velocity_.y > 0) {
+				correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+				worldtransform_.transform_.translate.y = correctPosition.y;
+				velocity_.y = 0;
+			}
+			else if (velocity_.y < 0) {
+				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+				worldtransform_.transform_.translate.y = correctPosition.y;
+				velocity_.y = 0;
+			}
 
 			break;
 		// 下側
 		case IObject::kBottomSide:
 			// プレイヤーの修正されたY座標を計算
-			correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
-			worldtransform_.transform_.translate.y = correctPosition.y;
-			// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
-			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-				ChangeState(std::make_unique<GroundState>());
+			if (velocity_.y > 0) {
+				correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+				worldtransform_.transform_.translate.y = correctPosition.y;
+				velocity_.y = 0;
 			}
-			isGround_ = true;
+			else if (velocity_.y < 0) {
+				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+				worldtransform_.transform_.translate.y = correctPosition.y;
+				velocity_.y = 0;
+				// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+					ChangeState(std::make_unique<GroundState>());
+				}
+				isGround_ = true;
+			}
+			//// プレイヤーの修正されたY座標を計算
+			//correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+			//worldtransform_.transform_.translate.y = correctPosition.y;
 			break;
 
 		///---一点のみの衝突---///
