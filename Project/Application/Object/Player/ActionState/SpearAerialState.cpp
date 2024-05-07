@@ -8,7 +8,7 @@ void SpearAerialState::Initialize()
 	// 落下処理
 	// jsonデータ
 	const char* groupName = "Player";
-	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue(groupName, "SpearJumpPower");
+	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "SpearJumpPower");
 
 	//groupName = "Common";
 
@@ -19,6 +19,15 @@ void SpearAerialState::Initialize()
 	player_->isGround_ = true;
 	// コンボ加算
 	player_->AddCombo();
+	//// キャストして方向設定
+	//SpearAerialState* state = dynamic_cast<SpearAerialState*>(player_->actionState_.get());
+
+	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+
+	leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
+
+	InitializeDirection(leftStick);
+
 
 	// 槍ジャンアニメーションの再生
 	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::SpearJump);
@@ -29,9 +38,16 @@ void SpearAerialState::Update()
 {
 	// 速度計算
 	float mass = 1.0f;
-	float moveRatio = 0.005f;
+	float activeRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialActiveDecelerateRatio");
+	float inActiveRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialInActiveDecelerateRatio");
+	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+	if (leftStick.x != 0) {
+		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, activeRatio);
+	}
+	else {
+		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, inActiveRatio);
+	}
 
-	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, moveRatio);
 	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// 移動処理

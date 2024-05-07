@@ -10,6 +10,9 @@ void ImpaledState::Initialize()
 	weapon_->worldtransform_.transform_.translate = weapon_->worldtransform_.GetWorldPosition();
 	weapon_->worldtransform_.parent_ = nullptr;
 	weapon_->worldtransform_.UpdateMatrix();
+
+	//autoComeBack_
+
 }
 
 void ImpaledState::Update()

@@ -1,5 +1,6 @@
 #pragma once
 #include "IWeaponState.h"
+#include "../System/AutoComeBack.h"
 
 class ImpaledState : public IWeaponState
 {
@@ -18,6 +19,8 @@ public:
 	void ImGuiUpdate() override;
 
 private:
+	// 自動的に戻ってくるシステム
+	//AutoComeBack autoComeBack_;
 
 	int easeTime_ = 0;
 
