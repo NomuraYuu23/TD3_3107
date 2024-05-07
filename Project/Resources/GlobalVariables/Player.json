@@ -2,11 +2,11 @@
     "Player": {
         "AerialActiveDecelerateRatio": 0.004999999888241291,
         "AerialInActiveDecelerateRatio": 0.05000000074505806,
-        "Gravity": 8.0,
+        "Gravity": 12.0,
         "HitInvisibleFrame": 15.0,
         "HitPoint": 10,
         "InitLength": 30.0,
-        "MoveSpeed": 10.0,
+        "MoveSpeed": 20.0,
         "NormalJumpPower": 40.0,
         "RecoilFrame": 20.0,
         "RecoilLerpRatio": 0.05000000074505806,
