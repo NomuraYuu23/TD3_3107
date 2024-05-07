@@ -120,6 +120,9 @@ void GameScene::Initialize() {
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
 	player_->Initialize(playerModel_.get());
+	// 紐挙動がバグってるので一旦コメントアウト
+	//player_->SetPonyTail(ponyTailModel_.get());
+
 	// 更新
 	//countTime_ = 0;
 
@@ -138,6 +141,10 @@ void GameScene::Initialize() {
 	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	mapManager_->Initialize(terrainModel_.get());
 	
+	// 背景用オブジェクト
+	backGround_ = std::make_unique<BackGround>();
+	backGround_->Initialize(backGroundModel_.get());
+
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
@@ -174,6 +181,10 @@ void GameScene::Update() {
 
 	if (input_->TriggerKey(DIK_L)) {
 		requestSceneNo = kTitle;
+	}
+
+	if (input_->TriggerKey(DIK_R)) {
+		this->Initialize();
 	}
 
 #endif
@@ -238,6 +249,9 @@ void GameScene::Update() {
 	// スカイドーム
 	skydome_->Update();
 
+	// 背景更新
+	backGround_->Update();
+
 	//uiManager_->Update();
 
 	// デバッグカメラ
@@ -289,7 +303,10 @@ void GameScene::Draw() {
 	tmpTextures_.push_back(blockTexture_);
 
 	// ブロック用
-	mapManager_->Draw(camera_, &tmpTextures_);
+	mapManager_->Draw(camera_);
+
+	// 背景
+	backGround_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(enemyTexture_);
@@ -415,6 +432,9 @@ void GameScene::ImguiDraw(){
 	// ボス
 	//bossEnemy_->ImGuiDraw();
 
+	// 背景
+	backGround_->ImGuiDraw();
+
 	// スカイドーム
 	skydome_->ImGuiDraw();
 
@@ -481,12 +501,16 @@ void GameScene::ModelCreate()
 	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// プレイヤーモデル
-	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
-	weaponModel_.reset(Model::Create("Resources/GameObject/SpearB/", "SpearB.obj", dxCommon_, textureHandleManager_.get()));
+	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
+	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック
-	terrainModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
+	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
 	
+	// 背景モデル
+	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
+
 	// 敵モデル
 	enemyModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 

@@ -10,7 +10,7 @@ void PlayerController::Initialize(Player* player)
 
 	player_ = player;
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
-	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
 }
 
 void PlayerController::Update()
@@ -22,13 +22,18 @@ void PlayerController::Update()
 
 	// コントローラー用
 	ControllerProcess();
-
+	if (player_->velocity_.x > 0) {
+		player_->isLeft_ = false;
+	}
+	else if (player_->velocity_.x < 0) {
+		player_->isLeft_ = true;
+	}
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_H)) {
 		player_->ChangeState(std::make_unique<AerialState>());
 	}
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
-	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
 
 #endif // _DEBUG
 
@@ -107,13 +112,13 @@ void PlayerController::ControllerProcess()
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+		//Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 
-		if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
-			// 投げる方向ベクトル
-			player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
+		//if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
+		//	// 投げる方向ベクトル
+		//	player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
 
-		}
+		//}
 
 	}
 	// 座標更新
@@ -132,7 +137,7 @@ void PlayerController::AerialMoveProcess()
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
 	bool CheckAction = (std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()));
-	float ratio = GlobalVariables::GetInstance()->GetFloatValue("Player", "inverceRatio");
+	float ratio = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "inverceRatio");
 	// 空中にいる場合
 	if (CheckAction) {
 		// 左右移動
@@ -218,6 +223,7 @@ void PlayerController::ThrownProcess()
 			}
 			// 方向
 			player_->weapon_->throwDirect_ = player_->throwDirect_;
+			player_->weapon_->throwDirect_ = Vector3::Normalize(player_->weapon_->throwDirect_);
 			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
 		}
 		// 刺さってる→戻ってくる
@@ -227,7 +233,10 @@ void PlayerController::ThrownProcess()
 			}
 		}
 		else if (std::holds_alternative<FreeFallState*>(player_->weapon_->GetNowState())) {
-			if (player_->IsFreeFallTimerEnd()) {
+			if (!player_->IsCanReturn()) {
+				return;
+			}
+			if (!player_->FreeFallActive()) {
 				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 		}
@@ -237,15 +246,15 @@ void PlayerController::ThrownProcess()
 		}
 
 	}
-	if (input_->TriggerJoystick(kJoystickButtonLB)) {
-		if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
-			// 切り替え
-			if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->ChangeState(std::make_unique<AttractState>());
-				return;
-			}
-		}
-	}
+	//if (input_->TriggerJoystick(kJoystickButtonLB)) {
+	//	if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
+	//		// 切り替え
+	//		if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+	//			player_->ChangeState(std::make_unique<AttractState>());
+	//			return;
+	//		}
+	//	}
+	//}
 
 }
 

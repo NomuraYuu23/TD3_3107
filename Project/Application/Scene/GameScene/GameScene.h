@@ -133,11 +133,16 @@ private:
 	// プレイヤー
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Model> playerModel_;
+	std::unique_ptr<Model> ponyTailModel_;
 	std::unique_ptr<Model> weaponModel_;
 
 	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;
 	std::unique_ptr<Model> terrainModel_;
+
+	// 背景
+	std::unique_ptr<BackGround> backGround_;
+	std::unique_ptr<Model> backGroundModel_;
 
 	// 敵
 	std::unique_ptr<EnemyManager> enemyManager_;

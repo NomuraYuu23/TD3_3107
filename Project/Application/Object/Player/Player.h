@@ -11,6 +11,10 @@
 
 #include "PlayerFootCollider.h"
 
+#include "Anim/PlayerAnimManager.h"
+
+#include "../../../Engine/Physics/String.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -71,6 +75,7 @@ public: // メンバ関数
 	void SetWeapon(std::unique_ptr<Weapon> newWeapon) {
 		weapon_ = std::move(newWeapon);
 		weapon_->SetParentAdress(&worldtransform_);
+		weapon_->SetPlayer(this);
 	}
 
 	/// <summary>
@@ -107,6 +112,14 @@ public: // メンバ関数
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
 
+public: // アニメーション関連関数群
+
+	/// <summary>
+	/// アニメーションマネージャーゲッター
+	/// </summary>
+	/// <returns>アニメーションマネージャー</returns>
+	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
+
 public:
 	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
@@ -120,11 +133,26 @@ public:
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
 	bool IsFreeFallTimerEnd() { return fallTimer_.IsEnd(); }
+	bool FreeFallActive() { return fallTimer_.IsActive(); }
+
+	void SetFallTimer();
+
 	/// <summary>
 	/// 死亡フラグの設定
 	/// </summary>
 	/// <param name="isDead"></param>
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
+	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
+
+	void KnockBackOnGround() { knockBackSystem_.SetIsHit(false); }
+
+	/// <summary>
+	/// ポニーテール用のモデルセッター
+	/// </summary>
+	/// <param name="model">モデル</param>
+	void SetPonyTail(Model* model);
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -137,6 +165,7 @@ public:
 	// 矢印テクスチャ
 	uint32_t arrowTexture_ = 0u;
 
+	bool isLeft_ = false;
 	// 接地フラグ
 	bool isGround_ = false;
 	// 矢印描画フラグ
@@ -161,12 +190,9 @@ private: // フラグ
 	// デバッグ用
 	bool isDebugDraw_ = false;
 
-
 private: // システム
 	// 現状のステート
 	PlayerState nowState_;
-	// 反動管理クラス
-	PlayerRecoil recoil_;
 	// 操作クラス
 	PlayerController controller_;
 	// 放物線
@@ -177,14 +203,30 @@ private: // システム
 	ComboCounter jumpCombo_;
 	// 自由落下の武器を回収するためのシステム
 	FreeFallTimer fallTimer_;
+
+	//--- オンヒットシステム ---//
+	// 反動管理クラス
+	PlayerRecoil recoil_;
 	// HP管理クラス
 	PlayerHitManager hpManager_;
+	// 敵とぶつかった時のノックバック
+	KnockBack knockBackSystem_;
 
 	// プレイヤーと槍をつなぐ線の色
 	Vector4 connectingSpearLineColor_;
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+private: // アニメーション関連
+
+	// ポニーテール用紐クラス
+	std::unique_ptr<String> ponytail_;
+	// ポニテ用トランスフォーム
+	WorldTransform ponyTailTransform_;
+
+	// アニメーションマネージャー
+	std::unique_ptr<PlayerAnimManager> anim_;
 
 };
 

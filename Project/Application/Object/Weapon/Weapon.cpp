@@ -5,12 +5,17 @@
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../GameUtility/MathUtility.h"
 #include "../ObjectList.h"
+#include "../Player/Player.h"
 
 void Weapon::Initialize(Model* model)
 {
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+
+	// ライティング有効
+	enableLighting_ = EnableLighting::HalfLambert;
+	material_->SetEnableLighting(enableLighting_);
 
 	// 親子関係でのオフセット
 	worldtransform_.transform_.translate = GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
@@ -30,6 +35,10 @@ void Weapon::Initialize(Model* model)
 	// 戻るレート
 	returnRate_ = 1.3f;
 	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
+
+	// アニメーション関連初期化
+	anim_ = std::make_unique<SpearAnimManager>();  // 生成
+	anim_->Init(this);							   // 初期化
 }
 
 void Weapon::Update()
@@ -56,6 +65,10 @@ void Weapon::Update()
 
 	// 基底クラスの更新
 	IObject::Update();
+
+	// アニメーション更新
+	anim_->Update();
+
 	// コライダー
 	Vector3 direct = worldtransform_.direction_;
 	//float angle = MathUtility::CalcAngle({ direct.x,direct.y });
@@ -74,14 +87,15 @@ void Weapon::Draw(const BaseCamera& camera)
 		}
 	}
 
-
-	ModelDraw::AnimObjectDesc desc;
-	desc.camera = &const_cast<BaseCamera&>(camera);
-	desc.localMatrixManager = localMatrixManager_.get();
-	desc.material = material_.get();
-	desc.model = model_;
-	desc.worldTransform = &worldtransform_;
-	ModelDraw::AnimObjectDraw(desc);
+	if (!isHold_) {
+		ModelDraw::AnimObjectDesc desc;
+		desc.camera = &const_cast<BaseCamera&>(camera);
+		desc.localMatrixManager = localMatrixManager_.get();
+		desc.material = material_.get();
+		desc.model = model_;
+		desc.worldTransform = &worldtransform_;
+		ModelDraw::AnimObjectDraw(desc);
+	}
 
 }
 
@@ -358,16 +372,17 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	else if (std::holds_alternative<ImpaledState*>(nowState_)) {
 		if (std::holds_alternative<Enemy*>(target)) {
 			isEnemyImpaled_ = true;
-			if (isTread_) {
+			if (std::holds_alternative<SpearAerialState*>(player_->GetNowState())) {
+				player_->SetFallTimer(); 
 				ChangeRequest(Weapon::StateName::kFreeFall);
 			}
-			Player** player = std::get_if<Player*>(&target);			
-			if (player != nullptr) {
-				//Player* player = *playerPtr;
-				if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
-					ChangeRequest(Weapon::StateName::kFreeFall);
-				}
-			}
+			//Player** player = std::get_if<Player*>(&target);			
+			//if (player != nullptr) {
+			//	//Player* player = *playerPtr;
+			//	if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
+			//		ChangeRequest(Weapon::StateName::kFreeFall);
+			//	}
+			//}
 		}
 	}
 }

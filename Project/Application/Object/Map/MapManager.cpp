@@ -81,6 +81,8 @@ void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 	static_cast<Terrain*>(obj.get())->scale2D_ = { scale.x * 2.0f, scale.y * 2.0f };
 	// タイプの設定
 	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kTerrain;
+	// マテリアル更新（サイズの変更後に合わせて）
+	static_cast<Terrain*>(obj.get())->MaterialUpdate();
 	// 追加
 	objects_.push_back(std::move(obj));
 }

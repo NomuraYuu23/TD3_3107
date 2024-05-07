@@ -13,7 +13,7 @@ void ReturnState::Initialize()
 	weapon_->worldtransform_.usedDirection_ = true;
 
 	//StartEasing(30);
-	startPosition_ = weapon_->worldtransform_.transform_.translate;
+	startPosition_ = weapon_->worldtransform_.GetWorldPosition();
 	lerp_t = 0.3f;
 	CreateRelayPoint();
 }

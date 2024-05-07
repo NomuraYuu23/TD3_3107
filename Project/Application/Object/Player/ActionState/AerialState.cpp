@@ -15,12 +15,14 @@ void AerialState::Initialize()
 	
 	gravity_ = GlobalVariables::GetInstance()->GetFloatValue(groupName, "Gravity");
 
-
 	player_->SetNowState(this);
 	player_->isGround_ = true;
 
 	// 速度をこちらの変数に
 	velocity_ = player_->velocity_;
+
+	// ジャンプ開始アニメーション
+	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
 }
 
 void AerialState::Update()
@@ -53,8 +55,15 @@ void AerialState::Update()
 
 	//// プレイヤーに渡す
 	//player_->velocity_ = velocity_;
-	float decrValue = 0.001f;
-	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, decrValue);
+	float activeRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialActiveDecelerateRatio");
+	float inActiveRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialInActiveDecelerateRatio");
+	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+	if (leftStick.x != 0) {
+		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, activeRatio);
+	}
+	else {
+		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, inActiveRatio);
+	}
 	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// 移動処理

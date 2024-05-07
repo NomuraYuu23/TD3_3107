@@ -17,22 +17,22 @@ void EnemyManager::Initialize(Model* model)
 	//RegisterEnemy({ 0,-10.0f,0 }, 0, { 20.0f,10.0f });
 
 	testParent.Initialize();
-	testParent.transform_.translate = { -5.0f,15.0f };
+	testParent.transform_.translate = { -5.0f,10.0f };
 
-	RegisterEnemy({ 10.0f,0,0 }, 0, &testParent);
-	RegisterEnemy({ -10.0f,0,0 }, 0, &testParent);
-	RegisterEnemy({ 0,10.0f,0 }, 0, &testParent);
-	RegisterEnemy({ 0,-10.0f,0 }, 0, &testParent);
+	RegisterEnemy({ 7.5f,0,0 }, 0, &testParent);
+	RegisterEnemy({ -7.5f,0,0 }, 0, &testParent);
+	RegisterEnemy({ 0,7.5f,0 }, 0, &testParent);
+	RegisterEnemy({ 0,-7.5f,0 }, 0, &testParent);
 
 	for (int i = 0; i < 3; i++) {
 		emitters_[i].Initialize();
 	}
-	emitters_[0].transform_.translate = { -40.0f, 17.5f };
+	emitters_[0].transform_.translate = { -40.0f, 12.5f };
 
-	RegisterEnemy({ 12.5f,0,0 }, 0, &emitters_[0]);
-	RegisterEnemy({ -12.5f,0,0 }, 0, &emitters_[0]);
-	RegisterEnemy({ 0,12.5f,0 }, 0, &emitters_[0]);
-	RegisterEnemy({ 0,-12.5f,0 }, 0, &emitters_[0]);
+	RegisterEnemy({ 10.0f,0,0 }, 0, &emitters_[0]);
+	RegisterEnemy({ -10.0f,0,0 }, 0, &emitters_[0]);
+	RegisterEnemy({ 0,10.0f,0 }, 0, &emitters_[0]);
+	RegisterEnemy({ 0,-10.0f,0 }, 0, &emitters_[0]);
 
 }
 
