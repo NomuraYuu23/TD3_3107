@@ -53,8 +53,15 @@ void AerialState::Update()
 
 	//// プレイヤーに渡す
 	//player_->velocity_ = velocity_;
-	float decrValue = 0.001f;
-	player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, decrValue);
+	float activeRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialActiveDecelerateRatio");
+	float inActiveRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialInActiveDecelerateRatio");
+	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+	if (leftStick.x != 0) {
+		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, activeRatio);
+	}
+	else {
+		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, inActiveRatio);
+	}
 	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
 
 	// 移動処理

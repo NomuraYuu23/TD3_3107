@@ -10,7 +10,7 @@ void PlayerController::Initialize(Player* player)
 
 	player_ = player;
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
-	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
 }
 
 void PlayerController::Update()
@@ -33,7 +33,7 @@ void PlayerController::Update()
 		player_->ChangeState(std::make_unique<AerialState>());
 	}
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
-	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
 
 #endif // _DEBUG
 
@@ -137,7 +137,7 @@ void PlayerController::AerialMoveProcess()
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
 	bool CheckAction = (std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()));
-	float ratio = GlobalVariables::GetInstance()->GetFloatValue("Player", "inverceRatio");
+	float ratio = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "inverceRatio");
 	// 空中にいる場合
 	if (CheckAction) {
 		// 左右移動

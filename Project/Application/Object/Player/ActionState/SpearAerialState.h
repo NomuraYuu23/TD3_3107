@@ -25,7 +25,7 @@ private:
 
 private:
 	float CreateNewSpeed(float direct) {
-		const char* groupName = "Player";
+		const char* groupName = "SpearJump";
 		float power = GlobalVariables::GetInstance()->GetFloatValue(groupName, "HorizontalPower");
 		return direct * power;
 	}

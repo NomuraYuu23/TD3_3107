@@ -6,7 +6,7 @@ void ActionWaitState::Initialize()
 	// ステートの設定
 	player_->SetNowState(this);
 	
-	float waitFrame = GlobalVariables::GetInstance()->GetFloatValue("Player", "OnSpearWaitFrame");
+	float waitFrame = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "OnSpearWaitFrame");
 	changeTimer_.Start(waitFrame);
 
 }
