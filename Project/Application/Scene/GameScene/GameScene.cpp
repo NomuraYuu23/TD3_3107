@@ -503,7 +503,7 @@ void GameScene::ModelCreate()
 	// プレイヤーモデル
 	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
 	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
-	weaponModel_.reset(Model::Create("Resources/GameObject/SpearB/", "SpearB.obj", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
