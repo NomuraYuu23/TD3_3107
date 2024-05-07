@@ -17,7 +17,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "SpearJumpPower", player_.jumpData_.highJumpPower_);
 	globalVariables_->AddItem(groupName, "Gravity", player_.jumpData_.gravity_);
 	globalVariables_->AddItem(groupName, "HorizontalPower", player_.jumpData_.horizontalPower_);
-
+	globalVariables_->AddItem(groupName, "OnSpearWaitFrame", player_.jumpData_.onSpearWaitFrame_);
 
 	globalVariables_->AddItem(groupName, "MoveSpeed", player_.moveData_.moveValue_);
 	globalVariables_->AddItem(groupName, "AerialAcceleration", player_.moveData_.aerialAcceleration_);
@@ -64,6 +64,7 @@ void GameObjectData::ApplyGlobalVariables()
 	player_.jumpData_.highJumpPower_ = globalVariables_->GetFloatValue(groupName, "SpearJumpPower");
 	player_.jumpData_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	player_.jumpData_.horizontalPower_ = globalVariables_->GetFloatValue(groupName, "HorizontalPower");
+	player_.jumpData_.onSpearWaitFrame_ = globalVariables_->GetFloatValue(groupName, "OnSpearWaitFrame");
 
 	player_.moveData_.moveValue_ = globalVariables_->GetFloatValue(groupName, "MoveSpeed");
 	player_.moveData_.aerialAcceleration_ = globalVariables_->GetFloatValue(groupName, "AerialAcceleration");

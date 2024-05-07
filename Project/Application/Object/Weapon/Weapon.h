@@ -132,6 +132,9 @@ public: // 外部で行う設定関数
 	// 投げの最初の衝突無効処理
 	TimerLib throwInvTimer_;
 
+	// 刺さってる武器が自動的に戻る大麻ー
+	TimerLib autoComeBackTimer_;
+
 	Terrain::BlockType hitBlockType_ = Terrain::BlockType::kNone;
 
 private:

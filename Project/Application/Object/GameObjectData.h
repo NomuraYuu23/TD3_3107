@@ -30,6 +30,9 @@ private: // データ用構造体クラス
 		// 槍じゃんの水平方向の力
 		float horizontalPower_;
 
+		// 槍の上での待機時間
+		float onSpearWaitFrame_;
+
 	};
 
 	/// <summary>

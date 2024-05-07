@@ -19,6 +19,15 @@ void SpearAerialState::Initialize()
 	player_->isGround_ = true;
 	// コンボ加算
 	player_->AddCombo();
+	//// キャストして方向設定
+	//SpearAerialState* state = dynamic_cast<SpearAerialState*>(player_->actionState_.get());
+
+	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+
+	leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
+
+	InitializeDirection(leftStick);
+
 
 }
 

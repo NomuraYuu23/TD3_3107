@@ -257,17 +257,24 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 					// 踏む際の武器設定
 					weapon_->TreadSetting();
-					// 槍じゃんステートへ
-					ChangeState(std::make_unique<SpearAerialState>());
-
-					// キャストして方向設定
-					SpearAerialState* state = dynamic_cast<SpearAerialState*>(actionState_.get());
 					
 					Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
-					
+
 					leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
 
-					state->InitializeDirection(leftStick);
+					if (leftStick.x != 0) {
+						// 槍じゃんステートへ
+						ChangeState(std::make_unique<SpearAerialState>());
+					}
+					else {
+						// 槍じゃんステートへ
+						ChangeState(std::make_unique<ActionWaitState>());
+					}
+
+					//// キャストして方向設定
+					//SpearAerialState* state = dynamic_cast<SpearAerialState*>(actionState_.get());
+
+					//state->InitializeDirection(leftStick);
 
 					return;
 				}

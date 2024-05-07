@@ -8,6 +8,7 @@
         "InitLength": 30.0,
         "MoveSpeed": 10.0,
         "NormalJumpPower": 40.0,
+        "OnSpearWaitFrame": 5.0,
         "RecoilFrame": 20.0,
         "RecoilLerpRatio": 0.05000000074505806,
         "RecoilRatio": 60.0,
