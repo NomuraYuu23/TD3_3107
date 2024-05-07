@@ -51,9 +51,9 @@ void MapManager::CollisionRegister(Collision2DManager* collisionManager, const B
 
 
 		//if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), {100.0f,500.0f}, camera)) {
-			if (static_cast<Terrain*>(it->get())->typeNumber_ != Terrain::BlockType::kNone) {
-				collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
-			}
+		if (static_cast<Terrain*>(it->get())->typeNumber_ != Terrain::BlockType::kNone) {
+			collisionManager->ListRegister(&static_cast<Terrain*>((it->get()))->boxCollider_);
+		}
 		//}
 
 	}
@@ -217,7 +217,6 @@ void MapManager::InitializePlacement()
 //	}
 //
 //#pragma endregion
-
 #pragma region 空中の障害物
 	RegisterBlock({ 20.0f,4.0f,0 }, { 20.0f,1.0f });
 
@@ -231,34 +230,34 @@ void MapManager::InitializePlacement()
 #pragma endregion
 
 
-//#pragma region 最初の壁じゃんのとこいら
-//
-//	for (int i = 0; i < 14; ++i) {
-//		// 右の壁
-//		RegisterBlock({ 30.0f * blockSize,-4.0f + ((float)i * blockSize),0 });
-//	}
-//
-//	// 壁じゃん用
-//	for (int i = 0; i < 8; ++i) {
-//		RegisterBlock({ 24.0f * blockSize, 8.0f + ((float)i * blockSize),0 });
-//	}
-//
-//	// 壁上の床
-//	for (int i = 0; i < 35; ++i) {
-//		RegisterBlock({ 30.0f * blockSize +((float)i * blockSize), 8.0f + (7 * blockSize),0});
-//	}
-//
-//	// 上の段差
-//	for (int i = 0; i < 4; ++i) {
-//		RegisterBlock({ 40.0f * blockSize + ((float)i * blockSize), 8.0f + (8 * blockSize),0 });
-//	}
-//
-//	for (int i = 0; i < 4; ++i) {
-//		RegisterBlock({ 50.0f * blockSize + ((float)i * blockSize), 8.0f + (8 * blockSize),0 });
-//	}
-//
-//#pragma endregion
-//
+#pragma region 最初の壁じゃんのとこいら
+
+	//for (int i = 0; i < 14; ++i) {
+	//	// 右の壁
+	//	RegisterBlock({ 30.0f * blockSize,-4.0f + ((float)i * blockSize),0 });
+	//}
+
+	//// 壁じゃん用
+	//for (int i = 0; i < 8; ++i) {
+	//	RegisterBlock({ 24.0f * blockSize, 8.0f + ((float)i * blockSize),0 });
+	//}
+
+	//// 壁上の床
+	//for (int i = 0; i < 35; ++i) {
+	//	RegisterBlock({ 30.0f * blockSize + ((float)i * blockSize), 8.0f + (7 * blockSize),0 });
+	//}
+
+	//// 上の段差
+	//for (int i = 0; i < 4; ++i) {
+	//	RegisterBlock({ 40.0f * blockSize + ((float)i * blockSize), 8.0f + (8 * blockSize),0 });
+	//}
+
+	//for (int i = 0; i < 4; ++i) {
+	//	RegisterBlock({ 50.0f * blockSize + ((float)i * blockSize), 8.0f + (8 * blockSize),0 });
+	//}
+
+	//#pragma endregion
+	//
 
 }
 
@@ -313,23 +312,23 @@ void MapManager::InitializeLongPatternMap()
 
 	// 真ん中の縦
 	// 右
-	RegisterBlock({ 50.0f,28.0f,0 }, { 2.0f,30.0f });
+	//RegisterBlock({ 50.0f,28.0f,0 }, { 2.0f,30.0f });
 	// 左
-	RegisterBlock({ 40.0f,40.0f,0 }, { 2.0f,30.0f });
+	//RegisterBlock({ 40.0f,40.0f,0 }, { 2.0f,30.0f });
 
 	// 上の床
-	RegisterBlock({ 87.0f,56.0f,0 }, { 35.0f,2.0f });
+	//RegisterBlock({ 87.0f,56.0f,0 }, { 35.0f,2.0f });
 
 
 	// ブロック
 	RegisterBlock({ 17.5f,12.5f,0 }, { 6.0f,1.0f });
 
 	// 右下の奴ら
-	RegisterBlock({ 90.0f,8.0f,0 }, { 6.0f,1.0f });
-	RegisterBlock({ 110.0f,16.0f,0 }, { 6.0f,1.0f });
+	//RegisterBlock({ 90.0f,8.0f,0 }, { 6.0f,1.0f });
+	//RegisterBlock({ 110.0f,16.0f,0 }, { 6.0f,1.0f });
 
-	RegisterBlock({ 90.0f,24.0f,0 }, { 6.0f,1.0f });
-	RegisterBlock({ 110.0f,32.0f,0 }, { 6.0f,1.0f });
+	//RegisterBlock({ 90.0f,24.0f,0 }, { 6.0f,1.0f });
+	//RegisterBlock({ 110.0f,32.0f,0 }, { 6.0f,1.0f });
 
 
 	// 左端縦

@@ -7,16 +7,16 @@ void EnemyManager::Initialize(Model* model)
 {
 	LargeNumberOfObjects::Initialize(model);
 
-	RegisterEnemy({ 80.0f,59.0f,0 }, 0);
-	RegisterEnemy({ 90.0f,59.0f,0 }, 0);
-	RegisterEnemy({ 100.0f,59.0f,0 }, 0);
+	RegisterEnemy({ 80.0f,0.0f,0 }, 0);
+	RegisterEnemy({ 90.0f,0.0f,0 }, 0);
+	RegisterEnemy({ 100.0f,0.0f,0 }, 0);
 
 	//RegisterEnemy({ 10.0f,0,0 }, 0, { 20.0f,10.0f });
 	//RegisterEnemy({ -10.0f,0,0 }, 0, { 20.0f,10.0f });
 	//RegisterEnemy({ 0,10.0f,0 }, 0, { 20.0f,10.0f });
 	//RegisterEnemy({ 0,-10.0f,0 }, 0, { 20.0f,10.0f });
 
-	testParent.Initialize();
+	/*testParent.Initialize();
 	testParent.transform_.translate = { -5.0f,15.0f };
 
 	RegisterEnemy({ 10.0f,0,0 }, 0, &testParent);
@@ -33,7 +33,7 @@ void EnemyManager::Initialize(Model* model)
 	RegisterEnemy({ -12.5f,0,0 }, 0, &emitters_[0]);
 	RegisterEnemy({ 0,12.5f,0 }, 0, &emitters_[0]);
 	RegisterEnemy({ 0,-12.5f,0 }, 0, &emitters_[0]);
-
+	*/
 }
 
 void EnemyManager::Update()
