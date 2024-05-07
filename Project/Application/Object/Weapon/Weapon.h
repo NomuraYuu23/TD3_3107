@@ -134,6 +134,9 @@ public: // 外部で行う設定関数
 
 	Terrain::BlockType hitBlockType_ = Terrain::BlockType::kNone;
 
+	// 槍を持っているかのフラグ
+	bool isHold_ = true;
+
 private:
 	/// <summary>
 	/// ステート変更
@@ -146,6 +149,7 @@ private:
 	std::unique_ptr<IWeaponState> state_;
 	// 親のワールドトランスフォーム
 	WorldTransform* parentAdress_ = nullptr;
+
 	// 一回踏んだか確認フラグ
 	bool isTread_ = false;
 	// 重力フラグ
