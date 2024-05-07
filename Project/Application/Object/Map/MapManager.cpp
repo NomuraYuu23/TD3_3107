@@ -14,6 +14,10 @@ void MapManager::Initialize(Model* model)
 	//InitializePlacement();
 	//InitializeBossMap();
 	InitializeLongPatternMap();
+
+	mapEditor_ = std::make_unique<MapEditor>();
+	//mapEditor_->LoadFiles();
+
 }
 
 void MapManager::Update()
@@ -26,20 +30,24 @@ void MapManager::Update()
 void MapManager::ImGuiDraw()
 {
 
-	ImGui::Begin("BlockManager");
-	// リストの最大値
-	int size = (int)objects_.size();
-	ImGui::InputInt("maxBlockSize", &size);
+	//ImGui::Begin("BlockManager");
+	//// リストの最大値
+	//int size = (int)objects_.size();
+	//ImGui::InputInt("maxBlockSize", &size);
 
-	ImGui::Separator();
+	//ImGui::Separator();
 
-	// ブロック達のImGui
-	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
-		it != objects_.end(); ++it) {
-		static_cast<Terrain*>(it->get())->ImGuiDraw();
-	}
+	//// ブロック達のImGui
+	//for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+	//	it != objects_.end(); ++it) {
+	//	static_cast<Terrain*>(it->get())->ImGuiDraw();
+	//}
 
-	ImGui::End();
+	//ImGui::End();
+
+	mapEditor_->ImGuiDraw();
+
+
 
 }
 

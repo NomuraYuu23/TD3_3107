@@ -5,6 +5,7 @@
 #include "../../../Engine/Collider2D/Box.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
+#include "MapEditor.h"
 
 class MapManager : public LargeNumberOfObjects
 {
@@ -82,6 +83,9 @@ private:
 		&MapManager::RegisterObstacleBlock,
 		&MapManager::RegisterWallBlock
 	};
+
+	// 
+	std::unique_ptr<MapEditor> mapEditor_;
 
 };
 
