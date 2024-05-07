@@ -155,6 +155,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
     <ClCompile Include="Engine\3D\ModelNode.cpp" />
     <ClCompile Include="Engine\3D\OneOfManyObjects.cpp" />
+    <ClCompile Include="Engine\3D\Outline.cpp" />
     <ClCompile Include="Engine\Animation\Animation.cpp" />
     <ClCompile Include="Engine\Animation\AnimationData.cpp" />
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
@@ -176,6 +177,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\SRVDescriptorHerpManager.cpp" />
     <ClCompile Include="Engine\base\SwapChain.cpp" />
     <ClCompile Include="Engine\base\TextureUAV.cpp" />
+    <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
     <ClCompile Include="Engine\Collider2D\Box.cpp" />
     <ClCompile Include="Engine\Collider2D\Circle.cpp" />
     <ClCompile Include="Engine\Collider2D\Collider2D.cpp" />
@@ -344,6 +346,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\ModelNode.h" />
     <ClInclude Include="Engine\3D\ModelNodeData.h" />
     <ClInclude Include="Engine\3D\OneOfManyObjects.h" />
+    <ClInclude Include="Engine\3D\Outline.h" />
+    <ClInclude Include="Engine\3D\OutlineData.h" />
     <ClInclude Include="Engine\3D\VertexInfluence.h" />
     <ClInclude Include="Engine\Animation\Animation.h" />
     <ClInclude Include="Engine\Animation\AnimationData.h" />
@@ -367,6 +371,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\SwapChain.h" />
     <ClInclude Include="Engine\base\TextureUAV.h" />
+    <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
     <ClInclude Include="Engine\Camera\CameraForGPU.h" />
     <ClInclude Include="Engine\Camera\ViewProjectionMatrix.h" />
     <ClInclude Include="Engine\Collider2D\Box.h" />

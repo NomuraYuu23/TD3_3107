@@ -23,6 +23,11 @@ public: // 関数
 	/// </summary>
 	void ImGuiDraw();
 
+	/// <summary>
+	/// リセット
+	/// </summary>
+	void Reset();
+
 private: // 関数
 
 	/// <summary>
@@ -80,8 +85,8 @@ private: // 定数
 	// シェーダー情報 <シェーダ名, エントリポイント>
 	const std::array<std::pair<const std::wstring, const wchar_t*>, kPipelineIndexOfCount> shaderNames_ =
 	{
-		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainCopy"}, // レンダーターゲット画像の修正＆コピー
-		std::pair{L"Resources/shaders/PostEffect.CS.hlsl", L"mainOverwrite"}, // 上書き
+		std::pair{L"Resources/shaders/WindowSpriteStorage.CS.hlsl", L"mainCopy"}, // レンダーターゲット画像の修正＆コピー
+		std::pair{L"Resources/shaders/WindowSpriteStorage.CS.hlsl", L"mainOverwrite"}, // 上書き
 
 	};
 
@@ -137,8 +142,10 @@ public: // 一時保存 関数
 	/// <summary>
 	/// 一時保存に登録された画像で上書きする
 	/// </summary>
+	/// <param name="commandList">コマンドリスト</param>
 	/// <param name="temporaryStorageNames">保存された画像の名前 上書き順（ない場合は登録順）</param>
 	void TemporaryStoragOverwrite(
+		ID3D12GraphicsCommandList* commandList,
 		std::array<std::string, kTemporaryStorageTexturesNum>* temporaryStorageNames = nullptr);
 
 private: // 一時保存 関数
@@ -155,6 +162,10 @@ private: // 一時保存 変数
 
 	// 保存された画像をすべて上書きした画像
 	std::unique_ptr<TextureUAV> temporaryStorageOverwriteTexture_;
+
+public: // アクセッサ
+
+	TextureUAV* GetTemporaryStorageOverwriteTexture() { return temporaryStorageOverwriteTexture_.get(); }
 
 };
 
