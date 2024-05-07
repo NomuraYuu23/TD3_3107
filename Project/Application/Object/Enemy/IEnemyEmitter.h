@@ -14,6 +14,14 @@ public:
 	/// </summary>
 	void Update() override;
 
+	void CreateEnemy(const Vector3& transformPosition, float distance, uint32_t enemyCount);
+
+private:
+	// シリアルナンバー
+	uint32_t serialNum_ = 0;
+
+	static uint32_t sSerialNumber_;
+
 private:
 	WorldTransform worldTransform_;
 	float distance_ = 0.0f;
