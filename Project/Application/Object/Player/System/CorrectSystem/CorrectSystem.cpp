@@ -21,7 +21,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 
 	if (targetPointer_) {
 		// 現在の最小の長さ
-		float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("Player", "InitLength");
+		float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
 		// 長さを作成
 		float length = Vector3::Length(targetPointer_->GetWorldPosition() - player_->worldtransform_.GetWorldPosition());
 		// 長さが短いか確認
@@ -42,52 +42,52 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		Vector3 normalize = { rightStick.x / SHRT_MAX,rightStick.y / SHRT_MAX,0 };
 		normalize.y *= -1.0f;
 		// 仮のアシスト君
-		player_->throwDirect_ = RightStickAssist(enemyManager, normalize);
-	}
-	else if (isInNearArea_ && std::holds_alternative<HoldState*>(player_->GetWeapon()->GetNowState())) {
-		// プレイヤーの向きとターゲット対象の向きが不一致の場合
-		if (targetDirect_.x > 0 && player_->isLeft_) {
-			// Y軸補正の判断
-			if (targetDirect_.y > 0) {
-				player_->throwDirect_ = { -0.5f,0.5f };
-			}
-			else if (targetDirect_.y < 0) {
-				player_->throwDirect_ = { -0.5f,-0.5f };
-			}
-			else {
-				player_->throwDirect_ = { -0.5f,0.0f };
-			}
-			targetPointer_ = nullptr;
-			return;
-		}
-		// プレイヤーの向きとターゲット対象の向きが不一致の場合
-		else if (targetDirect_.x < 0 && !player_->isLeft_) {
-			// Y軸補正の判断
-			if (targetDirect_.y > 0) {
-				player_->throwDirect_ = { 0.5f,0.5f };
-			}
-			else if (targetDirect_.y < 0) {
-				player_->throwDirect_ = { 0.5f,-0.5f };
-			}
-			else {
-				player_->throwDirect_ = { 0.5f,0.0f };
-			}
-			targetPointer_ = nullptr;
-			return;
-		}
-		player_->throwDirect_ = targetDirect_;
+		player_->throwDirect_ = StickAimAssist(enemyManager, normalize);
 	}
 	else if (leftStick.x != 0 || leftStick.y != 0) {
 		Vector3 normalize = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX,0 };
 		normalize.y *= -1.0f;
-
 		// 仮のアシスト君
-		player_->throwDirect_ = normalize;
+		player_->throwDirect_ = StickAimAssist(enemyManager, normalize);
 
 	}
 	else {
 		player_->throwDirect_ = targetDirect_;
 	}
+
+	//else if (isInNearArea_ && std::holds_alternative<HoldState*>(player_->GetWeapon()->GetNowState())) {
+	//	// プレイヤーの向きとターゲット対象の向きが不一致の場合
+	//	if (targetDirect_.x > 0 && player_->isLeft_) {
+	//		// Y軸補正の判断
+	//		if (targetDirect_.y > 0) {
+	//			player_->throwDirect_ = { -0.5f,0.5f };
+	//		}
+	//		else if (targetDirect_.y < 0) {
+	//			player_->throwDirect_ = { -0.5f,-0.5f };
+	//		}
+	//		else {
+	//			player_->throwDirect_ = { -0.5f,0.0f };
+	//		}
+	//		targetPointer_ = nullptr;
+	//		return;
+	//	}
+	//	// プレイヤーの向きとターゲット対象の向きが不一致の場合
+	//	else if (targetDirect_.x < 0 && !player_->isLeft_) {
+	//		// Y軸補正の判断
+	//		if (targetDirect_.y > 0) {
+	//			player_->throwDirect_ = { 0.5f,0.5f };
+	//		}
+	//		else if (targetDirect_.y < 0) {
+	//			player_->throwDirect_ = { 0.5f,-0.5f };
+	//		}
+	//		else {
+	//			player_->throwDirect_ = { 0.5f,0.0f };
+	//		}
+	//		targetPointer_ = nullptr;
+	//		return;
+	//	}
+	//	player_->throwDirect_ = targetDirect_;
+	//}
 
 	prevLeftStick_ = leftStick;
 	// 方向ベクトル
@@ -113,7 +113,7 @@ void CorrectSystem::NearLockOn(EnemyManager* enemyManager)
 	// 長さ
 	float length = 0.0f;
 	// 現在の最小の長さ
-	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("Player", "InitLength");
+	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
 	//float lengthMin = kInitLengthMin_;
 	// 方向ベクトル
 	Vector3 direction = { 0.0f, 0.0f,0.0f };
@@ -123,7 +123,7 @@ void CorrectSystem::NearLockOn(EnemyManager* enemyManager)
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { player_->throwDirect_.x, player_->throwDirect_.y };
 	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("Player", "RotateWidth");
+	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "RotateWidth");
 	//float rotateWidth = kRotationWidth_;
 	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
 	// 方向確認用の行列(右範囲)
@@ -183,7 +183,7 @@ Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
 	// 長さ
 	float length = 0.0f;
 	// 現在の最小の長さ
-	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("Player", "InitLength");
+	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
 	//float lengthMin = kInitLengthMin_;
 	// 方向ベクトル
 	Vector3 direction = { 0.0f, 0.0f,0.0f };
@@ -193,7 +193,7 @@ Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { player_->throwDirect_.x, player_->throwDirect_.y };
 	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("Player", "RotateWidth");
+	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "RotateWidth");
 	//float rotateWidth = kRotationWidth_;
 	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
 	// 方向確認用の行列(右範囲)
@@ -244,7 +244,7 @@ Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
 	return targetDirection;
 }
 
-Vector3 CorrectSystem::RightStickAssist(EnemyManager* enemyManager, const Vector3& stickDirect)
+Vector3 CorrectSystem::StickAimAssist(EnemyManager* enemyManager, const Vector3& stickDirect)
 {
 	// プレイヤーのワールドポジション
 	Vector3 playerPos = player_->worldtransform_.GetWorldPosition();
@@ -255,7 +255,7 @@ Vector3 CorrectSystem::RightStickAssist(EnemyManager* enemyManager, const Vector
 	// 長さ
 	float length = 0.0f;
 	// 現在の最小の長さ
-	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("Player", "InitLength");
+	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
 	//float lengthMin = kInitLengthMin_;
 	// 方向ベクトル
 	Vector3 direction = { 0.0f, 0.0f,0.0f };
@@ -265,7 +265,7 @@ Vector3 CorrectSystem::RightStickAssist(EnemyManager* enemyManager, const Vector
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { stickDirect.x, stickDirect.y };
 	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "AssistWidth");
+	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "AssistWidth");
 	//float rotateWidth = kRotationWidth_;
 	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
 	// 方向確認用の行列(右範囲)

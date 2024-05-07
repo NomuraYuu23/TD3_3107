@@ -56,6 +56,9 @@ private: // データ用構造体クラス
 		float rotationWidth_;
 		// 領域範囲
 		float InitLength_;
+		// エイム補正の幅
+		float assistWidth_;
+
 	};
 
 	// プレイヤーの情報
@@ -73,7 +76,6 @@ private: // データ用構造体クラス
 		// 体力データ
 		HealthData hpData_;
 
-		CorrectData correctData_;
 	};
 	// 共通の情報
 	struct CommonData {
@@ -95,9 +97,6 @@ private: // データ用構造体クラス
 		Vector3 localPosition_;
 		// 衝突時の避ける内積の値
 		float collisionDot_;
-
-		// 補正の幅
-		float assistWidth_;
 		// 
 		float kickBackCooltime_;
 	};
@@ -144,6 +143,8 @@ private:
 	CommonData common_;
 	// プレイヤーの情報
 	PlayerData player_;
+	// エイムの補正関係
+	CorrectData aimCorrect_;
 	// 武器の情報
 	WeaponData weapon_;
 	// 槍ジャンプの情報

@@ -5,12 +5,10 @@
         "Gravity": 12.0,
         "HitInvisibleFrame": 15.0,
         "HitPoint": 10,
-        "InitLength": 30.0,
         "MoveSpeed": 20.0,
         "NormalJumpPower": 40.0,
         "RecoilFrame": 20.0,
         "RecoilLerpRatio": 0.05000000074505806,
-        "RecoilRatio": 60.0,
-        "RotateWidth": 0.15000000596046448
+        "RecoilRatio": 60.0
     }
 }

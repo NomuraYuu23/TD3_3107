@@ -28,8 +28,10 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "HitInvisibleFrame", player_.hpData_.invTimer_);
 
 	// 補正用
-	globalVariables_->AddItem(groupName, "InitLength", player_.correctData_.InitLength_);
-	globalVariables_->AddItem(groupName, "RotateWidth", player_.correctData_.rotationWidth_);
+	groupName = "AimCorrection";
+	globalVariables_->AddItem(groupName, "InitLength", aimCorrect_.InitLength_);
+	globalVariables_->AddItem(groupName, "RotateWidth", aimCorrect_.rotationWidth_);
+	globalVariables_->AddItem(groupName, "AssistWidth", aimCorrect_.assistWidth_);
 
 	groupName = "Weapon";
 	// グループを追加
@@ -39,7 +41,6 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "ScaleRate", weapon_.scaleRate_);
 	globalVariables_->AddItem(groupName, "LocalPosition", weapon_.localPosition_);
 	globalVariables_->AddItem(groupName, "AngleDot", weapon_.collisionDot_);
-	globalVariables_->AddItem(groupName, "AssistWidth", weapon_.assistWidth_);
 	globalVariables_->AddItem(groupName, "KickBackCooltime", weapon_.kickBackCooltime_);
 
 
@@ -80,8 +81,10 @@ void GameObjectData::ApplyGlobalVariables()
 	player_.hpData_.invTimer_ = globalVariables_->GetFloatValue(groupName, "HitInvisibleFrame");
 
 	// 補正用
-	player_.correctData_.InitLength_ = globalVariables_->GetFloatValue(groupName, "InitLength");
-	player_.correctData_.rotationWidth_ = globalVariables_->GetFloatValue(groupName, "RotateWidth");
+	groupName = "AimCorrection";
+	aimCorrect_.InitLength_ = globalVariables_->GetFloatValue(groupName, "InitLength");
+	aimCorrect_.rotationWidth_ = globalVariables_->GetFloatValue(groupName, "RotateWidth");
+	aimCorrect_.assistWidth_ = globalVariables_->GetFloatValue(groupName, "AssistWidth");
 
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
@@ -89,7 +92,6 @@ void GameObjectData::ApplyGlobalVariables()
 	weapon_.scaleRate_ = globalVariables_->GetFloatValue(groupName, "ScaleRate");
 	weapon_.localPosition_ = globalVariables_->GetVector3Value(groupName, "LocalPosition");
 	weapon_.collisionDot_ = globalVariables_->GetFloatValue(groupName, "AngleDot"); 
-	weapon_.assistWidth_ = globalVariables_->GetFloatValue(groupName, "AssistWidth");
 	weapon_.kickBackCooltime_ = globalVariables_->GetFloatValue(groupName, "KickBackCooltime");
 
 	groupName = "SpearJump";

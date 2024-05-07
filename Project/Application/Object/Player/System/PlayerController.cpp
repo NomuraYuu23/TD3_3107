@@ -246,15 +246,15 @@ void PlayerController::ThrownProcess()
 		}
 
 	}
-	if (input_->TriggerJoystick(kJoystickButtonLB)) {
-		if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
-			// 切り替え
-			if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->ChangeState(std::make_unique<AttractState>());
-				return;
-			}
-		}
-	}
+	//if (input_->TriggerJoystick(kJoystickButtonLB)) {
+	//	if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
+	//		// 切り替え
+	//		if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+	//			player_->ChangeState(std::make_unique<AttractState>());
+	//			return;
+	//		}
+	//	}
+	//}
 
 }
 
