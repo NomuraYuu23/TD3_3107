@@ -46,6 +46,8 @@ public: // メンバ関数(読み込みなど)
 	/// <param name="groupName"></param>
 	void SaveFile(const std::string& groupName);
 
+	std::map<std::string, std::map<std::string, MapBlockData>>* GetDatas() { return &datas_; }
+
 private: // 変数
 
 	//項目

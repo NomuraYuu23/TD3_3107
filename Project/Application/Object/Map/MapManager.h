@@ -38,7 +38,7 @@ private:
 	/// ブロックの追加
 	/// </summary>
 	void RegisterBlock(const Vector3& position);
-	void RegisterBlock(const Vector3& position, const Vector2 scale);
+	void RegisterBlock(const Vector3& position, const Vector2& scale, const std::string& name);
 
 	/// <summary>
 	/// カメラに影響を与えるブロック登録
@@ -74,6 +74,10 @@ private:
 
 
 	void LoadMapData(const std::string& filePath);
+
+private: 
+
+	void EditorMapLoad();
 
 private:
 	// マップのオブジェクト登録用の関数ポインタ
