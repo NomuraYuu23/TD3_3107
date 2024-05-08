@@ -35,12 +35,14 @@ public: // サブクラス
 
 		float distortion; // 歪み
 		float vignetteSize; // ビネットの大きさ
+		float vignetteChange; // ビネットの変化
 
 		float horzGlitchPase; // グリッチの水平
 		float vertGlitchPase; // グリッチの垂直
 		float glitchStepValue; // グリッチのステップ値
 
 		int32_t radialBlurSamples; // 放射状ブラーのサンプル回数
+		float padding2[3]; // パディング
 		Vector2 radialBlurCenter; // 放射状ブラーの中心座標
 		float radialBlurStrength; // 放射状ブラーの広がる強さ
 		float radialBlurMask; // 放射状ブラーが適用されないサイズ
@@ -491,6 +493,12 @@ public: // アクセッサ
 	void SetVignetteSize(float vignetteSize) { computeParametersMap_->vignetteSize = vignetteSize; }
 
 	/// <summary>
+	/// ビネットの変化設定
+	/// </summary>
+	/// <param name="vignetteChange">ビネットの変化</param>
+	void SetVignetteChange(float vignetteChange) { computeParametersMap_->vignetteChange = vignetteChange; }
+
+	/// <summary>
 	/// グリッチの水平設定
 	/// </summary>
 	/// <param name="horzGlitchPase">グリッチの水平</param>
@@ -577,10 +585,10 @@ public: // アクセッサ
 private: // 変数
 
 	// デバイス
-	ID3D12Device* device_;
+	ID3D12Device* device_ = nullptr;
 
 	// コマンドリスト
-	ID3D12GraphicsCommandList* commandList_;
+	ID3D12GraphicsCommandList* commandList_ = nullptr;
 
 	// 編集する画像
 	std::unique_ptr<TextureUAV> editTextures_[8];
