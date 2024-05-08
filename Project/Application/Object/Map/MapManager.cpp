@@ -13,10 +13,10 @@ void MapManager::Initialize(Model* model)
 
 	//InitializePlacement();
 	//InitializeBossMap();
-	InitializeLongPatternMap();
+	//InitializeLongPatternMap();
 
 	mapEditor_ = std::make_unique<MapEditor>();
-	//mapEditor_->LoadFiles();
+	mapEditor_->LoadFiles();
 
 }
 
