@@ -3,6 +3,13 @@
 
 class IEnemyEmitter : public LargeNumberOfObjects
 {
+private:
+	// 共通の番号
+	static uint32_t sSerialNumber_;
+
+	// シリアルナンバー
+	uint32_t serialNum_ = 0;
+
 public:
 	/// <summary>
 	/// 初期化
@@ -17,10 +24,8 @@ public:
 	void CreateEnemy(const Vector3& transformPosition, float distance, uint32_t enemyCount);
 
 private:
-	// シリアルナンバー
-	uint32_t serialNum_ = 0;
-
-	static uint32_t sSerialNumber_;
+	// 
+	std::string name_;
 
 private:
 	WorldTransform worldTransform_;
