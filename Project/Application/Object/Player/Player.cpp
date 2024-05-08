@@ -81,7 +81,8 @@ void Player::Update()
 	fallTimer_.Update();
 	// 無敵時間の処理もするので更新必須
 	hpManager_.Update();
-
+	// 仮の踏んだ時のチェック
+	spearJumpAccepter_.Update();
 	// 武器の更新
 	if (weapon_) {
 		weapon_->Update();
@@ -304,6 +305,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 					if (leftStick.x != 0) {
 						// 槍じゃんステートへ
+						spearJumpAccepter_.Start(10.0f);
 						ChangeState(std::make_unique<SpearAerialState>());
 					}
 					else {
@@ -392,30 +394,50 @@ void Player::OnCollision(ColliderParentObject2D target)
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
-		// 上側
+			// 上側
 		case IObject::kTopSide:
-			// プレイヤーの修正されたY座標を計算
-			if (velocity_.y > 0) {
+			// バカデか移動
+			if (std::fabsf(velocity_.y) > 85.0f) {
+				// プレイヤーの修正されたY座標を計算
+				if (velocity_.y > 0) {
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+				}
+				else if (velocity_.y < 0) {
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+				}
+			}
+			else {
 				correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
 				velocity_.y = 0;
 			}
-			else if (velocity_.y < 0) {
-				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
-				worldtransform_.transform_.translate.y = correctPosition.y;
-				velocity_.y = 0;
-			}
-
 			break;
-		// 下側
+			// 下側
 		case IObject::kBottomSide:
-			// プレイヤーの修正されたY座標を計算
-			if (velocity_.y > 0) {
-				correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
-				worldtransform_.transform_.translate.y = correctPosition.y;
-				velocity_.y = 0;
+			// バカデか移動
+			if (std::fabsf(velocity_.y) > 85.0f) {
+				// プレイヤーの修正されたY座標を計算
+				if (velocity_.y > 0) {
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+				}
+				else if (velocity_.y < 0) {
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+						ChangeState(std::make_unique<GroundState>());
+					}
+					isGround_ = true;
+				}
 			}
-			else if (velocity_.y < 0) {
+			else {
 				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
 				velocity_.y = 0;
@@ -430,7 +452,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			//worldtransform_.transform_.translate.y = correctPosition.y;
 			break;
 
-		///---一点のみの衝突---///
+			///---一点のみの衝突---///
 #pragma region 左下
 		case IObject::kLBPoint:
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {

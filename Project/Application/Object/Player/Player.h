@@ -184,6 +184,8 @@ public:
 
 	EnemyManager* enemyManager_;
 
+	TimerLib spearJumpAccepter_;
+
 private: // フラグ
 	// ゲームスピード
 	bool isSlowGame_ = false;

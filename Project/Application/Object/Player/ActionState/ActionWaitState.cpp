@@ -15,6 +15,7 @@ void ActionWaitState::Update()
 {
 	// 時間切れ
 	if (changeTimer_.IsEnd()) {
+		player_->spearJumpAccepter_.Start(10.0f);
 		player_->ChangeState(std::make_unique<SpearAerialState>());
 
 		return;

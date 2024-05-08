@@ -372,7 +372,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	else if (std::holds_alternative<ImpaledState*>(nowState_)) {
 		if (std::holds_alternative<Enemy*>(target)) {
 			isEnemyImpaled_ = true;
-			if (std::holds_alternative<SpearAerialState*>(player_->GetNowState())) {
+			if (player_->spearJumpAccepter_.IsActive()) {
 				player_->SetFallTimer(); 
 				ChangeRequest(Weapon::StateName::kFreeFall);
 			}
