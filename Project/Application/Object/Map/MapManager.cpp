@@ -381,36 +381,61 @@ void MapManager::EditorMapLoad()
 
 		// ステージ番号が違う
 		if (stageItr->first != stageName) {
-			return;
+			continue;
 		}
+
+		std::vector<std::string> terrainNames;
 
 		for (std::map<std::string, MapBlockData>::iterator terrainItr = stageItr->second.begin();
 			terrainItr != stageItr->second.end(); ++terrainItr) {
 
 			std::string terrainName = terrainItr->first;
 			MapBlockData terrainData = terrainItr->second;
+			bool edited = false;
 
 			// 編集
 			for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
 				it != objects_.end(); ++it) {
 
-				// ステージ番号が違う
+				// ブロックの番号が違う
 				if (terrainName != static_cast<Terrain*>(it->get())->name_) {
-					return;
+					continue;
 				}
 
-				it->get()->transform_.translate = { terrainData.position.x, terrainData.position.y, 1.0f };
+				it->get()->transform_.translate = { terrainData.position.x, terrainData.position.y, 0.0f };
 				it->get()->transform_.scale = { terrainData.size.x,terrainData.size.y,1.0f };
 				// サイズの設定
 				static_cast<Terrain*>(it->get())->scale2D_ = { terrainData.size.x * 2.0f, terrainData.size.y * 2.0f };
 				// マテリアル更新（サイズの変更後に合わせて）
 				static_cast<Terrain*>(it->get())->MaterialUpdate();
+
+				edited = true;
+
+				break;
 			
 			}
 
-			//std::string nameTerrainAdd = "Terrain" + std::to_string(stageCount);
+			// 追加
+			if (!edited) {
+				RegisterBlock({ terrainData.position.x, terrainData.position.y, 0.0f }, terrainData.size, terrainName);
+			}
+
+			// 削除用に名前登録
+			terrainNames.push_back(terrainName);
 
 		}
+
+		// 削除
+		objects_.remove_if([=](std::unique_ptr<OneOfManyObjects>& terrain) {
+			
+			for (uint32_t i = 0; i < terrainNames.size(); ++i) {
+				if (terrainNames[i] == static_cast<Terrain*>(terrain.get())->name_) {
+					return false;
+				}
+			}
+			return true;
+
+			});
 
 	}
 
