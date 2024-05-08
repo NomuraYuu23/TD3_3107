@@ -25,7 +25,7 @@ public:
 	/// </summary>
 	void Update() override;
 
-	void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles);
+	//void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles);
 
 	/// <summary>
 	/// ImGUi
