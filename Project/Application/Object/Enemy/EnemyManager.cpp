@@ -120,22 +120,6 @@ void EnemyManager::RegisterEnemy(const Vector3& position, uint32_t typeNum)
 
 }
 
-void EnemyManager::RegisterEnemy(const Vector3& offset, uint32_t typeNum, const Vector3& parent)
-{
-
-	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
-	obj->Initialize();
-	static_cast<Enemy*>(obj.get())->parentPosition_ = parent;
-	obj->transform_.translate = Vector3::Add(parent, offset);
-	// 初期化
-	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), typeNum);
-
-	// 追加
-	objects_.push_back(std::move(obj));
-
-
-}
-
 void EnemyManager::RegisterEnemy(const Vector3& offset, uint32_t typeNum, WorldTransform* parent)
 {
 
