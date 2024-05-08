@@ -2,6 +2,7 @@
 #include "../GameUtility/MathUtility.h"
 #include "../ObjectList.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 void FollowCamera::Initialize()
 {
@@ -9,7 +10,7 @@ void FollowCamera::Initialize()
 	BaseCamera::Initialize();
 
 	// 初期値の設定
-	defaultOffset_ = { 0,5.0f,-85.0f };
+	defaultOffset_ = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
 	minY = 1.0f;
 	maxY = 30.0f;
 	defaultFovY_ = fovY_;
@@ -21,7 +22,7 @@ void FollowCamera::Update(float elapsedTime)
 	if (targetTransform_) {
 
 		transform_.translate = targetTransform_->transform_.translate + defaultOffset_;
-	
+
 	}
 
 	// 拡縮処理
