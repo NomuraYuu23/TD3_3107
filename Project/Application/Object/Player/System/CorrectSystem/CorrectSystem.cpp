@@ -36,9 +36,11 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 	else {
 		NearLockOn(enemyManager);
 	}
-
+	// スティックを倒した時にロックオンを解除する際の傾きのデッドゾーンの値
+	float lockCancell = 0.75f;
 	if (rightStick.x != 0 || rightStick.y != 0) {
-		if (std::fabsf(rightStick.x) > 0.4f || std::fabsf(rightStick.y) > 0.4f) {
+		// 解除処理
+		if (std::fabsf(rightStick.x) > lockCancell || std::fabsf(rightStick.y) > lockCancell) {
 			targetPointer_ = nullptr;
 		}
 		Vector3 normalize = { rightStick.x / SHRT_MAX,rightStick.y / SHRT_MAX,0 };
@@ -47,7 +49,8 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		player_->throwDirect_ = StickAimAssist(enemyManager, normalize);
 	}
 	else if (leftStick.x != 0 || leftStick.y != 0) {
-		if (std::fabsf(leftStick.x) > 0.4f || std::fabsf(leftStick.y) > 0.4f) {
+		// 解除処理
+		if (std::fabsf(leftStick.x) > lockCancell || std::fabsf(leftStick.y) > lockCancell) {
 			targetPointer_ = nullptr;
 		}
 		Vector3 normalize = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX,0 };
@@ -271,8 +274,8 @@ Vector3 CorrectSystem::StickAimAssist(EnemyManager* enemyManager, const Vector3&
 			leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
 			rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-			if (leftCross * rightCross <= 0.0f) {
-
+			//if (leftCross * rightCross <= 0.0f) {
+			if (leftCross <= 0.0f && rightCross > 0.0f) {
 				isInNearArea_ = true;
 				// 目指す方向ベクトルを更新
 				targetDirection = direction;
@@ -342,8 +345,8 @@ Vector3 CorrectSystem::LeftStickAimAssist(EnemyManager* enemyManager, const Vect
 			leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
 			rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-			if (leftCross * rightCross <= 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0)||(toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
-
+			//if (leftCross * rightCross <= 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0)||(toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
+			if (leftCross <= 0.0f && rightCross > 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0) || (toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
 				isInNearArea_ = true;
 				// 目指す方向ベクトルを更新
 				targetDirection = direction;
