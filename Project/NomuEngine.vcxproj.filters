@@ -179,6 +179,7 @@
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\AutoComeBack.cpp" />
+    <ClCompile Include="Application\Object\Player\System\AssistDash\AssistDash.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -396,6 +397,7 @@
     <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
     <ClInclude Include="Engine\Particle\EmitterDesc.h" />
     <ClInclude Include="Application\Object\Weapon\System\AutoComeBack.h" />
+    <ClInclude Include="Application\Object\Player\System\AssistDash\AssistDash.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

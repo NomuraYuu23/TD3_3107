@@ -57,7 +57,7 @@ void Player::Update()
 	prevPosition_ = worldtransform_.GetWorldPosition();
 
 	// ステートの更新
-	if (actionState_ && !recoil_.IsActive()) {
+	if (actionState_ /*&& !recoil_.IsActive()*/) {
 		actionState_->Update();
 	}
 
@@ -280,12 +280,21 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 		// 帰ってきてる時の衝突
 		else if (std::holds_alternative<ReturnState*>(weapon_->GetNowState())) {
+			//Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+			//Vector2 direct = {};
+			//if (leftStick.x > 0) {
+			//	direct.x = 1.0f;
+			//}
+			//else if(leftStick.x < 0){
+			//	direct.x = -1.0f;
+			//}
+			//// 反動生成
+			//recoil_.CreateRecoil(Vector3(direct.x, direct.y, 0));
+
 			//// 着地している場合早期リターン
 			if (std::holds_alternative<GroundState*>(nowState_)) {
 				return;
 			}
-			// 反動生成
-			//recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
 			//float upperPower = 25.0f;
 			//if (velocity_.y < 0) {
 			//	velocity_.y = 0;
