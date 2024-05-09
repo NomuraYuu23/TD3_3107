@@ -85,6 +85,16 @@ void PlayerController::ControllerProcess()
 			return;
 		}
 
+		Vector2 leftStick = input_->GetLeftAnalogstick();
+		leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX * -1.0f };
+
+		if (std::fabsf(leftStick.x) > 0.25f) {
+			player_->worldtransform_.direction_.x = leftStick.x;
+		}
+		if (std::fabsf(leftStick.y) > 0.25f) {
+			player_->worldtransform_.direction_.y = leftStick.y;
+		}
+
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 

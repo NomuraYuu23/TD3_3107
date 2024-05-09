@@ -65,7 +65,7 @@ void Player::Update()
 	prevPosition_ = worldtransform_.GetWorldPosition();
 
 	// ステートの更新
-	if (actionState_ && !recoil_.IsActive()) {
+	if (actionState_ /*&& !recoil_.IsActive()*/) {
 		actionState_->Update();
 	}
 
@@ -185,13 +185,7 @@ void Player::ImGuiDraw()
 		isGround_ = true;
 	}
 
-	perVec = { -up.y,up.x };
-	float dot = Vector2::Dot(perVec, tag);
-
-	ImGui::DragFloat2("dir", &up.x);
-	ImGui::DragFloat2("targ", &tag.x);
-	ImGui::DragFloat2("per", &perVec.x);
-	ImGui::DragFloat("Dot", &dot);
+	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
 
 	// 足場の描画表示
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
@@ -326,13 +320,26 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 		// 帰ってきてる時の衝突
 		else if (std::holds_alternative<ReturnState*>(weapon_->GetNowState())) {
+			//Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+			//Vector2 direct = {};
+			//if (leftStick.x > 0) {
+			//	direct.x = 1.0f;
+			//}
+			//else if(leftStick.x < 0){
+			//	direct.x = -1.0f;
+			//}
+			//// 反動生成
+			//recoil_.CreateRecoil(Vector3(direct.x, direct.y, 0));
+
 			//// 着地している場合早期リターン
 			if (std::holds_alternative<GroundState*>(nowState_)) {
 				return;
 			}
-			// 反動生成
-			//recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
-
+			//float upperPower = 25.0f;
+			//if (velocity_.y < 0) {
+			//	velocity_.y = 0;
+			//}
+			//velocity_.y += upperPower;
 			return;
 		}
 	}
@@ -464,6 +471,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					isGround_ = true;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
@@ -506,6 +514,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					isGround_ = true;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
