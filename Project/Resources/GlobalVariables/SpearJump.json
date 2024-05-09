@@ -4,7 +4,7 @@
         "Gravity": 8.0,
         "HorizontalPower": 20.0,
         "OnSpearWaitFrame": 5.0,
-        "SpearJumpPower": 55.0,
+        "SpearJumpPower": 44.0,
         "inverceRatio": 50.0
     }
 }
