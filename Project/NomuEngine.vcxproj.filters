@@ -179,6 +179,7 @@
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
     <ClCompile Include="Engine\3D\Outline.cpp" />
     <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
+    <ClCompile Include="Engine\base\CrashHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -397,6 +398,7 @@
     <ClInclude Include="Engine\3D\Outline.h" />
     <ClInclude Include="Engine\3D\OutlineData.h" />
     <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
+    <ClInclude Include="Engine\base\CrashHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
