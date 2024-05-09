@@ -38,6 +38,7 @@ void SpearAerialState::Update()
 	float activeRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialActiveDecelerateRatio");
 	float inActiveRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialInActiveDecelerateRatio");
 	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+	// X速度
 	if (leftStick.x != 0) {
 		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, activeRatio);
 	}
@@ -45,7 +46,14 @@ void SpearAerialState::Update()
 		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, inActiveRatio);
 	}
 
-	player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	// Y速度
+	if (player_->IsNowAssistDash()) {
+		float ratio = GlobalVariables::GetInstance()->GetFloatValue("Dash", "SlowRatio");
+		player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	}
+	else {
+		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	}
 
 	// 移動処理
 	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);

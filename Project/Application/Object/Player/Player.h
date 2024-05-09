@@ -23,10 +23,6 @@ private: // サブクラス
 		float offsetLength;
 	};
 
-	Vector2 up = { 1.0f,1.0f };
-	Vector2 tag = { -1.0f,1.0f };
-	Vector2 perVec = { up.x,up.y * -1.0f };
-
 public: // 継承
 	/// <summary>
 	/// 初期化
@@ -134,6 +130,10 @@ public:
 	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
 
 	void KnockBackOnGround() { knockBackSystem_.SetIsHit(false); }
+
+	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
+	void EndAssistDash() { assistDash_.SlowCancel(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -201,6 +201,13 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+	// 空中ダッシュシステム
+	AssistDash assistDash_;
+
+private:
+	void SystemInitialize();
+	void SystemUpdate();
 
 };
 

@@ -16,6 +16,7 @@ void GroundState::Initialize()
 	// 槍を踏んだかのフラグ
 	player_->isOneStepOn_ = false;
 	player_->KnockBackOnGround();
+	player_->EndAssistDash();
 }
 
 void GroundState::Update()

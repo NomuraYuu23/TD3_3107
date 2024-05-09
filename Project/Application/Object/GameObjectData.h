@@ -83,6 +83,9 @@ private: // データ用構造体クラス
 		float slowMotionFactor_;
 		// 重力
 		float gravity_;
+		// スティックのif分用のDeadZone
+		float stickDeadZone_;
+
 	};
 
 	// 武器の情報
@@ -130,6 +133,17 @@ private: // データ用構造体クラス
 		Vector3 offset_;
 	};
 
+	struct DashData {
+		// ダッシュ力
+		float dashPower_;
+		// 入力受け付けるフレーム
+		float acceptFrame_;
+		// 落下減速
+		float slowFrame_;
+		// 落下の重力の割る値
+		float slowRatio_;
+	};
+
 public:
 	/// <summary>
 	/// シングルトン
@@ -159,5 +173,7 @@ private:
 	SpearJumpData spearJump_;
 	// カメラ関係の情報
 	CameraData camera_;
+	// ダッシュ関係
+	DashData dash_;
 };
 

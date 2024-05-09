@@ -31,6 +31,11 @@ public:
 	/// <param name="acceptFrame"></param>
 	void StartAccept(float acceptFrame);
 
+	bool IsFallslowActive() { return fallSlowTimer_.IsActive(); }
+
+	void SlowCancel() { fallSlowTimer_.End(); }
+
+private:
 	/// <summary>
 	/// 加速処理
 	/// </summary>
