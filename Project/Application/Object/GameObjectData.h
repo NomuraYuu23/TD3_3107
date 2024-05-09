@@ -115,7 +115,8 @@ private: // データ用構造体クラス
 		float onSpearWaitFrame_;
 		// 槍ジャンプ
 		float highJumpPower_;
-
+		// 槍じゃん用の重力
+		float jumpGravity_;
 	};
 
 	struct BossData {

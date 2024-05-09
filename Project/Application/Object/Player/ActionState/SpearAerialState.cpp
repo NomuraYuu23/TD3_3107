@@ -7,8 +7,8 @@ void SpearAerialState::Initialize()
 
 	// 落下処理
 	// jsonデータ
-	const char* groupName = "Player";
-	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "SpearJumpPower");
+	const char* groupName = "SpearJump";
+	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue(groupName, "SpearJumpPower");
 
 	//groupName = "Common";
 
