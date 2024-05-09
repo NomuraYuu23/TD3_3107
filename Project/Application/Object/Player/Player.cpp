@@ -150,13 +150,7 @@ void Player::ImGuiDraw()
 		isGround_ = true;
 	}
 
-	perVec = { -up.y,up.x };
-	float dot = Vector2::Dot(perVec, tag);
-
-	ImGui::DragFloat2("dir", &up.x);
-	ImGui::DragFloat2("targ", &tag.x);
-	ImGui::DragFloat2("per", &perVec.x);
-	ImGui::DragFloat("Dot", &dot);
+	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
 
 	// 足場の描画表示
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
@@ -424,6 +418,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					isGround_ = true;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
@@ -466,6 +461,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					isGround_ = true;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {

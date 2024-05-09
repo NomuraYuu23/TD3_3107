@@ -33,6 +33,8 @@ private:
 
 	Vector3 StickAimAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
 
+	Vector3 LeftStickAimAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
+
 	Vector2 prevLeftStick_ = {};
 
 	bool isInNearArea_ = false;
