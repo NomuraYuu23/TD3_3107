@@ -99,6 +99,9 @@ private: // データ用構造体クラス
 		float collisionDot_;
 		// 
 		float kickBackCooltime_;
+		// 戻ってくるLerpのレート
+		float returnLerpRatio_;
+
 	};
 
 	/// <summary>
