@@ -14,6 +14,17 @@ private:
 	//	eRemote,	// 遠隔タイプ
 	//};
 
+	struct SingleEnemyData {
+		Vector3 position;
+		uint32_t typeNum;
+	};
+
+	struct MultiEnemyData {
+		Vector3 position;
+		float distance;
+		uint32_t enemyMaxCount;
+	};
+
 public:
 	/// <summary>
 	/// 初期化
@@ -51,7 +62,7 @@ private:
 	/// <summary>
 	/// 敵の追加
 	/// </summary>
-	void RegisterEnemy(const Vector3& position, uint32_t typeNum);
+	void RegisterEnemy(const SingleEnemyData& data);
 
 	/// <summary>
 	/// 単体の敵を生成している場所
@@ -63,7 +74,7 @@ private:
 	/// <param name="position">エミッターの座標</param>
 	/// <param name="distance">各敵との距離</param>
 	/// <param name="enemyMaxCount">敵の数</param>
-	void CreateEmitter(const Vector3& position, float distance, uint32_t enemyMaxCount);
+	void CreateEmitter(const MultiEnemyData& data);
 
 	Vector3 resPoint_ = {};
 	

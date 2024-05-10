@@ -7,7 +7,7 @@
 void EnemyManager::Initialize(Model* model)
 {
 	model_ = model;
-	CreateEmitter({ -5.0f,10.0f }, 7.0f, 5);
+	CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
 	CreateSingleEnemy();
 }
 
@@ -56,13 +56,13 @@ void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const
 	}
 }
 
-void EnemyManager::CreateEmitter(const Vector3& position, float distance, uint32_t enemyMaxCount)
+void EnemyManager::CreateEmitter(const MultiEnemyData& data)
 {
 	std::unique_ptr<LargeNumberOfObjects> obj = std::make_unique<IEnemyEmitter>();
 	// 初期化
 	obj->Initialize(model_);
 	// 敵生成
-	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(position, distance, enemyMaxCount);
+	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
 	// エミッターの設定
 	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(180.0f);
 	// リストに
@@ -70,14 +70,14 @@ void EnemyManager::CreateEmitter(const Vector3& position, float distance, uint32
 
 }
 
-void EnemyManager::RegisterEnemy(const Vector3& position, uint32_t typeNum)
+void EnemyManager::RegisterEnemy(const SingleEnemyData& data)
 {
 
 	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
 	obj->Initialize();
-	obj->transform_.translate = position;
+	obj->transform_.translate = data.position;
 	// 初期化
-	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), typeNum);
+	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), data.typeNum);
 	
 	// 追加
 	singleEnemys_->GetObjects()->push_back(std::move(obj));
@@ -91,7 +91,7 @@ void EnemyManager::CreateSingleEnemy()
 	singleEnemys_->Initialize(model_);
 
 	///---ここに敵単体ごとに登録する---//
-	RegisterEnemy({ 10,10,0 }, { 0 });
+	RegisterEnemy({ {10,10,0},0 });
 
 	// Largeの奴でまとめるためにリストにプッシュ
 	enemyEmitters_.push_back(std::move(singleEnemys_));
