@@ -2,6 +2,7 @@
 #include "../IObject.h"
 #include "State/EnemyStateList.h"
 #include "../../../Engine/3D/OneOfManyObjects.h"
+#include "IEnemyEmitter.h"
 
 class Enemy : public OneOfManyObjects
 {
@@ -96,5 +97,5 @@ public:
 
 	//// 親の座標
 	//Vector3 parentPosition_;
-
+	IEnemyEmitter* parent_;
 };
