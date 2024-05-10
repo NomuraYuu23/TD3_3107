@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "../../base/OutputLog.h"
 
 SceneManager::~SceneManager()
 {
@@ -23,6 +24,7 @@ void SceneManager::Initialize(uint32_t earlySceneNo)
 	// シーンの静的初期化
 	scene_->StaticInitialize();
 	// シーンの初期化
+	OutputLog::Output("シーンのスレッド開始\n");
 	sceneInitialize_ = std::thread(std::bind(&SceneManager::SceneInitializeThread, this));
 	// デタッチ完了フラグ
 	sceneDetachCompletion_ = false;
@@ -55,7 +57,7 @@ void SceneManager::Update()
 {
 
 	// シーンのチェック
-	if (sceneDetachCompletion_) {
+	if (sceneDetachCompletion_ && !sceneTransition_) {
 		currentSceneNo_ = scene_->GetSceneNo();
 
 		prevRequestSeneNo_ = requestSeneNo_; // 前のリクエストシーン
@@ -64,9 +66,10 @@ void SceneManager::Update()
 
 	// リクエストシーンが変わったか
 	if ( (requestSeneNo_ != prevRequestSeneNo_ || scene_->GetResetScene())
-		&& sceneTransitionDetachCompletion_ && sceneDetachCompletion_) {
+		&& sceneTransitionDetachCompletion_ && sceneDetachCompletion_ && !sceneTransition_) {
 		//シーン遷移開始（初期化）
 		sceneTransition_.reset(sceneTransitionFactory_->CreateSceneTransition(currentSceneNo_, requestSeneNo_));
+		OutputLog::Output("シーン遷移のスレッド開始\n");
 		sceneTransitionInitialize_ = std::thread(std::bind(&SceneManager::SceneTransitionInitializeThread, this));
 		sceneTransitionDetachCompletion_ = false;
 	}
@@ -81,6 +84,7 @@ void SceneManager::Update()
 			scene_->SetStopAudio(true);
 			scene_.reset(sceneFacyory_->CreateScene(currentSceneNo_));
 			// シーンの初期化
+			OutputLog::Output("シーンのスレッド開始\n");
 			sceneInitialize_ = std::thread(std::bind(&SceneManager::SceneInitializeThread, this));
 			sceneDetachCompletion_ = false;
 			sceneTransition_->SetSwitchScene(false);
@@ -88,6 +92,7 @@ void SceneManager::Update()
 		}
 		else if (!sceneTransition_->GetTransitioning()) {
 			sceneTransition_.reset(nullptr);
+			OutputLog::Output("シーン遷移削除\n");
 		}
 	}
 
@@ -100,6 +105,7 @@ void SceneManager::Update()
 	if (sceneInitializeEnd_) {
 		sceneInitializeEnd_ = false;
 		sceneInitialize_.detach();
+		OutputLog::Output("シーンのデタッチ完了\n");
 		sceneDetachCompletion_ = true;
 		if (sceneTransition_) {
 			sceneTransition_->SetStoppingUpdates(false);
@@ -110,6 +116,7 @@ void SceneManager::Update()
 	if (sceneTransitionInitializeEnd_) {
 		sceneTransitionInitializeEnd_ = false;
 		sceneTransitionInitialize_.detach();
+		OutputLog::Output("シーン遷移のデタッチ完了\n");
 		sceneTransitionDetachCompletion_ = true;
 	}
 

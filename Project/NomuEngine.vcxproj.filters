@@ -409,6 +409,7 @@
     <ClInclude Include="Engine\3D\OutlineData.h" />
     <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
     <ClInclude Include="Engine\base\CrashHandler.h" />
+    <ClInclude Include="Engine\base\OutputLog.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

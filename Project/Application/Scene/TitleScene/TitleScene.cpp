@@ -4,6 +4,7 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/Math/Ease.h"
 #include "../../../Engine/3D/ModelDraw.h"
+#include "../../../Engine/base/OutputLog.h"
 
 TitleScene::~TitleScene()
 {
@@ -39,6 +40,7 @@ void TitleScene::Initialize()
 	skydome_->Initialize(skydomeModel_.get());
 
 	requestSceneNo = kGame;
+	OutputLog::Output("タイトルシーン初期化終了\n");
 
 }
 
@@ -65,6 +67,9 @@ void TitleScene::Update()
 	
 	// スカイドーム
 	skydome_->Update();
+
+	OutputLog::Output("タイトルシーン更新終了\n");
+
 
 }
 
@@ -112,6 +117,8 @@ void TitleScene::Draw()
 	Sprite::PostDraw();
 
 #pragma endregion
+
+	OutputLog::Output("タイトルシーン描画終了\n");
 
 }
 

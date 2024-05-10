@@ -76,8 +76,6 @@ private: // メンバ変数
 	std::thread sceneTransitionInitialize_;
 	// シーン遷移初期化が終わったか
 	bool sceneTransitionInitializeEnd_;
-	// シーン遷移初期化が最初か
-	bool isFirstLoad_;
 	// シーン遷移初期化がデタッチされたか
 	bool sceneTransitionDetachCompletion_;
 

@@ -2,6 +2,7 @@
 #include "../../../Engine/base/TextureManager.h"
 #include "../../../Engine/base/DirectXCommon.h"
 #include "../../../Engine/base/WinApp.h"
+#include "../../../Engine/base/OutputLog.h"
 
 SceneTransitionBlackOut::~SceneTransitionBlackOut()
 {
@@ -31,6 +32,9 @@ void SceneTransitionBlackOut::Initialize()
 	loadSprite_->SetTextureLeftTop({ 0.0f, 0.0f });
 	loadCount_ = 0;
 
+
+	OutputLog::Output("シーン遷移の初期化終了\n");
+
 }
 
 void SceneTransitionBlackOut::Update()
@@ -52,6 +56,8 @@ void SceneTransitionBlackOut::Update()
 	sprite_->SetColor(color_);
 	loadSprite_->SetColor({ 1.0f,1.0f,1.0f,color_.w });
 
+	OutputLog::Output("シーン遷移の更新終了\n");
+
 }
 
 void SceneTransitionBlackOut::Draw()
@@ -68,5 +74,8 @@ void SceneTransitionBlackOut::Draw()
 	Sprite::PostDraw();
 
 #pragma endregion
+
+
+	OutputLog::Output("シーン遷移の描画終了\n");
 
 }
