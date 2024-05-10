@@ -5,27 +5,27 @@
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
 
-class EnemyManager : public LargeNumberOfObjects
+class EnemyManager
 {
 private:
-	enum class EnemyType : uint32_t
-	{
-		eProximity,	// 近接タイプ
-		eRemote,	// 遠隔タイプ
-	};
+	//enum class EnemyType : uint32_t
+	//{
+	//	eProximity,	// 近接タイプ
+	//	eRemote,	// 遠隔タイプ
+	//};
 
 public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="model"></param>
-	void Initialize(Model* model) override;
+	void Initialize(Model* model);
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update() override;
+	void Update();
 
-	//void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles);
+	void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles);
 
 	/// <summary>
 	/// ImGUi
@@ -37,25 +37,26 @@ public:
 	/// <param name="collisionManager"></param>
 	void CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera);
 
+	std::list<std::unique_ptr<LargeNumberOfObjects>>* GetEmitterLists() { return &enemyEmitters_; }
+
 private:
 	/// <summary>
 	/// 敵の追加
 	/// </summary>
 	void RegisterEnemy(const Vector3& position, uint32_t typeNum);
-	void RegisterEnemy(const Vector3& offset, uint32_t typeNum, WorldTransform* parent);
 
-	struct EnemyEmitter {
-		WorldTransform worldTransform;
-		float distance;
-		uint32_t maxCount;
-	};
-	std::list<EnemyEmitter> enemyEmitters_;
-	WorldTransform testParent;
+	void CreateSingleEnemy();
 
-	WorldTransform emitters_[3];
-
-	std::list<WorldTransform> enemyEmitterTest_;
+	void CreateEmitter(const Vector3& position, float distance, uint32_t enemyMaxCount);
 
 	Vector3 resPoint_ = {};
+	
+	// エミッター単位で敵を管理
+	std::list<std::unique_ptr<LargeNumberOfObjects>> enemyEmitters_;
 
+	// 単体管理のエネミーたちをまとめる
+	std::unique_ptr<LargeNumberOfObjects> singleEnemys_;
+
+	// 全体のモデル
+	Model* model_;
 };

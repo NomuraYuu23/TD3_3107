@@ -2,107 +2,72 @@
 #include "../ObjectList.h"
 #include "../GameUtility/MathUtility.h"
 #include "State/EnemyStateList.h"
+#include "SingleEnemyRegister.h"
 
 void EnemyManager::Initialize(Model* model)
 {
-	LargeNumberOfObjects::Initialize(model);
-
-	RegisterEnemy({ 80.0f,59.0f,0 }, 0);
-	RegisterEnemy({ 90.0f,59.0f,0 }, 0);
-	RegisterEnemy({ 100.0f,59.0f,0 }, 0);
-
-	//RegisterEnemy({ 10.0f,0,0 }, 0, { 20.0f,10.0f });
-	//RegisterEnemy({ -10.0f,0,0 }, 0, { 20.0f,10.0f });
-	//RegisterEnemy({ 0,10.0f,0 }, 0, { 20.0f,10.0f });
-	//RegisterEnemy({ 0,-10.0f,0 }, 0, { 20.0f,10.0f });
-
-	testParent.Initialize();
-	testParent.transform_.translate = { -5.0f,10.0f };
-
-	RegisterEnemy({ 7.5f,0,0 }, 0, &testParent);
-	RegisterEnemy({ -7.5f,0,0 }, 0, &testParent);
-	RegisterEnemy({ 0,7.5f,0 }, 0, &testParent);
-	RegisterEnemy({ 0,-7.5f,0 }, 0, &testParent);
-
-	for (int i = 0; i < 3; i++) {
-		emitters_[i].Initialize();
-	}
-	emitters_[0].transform_.translate = { -40.0f, 12.5f };
-
-	RegisterEnemy({ 10.0f,0,0 }, 0, &emitters_[0]);
-	RegisterEnemy({ -10.0f,0,0 }, 0, &emitters_[0]);
-	RegisterEnemy({ 0,10.0f,0 }, 0, &emitters_[0]);
-	RegisterEnemy({ 0,-10.0f,0 }, 0, &emitters_[0]);
-
+	model_ = model;
+	CreateEmitter({ -5.0f,10.0f }, 7.0f, 5);
+	CreateSingleEnemy();
 }
 
 void EnemyManager::Update()
 {
-	// フラグによる死亡処理
-	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
-		if (enemy->IsDead()) {
-			enemy.reset();
-			return true;
-		}
-		return false;
-		});
-
-	// 
-	testParent.UpdateMatrix();
-	testParent.transform_.rotate.z -= 0.005f;
-	for (int i = 0; i < 3; i++) {
-		emitters_[0].UpdateMatrix();
+	// 更新をLargeのやつごとに
+	for (std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator it = enemyEmitters_.begin();
+		it != enemyEmitters_.end(); ++it) {
+		(*it)->Update();
 	}
-	emitters_[0].transform_.rotate.z += 0.01f;
-	// リストの更新処理
-	LargeNumberOfObjects::Update();
+}
 
+void EnemyManager::Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles)
+{
+	// ドローコールをLargeのやつごとに
+	for (std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator it = enemyEmitters_.begin();
+		it != enemyEmitters_.end(); ++it) {
+		(*it)->Draw(camera, textureHnadles);
+	}
 }
 
 void EnemyManager::ImGuiDraw()
 {
 	ImGui::Begin("EnemyManager");
 
-	if (ImGui::Button("RegisterMeleeBlock")) {
-		//RegisterBlock();
-		RegisterEnemy(resPoint_, 0);
-	}
-	if (ImGui::Button("RegisterRangedBlock")) {
-		//RegisterBlock();
-		RegisterEnemy(resPoint_, 1);
-	}
-
-	ImGui::DragFloat3("Parent", &testParent.transform_.translate.x, 0.01f, -100.0f, 100.0f);
-	ImGui::DragFloat3("PRot", &testParent.transform_.rotate.x, 0.01f, -100, 100);
-
 	ImGui::DragFloat3("pos", &resPoint_.x, 0.01f, -100.0f, 100.0f);
 
-	int size = (int)objects_.size();
+	int size = (int)enemyEmitters_.size();
 	ImGui::InputInt("Size", &size);
 
 	ImGui::Separator();
-
-	// ブロック達のImGui
-
-	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
-		it != objects_.end(); ++it) {
-		static_cast<Enemy*>((it->get()))->ImGuiDraw();
-	}
 
 	ImGui::End();
 }
 
 void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera)
 {
+	for (std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator itParent = enemyEmitters_.begin();
+		itParent != enemyEmitters_.end(); ++itParent) {
 
-	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
-		it != objects_.end(); ++it) {
-		//float range = 100.0f;
-		//if (!MathUtility::CheckOutScreen((*it)->GetWorldPosition(), range, camera)) {
+		for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*itParent)->GetObjects()->begin();
+			it != (*itParent)->GetObjects()->end(); ++it) {
 			collisionManager->ListRegister(&static_cast<Enemy*>((it->get()))->boxCollider_);
-		//}
+		}
 
 	}
+}
+
+void EnemyManager::CreateEmitter(const Vector3& position, float distance, uint32_t enemyMaxCount)
+{
+	std::unique_ptr<LargeNumberOfObjects> obj = std::make_unique<IEnemyEmitter>();
+	// 初期化
+	obj->Initialize(model_);
+	// 敵生成
+	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(position, distance, enemyMaxCount);
+	// エミッターの設定
+	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(180.0f);
+	// リストに
+	enemyEmitters_.push_back(std::move(obj));
+
 }
 
 void EnemyManager::RegisterEnemy(const Vector3& position, uint32_t typeNum)
@@ -115,22 +80,19 @@ void EnemyManager::RegisterEnemy(const Vector3& position, uint32_t typeNum)
 	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), typeNum);
 	
 	// 追加
-	objects_.push_back(std::move(obj));
-
+	singleEnemys_->GetObjects()->push_back(std::move(obj));
 
 }
 
-void EnemyManager::RegisterEnemy(const Vector3& offset, uint32_t typeNum, WorldTransform* parent)
+void EnemyManager::CreateSingleEnemy()
 {
+	// 単体管理用変数に
+	singleEnemys_ = std::make_unique<SingleEnemyRegister>();
+	singleEnemys_->Initialize(model_);
 
-	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
-	obj->Initialize();
-	static_cast<Enemy*>(obj.get())->SetParent(parent);
-	obj->transform_.translate = Vector3::Add(parent->GetWorldPosition(), offset);
-	// 初期化
-	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), typeNum);
+	///---ここに敵単体ごとに登録する---//
+	RegisterEnemy({ 10,10,0 }, { 0 });
 
-	// 追加
-	objects_.push_back(std::move(obj));
-
+	// Largeの奴でまとめるためにリストにプッシュ
+	enemyEmitters_.push_back(std::move(singleEnemys_));
 }

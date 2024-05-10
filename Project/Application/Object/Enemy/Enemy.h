@@ -46,6 +46,11 @@ public:
 
 	void MatrixUpdate();
 
+	void SetEmitter(IEnemyEmitter* parent) {
+		parentEmitter_ = parent;
+		parent_ = parentEmitter_->GetWorldTransform();
+	}
+
 public:
 	/// <summary>
 	/// 生成時に呼び出す関数（ここで地上・空中の選択、その際に近接・遠隔の選択も
@@ -97,5 +102,5 @@ public:
 
 	//// 親の座標
 	//Vector3 parentPosition_;
-	IEnemyEmitter* parent_;
+	IEnemyEmitter* parentEmitter_;
 };

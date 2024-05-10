@@ -111,38 +111,43 @@ void CorrectSystem::NearLockOn(EnemyManager* enemyManager)
 	float rightCross = 0.0f;
 
 	// ループ文
-	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = enemyManager->GetObjects()->begin();
-	for (; itr != enemyManager->GetObjects()->end(); ++itr) {
+	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
+	for (; emitItr != enemyManager->GetEmitterLists()->end(); ++emitItr) {
+		//static_cast<LargeNumberOfObjects>
+		std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*emitItr)->GetObjects()->begin();
+		for (; it != (*emitItr)->GetObjects()->end(); ++it) {
+			// エネミーをとってくる
+			OneOfManyObjects* obj = it->get();
+			// エネミーのポジションをとる
+			enemyPos = obj->GetWorldPosition();
+			// エネミーへのベクトルを作成
+			toEnemy = enemyPos - playerPos;
+			// 長さを作成
+			length = Vector3::Length(toEnemy);
+			// 長さが短いか確認
+			if (length < lengthMin) {
+				// 方向ベクトルを作成
+				direction = Vector3::Normalize(toEnemy);
+				enemyDirection = { direction.x, direction.y };
 
-		// エネミーをとってくる
-		OneOfManyObjects* obj = itr->get();
-		// エネミーのポジションをとる
-		enemyPos = obj->GetWorldPosition();
-		// エネミーへのベクトルを作成
-		toEnemy = enemyPos - playerPos;
-		// 長さを作成
-		length = Vector3::Length(toEnemy);
-		// 長さが短いか確認
-		if (length < lengthMin) {
-			// 方向ベクトルを作成
-			direction = Vector3::Normalize(toEnemy);
-			enemyDirection = { direction.x, direction.y };
+				// 方向確認
+				leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
+				rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-			// 方向確認
-			leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
-			rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
+				if (leftCross * rightCross <= 0.0f) {
 
-			if (leftCross * rightCross <= 0.0f) {
-
-				isInNearArea_ = true;
-				// 目指す方向ベクトルを更新
-				targetDirection = direction;
-				// 現在の最小の長さを更新
-				lengthMin = length;
-				targetPointer_ = obj;
+					isInNearArea_ = true;
+					// 目指す方向ベクトルを更新
+					targetDirection = direction;
+					// 現在の最小の長さを更新
+					lengthMin = length;
+					targetPointer_ = obj;
+				}
 			}
+
 		}
 	}
+
 	targetDirect_ = targetDirection;
 }
 
@@ -181,40 +186,42 @@ Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
 	float rightCross = 0.0f;
 
 	// ループ文
-	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = enemyManager->GetObjects()->begin();
-	for (; itr != enemyManager->GetObjects()->end(); ++itr) {
+	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
+	for (; emitItr != enemyManager->GetEmitterLists()->end(); ++emitItr) {
+		std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*emitItr)->GetObjects()->begin();
+		for (; it != (*emitItr)->GetObjects()->end(); ++it) {
+			// エネミーをとってくる
+			OneOfManyObjects* obj = it->get();
+			// エネミーのポジションをとる
+			enemyPos = obj->GetWorldPosition();
+			// エネミーへのベクトルを作成
+			toEnemy = enemyPos - playerPos;
+			// 長さを作成
+			length = Vector3::Length(toEnemy);
+			// 長さが短いか確認
+			if (length < lengthMin) {
+				// 方向ベクトルを作成
+				direction = Vector3::Normalize(toEnemy);
+				enemyDirection = { direction.x, direction.y };
 
-		// エネミーをとってくる
-		OneOfManyObjects* obj = itr->get();
-		// エネミーのポジションをとる
-		enemyPos = obj->GetWorldPosition();
-		// エネミーへのベクトルを作成
-		toEnemy = enemyPos - playerPos;
-		// 長さを作成
-		length = Vector3::Length(toEnemy);
-		// 長さが短いか確認
-		if (length < lengthMin) {
-			// 方向ベクトルを作成
-			direction = Vector3::Normalize(toEnemy);
-			enemyDirection = { direction.x, direction.y };
+				// 方向確認
+				leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
+				rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-			// 方向確認
-			leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
-			rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
+				if (leftCross * rightCross <= 0.0f) {
 
-			if (leftCross * rightCross <= 0.0f) {
+					isInNearArea_ = true;
+					// 目指す方向ベクトルを更新
+					targetDirection = direction;
+					// 現在の最小の長さを更新
+					lengthMin = length;
 
-				isInNearArea_ = true;
-				// 目指す方向ベクトルを更新
-				targetDirection = direction;
-				// 現在の最小の長さを更新
-				lengthMin = length;
+				}
 
 			}
-
 		}
-
 	}
+
 	return targetDirection;
 }
 
@@ -253,35 +260,37 @@ Vector3 CorrectSystem::StickAimAssist(EnemyManager* enemyManager, const Vector3&
 	float rightCross = 0.0f;
 
 	// ループ文
-	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = enemyManager->GetObjects()->begin();
-	for (; itr != enemyManager->GetObjects()->end(); ++itr) {
+	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
+	for (; emitItr != enemyManager->GetEmitterLists()->end(); ++emitItr) {
+		std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*emitItr)->GetObjects()->begin();
+		for (; it != (*emitItr)->GetObjects()->end(); ++it) {
+			// エネミーをとってくる
+			OneOfManyObjects* obj = it->get();
+			// エネミーのポジションをとる
+			enemyPos = obj->GetWorldPosition();
+			// エネミーへのベクトルを作成
+			toEnemy = enemyPos - playerPos;
+			// 長さを作成
+			length = Vector3::Length(toEnemy);
+			// 長さが短いか確認
+			if (length < lengthMin) {
+				// 方向ベクトルを作成
+				direction = Vector3::Normalize(toEnemy);
+				enemyDirection = { direction.x, direction.y };
 
-		// エネミーをとってくる
-		OneOfManyObjects* obj = itr->get();
-		// エネミーのポジションをとる
-		enemyPos = obj->GetWorldPosition();
-		// エネミーへのベクトルを作成
-		toEnemy = enemyPos - playerPos;
-		// 長さを作成
-		length = Vector3::Length(toEnemy);
-		// 長さが短いか確認
-		if (length < lengthMin) {
-			// 方向ベクトルを作成
-			direction = Vector3::Normalize(toEnemy);
-			enemyDirection = { direction.x, direction.y };
+				// 方向確認
+				leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
+				rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-			// 方向確認
-			leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
-			rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
-
-			//if (leftCross * rightCross <= 0.0f) {
-			if (leftCross <= 0.0f && rightCross > 0.0f) {
-				isInNearArea_ = true;
-				// 目指す方向ベクトルを更新
-				targetDirection = direction;
-				// 現在の最小の長さを更新
-				lengthMin = length;
-				targetPointer_ = obj;
+				//if (leftCross * rightCross <= 0.0f) {
+				if (leftCross <= 0.0f && rightCross > 0.0f) {
+					isInNearArea_ = true;
+					// 目指す方向ベクトルを更新
+					targetDirection = direction;
+					// 現在の最小の長さを更新
+					lengthMin = length;
+					targetPointer_ = obj;
+				}
 			}
 		}
 	}
@@ -324,38 +333,39 @@ Vector3 CorrectSystem::LeftStickAimAssist(EnemyManager* enemyManager, const Vect
 	float rightCross = 0.0f;
 
 	// ループ文
-	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = enemyManager->GetObjects()->begin();
-	for (; itr != enemyManager->GetObjects()->end(); ++itr) {
+	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
+	for (; emitItr != enemyManager->GetEmitterLists()->end(); ++emitItr) {
+		std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*emitItr)->GetObjects()->begin();
+		for (; it != (*emitItr)->GetObjects()->end(); ++it) {
+			// エネミーをとってくる
+			OneOfManyObjects* obj = it->get();
+			// エネミーのポジションをとる
+			enemyPos = obj->GetWorldPosition();
+			// エネミーへのベクトルを作成
+			toEnemy = enemyPos - playerPos;
+			// 長さを作成
+			length = Vector3::Length(toEnemy);
+			// 長さが短いか確認
+			if (length < lengthMin) {
+				// 方向ベクトルを作成
+				direction = Vector3::Normalize(toEnemy);
+				enemyDirection = { direction.x, direction.y };
 
-		// エネミーをとってくる
-		OneOfManyObjects* obj = itr->get();
-		// エネミーのポジションをとる
-		enemyPos = obj->GetWorldPosition();
-		// エネミーへのベクトルを作成
-		toEnemy = enemyPos - playerPos;
-		// 長さを作成
-		length = Vector3::Length(toEnemy);
-		// 長さが短いか確認
-		if (length < lengthMin) {
-			// 方向ベクトルを作成
-			direction = Vector3::Normalize(toEnemy);
-			enemyDirection = { direction.x, direction.y };
+				// 方向確認
+				leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
+				rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-			// 方向確認
-			leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
-			rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
-
-			//if (leftCross * rightCross <= 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0)||(toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
-			if (leftCross <= 0.0f && rightCross > 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0) || (toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
-				isInNearArea_ = true;
-				// 目指す方向ベクトルを更新
-				targetDirection = direction;
-				// 現在の最小の長さを更新
-				lengthMin = length;
-				targetPointer_ = obj;
+				//if (leftCross * rightCross <= 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0)||(toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
+				if (leftCross <= 0.0f && rightCross > 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0) || (toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
+					isInNearArea_ = true;
+					// 目指す方向ベクトルを更新
+					targetDirection = direction;
+					// 現在の最小の長さを更新
+					lengthMin = length;
+					targetPointer_ = obj;
+				}
 			}
 		}
 	}
-
 	return Vector3::Normalize(targetDirection);
 }
