@@ -24,7 +24,11 @@ public:
 	/// 更新
 	/// </summary>
 	void Update();
-
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="camera"></param>
+	/// <param name="textureHnadles"></param>
 	void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles);
 
 	/// <summary>
@@ -37,6 +41,10 @@ public:
 	/// <param name="collisionManager"></param>
 	void CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera);
 
+	/// <summary>
+	/// LargeNumberOfObjectsのリスト
+	/// </summary>
+	/// <returns></returns>
 	std::list<std::unique_ptr<LargeNumberOfObjects>>* GetEmitterLists() { return &enemyEmitters_; }
 
 private:
@@ -45,8 +53,16 @@ private:
 	/// </summary>
 	void RegisterEnemy(const Vector3& position, uint32_t typeNum);
 
+	/// <summary>
+	/// 単体の敵を生成している場所
+	/// </summary>
 	void CreateSingleEnemy();
-
+	/// <summary>
+	/// エミッター生成関数
+	/// </summary>
+	/// <param name="position">エミッターの座標</param>
+	/// <param name="distance">各敵との距離</param>
+	/// <param name="enemyMaxCount">敵の数</param>
 	void CreateEmitter(const Vector3& position, float distance, uint32_t enemyMaxCount);
 
 	Vector3 resPoint_ = {};
