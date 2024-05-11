@@ -10,6 +10,15 @@
     <FxCompile Include="Resources\shaders\Particle.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\ManyAnimModels.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\ManyModels.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\ManyNormalModels.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\NormalModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Outline.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Outline.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\AnimInverseModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\AnimModel.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
@@ -409,6 +418,9 @@
     <None Include="resources\shaders\Object3d.hlsli" />
     <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
+    <None Include="Resources\shaders\ManyModels.hlsli" />
+    <None Include="Resources\shaders\Model.hlsli" />
+    <None Include="Resources\shaders\Outline.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
