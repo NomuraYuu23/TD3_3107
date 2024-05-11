@@ -368,6 +368,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\GraphicsPipelineState\SamplerManager.h" />
     <ClInclude Include="Engine\base\ITextureHandleManager.h" />
     <ClInclude Include="Engine\base\Log.h" />
+    <ClInclude Include="Engine\base\OutputLog.h" />
     <ClInclude Include="Engine\base\RenderTargetTexture.h" />
     <ClInclude Include="Engine\base\RTVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h" />
