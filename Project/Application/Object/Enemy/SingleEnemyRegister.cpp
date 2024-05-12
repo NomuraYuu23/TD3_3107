@@ -1,8 +1,17 @@
 #include "SingleEnemyRegister.h"
+#include "../../../Engine/2D/ImguiManager.h"
+
+uint32_t SingleEnemyRegister::sSerialNumber_ = 0;
 
 void SingleEnemyRegister::Initialize(Model* model)
 {
 	LargeNumberOfObjects::Initialize(model);
+
+	// 型番
+	serialNum_ = sSerialNumber_;
+	// 全体番号
+	sSerialNumber_++;
+	name_ = "EnemySingle:" + std::to_string(serialNum_);
 
 }
 
@@ -20,4 +29,11 @@ void SingleEnemyRegister::Update()
 		return false;
 		});
 
+}
+
+void SingleEnemyRegister::ImGuiDraw()
+{
+	//ImGui::Begin(name_.c_str());
+	ImGui::Text(name_.c_str());
+	//ImGui::End();
 }

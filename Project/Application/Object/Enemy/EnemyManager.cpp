@@ -7,7 +7,10 @@
 void EnemyManager::Initialize(Model* model)
 {
 	model_ = model;
-	CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
+	//CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
+	CreateEmitter({ {0.0f,10.0f},7.0f,5 });
+	CreateEmitter({ {-20.0f,10.0f},7.0f,3 });
+
 	CreateSingleEnemy();
 }
 
@@ -33,12 +36,33 @@ void EnemyManager::ImGuiDraw()
 {
 	ImGui::Begin("EnemyManager");
 
-	ImGui::DragFloat3("pos", &resPoint_.x, 0.01f, -100.0f, 100.0f);
+	//ImGui::DragFloat3("pos", &resPoint_.x, 0.01f, -100.0f, 100.0f);
 
-	int size = (int)enemyEmitters_.size();
-	ImGui::InputInt("Size", &size);
+	//int size = (int)enemyEmitters_.size();
+	//ImGui::InputInt("Size", &size);
 
-	ImGui::Separator();
+	//ImGui::Separator();
+	int maxSize = 0;
+	for (std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator itParent = enemyEmitters_.begin();
+		itParent != enemyEmitters_.end(); ++itParent) {
+
+		for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*itParent)->GetObjects()->begin();
+			it != (*itParent)->GetObjects()->end(); ++it) {
+			maxSize++;
+		}
+
+	}
+
+	ImGui::InputInt("MaxEnemy", &maxSize);
+
+	ImGui::SeparatorText("Emittes");
+
+	for (std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator itr = enemyEmitters_.begin();
+		itr != enemyEmitters_.end(); ++itr) {
+		(*itr)->ImGuiDraw();
+		ImGui::Separator();
+	}
+
 
 	ImGui::End();
 }
@@ -64,7 +88,7 @@ void EnemyManager::CreateEmitter(const MultiEnemyData& data)
 	// 敵生成
 	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
 	// エミッターの設定
-	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(180.0f);
+	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(90.0f);
 	// リストに
 	enemyEmitters_.push_back(std::move(obj));
 

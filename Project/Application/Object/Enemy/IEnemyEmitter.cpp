@@ -1,5 +1,6 @@
 #include "IEnemyEmitter.h"
 #include "Enemy.h"
+#include "../../../Engine/2D/ImguiManager.h"
 
 #include <numbers>
 #include <cmath>
@@ -11,12 +12,26 @@ void IEnemyEmitter::Initialize(Model* model)
 	LargeNumberOfObjects::Initialize(model);
 
 	worldTransform_.Initialize();
+
+	// 型番
+	serialNum_ = sSerialNumber_;
+	// 全体番号
+	sSerialNumber_++;
+	name_ = "EnemyEmitter:" + std::to_string(serialNum_);
+	// 初期化
+	isRotateReturn_ = false;
+
 }
 
 void IEnemyEmitter::Update()
 {
+	if (isRotateReturn_ && !interval_.IsActive()) {
+		isRotateReturn_ = false;
+	}
 	// リストの更新処理
 	LargeNumberOfObjects::Update();
+
+	interval_.Update();
 
 	// フラグによる死亡処理
 	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
@@ -27,10 +42,16 @@ void IEnemyEmitter::Update()
 		return false;
 		});
 
+	// 回転処理
 	nowAngle_ += 1.0f / rotation_;
-	//if (nowAngle_ >= 1.57f) {
-	//	nowAngle_ = 0;
-	//}
+
+	// 雑な一周リセット処理
+	float oneLap = 6.28f;
+	if (nowAngle_ >= oneLap) {
+		nowAngle_ = 0;
+		isRotateReturn_ = true;
+		interval_.Start(10.0f);
+	}
 
 	worldTransform_.transform_.rotate.z = nowAngle_;
 	worldTransform_.UpdateMatrix();
@@ -65,12 +86,33 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 		obj->Initialize();
 		//static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
 		static_cast<Enemy*>(obj.get())->SetEmitter(this);
-
+		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
 		obj->transform_.translate = newPosition;
 		// 初期化
 		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), 0);
 		// リストに追加
 		objects_.push_back(std::move(obj));
 	}
+
+}
+
+void IEnemyEmitter::ImGuiDraw()
+{
+	ImGui::Text(name_.c_str());
+
+	ImGui::Text("returnFlag : %d", this->isRotateReturn_);
+
+	std::string fullPath = name_ + "Position";
+	ImGui::DragFloat3(fullPath.c_str(), &worldTransform_.transform_.translate.x, 0.01f, -100, 100);
+	fullPath = name_ + "Rotate";
+	ImGui::DragFloat3(fullPath.c_str(), &worldTransform_.transform_.rotate.x, 0.01f, 0, 100);
+	
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+		static_cast<Enemy*>((*it).get())->ImGuiDraw();
+	}
+
+
+	ImGui::Text("\n");
 
 }

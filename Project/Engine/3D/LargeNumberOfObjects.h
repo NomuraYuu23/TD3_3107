@@ -52,6 +52,8 @@ public:
 	/// <param name="textureHnadles">テクスチャハンドル</param>
 	virtual void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles = nullptr);
 
+	virtual void ImGuiDraw() = 0;
+
 	/// <summary>
 	/// 死んでるのを削除
 	/// </summary>

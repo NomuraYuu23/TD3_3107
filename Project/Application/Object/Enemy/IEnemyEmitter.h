@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
+#include "../GameUtility/TimerLib.h"
 
 class IEnemyEmitter : public LargeNumberOfObjects
 {
@@ -34,11 +35,16 @@ public:
 	void CreateEnemy(const Vector3& transformPosition, float distance, uint32_t enemyCount);
 
 	/// <summary>
-	/// 敵のリスト取得
+	/// ワールドトランスフォームの取得
 	/// </summary>
 	/// <returns></returns>
-	//std::list<std::unique_ptr<OneOfManyObjects>>* GetList() { return &objects_; }
 	WorldTransform* GetWorldTransform() { return &worldTransform_; };
+
+	void ImGuiDraw() override;
+
+	bool IsRotateReturn() { return isRotateReturn_; }
+
+	float GetNowAngle() { return nowAngle_; }
 
 private:
 	// 
@@ -52,7 +58,12 @@ private:
 	// 最大数
 	uint32_t maxCount_ = 0u;
 	// 今の角度
-	float nowAngle_;
+	float nowAngle_ = 0.0f;
 	// フレーム単位の回転速度
-	float rotation_;
+	float rotation_ = 0.0f;
+
+	// 一周したか？
+	bool isRotateReturn_ = false;
+
+	TimerLib interval_;
 };

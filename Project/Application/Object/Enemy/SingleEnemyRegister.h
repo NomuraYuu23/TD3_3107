@@ -20,7 +20,10 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-
+	/// <summary>
+	/// ImGuiの描画
+	/// </summary>
+	void ImGuiDraw() override;
 	//std::list<std::unique_ptr<OneOfManyObjects>>* GetList() { return &objects_; }
 
 private:
