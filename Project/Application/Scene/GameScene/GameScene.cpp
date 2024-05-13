@@ -335,13 +335,13 @@ void GameScene::Draw() {
 
 #pragma endregion
 
-	// ブルーム描画
-	renderTargetTexture_->ChangePixelShaderResource(0);
-	PostEffect::GetInstance()->BloomCommand(dxCommon_->GetCommadList(), 0, renderTargetTexture_->GetSrvGPUHandle(0));
+	//// ブルーム描画
+	//renderTargetTexture_->ChangePixelShaderResource(0);
+	//PostEffect::GetInstance()->BloomCommand(dxCommon_->GetCommadList(), 0, renderTargetTexture_->GetSrvGPUHandle(0));
 
-	renderTargetTexture_->ChangeRenderTarget(0);
+	//renderTargetTexture_->ChangeRenderTarget(0);
 
-	renderTargetTexture_->TextureDraw(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	//renderTargetTexture_->TextureDraw(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 }
 
 void GameScene::ImguiDraw(){
