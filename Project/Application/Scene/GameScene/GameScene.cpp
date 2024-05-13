@@ -6,6 +6,7 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../Particle/EmitterName.h"
 #include "../../../Engine/Math/DeltaTime.h"
+#include "../../../Engine/base/WindowSprite.h"
 
 GameScene::~GameScene()
 {
@@ -29,7 +30,7 @@ void GameScene::Initialize() {
 
 	ModelCreate();
 	TextureLoad();
-		
+
 	// ビュープロジェクション
 	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
@@ -110,7 +111,7 @@ void GameScene::Initialize() {
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	mapManager_->Initialize(terrainModel_.get());
-	
+
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
@@ -118,7 +119,7 @@ void GameScene::Initialize() {
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
-	
+
 	// 追従カメラ（仮
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
@@ -129,7 +130,7 @@ void GameScene::Initialize() {
 	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
 	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
-	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y,player_->throwDirect_.x));
+	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y, player_->throwDirect_.x));
 
 	/// ポストエフェクトの値初期化
 	// ブルーム
@@ -220,7 +221,7 @@ void GameScene::Update() {
 
 	// 当たり判定の設定とチェック
 	CollisionUpdate();
-	
+
 	// 影
 	ShadowUpdate();
 
@@ -269,7 +270,7 @@ void GameScene::Draw() {
 	ModelDraw::PreDraw(preDrawDesc);
 
 	//3Dオブジェクトはここ
-	
+
 	//Obj
 	player_->Draw(camera_);
 	//bossEnemy_->Draw(camera_);
@@ -321,35 +322,46 @@ void GameScene::Draw() {
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
-	
+
 
 	//背景
 	//前景スプライト描画
-	
+
 	// UIマネージャー
 	//uiManager_->Draw();
 	arrowSprite_->Draw();
-	
+
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 
 #pragma endregion
 
-	//// ブルーム描画
-	//renderTargetTexture_->ChangePixelShaderResource(0);
-	//PostEffect::GetInstance()->BloomCommand(dxCommon_->GetCommadList(), 0, renderTargetTexture_->GetSrvGPUHandle(0));
+	PlayerHitManager::Effect instance = player_->GetEffectInfo();
+	PostEffect::GetInstance()->SetRShift(instance.bShift);
+	PostEffect::GetInstance()->SetGShift(instance.gShift);
+	PostEffect::GetInstance()->SetBShift(instance.rShift);
+	PostEffect::GetInstance()->SetTime(instance.time);
+	PostEffect::GetInstance()->Execution(
+		dxCommon_->GetCommadList(),
+		renderTargetTexture_,
+		PostEffect::kCommandIndexGlitchRGBShift);
+	WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 
-	//renderTargetTexture_->ChangeRenderTarget(0);
-
-	//renderTargetTexture_->TextureDraw(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 }
 
-void GameScene::ImguiDraw(){
+void GameScene::ImguiDraw() {
 #ifdef _DEBUG
 
 	ImGui::Begin("GameScene");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::Text("ColliderManagerSize : %d", (int)collision2DManager_->GetColliders().size());
+	float abs = 256.0f;
+	ImGui::DragFloat2("rShift", &rShift_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat2("gShift", &gShift_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat2("bShift", &bShift_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat2("shiftVelocity_", &shiftVelocity_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat("gti", &glitchTime_, 0.01f);
+	ImGui::Checkbox("IsShift", &isShift_);
 	ImGui::End();
 
 	//Obj
@@ -441,7 +453,7 @@ void GameScene::ModelCreate()
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
-	
+
 	// 背景モデル
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
 
@@ -524,7 +536,7 @@ void GameScene::CollisionUpdate()
 	}
 	// プレイヤーの足場
 	collision2DManager_->ListRegister(&player_->GetFootCollider()->boxCollider_);
-	
+
 	// マップ
 	mapManager_->CollisionRegister(collision2DManager_.get(), camera_);
 

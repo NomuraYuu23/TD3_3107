@@ -2,7 +2,7 @@
     "Dash": {
         "AcceptFrame": 10.0,
         "DashPower": 30.0,
-        "SlowFrame": 60.0,
+        "SlowFrame": 10.0,
         "SlowRatio": 3.0
     }
 }
