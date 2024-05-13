@@ -19,6 +19,11 @@
     <FxCompile Include="Resources\shaders\Outline.VS.hlsl" />
     <FxCompile Include="Resources\shaders\AnimInverseModel.VS.hlsl" />
     <FxCompile Include="Resources\shaders\AnimModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffectCalc.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffect.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSprite.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSprite.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSpriteStorage.CS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
@@ -51,7 +56,6 @@
     <ClCompile Include="Application\UI\UIManager.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
-    <ClCompile Include="Engine\2D\WindowSprite.cpp" />
     <ClCompile Include="Engine\3D\LargeNumberOfObjects.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
@@ -189,6 +193,8 @@
     <ClCompile Include="Engine\3D\Outline.cpp" />
     <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
     <ClCompile Include="Engine\base\CrashHandler.cpp" />
+    <ClCompile Include="Engine\base\WindowSprite.cpp" />
+    <ClCompile Include="Engine\PostEffect\Velocity2DManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -239,7 +245,6 @@
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\2D\SpriteForGPU.h" />
     <ClInclude Include="Engine\2D\SpriteVertex.h" />
-    <ClInclude Include="Engine\2D\WindowSprite.h" />
     <ClInclude Include="Engine\3D\LargeNumberOfObjects.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
     <ClInclude Include="Engine\3D\ModelLoader.h" />
@@ -409,6 +414,8 @@
     <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
     <ClInclude Include="Engine\base\CrashHandler.h" />
     <ClInclude Include="Engine\base\OutputLog.h" />
+    <ClInclude Include="Engine\base\WindowSprite.h" />
+    <ClInclude Include="Engine\PostEffect\Velocity2DManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -421,6 +428,9 @@
     <None Include="Resources\shaders\ManyModels.hlsli" />
     <None Include="Resources\shaders\Model.hlsli" />
     <None Include="Resources\shaders\Outline.hlsli" />
+    <None Include="Resources\shaders\PostEffect.hlsli" />
+    <None Include="Resources\shaders\WindowSpriteStorage.hlsli" />
+    <None Include="Resources\shaders\WindowSprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
