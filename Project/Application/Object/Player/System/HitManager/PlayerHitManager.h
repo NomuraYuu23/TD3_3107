@@ -65,6 +65,8 @@ public:
 	struct Effect {
 		float time;
 		Vector2 rShift, gShift, bShift;
+		bool isStop;
+		float nowFrame;
 	};
 	Effect hitEffect_;
 

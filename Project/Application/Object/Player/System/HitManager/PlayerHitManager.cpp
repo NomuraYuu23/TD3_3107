@@ -12,7 +12,7 @@ void PlayerHitManager::Initialize(Player* player)
 	hp_.decreValue_ = 1;
 
 	invMaxFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "HitInvisibleFrame");
-	defaultData_ = { 3.0f,{4.0f,0},{-3.0f,0},{1.5f,-1.5f} };
+	defaultData_ = { 3.0f,{4.0f,0},{-3.0f,0},{1.5f,-1.5f},false,0 };
 }
 
 void PlayerHitManager::Update()
@@ -25,10 +25,18 @@ void PlayerHitManager::Update()
 	hitEffectTimer_.Update();
 	if (hitEffectTimer_.IsActive()) {
 		hitEffect_.time = Ease::Easing(Ease::EaseName::Lerp, 0, defaultData_.time, hitEffectTimer_.GetNowFrame());
+		if (hitEffect_.nowFrame > 2.0f) {
+			hitEffect_.isStop = true;
+		}
+		else {
+			hitEffect_.isStop = false;
+		}
 	}
 	else {
 		hitEffect_ = {};
 	}
+	hitEffect_.nowFrame++;
+
 }
 
 void PlayerHitManager::OnHit()
@@ -68,6 +76,8 @@ void PlayerHitManager::OnHit(uint32_t decrement)
 		hitEffect_.gShift = defaultData_.gShift;
 		hitEffect_.bShift = defaultData_.bShift;
 
+		hitEffect_.nowFrame = 0;
+		hitEffect_.isStop = true;
 
 		// HP削る
 		hp_.current -= decrement;

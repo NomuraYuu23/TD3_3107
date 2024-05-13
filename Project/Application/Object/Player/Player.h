@@ -59,7 +59,7 @@ public: // アクセッサ
 	Box GetBoxCollider() override { return boxCollider_; }
 
 	PlayerHitManager::Effect GetEffectInfo() { return hpManager_.hitEffect_; }
-
+	PlayerHitManager GetHitManager() { return hpManager_; }
 public: // メンバ関数
 	/// <summary>
 	/// ステートの変更
@@ -239,6 +239,11 @@ private: // アニメーション関連
 private:
 	void SystemInitialize();
 	void SystemUpdate();
+
+public:
+	void HitUpdate() {
+		hpManager_.Update();
+	}
 
 };
 

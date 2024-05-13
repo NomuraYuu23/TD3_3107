@@ -197,6 +197,13 @@ void GameScene::Update() {
 	pointLightManager_->Update(pointLightDatas_);
 	spotLightManager_->Update(spotLightDatas_);
 
+	if (player_->GetEffectInfo().isStop) {
+		player_->HitUpdate();
+		// デバッグカメラ
+		DebugCameraUpdate();
+		return;
+	}
+
 	//Obj
 	// マップ
 	mapManager_->Update();
@@ -427,6 +434,10 @@ void GameScene::DebugCameraUpdate()
 		followCamera_->Update();
 		// 
 		camera_ = static_cast<BaseCamera>(*followCamera_.get());
+
+		if (player_->GetEffectInfo().isStop && !camera_.IsShakeNow()) {
+			camera_.ShakeStart(1.0f, 2);
+		}
 		// 
 		camera_.Update();
 	}
