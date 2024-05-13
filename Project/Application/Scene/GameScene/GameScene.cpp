@@ -161,6 +161,18 @@ void GameScene::Initialize() {
 	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
 	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y,player_->throwDirect_.x));
 
+	/// ポストエフェクトの値初期化
+	// ブルーム
+	PostEffect* pe = PostEffect::GetInstance();
+	pe->SetThreshold(0.15f);
+	pe->SetKernelSize(10);
+	pe->SetSigma(12.5f);
+
+	FogManager* fm = FogManager::GetInstance();
+	fm->SetColor({ 0.35f, 0.75f, 1.0f, 1.0f });
+	fm->SetNear(50.0f);
+	fm->SetRadius(1000.0f);
+
 	// Jsonデータのクラス
 #ifdef _DEBUG
 
@@ -357,6 +369,13 @@ void GameScene::Draw() {
 
 #pragma endregion
 
+	// ブルーム描画
+	renderTargetTexture_->ChangePixelShaderResource(0);
+	PostEffect::GetInstance()->BloomCommand(dxCommon_->GetCommadList(), 0, renderTargetTexture_->GetSrvGPUHandle(0));
+
+	renderTargetTexture_->ChangeRenderTarget(0);
+
+	renderTargetTexture_->TextureDraw(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 }
 
 void GameScene::ImguiDraw(){
@@ -447,6 +466,11 @@ void GameScene::ImguiDraw(){
 	followCamera_->ImGuiDraw();
 
 	gameData_->ApplyGlobalVariables();
+
+	// ポストエフェクトのImGuiを表示
+	PostEffect::GetInstance()->ImGuiDraw();
+	// フォグのImGuiの表示
+	FogManager::GetInstance()->ImGuiDraw();
 
 #endif // _DEBUG
 
