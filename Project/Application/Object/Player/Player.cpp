@@ -64,9 +64,9 @@ void Player::Update()
 		// ポニーテール用トランスフォーム更新
 		ponyTailTransform_.UpdateMatrix();
 
-		//ponytail_->SetAnchor(0, true);
+		ponytail_->SetAnchor(0, true);
 		// 追従先座標を渡す
-		ponytail_->SetPosition(0, ponyTailTransform_.GetWorldPosition());
+		//ponytail_->SetPosition(0, ponyTailTransform_.GetWorldPosition());
 		// 更新
 		ponytail_->Update();
 	}

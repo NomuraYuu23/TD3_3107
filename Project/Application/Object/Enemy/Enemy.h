@@ -88,6 +88,9 @@ public:
 
 	Vector2 prevPosition_ = {};
 
+	// 敵の移動方向を求めるための前フレーム座標
+	Vector3 prevTranslate_ = {};
+
 	// コライダー
 	Box boxCollider_;
 

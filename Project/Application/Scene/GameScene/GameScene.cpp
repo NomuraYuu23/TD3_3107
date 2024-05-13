@@ -90,15 +90,15 @@ void GameScene::Initialize() {
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
 	player_->Initialize(playerModel_.get());
-	// 紐挙動がバグってるので一旦コメントアウト
-	//player_->SetPonyTail(ponyTailModel_.get());
+	// ポニーテール
+	player_->SetPonyTail(ponyTailModel_.get());
 
 	// 更新
 	//countTime_ = 0;
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(terrainModel_.get());
+	enemyManager_->Initialize(enemyModel_.get());
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -446,7 +446,7 @@ void GameScene::ModelCreate()
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 敵モデル
-	enemyModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
+	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_, textureHandleManager_.get()));
 
 }
 
@@ -459,7 +459,7 @@ void GameScene::TextureLoad()
 	};
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-	enemyTexture_ = TextureManager::Load("Resources/default/red2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 
