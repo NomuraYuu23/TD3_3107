@@ -37,6 +37,7 @@ void Weapon::Update()
 {
 	isGravity_ = false;
 	isEnemyImpaled_ = false;
+	isPlayerJumpAccept_ = player_->spearJumpAccepter_.IsActive();
 
 	prevDirect_ = { worldtransform_.direction_.x,worldtransform_.direction_.y };
 
@@ -359,7 +360,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	else if (std::holds_alternative<ImpaledState*>(nowState_)) {
 		if (std::holds_alternative<Enemy*>(target)) {
 			isEnemyImpaled_ = true;
-			if (player_->spearJumpAccepter_.IsActive()) {
+			if (isPlayerJumpAccept_) {
 				player_->SetFallTimer(); 
 				ChangeRequest(Weapon::StateName::kFreeFall);
 			}

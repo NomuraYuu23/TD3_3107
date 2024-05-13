@@ -94,8 +94,9 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
 			}
 		}
-		else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) /*||
-			std::holds_alternative<ReturnState*>((*weapon)->GetNowState())*/) {
+		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
+		//	std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
+		else if((*weapon)->IsPlayerJump()){
 			isDead_ = true;
 		}
 

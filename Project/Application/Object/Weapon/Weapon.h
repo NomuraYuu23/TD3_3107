@@ -86,6 +86,8 @@ public: // アクセッサ
 
 	bool IsEnemyImpaled() { return isEnemyImpaled_; }
 
+	bool IsPlayerJump() { return isPlayerJumpAccept_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -171,5 +173,8 @@ private:
 	bool isEnemyImpaled_ = false;
 
 	Player* player_ = nullptr;
+	// 槍ジャンプを行ったかどうか
+	bool isPlayerJumpAccept_ = false;
+
 };
 
