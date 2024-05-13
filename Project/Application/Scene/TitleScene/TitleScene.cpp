@@ -38,8 +38,6 @@ void TitleScene::Initialize()
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
 
-	requestSceneNo = kGame;
-
 }
 
 void TitleScene::Update()
@@ -50,13 +48,13 @@ void TitleScene::Update()
 #endif // _DEBUG
 
 	if ((input_->TriggerJoystick(JoystickButton::kJoystickButtonA) || input_->TriggerKey(DIK_SPACE)) &&
-		requestSceneNo == kTitle) {
+		requestSceneNo_ == kTitle) {
 		// 行きたいシーンへ
-		requestSceneNo = kGame;
+		requestSceneNo_ = kGame;
 	}
 
 	// BGM音量下げる
-	if (requestSceneNo == kTutorial && isDecreasingVolume) {
+	if (requestSceneNo_ == kTutorial && isDecreasingVolume) {
 		LowerVolumeBGM();
 	}
 	
@@ -85,10 +83,10 @@ void TitleScene::Draw()
 
 	ModelDraw::PreDrawDesc preDrawDesc;
 	preDrawDesc.commandList = dxCommon_->GetCommadList();
-	preDrawDesc.directionalLight = nullptr;
+	preDrawDesc.directionalLight = directionalLight_.get();
 	preDrawDesc.fogManager = FogManager::GetInstance();
-	preDrawDesc.pointLightManager = nullptr;
-	preDrawDesc.spotLightManager = nullptr;
+	preDrawDesc.pointLightManager = pointLightManager_.get();
+	preDrawDesc.spotLightManager = spotLightManager_.get();
 
 	ModelDraw::PreDraw(preDrawDesc);
 

@@ -23,6 +23,7 @@ void GroundState::Initialize()
 	}
 	
 	player_->KnockBackOnGround();
+	player_->EndAssistDash();
 }
 
 void GroundState::Update()
