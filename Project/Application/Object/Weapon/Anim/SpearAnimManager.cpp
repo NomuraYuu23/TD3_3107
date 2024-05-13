@@ -11,6 +11,9 @@ void SpearAnimManager::Init(Weapon* weapon)
 		weapon_->model_->GetNodeAnimationData(),
 		weapon_->localMatrixManager_->GetInitTransform(),
 		weapon_->localMatrixManager_->GetNodeNames());
+
+	// アニメーション開始
+	anim_.StartAnimation(0, true);
 }
 
 void SpearAnimManager::Update()
@@ -35,7 +38,7 @@ void SpearAnimManager::PlayAnimation(int32_t animNum, bool isLoop, bool isFinish
 void SpearAnimManager::StopAnimationAll()
 {
 	// 全アニメーション分ループ
-	for (int i = 0; i < 0; i++) {
+	for (int i = 0; i < 4; i++) {
 		anim_.StopAnimation(i);
 	}
 }
