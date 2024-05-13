@@ -224,8 +224,8 @@ private: // アニメーション関連
 
 	// ポニーテール用紐クラス
 	std::unique_ptr<String> ponytail_;
-	// ポニテ用トランスフォーム
-	WorldTransform ponyTailTransform_;
+	// ポニテ用座標
+	Vector3 ponyAnchorPos_ = {};
 
 	// アニメーションマネージャー
 	std::unique_ptr<PlayerAnimManager> anim_;

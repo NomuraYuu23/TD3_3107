@@ -35,7 +35,6 @@ void Player::Initialize(Model* model)
 	weapon_->SettingParent();
 	isGround_ = false;
 
-	
 	// アニメーション関連初期化
 	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
 	anim_->Init(this);							   // 初期化
@@ -61,12 +60,17 @@ void Player::Update()
 
 	// ポニーテール更新
 	if (ponytail_ != nullptr) {
-		// ポニーテール用トランスフォーム更新
-		ponyTailTransform_.UpdateMatrix();
+		// 行列を求める
+		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[12].matrix * worldtransform_.worldMatrix_;
+		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
+		ponyAnchorPos_ = worldtransform_.GetWorldPosition();
 
+		// アンカー設定
 		ponytail_->SetAnchor(0, true);
+
 		// 追従先座標を渡す
-		//ponytail_->SetPosition(0, ponyTailTransform_.GetWorldPosition());
+		ponytail_->SetPosition(0, ponyAnchorPos_);
+
 		// 更新
 		ponytail_->Update();
 	}
@@ -224,9 +228,7 @@ void Player::ImGuiDraw()
 	}
 
 	ImGui::Text("\n PonyTailTransfporm");
-	ImGui::DragFloat3("Scale", &ponyTailTransform_.transform_.scale.x);
-	ImGui::DragFloat3("Rotate", &ponyTailTransform_.transform_.rotate.x);
-	ImGui::DragFloat3("Translate", &ponyTailTransform_.transform_.translate.x);
+	ImGui::DragFloat3("AnchorPos", &ponyAnchorPos_.x);
 
 	ImGui::End();
 
@@ -690,22 +692,28 @@ void Player::SetFallTimer()
 
 void Player::SetPonyTail(Model* model)
 {
-	// ポニテトランスフォーム初期化
-	ponyTailTransform_.Initialize();
-
-	// プレイヤーのトランスフォームに親子付け
-	//ponyTailTransform_.SetParent(&worldtransform_);
+	// 行列を求める
+	ponyAnchorPos_ = worldtransform_.GetWorldPosition();
 
 	// ポニーテール用紐生成
 	ponytail_ = std::make_unique<String>();
 	// 初期化
 	ponytail_->Initialize(
 		model,
-		ponyTailTransform_.GetWorldPosition(),
-		0.001f,
+		ponyAnchorPos_,
+		0.1f,
 		500.0f,
 		2.0f,
-		0.0f);
+		0.5f);
+
+	// アンカー設定
+	ponytail_->SetAnchor(0, true);
+
+	// 追従先座標を渡す
+	ponytail_->SetPosition(0, ponyAnchorPos_);
+
+	// 更新
+	ponytail_->Update();
 }
 
 void Player::SystemInitialize()

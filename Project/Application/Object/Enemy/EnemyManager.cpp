@@ -34,6 +34,15 @@ void EnemyManager::Initialize(Model* model)
 	RegisterEnemy({ 0,10.0f,0 }, 0, &emitters_[0]);
 	RegisterEnemy({ 0,-10.0f,0 }, 0, &emitters_[0]);
 
+
+	//// アニメーション取得と初期化
+	//anim_.Initialize(
+	//	model_->GetNodeAnimationData(),
+	//	localMatrixManager_->GetInitTransform(),
+	//	localMatrixManager_->GetNodeNames());
+
+	//// アニメーション開始
+	//anim_.StartAnimation(0, true);
 }
 
 void EnemyManager::Update()

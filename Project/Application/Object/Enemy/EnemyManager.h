@@ -4,6 +4,7 @@
 #include "../../../Engine/Collider2D/Box.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
+#include "../../../Engine/Animation/Animation.h"
 
 class EnemyManager : public LargeNumberOfObjects
 {
@@ -57,5 +58,8 @@ private:
 	std::list<WorldTransform> enemyEmitterTest_;
 
 	Vector3 resPoint_ = {};
+
+	// アニメーション本体
+	Animation anim_;
 
 };
