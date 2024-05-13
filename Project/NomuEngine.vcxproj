@@ -150,7 +150,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\UI\UIManager.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
-    <ClCompile Include="Engine\2D\WindowSprite.cpp" />
     <ClCompile Include="Engine\3D\FogManager.cpp" />
     <ClCompile Include="Engine\3D\LargeNumberOfObjects.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
@@ -158,6 +157,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
     <ClCompile Include="Engine\3D\ModelNode.cpp" />
     <ClCompile Include="Engine\3D\OneOfManyObjects.cpp" />
+    <ClCompile Include="Engine\3D\Outline.cpp" />
     <ClCompile Include="Engine\Animation\Animation.cpp" />
     <ClCompile Include="Engine\Animation\AnimationData.cpp" />
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
@@ -165,6 +165,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Animation\NodeAnimationData.cpp" />
     <ClCompile Include="Engine\Audio\AudioManager.cpp" />
     <ClCompile Include="Engine\base\CompileShader.cpp" />
+    <ClCompile Include="Engine\base\CrashHandler.cpp" />
     <ClCompile Include="Engine\base\DSVDescriptorHerpManager.cpp" />
     <ClCompile Include="Engine\base\DxCommand.cpp" />
     <ClCompile Include="Engine\base\DXGIDevice.cpp" />
@@ -179,6 +180,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\SRVDescriptorHerpManager.cpp" />
     <ClCompile Include="Engine\base\SwapChain.cpp" />
     <ClCompile Include="Engine\base\TextureUAV.cpp" />
+    <ClCompile Include="Engine\base\WindowSprite.cpp" />
+    <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
     <ClCompile Include="Engine\Collider2D\Box.cpp" />
     <ClCompile Include="Engine\Collider2D\Circle.cpp" />
     <ClCompile Include="Engine\Collider2D\Collider2D.cpp" />
@@ -219,6 +222,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\PostEffect\PostEffect.cpp" />
     <ClCompile Include="Engine\PostEffect\ShockWaveManager.cpp" />
     <ClCompile Include="Engine\PostEffect\Velocity2DData.cpp" />
+    <ClCompile Include="Engine\PostEffect\Velocity2DManager.cpp" />
     <ClCompile Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.cpp" />
     <ClCompile Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.cpp" />
     <ClCompile Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.cpp" />
@@ -340,7 +344,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\2D\LineForGPU.h" />
     <ClInclude Include="Engine\2D\SpriteForGPU.h" />
     <ClInclude Include="Engine\2D\SpriteVertex.h" />
-    <ClInclude Include="Engine\2D\WindowSprite.h" />
     <ClInclude Include="Engine\3D\FogData.h" />
     <ClInclude Include="Engine\3D\FogManager.h" />
     <ClInclude Include="Engine\3D\LargeNumberOfObjects.h" />
@@ -350,6 +353,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\ModelNode.h" />
     <ClInclude Include="Engine\3D\ModelNodeData.h" />
     <ClInclude Include="Engine\3D\OneOfManyObjects.h" />
+    <ClInclude Include="Engine\3D\Outline.h" />
+    <ClInclude Include="Engine\3D\OutlineData.h" />
     <ClInclude Include="Engine\3D\VertexInfluence.h" />
     <ClInclude Include="Engine\Animation\Animation.h" />
     <ClInclude Include="Engine\Animation\AnimationData.h" />
@@ -359,6 +364,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Animation\NodeAnimationData.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Engine\base\CompileShader.h" />
+    <ClInclude Include="Engine\base\CrashHandler.h" />
     <ClInclude Include="Engine\base\DSVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\DxCommand.h" />
     <ClInclude Include="Engine\base\DXGIDevice.h" />
@@ -368,11 +374,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\GraphicsPipelineState\SamplerManager.h" />
     <ClInclude Include="Engine\base\ITextureHandleManager.h" />
     <ClInclude Include="Engine\base\Log.h" />
+    <ClInclude Include="Engine\base\OutputLog.h" />
     <ClInclude Include="Engine\base\RenderTargetTexture.h" />
     <ClInclude Include="Engine\base\RTVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\SwapChain.h" />
     <ClInclude Include="Engine\base\TextureUAV.h" />
+    <ClInclude Include="Engine\base\WindowSprite.h" />
+    <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
     <ClInclude Include="Engine\Camera\CameraForGPU.h" />
     <ClInclude Include="Engine\Camera\ViewProjectionMatrix.h" />
     <ClInclude Include="Engine\Collider2D\Box.h" />
@@ -428,6 +437,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
     <ClInclude Include="Engine\PostEffect\Velocity2DData.h" />
+    <ClInclude Include="Engine\PostEffect\Velocity2DManager.h" />
     <ClInclude Include="Engine\SceneTransition\SceneTransitionFactory\AbstractSceneTransitionFactory.h" />
     <ClInclude Include="Engine\SceneTransition\ISceneTransition\ISceneTransition.h" />
     <ClInclude Include="Application\SceneTransition\SceneTransitionFactory\SceneTransitionFactory.h" />
@@ -515,7 +525,19 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="Resources\shaders\ManyModels.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Resources\shaders\Model.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="resources\shaders\Object3d.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Resources\shaders\Outline.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
@@ -523,12 +545,32 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="Resources\shaders\PostEffect.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="Resources\shaders\Sprite.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Resources\shaders\WindowSprite.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Resources\shaders\WindowSpriteStorage.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Resources\shaders\AnimInverseModel.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\AnimModel.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Resources\shaders\Collider2DDebug.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -545,11 +587,39 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ManyAnimModels.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ManyModels.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ManyNormalModels.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\Model.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\NormalModel.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="resources\shaders\Object3d.PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">6.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\Outline.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\Outline.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
@@ -561,11 +631,31 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffect.CS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectCalc.CS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Resources\shaders\Sprite.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Resources\shaders\Sprite.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\WindowSprite.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\WindowSprite.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\WindowSpriteStorage.CS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

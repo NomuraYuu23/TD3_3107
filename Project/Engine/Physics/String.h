@@ -81,7 +81,7 @@ public:
 	/// <param name="pointIndex">インデックス</param>
 	/// <param name="position">位置</param>
 	void SetPosition(uint32_t pointIndex, const Vector3& position);
-
+	
 public: // アクセッサ
 
 	std::vector<StructuralSpring> GetSpring() { return structuralSpring_; }
@@ -98,7 +98,7 @@ private: // 変数(モデル)
 	// マテリアル
 	std::unique_ptr<Material> material_ = nullptr;
 	// ワールドトランスフォーム
-	WorldTransform worldTransform_;
+	WorldTransform worldTransform_{};
 	// ローカル行列
 	std::unique_ptr<LocalMatrixManager> localMatrixManager_ = nullptr;
 
