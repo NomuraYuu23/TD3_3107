@@ -27,10 +27,6 @@ private: // サブクラス
 		float offsetLength;
 	};
 
-	Vector2 up = { 1.0f,1.0f };
-	Vector2 tag = { -1.0f,1.0f };
-	Vector2 perVec = { up.x,up.y * -1.0f };
-
 public: // 継承
 	/// <summary>
 	/// 初期化
@@ -153,6 +149,10 @@ public:
 	/// <param name="model">モデル</param>
 	void SetPonyTail(Model* model);
 
+
+	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
+	void EndAssistDash() { assistDash_.SlowCancel(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -229,6 +229,13 @@ private: // アニメーション関連
 
 	// アニメーションマネージャー
 	std::unique_ptr<PlayerAnimManager> anim_;
+
+	// 空中ダッシュシステム
+	AssistDash assistDash_;
+
+private:
+	void SystemInitialize();
+	void SystemUpdate();
 
 };
 

@@ -9,6 +9,7 @@ void GameObjectData::Initialize()
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "Gravity", common_.gravity_);
 	globalVariables_->AddItem(groupName, "SlowFactor", common_.slowMotionFactor_);
+	globalVariables_->AddItem(groupName, "DeadZone", common_.stickDeadZone_);
 
 	groupName = "Player";
 	// グループを追加
@@ -59,6 +60,14 @@ void GameObjectData::Initialize()
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "Offset", camera_.offset_);
 
+	groupName = "Dash";
+	// グループを追加
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, "AcceptFrame", dash_.acceptFrame_);
+	globalVariables_->AddItem(groupName, "DashPower", dash_.dashPower_);
+	globalVariables_->AddItem(groupName, "SlowFrame", dash_.slowFrame_);
+	globalVariables_->AddItem(groupName, "SlowRatio", dash_.slowRatio_);
+
 	ApplyGlobalVariables();
 
 
@@ -70,6 +79,7 @@ void GameObjectData::ApplyGlobalVariables()
 	const char* groupName = "Common";
 	common_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	common_.slowMotionFactor_ = globalVariables_->GetFloatValue(groupName, "SlowFactor");
+	common_.stickDeadZone_ = globalVariables_->GetFloatValue(groupName, "DeadZone");
 
 	// プレイヤー
 	groupName = "Player";
@@ -111,5 +121,12 @@ void GameObjectData::ApplyGlobalVariables()
 	groupName = "Camera";
 	// グループを追加
 	camera_.offset_ = globalVariables_->GetVector3Value(groupName, "Offset");
+
+	groupName = "Dash";
+	// グループを追加
+	dash_.acceptFrame_ = globalVariables_->GetFloatValue(groupName, "AcceptFrame");
+	dash_.dashPower_ = globalVariables_->GetFloatValue(groupName, "DashPower");
+	dash_.slowFrame_ = globalVariables_->GetFloatValue(groupName, "SlowFrame");
+	dash_.slowRatio_ = globalVariables_->GetFloatValue(groupName, "SlowRatio");
 
 }

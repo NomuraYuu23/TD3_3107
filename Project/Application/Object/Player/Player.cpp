@@ -25,19 +25,8 @@ void Player::Initialize(Model* model)
 	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
-	// 入力処理受付クラス
-	controller_.Initialize(this);
-	// 反動クラス
-	recoil_.Initialize(this);
-	// 足場クラス
-	footCollider_.Initialize(model, this);
-	// 補正クラス
-	correctSystem_.Initialize(this);
-	// HPクラス
-	hpManager_.Initialize(this);
-	// コンボクラス
-	jumpCombo_.Reset();
-	knockBackSystem_.Initialize(this);
+	// システム系の初期化
+	SystemInitialize();
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
@@ -46,12 +35,6 @@ void Player::Initialize(Model* model)
 	weapon_->SettingParent();
 	isGround_ = false;
 
-	// 放物線
-	parabola_.Initialize();
-	connectingSpearLineColor_ = { 0.8f, 0.0f, 0.8f, 1.0f };
-	// レイ
-	rayLength_ = -100.0f;
-	cameraRay_.Initialize(this);
 	
 	// アニメーション関連初期化
 	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
@@ -69,20 +52,8 @@ void Player::Update()
 		actionState_->Update();
 	}
 
-	// 操作クラス
-	controller_.Update();
-	// 反動クラス
-	recoil_.Update();
-	// ノックバック
-	knockBackSystem_.Update();
-	// 
-	correctSystem_.Update(enemyManager_);
-	// 落下中の引き寄せタイマークラス
-	fallTimer_.Update();
-	// 無敵時間の処理もするので更新必須
-	hpManager_.Update();
-	// 仮の踏んだ時のチェック
-	spearJumpAccepter_.Update();
+	SystemUpdate();
+
 	// 武器の更新
 	if (weapon_) {
 		weapon_->Update();
@@ -330,7 +301,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 			//}
 			//// 反動生成
 			//recoil_.CreateRecoil(Vector3(direct.x, direct.y, 0));
-
+			float acceptFrame = GlobalVariables::GetInstance()->GetFloatValue("Dash", "AcceptFrame");
+			assistDash_.StartAccept(acceptFrame);
 			//// 着地している場合早期リターン
 			if (std::holds_alternative<GroundState*>(nowState_)) {
 				return;
@@ -658,6 +630,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 		else {
 			hpManager_.OnHit(1);
 		}
+		// キャンセル
+		assistDash_.SlowCancel();
 
 	}
 	// ボス
@@ -732,4 +706,50 @@ void Player::SetPonyTail(Model* model)
 		500.0f,
 		2.0f,
 		0.0f);
+}
+
+void Player::SystemInitialize()
+{
+	// 入力処理受付クラス
+	controller_.Initialize(this);
+	// 反動クラス
+	recoil_.Initialize(this);
+	// 足場クラス
+	footCollider_.Initialize(model_, this);
+	// 補正クラス
+	correctSystem_.Initialize(this);
+	// HPクラス
+	hpManager_.Initialize(this);
+	// コンボクラス
+	jumpCombo_.Reset();
+	// 
+	knockBackSystem_.Initialize(this);
+	// 空中ダッシュのクラス
+	assistDash_.Initialize(this);
+	// 放物線
+	parabola_.Initialize();
+	connectingSpearLineColor_ = { 0.8f, 0.0f, 0.8f, 1.0f };
+	// レイ
+	rayLength_ = -100.0f;
+	cameraRay_.Initialize(this);
+}
+
+void Player::SystemUpdate()
+{
+	// 操作クラス
+	controller_.Update();
+	// 反動クラス
+	recoil_.Update();
+	// ノックバック
+	knockBackSystem_.Update();
+	// 
+	correctSystem_.Update(enemyManager_);
+	// 落下中の引き寄せタイマークラス
+	fallTimer_.Update();
+	// 無敵時間の処理もするので更新必須
+	hpManager_.Update();
+	// 仮の踏んだ時のチェック
+	spearJumpAccepter_.Update();
+	// 空中ダッシュ
+	assistDash_.Update();
 }

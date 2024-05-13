@@ -72,7 +72,7 @@ void TutorialScene::Update() {
 	ImguiDraw();
 #endif
 
-	if (requestSceneNo == kClear || requestSceneNo == kTitle || isBeingReset_) {
+	if (requestSceneNo_ == kClear || requestSceneNo_ == kTitle || isBeingReset_) {
 		resetScene_ = false;
 		// BGM音量下げる
 		if (isDecreasingVolume) {
@@ -123,11 +123,7 @@ void TutorialScene::Draw() {
 void TutorialScene::ImguiDraw() {
 #ifdef _DEBUG
 
-	ImGui::Begin("Light");
-	ImGui::DragFloat3("direction", &direction.x, 0.1f);
-	ImGui::DragFloat("i", &intencity, 0.01f);
-	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
-	ImGui::End();
+
 
 	// スカイドーム
 	skydome_->ImGuiDraw();
