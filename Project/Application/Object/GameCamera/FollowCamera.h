@@ -29,6 +29,8 @@ public:
 		targetTransform_ = &player_->worldtransform_;
 	}
 
+	void ScalingUpDown();
+
 private:
 	// プレイヤー
 	Player* player_ = nullptr;

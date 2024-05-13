@@ -72,7 +72,7 @@ private: // データ用構造体クラス
 
 		// 画面外から戻ってくる際の画面外の距離
 		float deadLength_;
-	
+
 		// 体力データ
 		HealthData hpData_;
 
@@ -115,11 +115,16 @@ private: // データ用構造体クラス
 		float onSpearWaitFrame_;
 		// 槍ジャンプ
 		float highJumpPower_;
-
+		// 槍じゃん用の重力
+		float jumpGravity_;
 	};
 
 	struct BossData {
 		float gravity_;
+	};
+
+	struct CameraData {
+		Vector3 offset_;
 	};
 
 public:
@@ -149,5 +154,7 @@ private:
 	WeaponData weapon_;
 	// 槍ジャンプの情報
 	SpearJumpData spearJump_;
+	// カメラ関係の情報
+	CameraData camera_;
 };
 

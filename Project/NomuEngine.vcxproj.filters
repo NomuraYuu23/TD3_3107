@@ -181,6 +181,7 @@
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
     <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\AutoComeBack.cpp" />
+    <ClCompile Include="Application\Object\Player\System\AssistDash\AssistDash.cpp" />
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +402,7 @@
     <ClInclude Include="Engine\Particle\EmitterDesc.h" />
     <ClInclude Include="Application\Object\BackGround\BackGround.h" />
     <ClInclude Include="Application\Object\Weapon\System\AutoComeBack.h" />
+    <ClInclude Include="Application\Object\Player\System\AssistDash\AssistDash.h" />
     <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
   </ItemGroup>
   <ItemGroup>

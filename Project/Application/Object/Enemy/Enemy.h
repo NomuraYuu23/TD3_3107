@@ -5,6 +5,12 @@
 
 class Enemy : public OneOfManyObjects
 {
+private:
+	// 共通
+	static uint32_t sSerialNumber_;
+	// シリアルナンバー
+	uint32_t serialNum_ = 0;
+
 public:
 	/// <summary>
 	/// 初期化
@@ -65,10 +71,7 @@ private:
 	
 
 private:
-	// シリアルナンバー
-	uint32_t serialNum_ = 0;
-
-	static uint32_t sSerialNumber_;
+	std::string name_;
 
 	EnemyState judState_;
 
@@ -91,7 +94,7 @@ public:
 	// 速度
 	Vector3 velocity_ = {};
 
-	// 親の座標
-	Vector3 parentPosition_;
+	//// 親の座標
+	//Vector3 parentPosition_;
 
 };

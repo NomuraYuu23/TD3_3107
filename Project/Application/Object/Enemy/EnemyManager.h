@@ -25,6 +25,8 @@ public:
 	/// </summary>
 	void Update() override;
 
+	//void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles);
+
 	/// <summary>
 	/// ImGUi
 	/// </summary>
@@ -36,21 +38,10 @@ public:
 	void CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera);
 
 private:
-	///// <summary>
-	///// ブロックの追加
-	///// </summary>
-	//void RegisterBlock();
-	//void RegisterBlock(const Vector3& position);
-	//void RegisterBlock(const Vector3& position, const Vector2 scale);
-
-	//void InitializePlacement();
-
 	/// <summary>
 	/// 敵の追加
 	/// </summary>
 	void RegisterEnemy(const Vector3& position, uint32_t typeNum);
-
-	void RegisterEnemy(const Vector3& offset, uint32_t typeNum, const Vector3& parent);
 	void RegisterEnemy(const Vector3& offset, uint32_t typeNum, WorldTransform* parent);
 
 	struct EnemyEmitter {

@@ -12,6 +12,7 @@ void FreeFallState::Initialize()
 	// 仮の値
 	float valueX = 2.0f;
 	// 速度設定
+	// weapon_->velocity_ = {};
 	weapon_->velocity_.x = weapon_->velocity_.x * valueX;
 	weapon_->velocity_.y = 40.0f;
 
