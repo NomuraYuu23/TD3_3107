@@ -6,6 +6,7 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../Particle/EmitterName.h"
 #include "../../../Engine/Math/DeltaTime.h"
+#include "../../../Engine/base/WindowSprite.h"
 
 GameScene::~GameScene()
 {
@@ -310,6 +311,19 @@ void GameScene::Draw() {
 
 #pragma endregion
 
+	if (isShift_) {
+		PlayerHitManager::Effect instance = player_->GetEffectInfo();
+		PostEffect::GetInstance()->SetRShift(instance.rShift);
+		PostEffect::GetInstance()->SetGShift(instance.gShift);
+		PostEffect::GetInstance()->SetBShift(instance.bShift);
+		PostEffect::GetInstance()->SetTime(instance.time);
+		PostEffect::GetInstance()->Execution(
+			dxCommon_->GetCommadList(),
+			renderTargetTexture_,
+			PostEffect::kCommandIndexGlitchRGBShift);
+		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	}
+
 }
 
 void GameScene::ImguiDraw(){
@@ -318,6 +332,13 @@ void GameScene::ImguiDraw(){
 	ImGui::Begin("GameScene");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
 	ImGui::Text("ColliderManagerSize : %d", (int)collision2DManager_->GetColliders().size());
+	float abs = 256.0f;
+	ImGui::DragFloat2("rShift", &rShift_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat2("gShift", &gShift_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat2("bShift", &bShift_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat2("shiftVelocity_", &shiftVelocity_.x, 0.01f, -abs, abs);
+	ImGui::DragFloat("gti", &glitchTime_, 0.01f);
+	ImGui::Checkbox("IsShift", &isShift_);
 	ImGui::End();
 
 	//Obj

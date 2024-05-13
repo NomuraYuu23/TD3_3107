@@ -92,6 +92,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			}
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
+				weapon_ = (*weapon);
 			}
 		}
 		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
@@ -175,6 +176,9 @@ void Enemy::CheckParent()
 	if (!parent_) {
 		//if (!parentEmitter_->IsRotateReturn() && (goalAngle_ == parentEmitter_->GetNowAngle())) {
 		if (!interval_.IsActive() && (goalAngle_ == parentEmitter_->GetNowAngle())) {
+			if (weapon_) {
+				weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
 			ResetParent();
 		}
 	}

@@ -122,6 +122,8 @@ private:
 	// 状態
 	std::unique_ptr<IEnemyState> state_;
 
+	Weapon* weapon_ = nullptr;
+
 public:
 
 	// コライダー用の座標・スケール

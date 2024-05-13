@@ -1,6 +1,7 @@
 #include "PlayerHitManager.h"
 #include "../../Player.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../../../Engine/Math/Ease.h"
 
 void PlayerHitManager::Initialize(Player* player)
 {
@@ -11,7 +12,7 @@ void PlayerHitManager::Initialize(Player* player)
 	hp_.decreValue_ = 1;
 
 	invMaxFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "HitInvisibleFrame");
-
+	defaultData_ = {};
 }
 
 void PlayerHitManager::Update()
@@ -21,6 +22,13 @@ void PlayerHitManager::Update()
 	}
 
 	invisibleTimer_.Update();
+	hitEffectTimer_.Update();
+	if (hitEffectTimer_.IsActive()) {
+		hitEffect_.time = Ease::Easing(Ease::EaseName::Lerp, 0, defaultData_.time, hitEffectTimer_.GetNowFrame());
+	}
+	else {
+		hitEffect_ = {};
+	}
 }
 
 void PlayerHitManager::OnHit()
@@ -28,6 +36,12 @@ void PlayerHitManager::OnHit()
 	if (!invisibleTimer_.IsActive()) {
 		// 無敵開始
 		invisibleTimer_.Start(invMaxFrame_);
+
+		hitEffectTimer_.Start(15.0f);
+		hitEffect_.bShift = { 3.0f,0 };
+		hitEffect_.gShift = { -3.0f,0 };
+		hitEffect_.rShift = { 1.5f,1.5f };
+
 		// HP削る
 		hp_.current -= hp_.decreValue_;
 		// 死亡処理
@@ -43,6 +57,18 @@ void PlayerHitManager::OnHit(uint32_t decrement)
 	if (!invisibleTimer_.IsActive()) {
 		// 無敵開始
 		invisibleTimer_.Start(invMaxFrame_);
+
+		// エフェクトの仮
+		hitEffectTimer_.Start(15.0f);
+		//hitEffect_.bShift = { 3.0f,0 };
+		//hitEffect_.gShift = { -3.0f,0 };
+		//hitEffect_.rShift = { 1.5f,1.5f };
+
+		hitEffect_.rShift = defaultData_.rShift;
+		hitEffect_.gShift = defaultData_.gShift;
+		hitEffect_.bShift = defaultData_.bShift;
+
+
 		// HP削る
 		hp_.current -= decrement;
 		// 死亡処理
@@ -56,5 +82,9 @@ void PlayerHitManager::ImGuiDraw()
 {
 	int hp = hp_.current;
 	ImGui::DragInt("currentHP", &hp);
-
+	
+	ImGui::DragFloat2("r", &defaultData_.rShift.x, 0.01f);
+	ImGui::DragFloat2("g", &defaultData_.gShift.x, 0.01f);
+	ImGui::DragFloat2("b", &defaultData_.bShift.x, 0.01f);
+	ImGui::DragFloat("t", &defaultData_.time, 0.01f);
 }

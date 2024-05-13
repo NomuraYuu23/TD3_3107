@@ -424,6 +424,7 @@
     <ClInclude Include="Application\Object\Weapon\System\AutoComeBack.h" />
     <ClInclude Include="Application\Object\Player\System\AssistDash\AssistDash.h" />
     <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
+    <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

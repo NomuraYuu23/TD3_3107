@@ -324,6 +324,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.h" />
     <ClInclude Include="Application\Object\Player\System\FreeFall\FreeFallTimer.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
+    <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\KnockBack.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
