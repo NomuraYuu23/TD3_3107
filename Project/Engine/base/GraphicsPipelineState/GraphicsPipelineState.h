@@ -26,8 +26,11 @@ public: // サブクラス
 		kPipelineStateIndexManyAnimModels, // たくさんのアニメーションモデル
 		kPipelineStateIndexManyNormalModels, // たくさんのアニメーション無しモデル
 
+		kPipelineStateIndexNormalOutline, // アニメーション無しモデルアウトライン
+
 		kPipelineStateIndexSprite, //スプライト
-		kPipelineStateIndexWindowSprite, // ウィンドウスプライト
+		kPipelineStateIndexWindowSpriteSRV, // ウィンドウスプライトSRV
+		kPipelineStateIndexWindowSpriteUAV, // ウィンドウスプライトUAV
 		kPipelineStateIndexLine, // 線
 		kPipelineStateIndexParticle, // パーティクル
 
@@ -49,6 +52,8 @@ public: // サブクラス
 		std::wstring filePathVS; // 頂点シェーダの名前
 		std::wstring filePathPS; // ピクセルシェーダの名前
 		D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveTopologyType; // 描き方（線とか三角形）
+		uint32_t numRenderTargets; //RTVの数
+		DXGI_FORMAT RTVFormats; //RTVの情報
 	};
 
 public: // 変数

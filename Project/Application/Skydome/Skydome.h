@@ -45,4 +45,7 @@ private:
 	// 回転速度
 	float rotateSpeed_ = 0.001f;
 
+	// UVトランスフォーム
+	WorldTransform uvTransform_;
+
 };

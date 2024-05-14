@@ -23,20 +23,29 @@ void Enemy::Initialize()
 	serialNum_ = sSerialNumber_;
 	sSerialNumber_++;
 
+	name_ = "Enemy" + std::to_string(serialNum_);
+
 	isDead_ = false;
 	isGround_ = false;
+
+	// 回転行列を使用する
+	usedDirection_ = true;
 }
 
 void Enemy::Update()
 {
 	prevPosition_ = { transform_.translate.x,transform_.translate.y };
+	// 前フレーム座標取得
+	prevTranslate_ = transform_.translate;
 	// 設定した状態の処理
 	if (state_) {
 		state_->Update();
 	}
-
+	interval_.Update();
 	//transform_.translate = {}
-
+	if (parentEmitter_) {
+		CheckParent();
+	}
 	MatrixUpdate();
 	// 2D更新
 	position2D_ = { worldMatrix_.m[3][0],worldMatrix_.m[3][1] };
@@ -47,12 +56,16 @@ void Enemy::Update()
 
 void Enemy::ImGuiDraw()
 {
-	std::string name = "Enemy" + std::to_string(serialNum_);
 	//ImGui::Begin(name.c_str());
-	ImGui::SeparatorText(name.c_str());
+	ImGui::SeparatorText(name_.c_str());
 	ImGui::DragFloat3("WorldPosition", &transform_.translate.x);
 	ImGui::DragFloat2("scale", &scale2D_.x);
 	ImGui::Text("%d", isDead_);
+
+	if (ImGui::Button("Release")) {
+		this->ReleaseParent();
+	}
+
 
 	//ImGui::End();
 
@@ -84,9 +97,12 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			}
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
+				weapon_ = (*weapon);
 			}
 		}
-		else {
+		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
+		//	std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
+		else if((*weapon)->IsPlayerJump()){
 			isDead_ = true;
 		}
 
@@ -158,4 +174,17 @@ void Enemy::ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::Atta
 	newState->Initialize();
 
 	state_ = std::move(newState);
+}
+
+void Enemy::CheckParent()
+{
+	if (!parent_) {
+		//if (!parentEmitter_->IsRotateReturn() && (goalAngle_ == parentEmitter_->GetNowAngle())) {
+		if (!interval_.IsActive() && (goalAngle_ == parentEmitter_->GetNowAngle())) {
+			if (weapon_) {
+				weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
+			ResetParent();
+		}
+	}
 }

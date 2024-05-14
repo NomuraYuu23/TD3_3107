@@ -66,6 +66,13 @@ public:
 	void SetMoveT(float moveT) { moveT_ = moveT; }
 
 	/// <summary>
+	/// 引数で指定したアニメーションの実行状態の取得
+	/// </summary>
+	/// <param name="count">取得するアニメーション番号</param>
+	/// <returns>アニメーションの実行状態</returns>
+	bool GetRunningAnimation(int count) { return animationDatas_[count].isRun; };
+
+	/// <summary>
 	/// アニメーションの実行状態取得
 	/// </summary>
 	/// <returns>アニメーションの実行状態</returns>
@@ -85,16 +92,16 @@ private:
 	// 計算データ
 	std::vector<AnimationCalcData> animationDatas_;
 	// アニメーション数
-	uint32_t animationCalcDataNum_;
+	uint32_t animationCalcDataNum_ = 0;
 
 	// ノード数
-	uint32_t nodeNum_;
+	uint32_t nodeNum_ = 0;
 
 	// トランスフォーム
 	std::vector<QuaternionTransform> transforms_;
 
 	// アニメーション速度
-	double animationSpeed_;
+	double animationSpeed_ = 0.0;
 
 	// ノードの名前
 	std::vector<std::string> nodeNames_;

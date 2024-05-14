@@ -11,6 +11,10 @@
 
 #include "PlayerFootCollider.h"
 
+#include "Anim/PlayerAnimManager.h"
+
+#include "../../../Engine/Physics/String.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -22,10 +26,6 @@ private: // サブクラス
 		Vector3 v3Position;
 		float offsetLength;
 	};
-
-	Vector2 up = { 1.0f,1.0f };
-	Vector2 tag = { -1.0f,1.0f };
-	Vector2 perVec = { up.x,up.y * -1.0f };
 
 public: // 継承
 	/// <summary>
@@ -57,6 +57,9 @@ public: // アクセッサ
 	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
 	Box GetBoxCollider() override { return boxCollider_; }
+
+	PlayerHitManager::Effect GetEffectInfo() { return hpManager_.hitEffect_; }
+	PlayerHitManager GetHitManager() { return hpManager_; }
 public: // メンバ関数
 	/// <summary>
 	/// ステートの変更
@@ -108,6 +111,14 @@ public: // メンバ関数
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
 
+public: // アニメーション関連関数群
+
+	/// <summary>
+	/// アニメーションマネージャーゲッター
+	/// </summary>
+	/// <returns>アニメーションマネージャー</returns>
+	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
+
 public:
 	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
@@ -134,6 +145,17 @@ public:
 	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
 
 	void KnockBackOnGround() { knockBackSystem_.SetIsHit(false); }
+
+	/// <summary>
+	/// ポニーテール用のモデルセッター
+	/// </summary>
+	/// <param name="model">モデル</param>
+	void SetPonyTail(Model* model);
+
+
+	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
+	void EndAssistDash() { assistDash_.SlowCancel(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -165,12 +187,13 @@ public:
 
 	EnemyManager* enemyManager_;
 
+	TimerLib spearJumpAccepter_;
+
 private: // フラグ
 	// ゲームスピード
 	bool isSlowGame_ = false;
 	// デバッグ用
 	bool isDebugDraw_ = false;
-
 
 private: // システム
 	// 現状のステート
@@ -199,6 +222,28 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+private: // アニメーション関連
+
+	// ポニーテール用紐クラス
+	std::unique_ptr<String> ponytail_;
+	// ポニテ用座標
+	Vector3 ponyAnchorPos_ = {};
+
+	// アニメーションマネージャー
+	std::unique_ptr<PlayerAnimManager> anim_;
+
+	// 空中ダッシュシステム
+	AssistDash assistDash_;
+
+private:
+	void SystemInitialize();
+	void SystemUpdate();
+
+public:
+	void HitUpdate() {
+		hpManager_.Update();
+	}
 
 };
 

@@ -50,13 +50,13 @@ void ClearScene::Update()
 #endif // _DEBUG
 
 	if ((input_->TriggerJoystick(JoystickButton::kJoystickButtonA)) &&
-		requestSceneNo == kClear) {
+		requestSceneNo_ == kClear) {
 		// 行きたいシーンへ
-		requestSceneNo = kTitle;
+		requestSceneNo_ = kTitle;
 	}
 
 	// BGM音量下げる
-	if (requestSceneNo == kTitle && isDecreasingVolume) {
+	if (requestSceneNo_ == kTitle && isDecreasingVolume) {
 		LowerVolumeBGM();
 	}
 

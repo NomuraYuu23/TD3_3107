@@ -9,6 +9,9 @@ void ThrownState::Initialize()
 	// 親子関係解除処理
 	weapon_->ReleaseParent();
 
+	// 槍の保持フラグをfalseに
+	weapon_->isHold_ = false;
+
 	// ステート更新
 	SetNowState(this);
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();

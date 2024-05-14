@@ -93,11 +93,6 @@ private:
 	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
 	std::unique_ptr<Model> particleCircleModel_ = nullptr;
 
-	// ライト
-	std::unique_ptr<DirectionalLight> directionalLight_;
-	Vector3 direction = { 1.0f, -1.0f, 0.0f};
-	float intencity = 1.0f;
-
 	std::unique_ptr<CollisionManager> collisionManager_;
 
 	// UIマネージャー
@@ -116,14 +111,6 @@ private:
 	std::unique_ptr<SampleObject> sampleObj_;
 	std::unique_ptr<Model> sampleObjModel_;
 
-	// 点光源
-	std::unique_ptr<PointLightManager> pointLightManager_;
-	std::array<PointLightData, PointLightManager::kNumInstanceMax_> pointLightDatas_;
-
-	// スポットライト
-	std::unique_ptr<SpotLightManager> spotLightManager_;
-	std::array<SpotLightData, SpotLightManager::kNumInstanceMax_> spotLightDatas_;
-
 	// Collision2DManager
 	std::unique_ptr<Collision2DManager> collision2DManager_;
 	// Collision2DDebugDraw
@@ -133,11 +120,16 @@ private:
 	// プレイヤー
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Model> playerModel_;
+	std::unique_ptr<Model> ponyTailModel_;
 	std::unique_ptr<Model> weaponModel_;
 
 	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;
 	std::unique_ptr<Model> terrainModel_;
+
+	// 背景
+	std::unique_ptr<BackGround> backGround_;
+	std::unique_ptr<Model> backGroundModel_;
 
 	// 敵
 	std::unique_ptr<EnemyManager> enemyManager_;
@@ -157,5 +149,13 @@ private:
 	uint32_t enemyTexture_ = 0u;
 
 	std::vector<UINT> tmpTextures_;
+
+	Vector2 rShift_ = {};
+	Vector2 gShift_ = {};
+	Vector2 bShift_ = {};
+
+	Vector2 shiftVelocity_ = {};
+	bool isShift_ = false;
+	float glitchTime_ = 0.0f;
 
 };

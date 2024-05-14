@@ -12,6 +12,9 @@ void HoldState::Initialize()
 	weapon_->worldtransform_.direction_ = Vector3::Normalize(weapon_->throwDirect_);
 	// 戻ってくる方向用のベクトル初期化
 	weapon_->returnDirect_ = {};
+
+	// 槍の保持フラグをtrueに
+	weapon_->isHold_ = true;
 }
 
 void HoldState::Update()

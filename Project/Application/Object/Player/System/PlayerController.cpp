@@ -10,7 +10,7 @@ void PlayerController::Initialize(Player* player)
 
 	player_ = player;
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
-	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
 }
 
 void PlayerController::Update()
@@ -33,7 +33,7 @@ void PlayerController::Update()
 		player_->ChangeState(std::make_unique<AerialState>());
 	}
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
-	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialAcceleration");
+	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
 
 #endif // _DEBUG
 
@@ -83,6 +83,16 @@ void PlayerController::ControllerProcess()
 		if (player_->IsRecoil()) {
 			player_->isArrowUiDraw_ = true;
 			return;
+		}
+
+		Vector2 leftStick = input_->GetLeftAnalogstick();
+		leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX * -1.0f };
+
+		if (std::fabsf(leftStick.x) > 0.25f) {
+			player_->worldtransform_.direction_.x = leftStick.x;
+		}
+		if (std::fabsf(leftStick.y) > 0.25f) {
+			player_->worldtransform_.direction_.y = leftStick.y;
 		}
 
 		// 投げる方向
@@ -137,7 +147,7 @@ void PlayerController::AerialMoveProcess()
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
 	bool CheckAction = (std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()));
-	float ratio = GlobalVariables::GetInstance()->GetFloatValue("Player", "inverceRatio");
+	float ratio = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "inverceRatio");
 	// 空中にいる場合
 	if (CheckAction) {
 		// 左右移動
@@ -246,15 +256,15 @@ void PlayerController::ThrownProcess()
 		}
 
 	}
-	if (input_->TriggerJoystick(kJoystickButtonLB)) {
-		if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
-			// 切り替え
-			if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->ChangeState(std::make_unique<AttractState>());
-				return;
-			}
-		}
-	}
+	//if (input_->TriggerJoystick(kJoystickButtonLB)) {
+	//	if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
+	//		// 切り替え
+	//		if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+	//			player_->ChangeState(std::make_unique<AttractState>());
+	//			return;
+	//		}
+	//	}
+	//}
 
 }
 

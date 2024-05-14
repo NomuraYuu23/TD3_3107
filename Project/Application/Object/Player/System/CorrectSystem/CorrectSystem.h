@@ -31,7 +31,9 @@ private:
 
 	Vector3 NearEnemyLockOn(EnemyManager* enemyManager);
 
-	Vector3 RightStickAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
+	Vector3 StickAimAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
+
+	Vector3 LeftStickAimAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
 
 	Vector2 prevLeftStick_ = {};
 

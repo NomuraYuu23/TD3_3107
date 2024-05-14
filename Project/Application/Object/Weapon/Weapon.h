@@ -8,6 +8,8 @@
 
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
+#include "Anim/SpearAnimManager.h"
+
 class Player;
 
 class Weapon : public IObject
@@ -86,6 +88,14 @@ public: // アクセッサ
 
 	bool IsEnemyImpaled() { return isEnemyImpaled_; }
 
+	/// <summary>
+	/// アニメーションマネージャーゲッター
+	/// </summary>
+	/// <returns>アニメーションマネージャー</returns>
+	SpearAnimManager* GetAnimManager() { return anim_.get(); }
+
+	bool IsPlayerJump() { return isPlayerJumpAccept_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -132,7 +142,13 @@ public: // 外部で行う設定関数
 	// 投げの最初の衝突無効処理
 	TimerLib throwInvTimer_;
 
+	// 刺さってる武器が自動的に戻る大麻ー
+	TimerLib autoComeBackTimer_;
+
 	Terrain::BlockType hitBlockType_ = Terrain::BlockType::kNone;
+
+	// 槍を持っているかのフラグ
+	bool isHold_ = true;
 
 private:
 	/// <summary>
@@ -146,6 +162,7 @@ private:
 	std::unique_ptr<IWeaponState> state_;
 	// 親のワールドトランスフォーム
 	WorldTransform* parentAdress_ = nullptr;
+
 	// 一回踏んだか確認フラグ
 	bool isTread_ = false;
 	// 重力フラグ
@@ -168,5 +185,14 @@ private:
 	bool isEnemyImpaled_ = false;
 
 	Player* player_ = nullptr;
+
+private: // アニメーション関連
+
+	// 槍用アニメーションマネージャー
+	std::unique_ptr<SpearAnimManager> anim_;
+
+	// 槍ジャンプを行ったかどうか
+	bool isPlayerJumpAccept_ = false;
+
 };
 

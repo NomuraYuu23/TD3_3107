@@ -10,6 +10,21 @@
     <FxCompile Include="Resources\shaders\Particle.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\ManyAnimModels.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\ManyModels.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\ManyNormalModels.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\NormalModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Outline.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Outline.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\AnimInverseModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\AnimModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffectCalc.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffect.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSprite.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSprite.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSpriteStorage.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSpriteUAV.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
@@ -42,7 +57,6 @@
     <ClCompile Include="Application\UI\UIManager.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
-    <ClCompile Include="Engine\2D\WindowSprite.cpp" />
     <ClCompile Include="Engine\3D\LargeNumberOfObjects.cpp" />
     <ClCompile Include="Engine\3D\Mesh.cpp" />
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
@@ -177,7 +191,18 @@
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\KnockBack.cpp" />
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
+    <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
+    <ClCompile Include="Engine\3D\Outline.cpp" />
+    <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
+    <ClCompile Include="Engine\base\CrashHandler.cpp" />
+    <ClCompile Include="Engine\base\WindowSprite.cpp" />
+    <ClCompile Include="Engine\PostEffect\Velocity2DManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
+    <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
+    <ClCompile Include="Application\Object\Weapon\System\AutoComeBack.cpp" />
+    <ClCompile Include="Application\Object\Player\System\AssistDash\AssistDash.cpp" />
+    <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
     <ClCompile Include="Application\Object\Map\MapEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -229,7 +254,6 @@
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\2D\SpriteForGPU.h" />
     <ClInclude Include="Engine\2D\SpriteVertex.h" />
-    <ClInclude Include="Engine\2D\WindowSprite.h" />
     <ClInclude Include="Engine\3D\LargeNumberOfObjects.h" />
     <ClInclude Include="Engine\3D\Mesh.h" />
     <ClInclude Include="Engine\3D\ModelLoader.h" />
@@ -394,7 +418,21 @@
     <ClInclude Include="Application\Object\Enemy\IEnemyEmitter.h" />
     <ClInclude Include="Engine\2D\LineForGPU.h" />
     <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
+    <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
     <ClInclude Include="Engine\Particle\EmitterDesc.h" />
+    <ClInclude Include="Application\Object\BackGround\BackGround.h" />
+    <ClInclude Include="Engine\3D\Outline.h" />
+    <ClInclude Include="Engine\3D\OutlineData.h" />
+    <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
+    <ClInclude Include="Engine\base\CrashHandler.h" />
+    <ClInclude Include="Engine\base\OutputLog.h" />
+    <ClInclude Include="Engine\base\WindowSprite.h" />
+    <ClInclude Include="Engine\PostEffect\Velocity2DManager.h" />
+    <ClInclude Include="Application\Object\Weapon\System\AutoComeBack.h" />
+    <ClInclude Include="Application\Object\Player\System\AssistDash\AssistDash.h" />
+    <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
+    <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
+    <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
     <ClInclude Include="Application\Object\Map\MapEditor.h" />
     <ClInclude Include="Application\Object\Map\MapBlockData.h" />
   </ItemGroup>
@@ -406,6 +444,12 @@
     <None Include="resources\shaders\Object3d.hlsli" />
     <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
+    <None Include="Resources\shaders\ManyModels.hlsli" />
+    <None Include="Resources\shaders\Model.hlsli" />
+    <None Include="Resources\shaders\Outline.hlsli" />
+    <None Include="Resources\shaders\PostEffect.hlsli" />
+    <None Include="Resources\shaders\WindowSpriteStorage.hlsli" />
+    <None Include="Resources\shaders\WindowSprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

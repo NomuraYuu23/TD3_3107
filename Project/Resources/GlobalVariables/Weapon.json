@@ -1,9 +1,8 @@
 {
     "Weapon": {
         "AngleDot": -0.8500000238418579,
-        "AssistWidth": 0.20000000298023224,
         "Gravity": 3.0,
-        "KickBackCooltime": 30.0,
+        "KickBackCooltime": 10.0,
         "LocalPosition": [
             2.0,
             0.0,
