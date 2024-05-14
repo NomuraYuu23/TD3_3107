@@ -1,6 +1,8 @@
 #include "IEnemyEmitter.h"
 #include "Enemy.h"
 #include "../../../Engine/2D/ImguiManager.h"
+#include "../../../Engine/base/SRVDescriptorHerpManager.h"
+#include "../../../Engine/3D/ModelDraw.h"
 
 #include <numbers>
 #include <cmath>
@@ -94,6 +96,23 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 		objects_.push_back(std::move(obj));
 	}
 
+}
+
+void IEnemyEmitter::Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles)
+{
+	Map(camera.GetViewProjectionMatrix());
+
+	ModelDraw::ManyAnimObjectsDesc desc;
+	desc.camera = &camera;
+	desc.materialsHandle = &materialsHandleGPU_;
+	desc.model = model_;
+	desc.numInstance = numInstance_;
+	if (textureHnadles) {
+		desc.textureHandles = *textureHnadles;
+	}
+	desc.transformationMatrixesHandle = &transformationMatrixesHandleGPU_;
+	//desc.localMatrixesHandle = &local;
+	ModelDraw::ManyAnimObjectsDraw(desc);
 }
 
 void IEnemyEmitter::ImGuiDraw()
