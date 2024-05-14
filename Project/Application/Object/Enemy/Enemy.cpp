@@ -89,9 +89,9 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		//// 武器のポインタにキャスト
 		Weapon** weapon = std::get_if<Weapon*>(&target);
 		if (std::holds_alternative<ImpaledState*>((*weapon)->GetNowState())) {
-			//if ((*weapon)->IsEnemyImpaled()) {
-			//	return;
-			//}
+			if ((*weapon)->IsEnemyImpaled()) {
+				return;
+			}
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
 				weapon_ = (*weapon);
