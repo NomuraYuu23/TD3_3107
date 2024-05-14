@@ -106,6 +106,8 @@ public:
 	/// </summary>
 	void ShakeStop();
 
+	bool IsShakeNow() { return isShake_; }
+
 protected: // 関数
 
 	/// <summary>

@@ -120,6 +120,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyGroundState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
@@ -299,6 +300,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
     <ClInclude Include="Application\Object\Enemy\IEnemyEmitter.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
+    <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />
@@ -325,6 +327,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.h" />
     <ClInclude Include="Application\Object\Player\System\FreeFall\FreeFallTimer.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
+    <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\KnockBack.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />

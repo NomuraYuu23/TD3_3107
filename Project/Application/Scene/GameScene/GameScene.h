@@ -150,4 +150,12 @@ private:
 
 	std::vector<UINT> tmpTextures_;
 
+	Vector2 rShift_ = {};
+	Vector2 gShift_ = {};
+	Vector2 bShift_ = {};
+
+	Vector2 shiftVelocity_ = {};
+	bool isShift_ = false;
+	float glitchTime_ = 0.0f;
+
 };

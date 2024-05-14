@@ -94,6 +94,8 @@ public: // アクセッサ
 	/// <returns>アニメーションマネージャー</returns>
 	SpearAnimManager* GetAnimManager() { return anim_.get(); }
 
+	bool IsPlayerJump() { return isPlayerJumpAccept_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -188,6 +190,9 @@ private: // アニメーション関連
 
 	// 槍用アニメーションマネージャー
 	std::unique_ptr<SpearAnimManager> anim_;
+
+	// 槍ジャンプを行ったかどうか
+	bool isPlayerJumpAccept_ = false;
 
 };
 
