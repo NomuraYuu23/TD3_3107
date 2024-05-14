@@ -72,8 +72,9 @@ public:
 		transform_.translate = GetWorldPosition();
 		SetParent(nullptr);
 		MatrixUpdate();
-
-		goalAngle_ = parentEmitter_->GetNowAngle();
+		if (parentEmitter_) {
+			goalAngle_ = parentEmitter_->GetNowAngle();
+		}
 
 		interval_.Start(5.0f);
 	}
