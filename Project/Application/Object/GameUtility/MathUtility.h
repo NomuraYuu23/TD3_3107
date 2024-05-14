@@ -49,5 +49,13 @@ public:
 
 	static Vector3 RotateVector(const Vector3& direct, float theta);
 
+	/// <summary>
+	/// 画面のどこにいるかを0~1で表現する
+	/// </summary>
+	/// <param name="worldPosition"></param>
+	/// <param name="camera"></param>
+	/// <returns></returns>
+	static Vector2 ScreenPositionRatio(const Vector3& worldPosition, const BaseCamera& camera);
+
 };
 

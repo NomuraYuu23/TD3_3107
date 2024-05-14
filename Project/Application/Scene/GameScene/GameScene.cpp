@@ -317,7 +317,7 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
-
+	//if(player_->)
 	PlayerHitManager::Effect instance = player_->GetEffectInfo();
 	PostEffect::GetInstance()->SetRShift(instance.rShift);
 	PostEffect::GetInstance()->SetGShift(instance.gShift);

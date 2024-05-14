@@ -94,11 +94,13 @@ public:
 
 	//void ChangeRequest()
 
-	void SetState(IEnemyState* state) {
+	void SetState(EnemyState state) {
 		judState_ = state;
 	}
 
 	void SetDefaultOffset(const Vector3& offset) { defaultOffset_ = offset; }
+	IEnemyState* GetNowState() { return state_.get(); }
+	EnemyState GetState() { return judState_; }
 
 private:
 
