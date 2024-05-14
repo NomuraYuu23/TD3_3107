@@ -564,12 +564,14 @@ void Player::OnCollision(ColliderParentObject2D target)
 		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
 			return;
 		}
+		// 反動生成
+		Enemy** enemy = std::get_if<Enemy*>(&target);
 
 		// 持ってないかどうか
 		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
 			// 持ってるから何か起きる
 			// 反動生成
-			Enemy** enemy = std::get_if<Enemy*>(&target);
+			//Enemy** enemy = std::get_if<Enemy*>(&target);
 			Vector3 newDirect = {};
 			newDirect.x = worldtransform_.GetWorldPosition().x - (*enemy)->GetWorldPosition().x;
 			newDirect.y = 1.0f;
@@ -588,6 +590,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		}
 		else {
+			if (std::holds_alternative<EnemyWaitState*>((*enemy)->GetState())) {
+			//if((*enemy)->IsEnemyImpaled()){
+				return;
+			}
+
 			hpManager_.OnHit(1);
 		}
 		// キャンセル
