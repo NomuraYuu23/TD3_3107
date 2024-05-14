@@ -24,6 +24,7 @@
     <FxCompile Include="Resources\shaders\WindowSprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSprite.VS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSpriteStorage.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\WindowSpriteUAV.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
