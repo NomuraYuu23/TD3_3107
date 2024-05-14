@@ -166,11 +166,12 @@ void GameScene::Update() {
 		requestSceneNo_ = kTitle;
 	}
 
+
+#endif
 	if (input_->TriggerKey(DIK_R)) {
 		this->Initialize();
 	}
 
-#endif
 	if (input_->TriggerKey(DIK_L)) {
 		requestSceneNo_ = kTitle;
 	}
@@ -436,7 +437,7 @@ void GameScene::DebugCameraUpdate()
 		camera_ = static_cast<BaseCamera>(*followCamera_.get());
 
 		if (player_->GetEffectInfo().isStop && !camera_.IsShakeNow()) {
-			camera_.ShakeStart(1.0f, 2);
+			camera_.ShakeStart(0.3f, 2);
 		}
 		// 
 		camera_.Update();
