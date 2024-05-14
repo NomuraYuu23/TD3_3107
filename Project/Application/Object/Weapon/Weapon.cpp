@@ -35,6 +35,9 @@ void Weapon::Initialize(Model* model)
 	// 戻るレート
 	returnRate_ = 1.3f;
 	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
+	// デフォルト衝撃波パラメータ
+	shockWaveManager_ = std::make_unique<ShockWaveManager>();
+	shockWaveManager_->Initialize();
 
 	// アニメーション関連初期化
 	anim_ = std::make_unique<SpearAnimManager>();  // 生成
@@ -46,7 +49,8 @@ void Weapon::Update()
 	isGravity_ = false;
 	isEnemyImpaled_ = false;
 	isPlayerJumpAccept_ = player_->spearJumpAccepter_.IsActive();
-
+	//shockWaveManager_->SetCenter({ worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y });
+	shockWaveManager_->Update();
 	prevDirect_ = { worldtransform_.direction_.x,worldtransform_.direction_.y };
 
 	// 状態ごとの更新
@@ -102,8 +106,10 @@ void Weapon::Draw(const BaseCamera& camera)
 
 void Weapon::ImGuiDraw()
 {
+	shockWaveManager_->ImGuiDraw();
 	ImGui::Begin("Weapon");
 
+	ImGui::Separator();
 	// 親子変更
 	if (ImGui::Button("ParentDelete")) {
 		ReleaseParent();

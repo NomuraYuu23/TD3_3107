@@ -345,16 +345,29 @@ void GameScene::Draw() {
 #pragma endregion
 
 	PlayerHitManager::Effect instance = player_->GetEffectInfo();
-	PostEffect::GetInstance()->SetRShift(instance.bShift);
-	PostEffect::GetInstance()->SetGShift(instance.gShift);
-	PostEffect::GetInstance()->SetBShift(instance.rShift);
-	PostEffect::GetInstance()->SetTime(instance.time);
-	PostEffect::GetInstance()->Execution(
-		dxCommon_->GetCommadList(),
-		renderTargetTexture_,
-		PostEffect::kCommandIndexGlitchRGBShift);
-	WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
-
+	if (player_->GetHitManager().IsHitEffectActive()) {
+		PostEffect::GetInstance()->SetRShift(instance.bShift);
+		PostEffect::GetInstance()->SetGShift(instance.gShift);
+		PostEffect::GetInstance()->SetBShift(instance.rShift);
+		PostEffect::GetInstance()->SetTime(instance.time);
+		PostEffect::GetInstance()->Execution(
+			dxCommon_->GetCommadList(),
+			renderTargetTexture_,
+			PostEffect::kCommandIndexGlitchRGBShift);
+		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	}
+	if (isImpact_) {
+		//PostEffect::GetInstance()-
+		PostEffect::ExecutionAdditionalDesc desc = {};
+		desc.shockWaveManagers[0] = player_->GetWeapon()->GetShockWaveManager();
+		PostEffect::GetInstance()->SetTime(3.0f);
+		PostEffect::GetInstance()->Execution(
+			dxCommon_->GetCommadList(),
+			renderTargetTexture_,
+			PostEffect::kCommandIndexShockWave,
+			&desc);
+		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	}
 }
 
 void GameScene::ImguiDraw() {
@@ -370,6 +383,7 @@ void GameScene::ImguiDraw() {
 	ImGui::DragFloat2("shiftVelocity_", &shiftVelocity_.x, 0.01f, -abs, abs);
 	ImGui::DragFloat("gti", &glitchTime_, 0.01f);
 	ImGui::Checkbox("IsShift", &isShift_);
+	ImGui::Checkbox("IsImpact", &isImpact_);
 	ImGui::End();
 
 	//Obj

@@ -9,6 +9,7 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 #include "Anim/SpearAnimManager.h"
+#include "../../../Engine/PostEffect/ShockWaveManager.h"
 
 class Player;
 
@@ -95,7 +96,7 @@ public: // アクセッサ
 	SpearAnimManager* GetAnimManager() { return anim_.get(); }
 
 	bool IsPlayerJump() { return isPlayerJumpAccept_; }
-
+	ShockWaveManager* GetShockWaveManager() { return shockWaveManager_.get(); }
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -194,5 +195,6 @@ private: // アニメーション関連
 	// 槍ジャンプを行ったかどうか
 	bool isPlayerJumpAccept_ = false;
 
+	std::unique_ptr<ShockWaveManager> shockWaveManager_;
 };
 
