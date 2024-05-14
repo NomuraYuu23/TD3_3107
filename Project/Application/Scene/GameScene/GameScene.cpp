@@ -30,7 +30,7 @@ void GameScene::Initialize() {
 
 	ModelCreate();
 	TextureLoad();
-		
+
 	// ビュープロジェクション
 	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
@@ -108,11 +108,11 @@ void GameScene::Initialize() {
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	mapManager_->Initialize(terrainModel_.get());
-	
+
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
-	
+
 	// 追従カメラ（仮
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
@@ -123,7 +123,7 @@ void GameScene::Initialize() {
 	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
 	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
-	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y,player_->throwDirect_.x));
+	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y, player_->throwDirect_.x));
 
 	// Jsonデータのクラス
 #ifdef _DEBUG
@@ -178,6 +178,13 @@ void GameScene::Update() {
 	pointLightManager_->Update(pointLightDatas_);
 	spotLightManager_->Update(spotLightDatas_);
 
+	if (player_->GetEffectInfo().isStop) {
+		player_->HitUpdate();
+		// デバッグカメラ
+		DebugCameraUpdate();
+		return;
+	}
+
 	//Obj
 	// マップ
 	mapManager_->Update();
@@ -202,7 +209,7 @@ void GameScene::Update() {
 
 	// 当たり判定の設定とチェック
 	CollisionUpdate();
-	
+
 	// 影
 	ShadowUpdate();
 
@@ -248,7 +255,7 @@ void GameScene::Draw() {
 	ModelDraw::PreDraw(preDrawDesc);
 
 	//3Dオブジェクトはここ
-	
+
 	//Obj
 	player_->Draw(camera_);
 	//bossEnemy_->Draw(camera_);
@@ -297,36 +304,34 @@ void GameScene::Draw() {
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
-	
+
 
 	//背景
 	//前景スプライト描画
-	
+
 	// UIマネージャー
 	//uiManager_->Draw();
 	arrowSprite_->Draw();
-	
+
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 
 #pragma endregion
 
-	if (isShift_) {
-		PlayerHitManager::Effect instance = player_->GetEffectInfo();
-		PostEffect::GetInstance()->SetRShift(instance.rShift);
-		PostEffect::GetInstance()->SetGShift(instance.gShift);
-		PostEffect::GetInstance()->SetBShift(instance.bShift);
-		PostEffect::GetInstance()->SetTime(instance.time);
-		PostEffect::GetInstance()->Execution(
-			dxCommon_->GetCommadList(),
-			renderTargetTexture_,
-			PostEffect::kCommandIndexGlitchRGBShift);
-		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
-	}
+	PlayerHitManager::Effect instance = player_->GetEffectInfo();
+	PostEffect::GetInstance()->SetRShift(instance.rShift);
+	PostEffect::GetInstance()->SetGShift(instance.gShift);
+	PostEffect::GetInstance()->SetBShift(instance.bShift);
+	PostEffect::GetInstance()->SetTime(instance.time);
+	PostEffect::GetInstance()->Execution(
+		dxCommon_->GetCommadList(),
+		renderTargetTexture_,
+		PostEffect::kCommandIndexGlitchRGBShift);
+	WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 
 }
 
-void GameScene::ImguiDraw(){
+void GameScene::ImguiDraw() {
 #ifdef _DEBUG
 
 	ImGui::Begin("GameScene");
@@ -396,6 +401,10 @@ void GameScene::DebugCameraUpdate()
 		followCamera_->Update();
 		// 
 		camera_ = static_cast<BaseCamera>(*followCamera_.get());
+
+		if (player_->GetEffectInfo().isStop && !camera_.IsShakeNow()) {
+			camera_.ShakeStart(0.3f, 2);
+		}
 		// 
 		camera_.Update();
 	}
@@ -421,7 +430,7 @@ void GameScene::ModelCreate()
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
-	
+
 	// 敵モデル
 	enemyModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
@@ -501,7 +510,7 @@ void GameScene::CollisionUpdate()
 	}
 	// プレイヤーの足場
 	collision2DManager_->ListRegister(&player_->GetFootCollider()->boxCollider_);
-	
+
 	// マップ
 	mapManager_->CollisionRegister(collision2DManager_.get(), camera_);
 
