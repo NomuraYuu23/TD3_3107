@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
 #include "../GameUtility/TimerLib.h"
+#include "../../../Engine/Animation/Animation.h"
 
 class IEnemyEmitter : public LargeNumberOfObjects
 {
@@ -74,6 +75,6 @@ private:
 
 	TimerLib interval_;
 
-	// ローカル行列マネージャ
-	LocalMatrixManager* localMatrixManager_ = nullptr;
+	// アニメーション本体
+	Animation anim_;
 };

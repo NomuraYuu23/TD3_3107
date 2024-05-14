@@ -23,6 +23,19 @@ void IEnemyEmitter::Initialize(Model* model)
 	// 初期化
 	isRotateReturn_ = false;
 
+	// アニメーション取得と初期化
+	anim_.Initialize(
+		model_->GetNodeAnimationData(),
+		localMatrixManager_->GetInitTransform(),
+		localMatrixManager_->GetNodeNames());
+
+	// アニメーション開始
+	anim_.StartAnimation(0, true);
+
+	// アニメーションの更新
+	localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	localMatrixManager_->Map();
+
 }
 
 void IEnemyEmitter::Update()
@@ -54,6 +67,10 @@ void IEnemyEmitter::Update()
 		isRotateReturn_ = true;
 		interval_.Start(10.0f);
 	}
+
+	// アニメーションの更新
+	localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	localMatrixManager_->Map();
 
 	worldTransform_.transform_.rotate.z = nowAngle_;
 	worldTransform_.UpdateMatrix();
@@ -111,7 +128,7 @@ void IEnemyEmitter::Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles)
 		desc.textureHandles = *textureHnadles;
 	}
 	desc.transformationMatrixesHandle = &transformationMatrixesHandleGPU_;
-	//desc.localMatrixesHandle = &local;
+	desc.localMatrixManager = localMatrixManager_.get();
 	ModelDraw::ManyAnimObjectsDraw(desc);
 }
 
