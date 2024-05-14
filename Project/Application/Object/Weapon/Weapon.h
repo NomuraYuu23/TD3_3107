@@ -4,6 +4,8 @@
 #include "WeaponState/WeaponStateList.h"
 #include "WeaponState/StateList.h"
 
+#include "System/ShockEffectSystem.h"
+
 #include "../Map/Terrain.h"
 
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
@@ -53,6 +55,15 @@ public: // 継承
 	void OnCollision(ColliderParentObject2D target) override;
 
 	void SetPlayer(Player* player) { player_ = player; }
+
+	/// <summary>
+	/// システムの初期化
+	/// </summary>
+	void SystemInitialize();
+	/// <summary>
+	/// システムの更新
+	/// </summary>
+	void SystemUpdate();
 
 public: // アクセッサ
 	/// <summary>
@@ -175,6 +186,8 @@ private:
 	Player* player_ = nullptr;
 	// 槍ジャンプを行ったかどうか
 	bool isPlayerJumpAccept_ = false;
+private:
+	ShockEffectSystem shockEffect_;
 
 };
 

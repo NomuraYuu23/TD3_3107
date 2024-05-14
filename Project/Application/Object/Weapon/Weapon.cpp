@@ -375,6 +375,16 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	}
 }
 
+void Weapon::SystemInitialize()
+{
+	shockEffect_.Initialize(this);
+}
+
+void Weapon::SystemUpdate()
+{
+	shockEffect_.Update();
+}
+
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
 {
 	// ポインタの設定

@@ -6,7 +6,7 @@ class ShockEffectSystem
 {
 public:
 	void Initialize(Weapon* weapon);
-	void Update(const BaseCamera& camera);
+	void Update();
 	ShockWaveManager* GetShockWaveManager() { return shockWaveManager_.get(); }
 	void SetScreenPosition(const Vector2& position) { screenPositionRatio_ = position; }
 private:

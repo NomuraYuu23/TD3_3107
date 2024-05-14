@@ -8,7 +8,7 @@ void ShockEffectSystem::Initialize(Weapon* weapon)
 	shockWaveManager_->Initialize();
 }
 
-void ShockEffectSystem::Update(const BaseCamera& camera)
+void ShockEffectSystem::Update()
 {
 	shockWaveManager_->Update();
 }
