@@ -565,6 +565,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
 			return;
 		}
+		// 反動生成
+		Enemy** enemy = std::get_if<Enemy*>(&target);
 
 		// 反動生成
 		Enemy** enemy = std::get_if<Enemy*>(&target);
