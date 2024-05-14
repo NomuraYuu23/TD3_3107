@@ -15,17 +15,6 @@ private:
 	//	eRemote,	// 遠隔タイプ
 	//};
 
-	struct SingleEnemyData {
-		Vector3 position;
-		uint32_t typeNum;
-	};
-
-	struct MultiEnemyData {
-		Vector3 position;
-		float distance;
-		uint32_t enemyMaxCount;
-	};
-
 public:
 	/// <summary>
 	/// 初期化
