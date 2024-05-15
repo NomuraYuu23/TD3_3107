@@ -406,6 +406,8 @@ void GameScene::DebugCameraUpdate()
 		if (player_->GetEffectInfo().isStop && !camera_.IsShakeNow()) {
 			camera_.ShakeStart(0.3f, 2);
 		}
+		player_->GetWeapon()->GetEffectSystem()->SetScreenPosition(camera_);
+
 		// 
 		camera_.Update();
 	}

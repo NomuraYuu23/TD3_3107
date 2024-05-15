@@ -61,7 +61,7 @@ public: // 継承
 	/// </summary>
 	void SystemInitialize();
 	/// <summary>
-	/// システムの更新
+	/// システムの更新(タイマー系もここ
 	/// </summary>
 	void SystemUpdate();
 
@@ -98,6 +98,8 @@ public: // アクセッサ
 	bool IsEnemyImpaled() { return isEnemyImpaled_; }
 
 	bool IsPlayerJump() { return isPlayerJumpAccept_; }
+
+	ShockEffectSystem* GetEffectSystem() { return &shockEffect_; }
 
 public: // 外部で行う設定関数
 	/// <summary>

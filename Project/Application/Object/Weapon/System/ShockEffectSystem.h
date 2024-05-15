@@ -1,5 +1,7 @@
 #pragma once
 #include "../Weapon.h"
+#include "../../GameUtility/TimerLib.h"
+#include "../../GameUtility/MathUtility.h"
 #include "../../../Engine/PostEffect/ShockWaveManager.h"
 
 class ShockEffectSystem 
@@ -23,12 +25,24 @@ public:
 	/// スクリーン内のどの位置かを設定
 	/// </summary>
 	/// <param name="position"></param>
-	void SetScreenPosition(const Vector2& position,const BaseCamera& camera) {
-		screenPositionRatio_ = position;
+	void SetScreenPosition(const BaseCamera& camera) {
+		screenPosition_ = MathUtility::WorldToScreen(weapon_->worldtransform_.GetWorldPosition(), &static_cast<BaseCamera>(camera));
+		screenPositionRatio_ = MathUtility::ScreenPositionRatio(weapon_->worldtransform_.GetWorldPosition(), &static_cast<BaseCamera>(camera));
 	}
-private:
-	Weapon* weapon_ = nullptr;
-	Vector2 screenPositionRatio_ = {};
 
+	void ImGuiDraw();
+
+private:
+	// 親
+	Weapon* weapon_ = nullptr;
+	// スクリーンの割合座標
+	Vector2 screenPositionRatio_ = {};
+	Vector2 screenPosition_ = {};
+
+	// 衝撃波マネ
 	std::unique_ptr<ShockWaveManager> shockWaveManager_;
+
+	// エフェクトの時間管理
+	TimerLib effectTimer_;
+
 };

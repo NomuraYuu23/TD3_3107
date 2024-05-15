@@ -31,6 +31,9 @@ void Weapon::Initialize(Model* model)
 	// 戻るレート
 	returnRate_ = 1.3f;
 	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
+
+	// システム初期化
+	SystemInitialize();
 }
 
 void Weapon::Update()
@@ -50,11 +53,8 @@ void Weapon::Update()
 	if (isTread_ && timer_.IsEnd()) {
 		isTread_ = false;
 	}
-
-	// タイマー
-	timer_.Update();
-	attractInvTimer_.Update();
-	throwInvTimer_.Update();
+	// システム更新
+	SystemUpdate();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -63,6 +63,8 @@ void Weapon::Update()
 	//float angle = MathUtility::CalcAngle({ direct.x,direct.y });
 	float angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
+
+
 }
 
 void Weapon::Draw(const BaseCamera& camera)
@@ -90,6 +92,10 @@ void Weapon::Draw(const BaseCamera& camera)
 void Weapon::ImGuiDraw()
 {
 	ImGui::Begin("Weapon");
+	// 衝撃波をまとめてるシステムのImGUi
+	ImGui::SeparatorText("EffectSystem");
+	shockEffect_.ImGuiDraw();
+	ImGui::Text("\n");
 
 	// 親子変更
 	if (ImGui::Button("ParentDelete")) {
@@ -382,6 +388,11 @@ void Weapon::SystemInitialize()
 
 void Weapon::SystemUpdate()
 {
+	// タイマー
+	timer_.Update();
+	attractInvTimer_.Update();
+	throwInvTimer_.Update();
+
 	shockEffect_.Update();
 }
 

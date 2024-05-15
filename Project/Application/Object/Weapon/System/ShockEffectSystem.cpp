@@ -12,3 +12,9 @@ void ShockEffectSystem::Update()
 {
 	shockWaveManager_->Update();
 }
+
+void ShockEffectSystem::ImGuiDraw()
+{
+	ImGui::DragFloat2("ScreenPos", &screenPosition_.x);
+	ImGui::DragFloat2("ScreenRatio", &screenPositionRatio_.x);
+}
