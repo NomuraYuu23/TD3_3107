@@ -317,17 +317,18 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
-	//if(player_->)
-	PlayerHitManager::Effect instance = player_->GetEffectInfo();
-	PostEffect::GetInstance()->SetRShift(instance.rShift);
-	PostEffect::GetInstance()->SetGShift(instance.gShift);
-	PostEffect::GetInstance()->SetBShift(instance.bShift);
-	PostEffect::GetInstance()->SetTime(instance.time);
-	PostEffect::GetInstance()->Execution(
-		dxCommon_->GetCommadList(),
-		renderTargetTexture_,
-		PostEffect::kCommandIndexGlitchRGBShift);
-	WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	if (player_->GetHitManager().IsHitEffectActive()) {
+		PlayerHitManager::Effect instance = player_->GetEffectInfo();
+		PostEffect::GetInstance()->SetRShift(instance.rShift);
+		PostEffect::GetInstance()->SetGShift(instance.gShift);
+		PostEffect::GetInstance()->SetBShift(instance.bShift);
+		PostEffect::GetInstance()->SetTime(instance.time);
+		PostEffect::GetInstance()->Execution(
+			dxCommon_->GetCommadList(),
+			renderTargetTexture_,
+			PostEffect::kCommandIndexGlitchRGBShift);
+		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	}
 
 }
 
