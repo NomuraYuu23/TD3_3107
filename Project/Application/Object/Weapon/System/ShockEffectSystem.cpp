@@ -8,7 +8,8 @@ void ShockEffectSystem::Initialize(Weapon* weapon)
 	shockWaveManager_ = std::make_unique<ShockWaveManager>();
 	shockWaveManager_->Initialize();
 
-
+	shockWaveManager_->SetDistortion(0.02f);
+	shockWaveManager_->SetThickness(0.05f);
 }
 
 void ShockEffectSystem::Update()
