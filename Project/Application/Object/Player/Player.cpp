@@ -13,7 +13,9 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { 0.0f,10.0f,0 };
+	worldtransform_.transform_.translate = { -70.0f,10.0f,0 };
+
+	worldtransform_.UpdateMatrix();
 
 	// ライティング有効
 	enableLighting_ = EnableLighting::HalfLambert;
@@ -61,7 +63,7 @@ void Player::Update()
 	// ポニーテール更新
 	if (ponytail_ != nullptr) {
 		// 行列を求める
-		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[12].matrix * worldtransform_.worldMatrix_;
+		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[10].matrix * worldtransform_.worldMatrix_;
 		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
 		//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
 
@@ -693,9 +695,8 @@ void Player::SetFallTimer()
 void Player::SetPonyTail(Model* model)
 {
 	// 行列を求める
-	Matrix4x4 result = localMatrixManager_->GetNodeDatas()[12].matrix * worldtransform_.worldMatrix_;
-	ponyAnchorPos_ = { result.m[3][0], result.m[3][1], 0.0f };
-	//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
+	Matrix4x4 result = localMatrixManager_->GetNodeDatas()[11].matrix * worldtransform_.worldMatrix_;
+	ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
 
 	// ポニーテール用紐生成
 	ponytail_ = std::make_unique<String>();

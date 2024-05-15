@@ -10,6 +10,7 @@ void HoldState::Initialize()
 	this->weapon_->throwDirect_ = { 0,1,0 };
 	// 向きの初期化
 	weapon_->worldtransform_.direction_ = Vector3::Normalize(weapon_->throwDirect_);
+	weapon_->worldtransform_.transform_.translate.z = 0.0f;
 	// 戻ってくる方向用のベクトル初期化
 	weapon_->returnDirect_ = {};
 

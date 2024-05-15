@@ -22,7 +22,7 @@ void Weapon::Initialize(Model* model)
 	worldtransform_.usedDirection_ = true;
 	float scaleRate = globalVariables->GetFloatValue("Weapon", "ScaleRate");
 	//float scaleRate = 2.5f;
-	worldtransform_.transform_.scale = { 1.0f,1.0f,scaleRate };
+	worldtransform_.transform_.scale = { 1.0f,1.0f,1.0f };
 	scale2D_ = { scaleRate * 2.0f,0.10f };
 
 	// コライダーの初期化
@@ -88,15 +88,13 @@ void Weapon::Draw(const BaseCamera& camera)
 		}
 	}
 
-	if (!isHold_) {
-		ModelDraw::AnimObjectDesc desc;
-		desc.camera = &const_cast<BaseCamera&>(camera);
-		desc.localMatrixManager = localMatrixManager_.get();
-		desc.material = material_.get();
-		desc.model = model_;
-		desc.worldTransform = &worldtransform_;
-		ModelDraw::AnimObjectDraw(desc);
-	}
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.worldTransform = &worldtransform_;
+	ModelDraw::AnimObjectDraw(desc);
 
 }
 
