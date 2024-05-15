@@ -30,7 +30,10 @@ public:
 
 	void ImGuiDraw();
 
-	void StartShockWave(float frame) { effectTimer_.Start(frame); }
+	void StartShockWave(float frame) {
+		effectTimer_.Start(frame);
+		shockWaveManager_->SetRadius(0.0f);
+	}
 
 	bool IsActive() { return effectTimer_.IsActive(); }
 
