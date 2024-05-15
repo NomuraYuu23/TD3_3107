@@ -209,7 +209,5 @@ private: // アニメーション関連
 	bool isPlayerJumpAccept_ = false;
 private:
 	ShockEffectSystem shockEffect_;
-
-	std::unique_ptr<ShockWaveManager> shockWaveManager_;
 };
 

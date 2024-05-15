@@ -49,7 +49,6 @@ void Weapon::Update()
 	isEnemyImpaled_ = false;
 	isPlayerJumpAccept_ = player_->spearJumpAccepter_.IsActive();
 	//shockWaveManager_->SetCenter({ worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y });
-	shockWaveManager_->Update();
 	prevDirect_ = { worldtransform_.direction_.x,worldtransform_.direction_.y };
 
 	// 状態ごとの更新
@@ -104,7 +103,6 @@ void Weapon::Draw(const BaseCamera& camera)
 
 void Weapon::ImGuiDraw()
 {
-	shockWaveManager_->ImGuiDraw();
 	ImGui::Begin("Weapon");
 	// 衝撃波をまとめてるシステムのImGUi
 	ImGui::SeparatorText("EffectSystem");
