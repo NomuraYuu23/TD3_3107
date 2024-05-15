@@ -327,7 +327,7 @@ void GameScene::Draw() {
 			dxCommon_->GetCommadList(),
 			renderTargetTexture_,
 			PostEffect::kCommandIndexGlitchRGBShift);
-		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
 
 }
