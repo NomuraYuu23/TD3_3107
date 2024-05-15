@@ -339,7 +339,7 @@ void GameScene::Draw() {
 			renderTargetTexture_,
 			PostEffect::kCommandIndexShockWave,
 			&desc);
-		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
 
 }
