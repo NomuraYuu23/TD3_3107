@@ -329,7 +329,7 @@ void GameScene::Draw() {
 			PostEffect::kCommandIndexGlitchRGBShift);
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
-	//if (isImpact_) {
+	if (player_->GetWeapon()->GetEffectSystem()->IsActive()) {
 		//PostEffect::GetInstance()-
 		PostEffect::ExecutionAdditionalDesc desc = {};
 		desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
@@ -340,7 +340,7 @@ void GameScene::Draw() {
 			PostEffect::kCommandIndexShockWave,
 			&desc);
 		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
-	//}
+	}
 
 }
 
