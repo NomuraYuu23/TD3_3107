@@ -7,12 +7,16 @@ void ShockEffectSystem::Initialize(Weapon* weapon)
 	// 衝撃波マネージャの初期化
 	shockWaveManager_ = std::make_unique<ShockWaveManager>();
 	shockWaveManager_->Initialize();
+
+
 }
 
 void ShockEffectSystem::Update()
 {
 	shockWaveManager_->SetCenter(screenPositionRatio_);
-	shockWaveManager_->Update();
+	if (effectTimer_.IsActive()) {
+		shockWaveManager_->Update();
+	}
 
 	this->effectTimer_.Update();
 
@@ -27,4 +31,5 @@ void ShockEffectSystem::ImGuiDraw()
 {
 	ImGui::DragFloat2("ScreenPos", &screenPosition_.x);
 	ImGui::DragFloat2("ScreenRatio", &screenPositionRatio_.x);
+	shockWaveManager_->ImGuiDraw();
 }
