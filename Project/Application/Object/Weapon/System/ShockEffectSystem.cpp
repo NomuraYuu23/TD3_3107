@@ -1,4 +1,5 @@
 #include "ShockEffectSystem.h"
+#include "../Weapon.h"
 
 void ShockEffectSystem::Initialize(Weapon* weapon)
 {
@@ -13,6 +14,11 @@ void ShockEffectSystem::Update()
 	shockWaveManager_->Update();
 }
 
+void ShockEffectSystem::SetScreenPosition(const BaseCamera& camera)
+{
+	screenPosition_ = MathUtility::WorldToScreen(weapon_->worldtransform_.GetWorldPosition(), &const_cast<BaseCamera&>(camera));
+	screenPositionRatio_ = MathUtility::ScreenPositionRatio(weapon_->worldtransform_.GetWorldPosition(), &const_cast<BaseCamera&>(camera));
+}
 void ShockEffectSystem::ImGuiDraw()
 {
 	ImGui::DragFloat2("ScreenPos", &screenPosition_.x);

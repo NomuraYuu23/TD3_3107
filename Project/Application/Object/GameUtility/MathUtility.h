@@ -55,7 +55,7 @@ public:
 	/// <param name="worldPosition"></param>
 	/// <param name="camera"></param>
 	/// <returns></returns>
-	static Vector2 ScreenPositionRatio(const Vector3& worldPosition, const BaseCamera& camera);
+	static Vector2 ScreenPositionRatio(const Vector3& worldPosition, BaseCamera* camera);
 
 };
 

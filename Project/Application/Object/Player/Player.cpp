@@ -567,9 +567,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 		// 反動生成
 		Enemy** enemy = std::get_if<Enemy*>(&target);
-
-		// 反動生成
-		Enemy** enemy = std::get_if<Enemy*>(&target);
 		if (std::holds_alternative<EnemyWaitState*>((*enemy)->GetState())) {
 			return;
 		}

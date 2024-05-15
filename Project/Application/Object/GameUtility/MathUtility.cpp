@@ -94,9 +94,9 @@ Vector3 MathUtility::RotateVector(const Vector3& direct, float theta)
     return result;
 }
 
-Vector2 MathUtility::ScreenPositionRatio(const Vector3& worldPosition, const BaseCamera& camera)
+Vector2 MathUtility::ScreenPositionRatio(const Vector3& worldPosition, BaseCamera* camera)
 {
-    Vector2 screenPosition = WorldToScreen(worldPosition, &const_cast<BaseCamera&>(camera));
+    Vector2 screenPosition = WorldToScreen(worldPosition, camera);
     Vector2 result = { screenPosition.x / (float)WinApp::kWindowWidth,screenPosition.y / (float)WinApp::kWindowHeight };
     return result;
 }

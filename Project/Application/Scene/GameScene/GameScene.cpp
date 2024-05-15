@@ -329,6 +329,18 @@ void GameScene::Draw() {
 			PostEffect::kCommandIndexGlitchRGBShift);
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
+	//if (isImpact_) {
+		//PostEffect::GetInstance()-
+		PostEffect::ExecutionAdditionalDesc desc = {};
+		desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
+		PostEffect::GetInstance()->SetTime(3.0f);
+		PostEffect::GetInstance()->Execution(
+			dxCommon_->GetCommadList(),
+			renderTargetTexture_,
+			PostEffect::kCommandIndexShockWave,
+			&desc);
+		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	//}
 
 }
 

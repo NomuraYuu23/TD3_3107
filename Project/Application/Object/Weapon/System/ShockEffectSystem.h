@@ -1,8 +1,9 @@
 #pragma once
-#include "../Weapon.h"
 #include "../../GameUtility/TimerLib.h"
 #include "../../GameUtility/MathUtility.h"
 #include "../../../Engine/PostEffect/ShockWaveManager.h"
+
+class Weapon;
 
 class ShockEffectSystem 
 {
@@ -25,10 +26,7 @@ public:
 	/// スクリーン内のどの位置かを設定
 	/// </summary>
 	/// <param name="position"></param>
-	void SetScreenPosition(const BaseCamera& camera) {
-		screenPosition_ = MathUtility::WorldToScreen(weapon_->worldtransform_.GetWorldPosition(), &static_cast<BaseCamera>(camera));
-		screenPositionRatio_ = MathUtility::ScreenPositionRatio(weapon_->worldtransform_.GetWorldPosition(), &static_cast<BaseCamera>(camera));
-	}
+	void SetScreenPosition(const BaseCamera& camera);
 
 	void ImGuiDraw();
 
