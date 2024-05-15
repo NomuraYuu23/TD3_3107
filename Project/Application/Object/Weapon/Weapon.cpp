@@ -40,7 +40,7 @@ void Weapon::Initialize(Model* model)
 	anim_->Init(this);							   // 初期化
 
 	// システム初期化
-	SystemInitialize();
+	this->SystemInitialize();
 }
 
 void Weapon::Update()
@@ -61,7 +61,7 @@ void Weapon::Update()
 		isTread_ = false;
 	}
 	// システム更新
-	SystemUpdate();
+	this->SystemUpdate();
 
 	// 基底クラスの更新
 	IObject::Update();

@@ -30,6 +30,10 @@ public:
 
 	void ImGuiDraw();
 
+	void StartShockWave(float frame) { effectTimer_.Start(frame); }
+
+	bool IsActive() { return effectTimer_.IsActive(); }
+
 private:
 	// 親
 	Weapon* weapon_ = nullptr;

@@ -59,6 +59,7 @@ public: // 継承
 
 	void SetPlayer(Player* player) { player_ = player; }
 
+private:
 	/// <summary>
 	/// システムの初期化
 	/// </summary>

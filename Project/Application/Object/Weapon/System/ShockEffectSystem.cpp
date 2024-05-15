@@ -11,7 +11,11 @@ void ShockEffectSystem::Initialize(Weapon* weapon)
 
 void ShockEffectSystem::Update()
 {
+	shockWaveManager_->SetCenter(screenPositionRatio_);
 	shockWaveManager_->Update();
+
+	this->effectTimer_.Update();
+
 }
 
 void ShockEffectSystem::SetScreenPosition(const BaseCamera& camera)
