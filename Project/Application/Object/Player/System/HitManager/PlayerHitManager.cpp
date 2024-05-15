@@ -12,7 +12,7 @@ void PlayerHitManager::Initialize(Player* player)
 	hp_.decreValue_ = 1;
 
 	invMaxFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "HitInvisibleFrame");
-	defaultData_ = { 5.0f,{4.0f,0},{-3.0f,0},{1.5f,-1.5f},false,0 };
+	defaultData_ = { 3.0f,{4.0f,0},{-3.0f,0},{1.5f,-1.5f},false,0 };
 }
 
 void PlayerHitManager::Update()
@@ -25,7 +25,6 @@ void PlayerHitManager::Update()
 	hitEffectTimer_.Update();
 	if (hitEffectTimer_.IsActive()) {
 		hitEffect_.time = Ease::Easing(Ease::EaseName::Lerp, 0, defaultData_.time, hitEffectTimer_.GetNowFrame());
-		//hitEffect_.time = defaultData_.time;
 		if (hitEffect_.nowFrame > 2.0f) {
 			hitEffect_.isStop = true;
 		}
@@ -93,7 +92,7 @@ void PlayerHitManager::ImGuiDraw()
 {
 	int hp = hp_.current;
 	ImGui::DragInt("currentHP", &hp);
-	
+
 	ImGui::DragFloat2("r", &defaultData_.rShift.x, 0.01f);
 	ImGui::DragFloat2("g", &defaultData_.gShift.x, 0.01f);
 	ImGui::DragFloat2("b", &defaultData_.bShift.x, 0.01f);

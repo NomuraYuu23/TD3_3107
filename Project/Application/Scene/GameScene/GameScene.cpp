@@ -343,10 +343,9 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
-
-	PlayerHitManager::Effect instance = player_->GetEffectInfo();
 	if (player_->GetHitManager().IsHitEffectActive()) {
-		PostEffect::GetInstance()->SetRShift(instance.bShift);
+		PlayerHitManager::Effect instance = player_->GetEffectInfo();
+		PostEffect::GetInstance()->SetRShift(instance.rShift);
 		PostEffect::GetInstance()->SetGShift(instance.gShift);
 		PostEffect::GetInstance()->SetBShift(instance.rShift);
 		PostEffect::GetInstance()->SetTime(instance.time);
@@ -354,12 +353,12 @@ void GameScene::Draw() {
 			dxCommon_->GetCommadList(),
 			renderTargetTexture_,
 			PostEffect::kCommandIndexGlitchRGBShift);
-		WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
 	if (isImpact_) {
 		//PostEffect::GetInstance()-
 		PostEffect::ExecutionAdditionalDesc desc = {};
-		desc.shockWaveManagers[0] = player_->GetWeapon()->GetShockWaveManager();
+		desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
 		PostEffect::GetInstance()->SetTime(3.0f);
 		PostEffect::GetInstance()->Execution(
 			dxCommon_->GetCommadList(),
@@ -453,6 +452,8 @@ void GameScene::DebugCameraUpdate()
 		if (player_->GetEffectInfo().isStop && !camera_.IsShakeNow()) {
 			camera_.ShakeStart(0.3f, 2);
 		}
+		player_->GetWeapon()->GetEffectSystem()->SetScreenPosition(camera_);
+
 		// 
 		camera_.Update();
 	}

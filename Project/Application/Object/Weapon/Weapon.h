@@ -4,6 +4,8 @@
 #include "WeaponState/WeaponStateList.h"
 #include "WeaponState/StateList.h"
 
+#include "System/ShockEffectSystem.h"
+
 #include "../Map/Terrain.h"
 
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
@@ -57,6 +59,15 @@ public: // 継承
 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	/// <summary>
+	/// システムの初期化
+	/// </summary>
+	void SystemInitialize();
+	/// <summary>
+	/// システムの更新(タイマー系もここ
+	/// </summary>
+	void SystemUpdate();
+
 public: // アクセッサ
 	/// <summary>
 	/// 親のトランスフォームアドレス格納
@@ -96,7 +107,9 @@ public: // アクセッサ
 	SpearAnimManager* GetAnimManager() { return anim_.get(); }
 
 	bool IsPlayerJump() { return isPlayerJumpAccept_; }
-	ShockWaveManager* GetShockWaveManager() { return shockWaveManager_.get(); }
+
+	ShockEffectSystem* GetEffectSystem() { return &shockEffect_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -194,6 +207,8 @@ private: // アニメーション関連
 
 	// 槍ジャンプを行ったかどうか
 	bool isPlayerJumpAccept_ = false;
+private:
+	ShockEffectSystem shockEffect_;
 
 	std::unique_ptr<ShockWaveManager> shockWaveManager_;
 };

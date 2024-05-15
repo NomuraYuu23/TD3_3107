@@ -101,6 +101,7 @@ public:
 	void SetDefaultOffset(const Vector3& offset) { defaultOffset_ = offset; }
 	IEnemyState* GetNowState() { return state_.get(); }
 	EnemyState GetState() { return judState_; }
+
 private:
 
 	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern);

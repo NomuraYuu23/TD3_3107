@@ -203,6 +203,7 @@
     <ClCompile Include="Application\Object\Player\System\AssistDash\AssistDash.cpp" />
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
+    <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -432,6 +433,7 @@
     <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
     <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
+    <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
