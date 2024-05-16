@@ -306,6 +306,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\State\EnemyWaitState.h" />
     <ClInclude Include="Application\Object\Enemy\State\IEnemyState.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointObject.h" />
     <ClInclude Include="Application\Object\Map\Goal\GoalObject.h" />
     <ClInclude Include="Application\Object\Player\ActionState\ActionWaitState.h" />
     <ClInclude Include="Application\Object\GameUtility\CommonConfig.h" />

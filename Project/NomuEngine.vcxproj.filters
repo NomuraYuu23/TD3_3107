@@ -430,6 +430,8 @@
     <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
     <ClInclude Include="Application\Object\Map\Goal\GoalObject.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointObject.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
