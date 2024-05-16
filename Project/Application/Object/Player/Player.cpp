@@ -13,7 +13,7 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { -70.0f,10.0f,0 };
+	worldtransform_.transform_.translate = { 0.0f,10.0f,0 };
 
 	worldtransform_.UpdateMatrix();
 
