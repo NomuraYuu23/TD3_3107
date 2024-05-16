@@ -4,11 +4,14 @@
 #include "WeaponState/WeaponStateList.h"
 #include "WeaponState/StateList.h"
 
+#include "System/ShockEffectSystem.h"
+
 #include "../Map/Terrain.h"
 
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 #include "Anim/SpearAnimManager.h"
+#include "../../../Engine/PostEffect/ShockWaveManager.h"
 
 class Player;
 
@@ -55,6 +58,17 @@ public: // 継承
 	void OnCollision(ColliderParentObject2D target) override;
 
 	void SetPlayer(Player* player) { player_ = player; }
+	Player* GetPlayer() { return player_; }
+
+private:
+	/// <summary>
+	/// システムの初期化
+	/// </summary>
+	void SystemInitialize();
+	/// <summary>
+	/// システムの更新(タイマー系もここ
+	/// </summary>
+	void SystemUpdate();
 
 public: // アクセッサ
 	/// <summary>
@@ -96,6 +110,8 @@ public: // アクセッサ
 
 	bool IsPlayerJump() { return isPlayerJumpAccept_; }
 
+	ShockEffectSystem* GetEffectSystem() { return &shockEffect_; }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -108,8 +124,9 @@ public: // 外部で行う設定関数
 	/// </summary>
 	/// <param name="adress"></param>
 	void SettingParent() {
-		worldtransform_.SetParent(parentAdress_);
-		worldtransform_.transform_.translate = GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
+		//worldtransform_.SetParent(parentAdress_);
+		worldtransform_.transform_.translate = parentAdress_->GetWorldPosition();
+		worldtransform_.transform_.translate += GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
 	}
 
 	/// <summary>
@@ -195,6 +212,7 @@ private: // アニメーション関連
 
 	// 槍ジャンプを行ったかどうか
 	bool isPlayerJumpAccept_ = false;
-
+private:
+	ShockEffectSystem shockEffect_;
 };
 

@@ -205,6 +205,7 @@
     <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.cpp" />
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
+    <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -436,6 +437,7 @@
     <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
+    <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

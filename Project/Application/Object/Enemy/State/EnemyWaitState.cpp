@@ -10,5 +10,5 @@ void EnemyWaitState::Initialize()
 
 void EnemyWaitState::Update()
 {
-
+	//enemy_->transform_.translate.y += 0.1f;
 }

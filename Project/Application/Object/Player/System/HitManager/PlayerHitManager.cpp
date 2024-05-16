@@ -92,7 +92,7 @@ void PlayerHitManager::ImGuiDraw()
 {
 	int hp = hp_.current;
 	ImGui::DragInt("currentHP", &hp);
-	
+
 	ImGui::DragFloat2("r", &defaultData_.rShift.x, 0.01f);
 	ImGui::DragFloat2("g", &defaultData_.gShift.x, 0.01f);
 	ImGui::DragFloat2("b", &defaultData_.bShift.x, 0.01f);

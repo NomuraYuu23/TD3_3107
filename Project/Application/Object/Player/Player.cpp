@@ -34,7 +34,12 @@ void Player::Initialize(Model* model)
 	ChangeState(std::make_unique<GroundState>());
 
 	// 武器の親設定
-	weapon_->SettingParent();
+	//weapon_->SettingParent();
+	worldtransform_.UpdateMatrix();
+	weapon_->SetParentAdress(&worldtransform_);
+	// ステート変更
+	weapon_->ChangeRequest(Weapon::StateName::kHold);
+
 	isGround_ = false;
 
 	// アニメーション関連初期化
@@ -305,8 +310,9 @@ void Player::OnCollision(ColliderParentObject2D target)
 			//}
 			//// 反動生成
 			//recoil_.CreateRecoil(Vector3(direct.x, direct.y, 0));
-			float acceptFrame = GlobalVariables::GetInstance()->GetFloatValue("Dash", "AcceptFrame");
-			assistDash_.StartAccept(acceptFrame);
+			
+			//float acceptFrame = GlobalVariables::GetInstance()->GetFloatValue("Dash", "AcceptFrame");
+			//assistDash_.StartAccept(acceptFrame);
 			//// 着地している場合早期リターン
 			if (std::holds_alternative<GroundState*>(nowState_)) {
 				return;
@@ -608,12 +614,17 @@ void Player::OnCollision(ColliderParentObject2D target)
 		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
 			return;
 		}
+		// 反動生成
+		Enemy** enemy = std::get_if<Enemy*>(&target);
+		if (std::holds_alternative<EnemyWaitState*>((*enemy)->GetState())) {
+			return;
+		}
 
 		// 持ってないかどうか
 		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
 			// 持ってるから何か起きる
 			// 反動生成
-			Enemy** enemy = std::get_if<Enemy*>(&target);
+			//Enemy** enemy = std::get_if<Enemy*>(&target);
 			Vector3 newDirect = {};
 			newDirect.x = worldtransform_.GetWorldPosition().x - (*enemy)->GetWorldPosition().x;
 			newDirect.y = 1.0f;
@@ -632,6 +643,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		}
 		else {
+
 			hpManager_.OnHit(1);
 		}
 		// キャンセル

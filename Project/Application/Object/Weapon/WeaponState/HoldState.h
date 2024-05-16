@@ -17,5 +17,10 @@ public:
 	/// </summary>
 	void ImGuiUpdate() override {};
 
+	void LerpUpdate();
+
+private:
+	Vector3 offset_ = {};
+	Vector3 interTarget_ = {};
 };
 

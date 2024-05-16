@@ -69,7 +69,7 @@ public:
 	/// </summary>
 	/// <returns>ワールドポジションバッファ</returns>
 	ID3D12Resource* GetWorldPositionBuff() { return worldPositionBuff_.Get(); }
-	
+
 	/// <summary>
 	/// ビュープロジェクション行列バッファ取得
 	/// </summary>

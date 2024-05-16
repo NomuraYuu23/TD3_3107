@@ -50,6 +50,8 @@ public:
 	/// <returns></returns>
 	bool InvisibleActive() { return invisibleTimer_.IsActive(); }
 
+	bool IsHitEffectActive() { return hitEffectTimer_.IsActive(); }
+
 private:
 	// 親
 	Player* player_ = nullptr;

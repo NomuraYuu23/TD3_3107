@@ -61,6 +61,8 @@ void Enemy::ImGuiDraw()
 	ImGui::DragFloat3("WorldPosition", &transform_.translate.x);
 	ImGui::DragFloat2("scale", &scale2D_.x);
 	ImGui::Text("%d", isDead_);
+	std::string name = typeid(*state_).name();
+	ImGui::Text(name.c_str());
 
 	if (ImGui::Button("Release")) {
 		this->ReleaseParent();
@@ -185,6 +187,7 @@ void Enemy::CheckParent()
 				weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 			ResetParent();
+			ChangeState(std::make_unique<EnemyAerialState>(), static_cast<IEnemyState::AttackPattern>(0));
 		}
 	}
 }
