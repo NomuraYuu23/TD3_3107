@@ -92,6 +92,22 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	// 敵の角度生成
 	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
 	Vector3 center = worldTransform_.GetWorldPosition();
+
+	float transformAngle = 0;
+	float addAngle = 0;
+	if (maxCount_ == 6) {
+		addAngle = 1.0f;
+		transformAngle = 1.8f;
+	}
+	else if (maxCount_ == 5) {
+		addAngle = 1.3f;
+		transformAngle = 1.6f;
+	}
+	else if (maxCount_ == 3) {
+		addAngle = 2.0f;
+		transformAngle = 1.8f;
+	}
+
 	// 敵の生成
 	for (uint32_t i = 0; i < maxCount_; ++i) {
 		// 角度からオフセットの計算
@@ -107,6 +123,8 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 		static_cast<Enemy*>(obj.get())->SetEmitter(this);
 		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
 		obj->transform_.translate = newPosition;
+		obj->transform_.rotate.z = transformAngle;
+		transformAngle += addAngle;
 		// 初期化
 		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), 0);
 		// リストに追加

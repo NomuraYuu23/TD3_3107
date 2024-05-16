@@ -27,9 +27,6 @@ void Enemy::Initialize()
 
 	isDead_ = false;
 	isGround_ = false;
-
-	// 回転行列を使用する
-	usedDirection_ = true;
 }
 
 void Enemy::Update()
@@ -59,6 +56,8 @@ void Enemy::ImGuiDraw()
 	//ImGui::Begin(name.c_str());
 	ImGui::SeparatorText(name_.c_str());
 	ImGui::DragFloat3("WorldPosition", &transform_.translate.x);
+	std::string rot = "transform" + name_;
+	ImGui::DragFloat3(rot.c_str(), &transform_.rotate.x, 0.01f);
 	ImGui::DragFloat2("scale", &scale2D_.x);
 	ImGui::Text("%d", isDead_);
 	std::string name = typeid(*state_).name();
