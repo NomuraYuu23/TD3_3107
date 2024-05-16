@@ -8,8 +8,9 @@ void EnemyManager::Initialize(Model* model)
 {
 	model_ = model;
 	//CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
-	CreateEmitter({ {0.0f,10.0f},7.0f,5 });
-	CreateEmitter({ {-20.0f,10.0f},7.0f,3 });
+	CreateEmitter({ {-40.0f,20.0f},15.0f,6 ,60.0f});
+	CreateEmitter({ {0.0f,10.0f},7.0f,5, 75.0f });
+	CreateEmitter({ {-20.0f,10.0f},7.0f,3, 90.0f });
 
 	CreateSingleEnemy();
 }
@@ -88,7 +89,7 @@ void EnemyManager::CreateEmitter(const MultiEnemyData& data)
 	// 敵生成
 	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
 	// エミッターの設定
-	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(90.0f);
+	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(data.rotateSpeed);
 	// リストに
 	enemyEmitters_.push_back(std::move(obj));
 
