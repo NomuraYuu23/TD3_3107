@@ -99,7 +99,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
 				weapon_ = (*weapon);
-				// ダメージ効果音を再生
+				// 槍が刺さった効果音を再生
 				weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearSting);
 			}
 		}
@@ -116,6 +116,9 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			desc.paeticleName = kEnemyDeadParticle;
 
 			ParticleManager::GetInstance()->MakeEmitter(desc, 0);
+
+			// 敵を倒す効果音を再生
+			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
 
 			isDead_ = true;
 		}

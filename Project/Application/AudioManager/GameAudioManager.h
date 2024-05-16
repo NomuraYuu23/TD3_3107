@@ -9,6 +9,7 @@ enum GameAudioNameIndex {
 	kSpearCatch,
 	kSpearSting,
 	kThrowSpear,
+	kEliminateEnemy,
 	kGameAudioNameIndexOfCount // 数
 };
 
@@ -51,6 +52,7 @@ private: // メンバ変数
 		"Audio/SE/Spear_Catch.mp3",
 		"Audio/SE/Spear_Sting.mp3",
 		"Audio/SE/ThrowSpear.mp3",
+		"Audio/SE/EnemyDeadSound.mp3",
 	};
 
 };
