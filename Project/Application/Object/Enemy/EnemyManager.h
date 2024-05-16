@@ -24,6 +24,7 @@ private:
 		Vector3 position;
 		float distance;
 		uint32_t enemyMaxCount;
+		float rotateSpeed;
 	};
 
 public:
