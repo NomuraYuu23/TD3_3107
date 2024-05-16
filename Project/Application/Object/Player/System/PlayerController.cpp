@@ -114,8 +114,24 @@ void PlayerController::ControllerProcess()
 				else {
 					player_->sPlaySpeed = 1.0f;
 				}
+
+				// 槍のエイムアニメーション再生
+				if (!player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation(SpearAnimManager::SpearAim)) {
+					player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearAim);
+				}
+
+				// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
+				if (player_->weapon_->isHold_) {
+
+				}
+
 			}
 			else {
+				// 何も再生されていなければ待機アニメーション再生
+				if (player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation()) {
+					player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+				}
+
 				player_->sPlaySpeed = 1.0f;
 			}
 		}

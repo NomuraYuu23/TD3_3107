@@ -149,6 +149,8 @@ public: // 外部で行う設定関数
 
 	// 槍を持っているかのフラグ
 	bool isHold_ = true;
+	// 槍を狙っている方向に向けるかのフラグ
+	bool isThrowDirect_ = false;
 
 private:
 	/// <summary>

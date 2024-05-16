@@ -73,6 +73,12 @@ public:
 	bool GetRunningAnimation(int count) { return animationDatas_[count].isRun; };
 
 	/// <summary>
+	/// 再生中アニメーションがあるかどうか取得
+	/// </summary>
+	/// <returns>再生中アニメーションがあるか</returns>
+	bool GetRunningAnimation();
+
+	/// <summary>
 	/// アニメーションの実行状態取得
 	/// </summary>
 	/// <returns>アニメーションの実行状態</returns>

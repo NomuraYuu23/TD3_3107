@@ -16,6 +16,11 @@ void HoldState::Initialize()
 
 	// 槍の保持フラグをtrueに
 	weapon_->isHold_ = true;
+
+	// 槍のアイドルアニメーション開始
+	if (weapon_->GetAnimManager() != nullptr) {
+		weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+	}
 }
 
 void HoldState::Update()

@@ -11,7 +11,8 @@ void ImpaledState::Initialize()
 	weapon_->worldtransform_.parent_ = nullptr;
 	weapon_->worldtransform_.UpdateMatrix();
 
-	//autoComeBack_
+	// 待機アニメーション開始
+	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
 
 }
 

@@ -163,6 +163,20 @@ std::vector<bool> Animation::FinishedAnimations()
 	return result;
 }
 
+bool Animation::GetRunningAnimation()
+{
+	// 配列内に再生中アニメーションがあるか検証
+	for (uint32_t i = 0; i < animationCalcDataNum_; ++i) {
+		// 実行されていたら
+		if (animationDatas_[i].isRun) {
+			return true;
+		}
+	}
+
+	// １つも実行されていなければfalse
+	return false;
+}
+
 std::vector<bool> Animation::GetRunningAnimations()
 {
 	

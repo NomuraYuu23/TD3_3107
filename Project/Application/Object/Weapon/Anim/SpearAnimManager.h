@@ -9,6 +9,19 @@ class Weapon;
 /// </summary>
 class SpearAnimManager
 {
+public: // サブクラス
+
+	/// <summary>
+	/// 槍アニメーション
+	/// </summary>
+	enum SpearAnim {
+		SpearIdle,	 // 待機
+		SpearAim,	 // エイム開始
+		SpearAiming, // エイム中
+		SpearThrow,  // 槍投げ
+		SpearBounce, // 槍のバウンド
+	};
+
 public: // メンバ関数
 
 	/// <summary>
@@ -29,6 +42,14 @@ public: // メンバ関数
 	/// <param name="isLoop">アニメーションをループさせるか</param>
 	/// <param name="isFinish">アニメーションを終了させるか</param>
 	void PlayAnimation(int32_t animNum, bool isLoop = false, bool isFinish = true);
+
+public: // アクセッサ等
+
+	/// <summary>
+	/// アニメーションゲッター
+	/// </summary>
+	/// <returns></returns>
+	Animation& GetAnim() { return anim_; }
 
 private: // プライベートなメンバ関数
 
