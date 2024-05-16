@@ -32,6 +32,15 @@ void Enemy::Initialize()
 	usedDirection_ = true;
 }
 
+void Enemy::Initialize(const std::string& name)
+{
+
+	Enemy::Initialize();
+
+	name_ = name;
+
+}
+
 void Enemy::Update()
 {
 	prevPosition_ = { transform_.translate.x,transform_.translate.y };

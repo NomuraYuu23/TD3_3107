@@ -19,6 +19,10 @@ public:
 	/// </summary>
 	void Initialize() override;
 	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize(const std::string& name);
+	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update() override;
@@ -99,6 +103,8 @@ public:
 	}
 
 	void SetDefaultOffset(const Vector3& offset) { defaultOffset_ = offset; }
+
+	std::string GetName() { return name_; }
 
 private:
 

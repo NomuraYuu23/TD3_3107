@@ -23,8 +23,8 @@ inline void from_json(const nlohmann::json& json, MultiEnemyData& value) {
 
     // キーを確認
     if (json.contains("position") && json["position"].is_array() &&
-        json.contains("distance") && json["distance"].is_array() &&
-        json.contains("enemyMaxCount") && json["enemyMaxCount"].is_array()) {
+        json.contains("distance") && json["distance"].is_number_float() &&
+        json.contains("enemyMaxCount") && json["enemyMaxCount"].is_number_integer()) {
 
         value.position = json["position"].get<Vector3>();
         value.distance = json["distance"].get<float>();

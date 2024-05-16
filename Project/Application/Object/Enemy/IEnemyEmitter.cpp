@@ -23,6 +23,14 @@ void IEnemyEmitter::Initialize(Model* model)
 
 }
 
+void IEnemyEmitter::Initialize(Model* model,const std::string& name)
+{
+
+	Initialize(model);
+	name_ = name;
+
+}
+
 void IEnemyEmitter::Update()
 {
 	if (isRotateReturn_ && !interval_.IsActive()) {
@@ -70,6 +78,7 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	worldTransform_.transform_.translate = transformPosition;
 	distance_ = distance;
 	maxCount_ = enemyCount;
+	worldTransform_.UpdateMatrix();
 	// 敵の角度生成
 	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
 	Vector3 center = worldTransform_.GetWorldPosition();

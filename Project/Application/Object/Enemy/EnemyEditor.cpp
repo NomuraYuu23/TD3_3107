@@ -132,19 +132,15 @@ void EnemyEditor::LoadFile(const std::string& groupName)
 		for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
 			// アイテム名を取得
 			const std::string& itemName = itItem.key();
-
-			
+			size_t tmp = itItem->size();
 			// SingleEnemyData型の値を保持していれば
-			if (itItem->contains("position") && itItem->find("position")->is_array() &&
-				itItem->contains("typeNum") && itItem->find("typeNum")->is_array()) {
+			if (itItem->is_object() && itItem->size() == 2) {
 				// SingleEnemyData型の値を登録
 				SingleEnemyData value = itItem->get<SingleEnemyData>();
 				SetValue(groupName, itemName, value);
 			}
 			// MultiEnemyData型の値を保持していれば
-			else if(itItem->contains("position") && itItem->find("position")->is_array() &&
-				itItem->contains("distance") && itItem->find("distance")->is_array() &&
-				itItem->contains("enemyMaxCount") && itItem->find("enemyMaxCount")->is_array()){
+			else{
 				// MultiEnemyData型の値を登録
 				MultiEnemyData value = itItem->get<MultiEnemyData>();
 				SetValue(groupName, itemName, value);
@@ -160,9 +156,9 @@ void EnemyEditor::SetValue(const std::string& groupName, const std::string& key,
 
 	// グループの参照を取得
 	EnemyEditorGroup& group = datas_[groupName];
-	if (group.find(key) != group.end()) {
-		return;
-	}
+	//if (group.find(key) != group.end()) {
+	//	return;
+	//}
 	// 新しい項目のデータを設定
 	EnemyEditorItem newItem{};
 	newItem = value;
@@ -176,9 +172,9 @@ void EnemyEditor::SetValue(const std::string& groupName, const std::string& key,
 
 	// グループの参照を取得
 	EnemyEditorGroup& group = datas_[groupName];
-	if (group.find(key) != group.end()) {
-		return;
-	}
+	//if (group.find(key) != group.end()) {
+	//	return;
+	//}
 	// 新しい項目のデータを設定
 	EnemyEditorItem newItem{};
 	newItem = value;
@@ -307,11 +303,18 @@ void EnemyEditor::ImGuiSingleEnemy()
 			addSingleEnemyNum_ = 0;
 		}
 
-		std::string nameTerrainAdd = "SingleEnemyAdd" + std::to_string(stageCount);
+		if (addSingleEnemyData_.typeNum < 0) {
+			addSingleEnemyData_.typeNum = 0;
+		}
+		else if (addSingleEnemyData_.typeNum > 1) {
+			addSingleEnemyData_.typeNum = 1;
+		}
 
-		if (ImGui::Button(nameTerrainAdd.c_str())) {
+		std::string nameSingleAdd = "SingleEnemyAdd" + std::to_string(stageCount);
+
+		if (ImGui::Button(nameSingleAdd.c_str())) {
 			// キー
-			std::string key = "SingleEnemy" + std::to_string(addSingleEnemyNum_);
+			std::string key = "Enemy" + std::to_string(addSingleEnemyNum_);
 			// 追加
 			SetValue(stageName, key, addSingleEnemyData_);
 			addSingleEnemyNum_++;
@@ -330,7 +333,7 @@ void EnemyEditor::ImGuiSingleEnemy()
 
 		if (ImGui::Button(nameSingleDelete.c_str())) {
 			// キー
-			std::string key = "SingleEnemy" + std::to_string(deleteSingleEnemyNum_);
+			std::string key = "Enemy" + std::to_string(deleteSingleEnemyNum_);
 
 			// 指定グループに指定キーが存在するか
 			if (datasItr->second.find(key) != datasItr->second.end()) {
@@ -358,6 +361,13 @@ void EnemyEditor::ImGuiSingleEnemy()
 
 				ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
 				ImGui::DragInt(nameTypeNum.c_str(), &item.typeNum, imGuiSpeed);
+
+				if (item.typeNum < 0) {
+					item.typeNum = 0;
+				}
+				else if (item.typeNum > 1) {
+					item.typeNum = 1;
+				}
 
 			}
 
@@ -392,6 +402,9 @@ void EnemyEditor::ImGuiMultiEnemy()
 		ImGui::DragInt("AddEnemyMaxCount", &addMultieEnemyData_.enemyMaxCount, imGuiSpeed, 0);
 		ImGui::DragInt("AddMultiEnemyNum", &addMultiEnemyNum_, 0.1f, 0);
 
+		if (addMultieEnemyData_.enemyMaxCount < 0) {
+			addMultieEnemyData_.enemyMaxCount = 0;
+		}
 		if (addMultiEnemyNum_ < 0) {
 			addMultiEnemyNum_ = 0;
 		}
@@ -400,9 +413,9 @@ void EnemyEditor::ImGuiMultiEnemy()
 
 		if (ImGui::Button(nameTerrainAdd.c_str())) {
 			// キー
-			std::string key = "MultiEnemy" + std::to_string(addMultiEnemyNum_);
+			std::string key = "EnemyEmitter:" + std::to_string(addMultiEnemyNum_);
 			// 追加
-			SetValue(stageName, key, addSingleEnemyData_);
+			SetValue(stageName, key, addMultieEnemyData_);
 			addMultiEnemyNum_++;
 		}
 
@@ -418,7 +431,7 @@ void EnemyEditor::ImGuiMultiEnemy()
 
 		if (ImGui::Button(nameSingleDelete.c_str())) {
 			// キー
-			std::string key = "MultiEnemy" + std::to_string(deleteMultiEnemyNum_);
+			std::string key = "EnemyEmitter:" + std::to_string(deleteMultiEnemyNum_);
 
 			// 指定グループに指定キーが存在するか
 			if (datasItr->second.find(key) != datasItr->second.end()) {
@@ -446,8 +459,12 @@ void EnemyEditor::ImGuiMultiEnemy()
 				std::string nameEnemyMaxCount = stageName + name + "EnemyMaxCount";
 
 				ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
-				ImGui::DragFloat(nameDistance.c_str(), &addMultieEnemyData_.distance, imGuiSpeed, 0);
-				ImGui::DragInt(nameEnemyMaxCount.c_str(), &addMultieEnemyData_.enemyMaxCount, imGuiSpeed, 0);
+				ImGui::DragFloat(nameDistance.c_str(), &item.distance, imGuiSpeed, 0);
+				ImGui::DragInt(nameEnemyMaxCount.c_str(), &item.enemyMaxCount, imGuiSpeed, 0);
+
+				if (item.enemyMaxCount < 0) {
+					item.enemyMaxCount = 0;
+				}
 
 			}
 

@@ -20,7 +20,7 @@ inline void from_json(const nlohmann::json& json, SingleEnemyData& value) {
 
     // キーを確認
     if (json.contains("position") && json["position"].is_array() &&
-        json.contains("typeNum") && json["typeNum"].is_array()) {
+        json.contains("typeNum") && json["typeNum"].is_number_integer()) {
 
         value.position = json["position"].get<Vector3>();
         value.typeNum = json["typeNum"].get<int32_t>();

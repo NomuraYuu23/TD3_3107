@@ -56,6 +56,7 @@ private:
 	/// 敵の追加
 	/// </summary>
 	void RegisterEnemy(const SingleEnemyData& data);
+	void RegisterEnemy(const SingleEnemyData& data, const std::string& name);
 
 	/// <summary>
 	/// 単体の敵を生成している場所
@@ -68,6 +69,12 @@ private:
 	/// <param name="distance">各敵との距離</param>
 	/// <param name="enemyMaxCount">敵の数</param>
 	void CreateEmitter(const MultiEnemyData& data);
+	void CreateEmitter(const MultiEnemyData& data, const std::string& name);
+
+	/// <summary>
+	/// ロードエネミーデータ
+	/// </summary>
+	void LoadEnemyData();
 
 	Vector3 resPoint_ = {};
 	
