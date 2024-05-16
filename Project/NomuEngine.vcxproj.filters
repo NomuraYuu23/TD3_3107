@@ -203,6 +203,8 @@
     <ClCompile Include="Application\Object\Player\System\AssistDash\AssistDash.cpp" />
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
+    <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.cpp" />
+    <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -432,6 +434,8 @@
     <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
     <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
+    <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
+    <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
