@@ -5,6 +5,9 @@
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
 #include "../../../Engine/Animation/Animation.h"
+#include "SingleEnemyData.h"
+#include "MultiEnemyData.h"
+#include "EnemyEditor.h"
 
 class EnemyManager
 {
@@ -14,18 +17,6 @@ private:
 	//	eProximity,	// 近接タイプ
 	//	eRemote,	// 遠隔タイプ
 	//};
-
-	struct SingleEnemyData {
-		Vector3 position;
-		uint32_t typeNum;
-	};
-
-	struct MultiEnemyData {
-		Vector3 position;
-		float distance;
-		uint32_t enemyMaxCount;
-		float rotateSpeed;
-	};
 
 public:
 	/// <summary>
@@ -65,6 +56,7 @@ private:
 	/// 敵の追加
 	/// </summary>
 	void RegisterEnemy(const SingleEnemyData& data);
+	void RegisterEnemy(const SingleEnemyData& data, const std::string& name);
 
 	/// <summary>
 	/// 単体の敵を生成している場所
@@ -77,6 +69,12 @@ private:
 	/// <param name="distance">各敵との距離</param>
 	/// <param name="enemyMaxCount">敵の数</param>
 	void CreateEmitter(const MultiEnemyData& data);
+	void CreateEmitter(const MultiEnemyData& data, const std::string& name);
+
+	/// <summary>
+	/// ロードエネミーデータ
+	/// </summary>
+	void LoadEnemyData();
 
 	Vector3 resPoint_ = {};
 	
@@ -88,5 +86,8 @@ private:
 
 	// 全体のモデル
 	Model* model_;
+
+	// エネミーエディタ
+	std::unique_ptr<EnemyEditor> enemyEditor_;
 
 };

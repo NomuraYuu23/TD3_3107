@@ -30,6 +30,9 @@ void Terrain::Initialize()
 	material_->SetEnableLighting(enableLighting_);
 	material_->SetShininess(shininess_);
 	//this->transform_
+
+	name_ = "noName";
+
 }
 
 void Terrain::Update()

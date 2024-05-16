@@ -19,6 +19,11 @@ public:
 	/// <param name="model"></param>
 	void Initialize(Model* model) override;
 	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="model"></param>
+	void Initialize(Model* model, const std::string& name);
+	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update() override;
@@ -53,6 +58,8 @@ public:
 	bool IsRotateReturn() { return isRotateReturn_; }
 
 	float GetNowAngle() { return nowAngle_; }
+
+	std::string GetName() { return name_; }
 
 private:
 	// 

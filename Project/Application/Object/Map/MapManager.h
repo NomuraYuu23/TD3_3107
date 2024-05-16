@@ -5,6 +5,7 @@
 #include "../../../Engine/Collider2D/Box.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
+#include "MapEditor.h"
 
 class MapManager : public LargeNumberOfObjects
 {
@@ -37,7 +38,7 @@ private:
 	/// ブロックの追加
 	/// </summary>
 	void RegisterBlock(const Vector3& position);
-	void RegisterBlock(const Vector3& position, const Vector2 scale);
+	void RegisterBlock(const Vector3& position, const Vector2& scale, const std::string& name);
 
 	/// <summary>
 	/// カメラに影響を与えるブロック登録
@@ -74,6 +75,10 @@ private:
 
 	void LoadMapData(const std::string& filePath);
 
+private: 
+
+	void EditorMapLoad();
+
 private:
 	// マップのオブジェクト登録用の関数ポインタ
 	void(MapManager::* registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kMaxSize)])(const Vector3&) = {
@@ -82,6 +87,9 @@ private:
 		&MapManager::RegisterObstacleBlock,
 		&MapManager::RegisterWallBlock
 	};
+
+	// 
+	std::unique_ptr<MapEditor> mapEditor_;
 
 };
 
