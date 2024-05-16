@@ -93,6 +93,8 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModel_.get());
 	// ポニーテール
 	player_->SetPonyTail(ponyTailModel_.get());
+	// オーディオマネージャーを渡す
+	player_->gameAudioManager_ = audioManager_.get();
 
 	// 更新
 	//countTime_ = 0;

@@ -36,6 +36,8 @@ void SpearAerialState::Initialize()
 	// 槍のバウンドアニメーション再生
 	player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearBounce);
 
+	// ジャンプ効果音を再生
+	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
 }
 
 void SpearAerialState::Update()
