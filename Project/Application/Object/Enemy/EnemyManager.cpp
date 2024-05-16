@@ -22,7 +22,9 @@ void EnemyManager::Initialize(Model* model)
 void EnemyManager::Update()
 {
 
+#ifdef _DEBUG
 	LoadEnemyData();
+#endif // _DEBUG
 
 	// 更新をLargeのやつごとに
 	for (std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator it = enemyEmitters_.begin();
