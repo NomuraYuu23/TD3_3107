@@ -206,6 +206,7 @@
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.cpp" />
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
+    <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -438,6 +439,7 @@
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
+    <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
