@@ -1,5 +1,6 @@
 #include "GoalObject.h"
-#include "../ObjectList.h"
+#include "../../ObjectList.h"
+#include "../../../Collider2D/CollisionConfig2D.h"
 
 void GoalObject::Initialize(Model* model)
 {
@@ -11,8 +12,8 @@ void GoalObject::Initialize(Model* model)
 	scale2D_ = { 2.0f,2.0f };
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
-	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
-	boxCollider_.SetCollisionMask(kCollisionAttributeTerrain);
+	boxCollider_.SetCollisionAttribute(kCollisionAttributeGoalObject);
+	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
 }
 

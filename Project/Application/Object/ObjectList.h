@@ -16,6 +16,7 @@
 // マップ
 #include "Map/MapManager.h"
 #include "Map/Terrain.h"
+#include "Map/Goal/GoalObject.h"
 
 // カメラ
 #include "GameCamera/FollowCamera.h"
