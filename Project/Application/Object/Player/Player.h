@@ -176,7 +176,8 @@ private: // フラグ
 	bool isSlowGame_ = false;
 	// デバッグ用
 	bool isDebugDraw_ = false;
-
+public:
+	bool isSlowNow_ = false;
 
 private: // システム
 	// 現状のステート
