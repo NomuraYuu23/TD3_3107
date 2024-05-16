@@ -137,13 +137,13 @@ void EnemyEditor::LoadFile(const std::string& groupName)
 			if (itItem->is_object() && itItem->size() == 2) {
 				// SingleEnemyData型の値を登録
 				SingleEnemyData value = itItem->get<SingleEnemyData>();
-				SetValue(groupName, itemName, value);
+				SetValue(name, itemName, value);
 			}
 			// MultiEnemyData型の値を保持していれば
 			else{
 				// MultiEnemyData型の値を登録
 				MultiEnemyData value = itItem->get<MultiEnemyData>();
-				SetValue(groupName, itemName, value);
+				SetValue(name, itemName, value);
 			}
 
 		}

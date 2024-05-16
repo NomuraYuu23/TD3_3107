@@ -125,7 +125,7 @@ void EnemyManager::LoadEnemyData()
 	std::map<std::string, EnemyEditor::EnemyEditorGroup>* mapDatas = enemyEditor_->GetDatas();
 
 	// ステージ
-	std::string stageName = "Stage";
+	std::string stageName = "Stage0";
 
 	// シングル用
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemySingle0 = enemyEmitters_.begin();
