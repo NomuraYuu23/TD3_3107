@@ -39,6 +39,10 @@ struct ComputeParameters {
 	float32_t radialBlurStrength; // 放射状ブラーの広がる強さ
 	float32_t radialBlurMask; // 放射状ブラーが適用されないサイズ
 
+	float32_t colorLerpT; // 色変える系のLerpT
+	float32_t2 colorSize; // 色変える系の大きさ
+	float32_t2 colorPosition; // 色変える系の位置
+
 	float32_t4 flareColor; // フレアの色
 	float32_t2 flareSize; // フレアの大きさ
 	float32_t2 flarePosition; // フレアの位置
@@ -677,18 +681,21 @@ float32_t4 FlarePara(in const float32_t4 input, in const float32_t2 index) {
 	// アウトプットにソース画像を入れる
 	float32_t4 output = input;
 
+	// uv
+	float32_t2 texcoord = GetTexcoord(index, float32_t2(gComputeConstants.threadIdTotalX, gComputeConstants.threadIdTotalY));
+
 	// フレアの距離
-	float32_t2 flareLength = index - gComputeConstants.flarePosition;
-	flareLength.x = flareLength.x * rcp(gComputeConstants.flareSize.x * gComputeConstants.threadIdTotalY);
-	flareLength.y = flareLength.y * rcp(gComputeConstants.flareSize.y * gComputeConstants.threadIdTotalY);
+	float32_t2 flareLength = texcoord - gComputeConstants.flarePosition;
+	flareLength.x = flareLength.x * rcp(gComputeConstants.flareSize.x);
+	flareLength.y = flareLength.y * rcp(gComputeConstants.flareSize.y);
 
 	// フレア
 	float32_t flare = 1.0f - clamp(length(flareLength), 0.0f, 1.0f);
 
 	// パラの距離
-	float32_t2 paraLength = index - gComputeConstants.paraPosition;
-	paraLength.x = paraLength.x * rcp(gComputeConstants.paraSize.x * gComputeConstants.threadIdTotalY);
-	paraLength.y = paraLength.y * rcp(gComputeConstants.paraSize.y * gComputeConstants.threadIdTotalY);
+	float32_t2 paraLength = texcoord - gComputeConstants.paraPosition;
+	paraLength.x = paraLength.x * rcp(gComputeConstants.paraSize.x);
+	paraLength.y = paraLength.y * rcp(gComputeConstants.paraSize.y);
 
 	// パラ
 	float32_t para = 1.0f - clamp(length(paraLength), 0.0f, 1.0f);
@@ -713,11 +720,27 @@ void mainFlarePara(uint32_t3 dispatchId : SV_DispatchThreadID) {
 
 }
 
-float32_t4 GrayScale(in const float32_t4 input) {
+float32_t4 GrayScale(in const float32_t4 input, in const float32_t2 index) {
 
 	float32_t value = dot(input.rgb, float32_t3(0.2125f, 0.7154f, 0.0721f));
 
-	return float32_t4(value, value, value, input.a);
+	float32_t3 output = lerp(input.rgb, float32_t3(value, value, value), gComputeConstants.colorLerpT);
+
+	// uv
+	float32_t2 texcoord = GetTexcoord(index, float32_t2(gComputeConstants.threadIdTotalX, gComputeConstants.threadIdTotalY));
+
+	// 距離
+	float32_t2 colorLength = texcoord - gComputeConstants.colorPosition;
+	colorLength.x = colorLength.x * rcp(gComputeConstants.colorSize.x);
+	colorLength.y = colorLength.y * rcp(gComputeConstants.colorSize.y);
+
+	// 補間係数
+	float32_t t = 1.0f - clamp(length(colorLength), 0.0f, 1.0f);
+
+	// 出力
+	output.rgb = lerp(input.rgb, output, t);
+
+	return float32_t4(output, input.a);
 
 }
 
@@ -728,17 +751,33 @@ void mainGrayScale(uint32_t3 dispatchId : SV_DispatchThreadID) {
 		dispatchId.y < gComputeConstants.threadIdTotalY) {
 		
 		float32_t4 input = sourceImage0[dispatchId.xy];
-		destinationImage0[dispatchId.xy] = GrayScale(input);
+		destinationImage0[dispatchId.xy] = GrayScale(input, dispatchId.xy);
 
 	}
 
 }
 
-float32_t4 Sepia(in const float32_t4 input) {
+float32_t4 Sepia(in const float32_t4 input, in const float32_t2 index) {
 
 	float32_t value = dot(input.rgb, float32_t3(0.2125f, 0.7154f, 0.0721f));
 
-	return float32_t4(value, value * 74.0f * rcp(107.0f), value * 43.0f * rcp(107.0f), input.a);
+	float32_t3 output = lerp(input.rgb, float32_t3(value, value * 74.0f * rcp(107.0f), value * 43.0f * rcp(107.0f)), gComputeConstants.colorLerpT);
+
+	// uv
+	float32_t2 texcoord = GetTexcoord(index, float32_t2(gComputeConstants.threadIdTotalX, gComputeConstants.threadIdTotalY));
+
+	// 距離
+	float32_t2 colorLength = texcoord - gComputeConstants.colorPosition;
+	colorLength.x = colorLength.x * rcp(gComputeConstants.colorSize.x);
+	colorLength.y = colorLength.y * rcp(gComputeConstants.colorSize.y);
+
+	// 補間係数
+	float32_t t = 1.0f - clamp(length(colorLength), 0.0f, 1.0f);
+
+	// 出力
+	output.rgb = lerp(input.rgb, output, t);
+
+	return float32_t4(output, input.a);
 
 }
 
@@ -749,7 +788,7 @@ void mainSepia(uint32_t3 dispatchId : SV_DispatchThreadID) {
 		dispatchId.y < gComputeConstants.threadIdTotalY) {
 
 		float32_t4 input = sourceImage0[dispatchId.xy];
-		destinationImage0[dispatchId.xy] = Sepia(input);
+		destinationImage0[dispatchId.xy] = Sepia(input, dispatchId.xy);
 
 	}
 

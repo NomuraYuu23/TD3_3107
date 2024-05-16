@@ -10,15 +10,12 @@
     <FxCompile Include="Resources\shaders\Particle.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\ManyAnimModels.VS.hlsl" />
     <FxCompile Include="Resources\shaders\ManyModels.PS.hlsl" />
     <FxCompile Include="Resources\shaders\ManyNormalModels.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Model.PS.hlsl" />
     <FxCompile Include="Resources\shaders\NormalModel.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Outline.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Outline.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\AnimInverseModel.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\AnimModel.VS.hlsl" />
     <FxCompile Include="Resources\shaders\PostEffectCalc.CS.hlsl" />
     <FxCompile Include="Resources\shaders\PostEffect.CS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSprite.PS.hlsl" />
