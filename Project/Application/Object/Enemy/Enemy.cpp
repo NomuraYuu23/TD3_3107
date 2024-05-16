@@ -185,4 +185,7 @@ void Enemy::CheckParent()
 			ChangeState(std::make_unique<EnemyAerialState>(), static_cast<IEnemyState::AttackPattern>(0));
 		}
 	}
+	else {
+		transform_.rotate = parent_->transform_.rotate * (1.0f);
+	}
 }
