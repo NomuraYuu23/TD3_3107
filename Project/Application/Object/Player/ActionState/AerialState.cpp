@@ -22,7 +22,7 @@ void AerialState::Initialize()
 	velocity_ = player_->velocity_;
 
 	// ジャンプ開始アニメーション
-	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
+	//player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
 }
 
 void AerialState::Update()

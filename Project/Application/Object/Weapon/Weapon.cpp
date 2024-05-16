@@ -40,8 +40,8 @@ void Weapon::Initialize(Model* model)
 	SystemInitialize();
 
 	// アニメーション関連初期化
-	anim_ = std::make_unique<SpearAnimManager>();  // 生成
-	anim_->Init(this);							   // 初期化
+	//anim_ = std::make_unique<SpearAnimManager>();  // 生成
+	//anim_->Init(this);							   // 初期化
 }
 
 void Weapon::Update()
@@ -68,7 +68,7 @@ void Weapon::Update()
 	IObject::Update();
 
 	// アニメーション更新
-	anim_->Update();
+	//anim_->Update();
 
 	// コライダー
 	Vector3 direct = worldtransform_.direction_;

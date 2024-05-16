@@ -92,7 +92,7 @@ void GameScene::Initialize() {
 	// 初期化
 	player_->Initialize(playerModel_.get());
 	// ポニーテール
-	player_->SetPonyTail(ponyTailModel_.get());
+	//player_->SetPonyTail(ponyTailModel_.get());
 
 	// 更新
 	//countTime_ = 0;
@@ -480,8 +480,7 @@ void GameScene::ModelCreate()
 	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// プレイヤーモデル
-	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
-	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
+	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_, textureHandleManager_.get()));
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック
@@ -491,7 +490,7 @@ void GameScene::ModelCreate()
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 敵モデル
-	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_, textureHandleManager_.get()));
+	enemyModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
 
 }
 
