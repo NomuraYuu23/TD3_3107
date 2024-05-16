@@ -11,6 +11,12 @@
 
 #include "PlayerFootCollider.h"
 
+#include "Anim/PlayerAnimManager.h"
+
+#include "../../../Engine/Physics/String.h"
+
+#include "../../AudioManager/GameAudioManager.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -22,10 +28,6 @@ private: // サブクラス
 		Vector3 v3Position;
 		float offsetLength;
 	};
-
-	Vector2 up = { 1.0f,1.0f };
-	Vector2 tag = { -1.0f,1.0f };
-	Vector2 perVec = { up.x,up.y * -1.0f };
 
 public: // 継承
 	/// <summary>
@@ -57,6 +59,10 @@ public: // アクセッサ
 	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
 	Box GetBoxCollider() override { return boxCollider_; }
+
+	PlayerHitManager::Effect GetEffectInfo() { return hpManager_.hitEffect_; }
+	PlayerHitManager GetHitManager() { return hpManager_; }
+
 public: // メンバ関数
 	/// <summary>
 	/// ステートの変更
@@ -71,6 +77,7 @@ public: // メンバ関数
 	void SetWeapon(std::unique_ptr<Weapon> newWeapon) {
 		weapon_ = std::move(newWeapon);
 		weapon_->SetParentAdress(&worldtransform_);
+		weapon_->SetPlayer(this);
 	}
 
 	/// <summary>
@@ -107,6 +114,14 @@ public: // メンバ関数
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
 
+public: // アニメーション関連関数群
+
+	/// <summary>
+	/// アニメーションマネージャーゲッター
+	/// </summary>
+	/// <returns>アニメーションマネージャー</returns>
+	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
+
 public:
 	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
@@ -120,11 +135,30 @@ public:
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
 	bool IsFreeFallTimerEnd() { return fallTimer_.IsEnd(); }
+	bool FreeFallActive() { return fallTimer_.IsActive(); }
+
+	void SetFallTimer();
+
 	/// <summary>
 	/// 死亡フラグの設定
 	/// </summary>
 	/// <param name="isDead"></param>
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+
+	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
+
+	void KnockBackOnGround() { knockBackSystem_.SetIsHit(false); }
+
+	/// <summary>
+	/// ポニーテール用のモデルセッター
+	/// </summary>
+	/// <param name="model">モデル</param>
+	void SetPonyTail(Model* model);
+
+
+	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
+	void EndAssistDash() { assistDash_.SlowCancel(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -137,6 +171,7 @@ public:
 	// 矢印テクスチャ
 	uint32_t arrowTexture_ = 0u;
 
+	bool isLeft_ = false;
 	// 接地フラグ
 	bool isGround_ = false;
 	// 矢印描画フラグ
@@ -155,18 +190,20 @@ public:
 
 	EnemyManager* enemyManager_;
 
+	TimerLib spearJumpAccepter_;
+
+	// オーディオマネージャー
+	GameAudioManager* gameAudioManager_ = nullptr;
+
 private: // フラグ
 	// ゲームスピード
 	bool isSlowGame_ = false;
 	// デバッグ用
 	bool isDebugDraw_ = false;
 
-
 private: // システム
 	// 現状のステート
 	PlayerState nowState_;
-	// 反動管理クラス
-	PlayerRecoil recoil_;
 	// 操作クラス
 	PlayerController controller_;
 	// 放物線
@@ -177,8 +214,14 @@ private: // システム
 	ComboCounter jumpCombo_;
 	// 自由落下の武器を回収するためのシステム
 	FreeFallTimer fallTimer_;
+
+	//--- オンヒットシステム ---//
+	// 反動管理クラス
+	PlayerRecoil recoil_;
 	// HP管理クラス
 	PlayerHitManager hpManager_;
+	// 敵とぶつかった時のノックバック
+	KnockBack knockBackSystem_;
 
 	// プレイヤーと槍をつなぐ線の色
 	Vector4 connectingSpearLineColor_;
@@ -186,5 +229,25 @@ private: // システム
 	// 補正用システム
 	CorrectSystem correctSystem_;
 
+private: // アニメーション関連
+
+	// ポニーテール用紐クラス
+	std::unique_ptr<String> ponytail_;
+	// ポニテ用座標
+	Vector3 ponyAnchorPos_ = {};
+
+	// アニメーションマネージャー
+	std::unique_ptr<PlayerAnimManager> anim_;
+
+	// 空中ダッシュシステム
+	AssistDash assistDash_;
+
+private:
+	void SystemInitialize();
+	void SystemUpdate();
+public:
+	void HitUpdate() {
+		hpManager_.Update();
+	}
 };
 

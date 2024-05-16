@@ -10,6 +10,10 @@ void ImpaledState::Initialize()
 	weapon_->worldtransform_.transform_.translate = weapon_->worldtransform_.GetWorldPosition();
 	weapon_->worldtransform_.parent_ = nullptr;
 	weapon_->worldtransform_.UpdateMatrix();
+
+	// 待機アニメーション開始
+	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+
 }
 
 void ImpaledState::Update()

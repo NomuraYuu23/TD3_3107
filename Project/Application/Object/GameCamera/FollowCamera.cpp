@@ -2,6 +2,7 @@
 #include "../GameUtility/MathUtility.h"
 #include "../ObjectList.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 void FollowCamera::Initialize()
 {
@@ -9,7 +10,7 @@ void FollowCamera::Initialize()
 	BaseCamera::Initialize();
 
 	// 初期値の設定
-	defaultOffset_ = { 0,5.0f,-85.0f };
+	defaultOffset_ = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
 	minY = 1.0f;
 	maxY = 30.0f;
 	defaultFovY_ = fovY_;
@@ -21,43 +22,13 @@ void FollowCamera::Update(float elapsedTime)
 	if (targetTransform_) {
 
 		transform_.translate = targetTransform_->transform_.translate + defaultOffset_;
-	
+
 	}
 
 	// 拡縮処理
 	if (player_) {
-		float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
-		float newSize = std::clamp(length, minY, maxY);
-		//if (/*!std::holds_alternative<GroundState*>(player_->GetNowState())*/ !player_->isGround_) {
-		// 割合計算
-		float rate = newSize / maxY;
-		//rate = std::clamp(rate, 0.3f, 1.0f);
-		//nowFovY_ = std::clamp(rate, 0.45f, 0.65f);
-		//nowFovY_ = std::clamp(pars, 0.45f, 0.65f);
-		if (minY > length) {
-			nowFovY_ = 0.45f;
-		}
-		else {
-			nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
-		}
 
-		SetFovY(nowFovY_);
-		// タイマーセット
-		float returnTime = 10.0f;
-		correctTimer_.Start(returnTime);
-		//}
-		//else {
-		//	// 視野角の戻す際に滑らかにする処理
-		//	if (correctTimer_.IsActive()) {
-		//		float fov = Ease::Easing(Ease::EaseName::Lerp, nowFovY_, defaultFovY_, correctTimer_.GetNowFrame());
-		//		SetFovY(fov);
-		//	}
-		//	// タイマー更新
-		//	correctTimer_.Update();
-
-		//}
-
-
+		ScalingUpDown();
 	}
 	// 基底クラス更新
 	BaseCamera::Update(elapsedTime);
@@ -87,4 +58,31 @@ void FollowCamera::ImGuiDraw()
 
 	ImGui::End();
 
+}
+
+void FollowCamera::ScalingUpDown()
+{
+	float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
+	float newSize = std::clamp(length, minY, maxY);
+
+	// 割合計算
+	float rate = newSize / maxY;
+
+	Vector3 defaultOff = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
+
+	float maxOffset = defaultOff.z - 15.0f;
+
+	if (minY > length) {
+		nowFovY_ = 0.45f;
+		defaultOffset_.z = defaultOff.z;
+	}
+	else {
+		nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
+		defaultOffset_.z = MathUtility::Ratio(defaultOff.z, maxOffset, rate);
+	}
+
+	SetFovY(nowFovY_);
+	// タイマーセット
+	float returnTime = 10.0f;
+	correctTimer_.Start(returnTime);
 }

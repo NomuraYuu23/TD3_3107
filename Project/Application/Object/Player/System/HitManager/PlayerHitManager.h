@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../GameUtility/TimerLib.h"
 #include <stdint.h>
+#include "../../../Engine/Math/Vector2.h"
 
 class Player;
 /// <summary>
@@ -19,7 +20,6 @@ private:
 		uint32_t decreValue_;
 
 	};
-
 public:
 	/// <summary>
 	/// 初期化
@@ -44,6 +44,14 @@ public:
 	/// </summary>
 	void ImGuiDraw();
 
+	/// <summary>
+	/// 無敵中か
+	/// </summary>
+	/// <returns></returns>
+	bool InvisibleActive() { return invisibleTimer_.IsActive(); }
+
+	bool IsHitEffectActive() { return hitEffectTimer_.IsActive(); }
+
 private:
 	// 親
 	Player* player_ = nullptr;
@@ -53,4 +61,16 @@ private:
 	float invMaxFrame_;
 	// HP
 	PlayerHealth hp_;
+
+	TimerLib hitEffectTimer_;
+public:
+	struct Effect {
+		float time;
+		Vector2 rShift, gShift, bShift;
+		bool isStop;
+		float nowFrame;
+	};
+	Effect hitEffect_;
+
+	Effect defaultData_;
 };

@@ -22,6 +22,14 @@ void Terrain::Initialize()
 	serialNum_ = sSerialNumber_;
 	sSerialNumber_++;
 
+	// マテリアル
+	enableLighting_ = 0;
+	shininess_ = 100.0f;
+
+	material_.reset(Material::Create());
+	material_->SetEnableLighting(enableLighting_);
+	material_->SetShininess(shininess_);
+	//this->transform_
 }
 
 void Terrain::Update()
@@ -52,4 +60,9 @@ void Terrain::ImGuiDraw()
 void Terrain::OnCollision(ColliderParentObject2D target)
 {
 	target;
+}
+
+void Terrain::MaterialUpdate()
+{
+	material_->SetUvTransform(transform_);
 }

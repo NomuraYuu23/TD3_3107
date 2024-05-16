@@ -15,39 +15,37 @@ void Player::Initialize(Model* model)
 
 	worldtransform_.transform_.translate = { -70.0f,10.0f,0 };
 
+	worldtransform_.UpdateMatrix();
+
+	// ライティング有効
+	enableLighting_ = EnableLighting::HalfLambert;
+	material_->SetEnableLighting(enableLighting_);
+
 	// コライダーの初期化
 	circleCollider_.radius_ = 0.985f;
 	circleCollider_.Initialize(position2D_, circleCollider_.radius_, this);
 	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
-	// 入力処理受付クラス
-	controller_.Initialize(this);
-	// 反動クラス
-	recoil_.Initialize(this);
-	// 足場クラス
-	footCollider_.Initialize(model, this);
-	// 補正クラス
-	correctSystem_.Initialize(this);
-	// HPクラス
-	hpManager_.Initialize(this);
-	// コンボクラス
-	jumpCombo_.Reset();
+	// システム系の初期化
+	SystemInitialize();
 
 	// ステートの作成
 	ChangeState(std::make_unique<GroundState>());
 
 	// 武器の親設定
-	weapon_->SettingParent();
+	//weapon_->SettingParent();
+	worldtransform_.UpdateMatrix();
+	weapon_->SetParentAdress(&worldtransform_);
+	// ステート変更
+	weapon_->ChangeRequest(Weapon::StateName::kHold);
+
 	isGround_ = false;
 
-	// 放物線
-	parabola_.Initialize();
-	connectingSpearLineColor_ = { 0.8f, 0.0f, 0.8f, 1.0f };
-	// レイ
-	rayLength_ = -100.0f;
-	cameraRay_.Initialize(this);
-	
+	// アニメーション関連初期化
+	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
+	anim_->Init(this);							   // 初期化
+
 }
 
 void Player::Update()
@@ -56,28 +54,40 @@ void Player::Update()
 	prevPosition_ = worldtransform_.GetWorldPosition();
 
 	// ステートの更新
-	if (actionState_ && !recoil_.IsActive()) {
+	if (actionState_ /*&& !recoil_.IsActive()*/) {
 		actionState_->Update();
 	}
 
-	// 操作クラス
-	controller_.Update();
-	// 反動クラス
-	recoil_.Update();
-	// 
-	correctSystem_.Update(enemyManager_);
-	// 落下中の引き寄せタイマークラス
-	fallTimer_.Update();
-	// 無敵時間の処理もするので更新必須
-	hpManager_.Update();
+	SystemUpdate();
 
 	// 武器の更新
 	if (weapon_) {
 		weapon_->Update();
 	}
 
+	// ポニーテール更新
+	if (ponytail_ != nullptr) {
+		// 行列を求める
+		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[10].matrix * worldtransform_.worldMatrix_;
+		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
+		//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
+
+		// アンカー設定
+		ponytail_->SetAnchor(0, true);
+
+		// 追従先座標を渡す
+		ponytail_->SetPosition(0, ponyAnchorPos_);
+
+		// 更新
+		ponytail_->Update();
+	}
+
 	// 基底クラスの更新
 	IObject::Update();
+
+	// アニメーション更新
+	anim_->Update();
+
 	// コライダー
 	CircleColliderUpdate();
 	// 足元のコライダー
@@ -109,7 +119,13 @@ void Player::Draw(const BaseCamera& camera)
 	desc.material = material_.get();
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
-	ModelDraw::AnimObjectDraw(desc);
+
+	if (anim_->GetIsRight()) {
+		ModelDraw::AnimObjectDraw(desc);
+	}
+	else {
+		ModelDraw::AnimInverseObjectDraw(desc);
+	}
 
 	// 武器の描画
 	if (weapon_) {
@@ -119,6 +135,11 @@ void Player::Draw(const BaseCamera& camera)
 	if (isDebugDraw_) {
 		footCollider_.DebugDraw(camera);
 	}
+
+	// ポニーテール描画
+	if (ponytail_ != nullptr) {
+		ponytail_->Draw(const_cast<BaseCamera&>(camera));
+	}
 }
 
 void Player::ImGuiDraw()
@@ -126,12 +147,15 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Player");
 	controller_.ImGuiDraw();
 	hpManager_.ImGuiDraw();
+	correctSystem_.ImGuiDraw();
 	// ゲームスピード
 	float ratio = IObject::sPlaySpeed;
 	ImGui::DragFloat("playTime", &ratio);
 	sPlaySpeed = ratio;
 	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
+	int tex = IsCanReturn();
+	ImGui::Text("%d : RetunCan", tex);
 	// 状態の名前取得
 	std::string name = typeid(*actionState_).name();
 	ImGui::Text(name.c_str());
@@ -143,13 +167,7 @@ void Player::ImGuiDraw()
 		isGround_ = true;
 	}
 
-	perVec = { -up.y,up.x };
-	float dot = Vector2::Dot(perVec, tag);
-
-	ImGui::DragFloat2("dir", &up.x);
-	ImGui::DragFloat2("targ", &tag.x);
-	ImGui::DragFloat2("per", &perVec.x);
-	ImGui::DragFloat("Dot", &dot);
+	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
 
 	// 足場の描画表示
 	ImGui::Checkbox("DrawFootCollider", &isDebugDraw_);
@@ -216,6 +234,9 @@ void Player::ImGuiDraw()
 		ImGui::EndTabBar();
 	}
 
+	ImGui::Text("\n PonyTailTransfporm");
+	ImGui::DragFloat3("AnchorPos", &ponyAnchorPos_.x);
+
 	ImGui::End();
 
 	// 武器のImGUi
@@ -241,7 +262,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 				else {
 					weapon_->velocity_.x = 1.0f * value;
 				}
-				this->fallTimer_.StartSetting(30.0f);
+				SetFallTimer();
 				weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 				return;
 			}
@@ -251,17 +272,25 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 					// 踏む際の武器設定
 					weapon_->TreadSetting();
-					// 槍じゃんステートへ
-					ChangeState(std::make_unique<SpearAerialState>());
-
-					// キャストして方向設定
-					SpearAerialState* state = dynamic_cast<SpearAerialState*>(actionState_.get());
 					
 					Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
-					
+
 					leftStick = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX };
 
-					state->InitializeDirection(leftStick);
+					if (leftStick.x != 0) {
+						// 槍じゃんステートへ
+						spearJumpAccepter_.Start(2.0f);
+						ChangeState(std::make_unique<SpearAerialState>());
+					}
+					else {
+						// 槍じゃんステートへ
+						ChangeState(std::make_unique<ActionWaitState>());
+					}
+
+					//// キャストして方向設定
+					//SpearAerialState* state = dynamic_cast<SpearAerialState*>(actionState_.get());
+
+					//state->InitializeDirection(leftStick);
 
 					return;
 				}
@@ -271,13 +300,28 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 		// 帰ってきてる時の衝突
 		else if (std::holds_alternative<ReturnState*>(weapon_->GetNowState())) {
+			//Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+			//Vector2 direct = {};
+			//if (leftStick.x > 0) {
+			//	direct.x = 1.0f;
+			//}
+			//else if(leftStick.x < 0){
+			//	direct.x = -1.0f;
+			//}
+			//// 反動生成
+			//recoil_.CreateRecoil(Vector3(direct.x, direct.y, 0));
+			
+			//float acceptFrame = GlobalVariables::GetInstance()->GetFloatValue("Dash", "AcceptFrame");
+			//assistDash_.StartAccept(acceptFrame);
 			//// 着地している場合早期リターン
 			if (std::holds_alternative<GroundState*>(nowState_)) {
 				return;
 			}
-			// 反動生成
-			recoil_.CreateRecoil(Vector3::Normalize(worldtransform_.GetWorldPosition() - weapon_->worldtransform_.GetWorldPosition()));
-
+			//float upperPower = 25.0f;
+			//if (velocity_.y < 0) {
+			//	velocity_.y = 0;
+			//}
+			//velocity_.y += upperPower;
 			return;
 		}
 	}
@@ -319,11 +363,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		// 四頂点
 		IObject::FourTop player4Point = IObject::GenerateFourTop(plMin, plMax);
-		//IObject::FourTop block4P = IObject::GenerateFourTop({ minPos.x,minPos.y }, {maxPos.x,maxPos.y});
-		//Vector2 perMove = { -velocity_.y,velocity_.x };
-		//// 移動ベクトルの垂線
-		//perMove = Vector2::Normalize(perMove);
-		//float dircDot = Vector2::Dot(perMove, p2tDist);
 
 		IObject::CollisionType type = IObject::GetCollisionType(player4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
 		Vector2 correctPosition = {};
@@ -344,27 +383,65 @@ void Player::OnCollision(ColliderParentObject2D target)
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
-		// 上側
+			// 上側
 		case IObject::kTopSide:
-			// プレイヤーの修正されたY座標を計算
-			correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
-			worldtransform_.transform_.translate.y = correctPosition.y;
-			velocity_.y = 0;
-
-			break;
-		// 下側
-		case IObject::kBottomSide:
-			// プレイヤーの修正されたY座標を計算
-			correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
-			worldtransform_.transform_.translate.y = correctPosition.y;
-			// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
-			if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
-				ChangeState(std::make_unique<GroundState>());
+			// バカデか移動
+			if (std::fabsf(velocity_.y) > 85.0f) {
+				// プレイヤーの修正されたY座標を計算
+				if (velocity_.y > 0) {
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+				}
+				else if (velocity_.y < 0) {
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+				}
 			}
-			isGround_ = true;
+			else {
+				correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+				worldtransform_.transform_.translate.y = correctPosition.y;
+				velocity_.y = 0;
+			}
+			break;
+			// 下側
+		case IObject::kBottomSide:
+			// バカデか移動
+			if (std::fabsf(velocity_.y) > 85.0f) {
+				// プレイヤーの修正されたY座標を計算
+				if (velocity_.y > 0) {
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+				}
+				else if (velocity_.y < 0) {
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+					worldtransform_.transform_.translate.y = correctPosition.y;
+					velocity_.y = 0;
+					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+						ChangeState(std::make_unique<GroundState>());
+					}
+					isGround_ = true;
+				}
+			}
+			else {
+				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+				worldtransform_.transform_.translate.y = correctPosition.y;
+				velocity_.y = 0;
+				// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
+				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
+					ChangeState(std::make_unique<GroundState>());
+				}
+				isGround_ = true;
+			}
+			//// プレイヤーの修正されたY座標を計算
+			//correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+			//worldtransform_.transform_.translate.y = correctPosition.y;
 			break;
 
-		///---一点のみの衝突---///
+			///---一点のみの衝突---///
 #pragma region 左下
 		case IObject::kLBPoint:
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
@@ -376,6 +453,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					isGround_ = true;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
@@ -418,6 +496,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					isGround_ = true;
 				}
 			}
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
@@ -532,15 +611,43 @@ void Player::OnCollision(ColliderParentObject2D target)
 		//if (invisibleTimer_.IsActive()) {
 		//	return;
 		//}
+		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
+			return;
+		}
+		// 反動生成
+		Enemy** enemy = std::get_if<Enemy*>(&target);
+		if (std::holds_alternative<EnemyWaitState*>((*enemy)->GetState())) {
+			return;
+		}
 
 		// 持ってないかどうか
 		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
 			// 持ってるから何か起きる
+			// 反動生成
+			//Enemy** enemy = std::get_if<Enemy*>(&target);
+			Vector3 newDirect = {};
+			newDirect.x = worldtransform_.GetWorldPosition().x - (*enemy)->GetWorldPosition().x;
+			newDirect.y = 1.0f;
+			knockBackSystem_.CreateKnockBack(newDirect);
+			// 引き寄せの
+			float value = 3.0f;
+			if (worldtransform_.GetWorldPosition().x > weapon_->worldtransform_.GetWorldPosition().x) {
+				weapon_->velocity_.x = -1.0f * value;
+			}
+			else {
+				weapon_->velocity_.x = 1.0f * value;
+			}
+			SetFallTimer();
+
+			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 
 		}
 		else {
+
 			hpManager_.OnHit(1);
 		}
+		// キャンセル
+		assistDash_.SlowCancel();
 
 	}
 	// ボス
@@ -589,4 +696,86 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
 	drawLine->Map(lineForGPU);
 
+}
+
+void Player::SetFallTimer()
+{
+	float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
+	this->fallTimer_.StartSetting(fallTimerFrame);
+}
+
+void Player::SetPonyTail(Model* model)
+{
+	// 行列を求める
+	Matrix4x4 result = localMatrixManager_->GetNodeDatas()[11].matrix * worldtransform_.worldMatrix_;
+	ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
+
+	// ポニーテール用紐生成
+	ponytail_ = std::make_unique<String>();
+	// 初期化
+	ponytail_->Initialize(
+		model,
+		ponyAnchorPos_,
+		0.1f,
+		750.0f,
+		2.0f,
+		0.5f);
+
+	// アンカー設定
+	ponytail_->SetAnchor(0, true);
+
+	// 初期化の段階で全ばねの座標をセットする
+	for (int i = 0; i < ponytail_->GetSpring().size(); i++) {
+		// 追従先座標を渡す
+		ponytail_->SetPosition(i, ponyAnchorPos_);
+	}
+
+	// 更新
+	ponytail_->Update();
+}
+
+void Player::SystemInitialize()
+{
+	// 入力処理受付クラス
+	controller_.Initialize(this);
+	// 反動クラス
+	recoil_.Initialize(this);
+	// 足場クラス
+	footCollider_.Initialize(model_, this);
+	// 補正クラス
+	correctSystem_.Initialize(this);
+	// HPクラス
+	hpManager_.Initialize(this);
+	// コンボクラス
+	jumpCombo_.Reset();
+	// 
+	knockBackSystem_.Initialize(this);
+	// 空中ダッシュのクラス
+	assistDash_.Initialize(this);
+	// 放物線
+	parabola_.Initialize();
+	connectingSpearLineColor_ = { 0.8f, 0.0f, 0.8f, 1.0f };
+	// レイ
+	rayLength_ = -100.0f;
+	cameraRay_.Initialize(this);
+}
+
+void Player::SystemUpdate()
+{
+	// 操作クラス
+	controller_.Update();
+	// 反動クラス
+	recoil_.Update();
+	// ノックバック
+	knockBackSystem_.Update();
+	// 
+	correctSystem_.Update(enemyManager_);
+	// 落下中の引き寄せタイマークラス
+	fallTimer_.Update();
+	// 無敵時間の処理もするので更新必須
+	hpManager_.Update();
+	// 仮の踏んだ時のチェック
+	spearJumpAccepter_.Update();
+	// 空中ダッシュ
+	assistDash_.Update();
 }

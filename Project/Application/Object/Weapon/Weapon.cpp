@@ -5,6 +5,7 @@
 #include "../../Collider2D/CollisionConfig2D.h"
 #include "../GameUtility/MathUtility.h"
 #include "../ObjectList.h"
+#include "../Player/Player.h"
 
 void Weapon::Initialize(Model* model)
 {
@@ -12,12 +13,16 @@ void Weapon::Initialize(Model* model)
 	IObject::Initialize(model);
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 
+	// ライティング有効
+	enableLighting_ = EnableLighting::HalfLambert;
+	material_->SetEnableLighting(enableLighting_);
+
 	// 親子関係でのオフセット
 	worldtransform_.transform_.translate = GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
 	worldtransform_.usedDirection_ = true;
 	float scaleRate = globalVariables->GetFloatValue("Weapon", "ScaleRate");
 	//float scaleRate = 2.5f;
-	worldtransform_.transform_.scale = { 1.0f,1.0f,scaleRate };
+	worldtransform_.transform_.scale = { 1.0f,1.0f,1.0f };
 	scale2D_ = { scaleRate * 2.0f,0.10f };
 
 	// コライダーの初期化
@@ -26,17 +31,24 @@ void Weapon::Initialize(Model* model)
 	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
 
 	// ステート変更
-	ChangeState(std::make_unique<HoldState>());
+	//ChangeState(std::make_unique<HoldState>());
 	// 戻るレート
 	returnRate_ = 1.3f;
 	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
+	// アニメーション関連初期化
+	anim_ = std::make_unique<SpearAnimManager>();  // 生成
+	anim_->Init(this);							   // 初期化
+
+	// システム初期化
+	this->SystemInitialize();
 }
 
 void Weapon::Update()
 {
 	isGravity_ = false;
 	isEnemyImpaled_ = false;
-
+	isPlayerJumpAccept_ = player_->spearJumpAccepter_.IsActive();
+	//shockWaveManager_->SetCenter({ worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y });
 	prevDirect_ = { worldtransform_.direction_.x,worldtransform_.direction_.y };
 
 	// 状態ごとの更新
@@ -48,19 +60,22 @@ void Weapon::Update()
 	if (isTread_ && timer_.IsEnd()) {
 		isTread_ = false;
 	}
-
-	// タイマー
-	timer_.Update();
-	attractInvTimer_.Update();
-	throwInvTimer_.Update();
+	// システム更新
+	this->SystemUpdate();
 
 	// 基底クラスの更新
 	IObject::Update();
+
+	// アニメーション更新
+	anim_->Update();
+
 	// コライダー
 	Vector3 direct = worldtransform_.direction_;
 	//float angle = MathUtility::CalcAngle({ direct.x,direct.y });
 	float angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
+
+
 }
 
 void Weapon::Draw(const BaseCamera& camera)
@@ -73,7 +88,6 @@ void Weapon::Draw(const BaseCamera& camera)
 			ChangeRequest(StateName::kReturn);
 		}
 	}
-
 
 	ModelDraw::AnimObjectDesc desc;
 	desc.camera = &const_cast<BaseCamera&>(camera);
@@ -88,7 +102,12 @@ void Weapon::Draw(const BaseCamera& camera)
 void Weapon::ImGuiDraw()
 {
 	ImGui::Begin("Weapon");
+	// 衝撃波をまとめてるシステムのImGUi
+	ImGui::SeparatorText("EffectSystem");
+	shockEffect_.ImGuiDraw();
+	ImGui::Text("\n");
 
+	ImGui::Separator();
 	// 親子変更
 	if (ImGui::Button("ParentDelete")) {
 		ReleaseParent();
@@ -358,18 +377,34 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	else if (std::holds_alternative<ImpaledState*>(nowState_)) {
 		if (std::holds_alternative<Enemy*>(target)) {
 			isEnemyImpaled_ = true;
-			if (isTread_) {
+			if (isPlayerJumpAccept_) {
+				player_->SetFallTimer(); 
 				ChangeRequest(Weapon::StateName::kFreeFall);
 			}
-			Player** player = std::get_if<Player*>(&target);			
-			if (player != nullptr) {
-				//Player* player = *playerPtr;
-				if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
-					ChangeRequest(Weapon::StateName::kFreeFall);
-				}
-			}
+			//Player** player = std::get_if<Player*>(&target);			
+			//if (player != nullptr) {
+			//	//Player* player = *playerPtr;
+			//	if (std::holds_alternative<AttractState*>((*player)->GetNowState())) {
+			//		ChangeRequest(Weapon::StateName::kFreeFall);
+			//	}
+			//}
 		}
 	}
+}
+
+void Weapon::SystemInitialize()
+{
+	shockEffect_.Initialize(this);
+}
+
+void Weapon::SystemUpdate()
+{
+	// タイマー
+	timer_.Update();
+	attractInvTimer_.Update();
+	throwInvTimer_.Update();
+
+	shockEffect_.Update();
 }
 
 void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)

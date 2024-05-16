@@ -118,7 +118,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
+    <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyGroundState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
@@ -130,14 +132,17 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\AudioManager\GameAudioManager.cpp" />
     <ClCompile Include="Application\AudioManager\TitleAudioManager.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AttractState.cpp" />
-    <ClCompile Include="Application\Object\Player\ActionState\KnockBackState.cpp" />
+    <ClCompile Include="Application\Object\Player\System\AssistDash\AssistDash.cpp" />
     <ClCompile Include="Application\Object\Player\System\CameraRay\CameraRay.cpp" />
     <ClCompile Include="Application\Object\Player\System\Combo\ComboCounter.cpp" />
     <ClCompile Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.cpp" />
     <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
+    <ClCompile Include="Application\Object\Player\System\HitManager\KnockBack.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
+    <ClCompile Include="Application\Object\Weapon\System\AutoComeBack.cpp" />
+    <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\FreeFallState.cpp" />
     <ClCompile Include="Application\Object\Weapon\WeaponState\ReturnWaitState.cpp" />
     <ClCompile Include="Application\Scene\SelectScene\SelectScene.cpp" />
@@ -145,6 +150,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Scene\TutorialScene\TutorialScene.cpp" />
     <ClCompile Include="Application\UI\UI.cpp" />
     <ClCompile Include="Application\UI\UIManager.cpp" />
+    <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
+    <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.cpp" />
+    <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\3D\FogManager.cpp" />
@@ -278,6 +286,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\System\Recoil\PlayerRecoil.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\SpearAerialState.cpp" />
     <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
+    <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
+    <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
+    <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -291,7 +302,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
+    <ClInclude Include="Application\Object\Enemy\IEnemyEmitter.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
+    <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />
@@ -312,16 +325,20 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Collider\CollisionConfig.h" />
     <ClInclude Include="Application\Object\Player\ActionState\AttractState.h" />
     <ClInclude Include="Application\Object\Player\ActionState\GroundState.h" />
-    <ClInclude Include="Application\Object\Player\ActionState\KnockBackState.h" />
+    <ClInclude Include="Application\Object\Player\System\AssistDash\AssistDash.h" />
     <ClInclude Include="Application\Object\Player\System\CameraRay\CameraRay.h" />
     <ClInclude Include="Application\Object\Player\System\Combo\ComboCounter.h" />
     <ClInclude Include="Application\Object\Player\System\CorrectSystem\CorrectSystem.h" />
     <ClInclude Include="Application\Object\Player\System\FreeFall\FreeFallTimer.h" />
     <ClInclude Include="Application\Object\Player\System\Handler\AerialHandler.h" />
+    <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
+    <ClInclude Include="Application\Object\Player\System\HitManager\KnockBack.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
     <ClInclude Include="Application\Object\Player\System\PlayerSystemList.h" />
     <ClInclude Include="Application\Object\Sample\SampleObject.h" />
+    <ClInclude Include="Application\Object\Weapon\System\AutoComeBack.h" />
+    <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\FreeFallState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\ReturnWaitState.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\StateList.h" />
@@ -332,6 +349,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Scene\TutorialScene\TutorialScene.h" />
     <ClInclude Include="Application\UI\UI.h" />
     <ClInclude Include="Application\UI\UIManager.h" />
+    <ClInclude Include="Application\Object\BackGround\BackGround.h" />
+    <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
+    <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
     <ClInclude Include="Engine\2D\ColorVertexData.h" />
     <ClInclude Include="Engine\2D\DrawLine.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
@@ -500,6 +520,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\ActionState\SpearAerialState.h" />
     <ClInclude Include="Application\Object\Player\PlayerFootCollider.h" />
     <ClInclude Include="Application\Object\GameObjectData.h" />
+    <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
+    <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
+    <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

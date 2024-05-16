@@ -9,19 +9,16 @@ void GameObjectData::Initialize()
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "Gravity", common_.gravity_);
 	globalVariables_->AddItem(groupName, "SlowFactor", common_.slowMotionFactor_);
+	globalVariables_->AddItem(groupName, "DeadZone", common_.stickDeadZone_);
 
 	groupName = "Player";
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "NormalJumpPower", player_.jumpData_.normalJumpPower_);
-	globalVariables_->AddItem(groupName, "SpearJumpPower", player_.jumpData_.highJumpPower_);
 	globalVariables_->AddItem(groupName, "Gravity", player_.jumpData_.gravity_);
-	globalVariables_->AddItem(groupName, "HorizontalPower", player_.jumpData_.horizontalPower_);
-
-
+	globalVariables_->AddItem(groupName, "AerialInActiveDecelerateRatio", player_.jumpData_.aerialInActiveDecelerateRatio_);
+	globalVariables_->AddItem(groupName, "AerialActiveDecelerateRatio", player_.jumpData_.aerialActiveDecelerateRatio_);
 	globalVariables_->AddItem(groupName, "MoveSpeed", player_.moveData_.moveValue_);
-	globalVariables_->AddItem(groupName, "AerialAcceleration", player_.moveData_.aerialAcceleration_);
-	globalVariables_->AddItem(groupName, "inverceRatio", player_.moveData_.invAerialRatio_);
 
 	// 反動用
 	globalVariables_->AddItem(groupName, "RecoilFrame", player_.recoil.time_);
@@ -31,6 +28,12 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "HitPoint", player_.hpData_.hp_);
 	globalVariables_->AddItem(groupName, "HitInvisibleFrame", player_.hpData_.invTimer_);
 
+	// 補正用
+	groupName = "AimCorrection";
+	globalVariables_->AddItem(groupName, "InitLength", aimCorrect_.InitLength_);
+	globalVariables_->AddItem(groupName, "RotateWidth", aimCorrect_.rotationWidth_);
+	globalVariables_->AddItem(groupName, "AssistWidth", aimCorrect_.assistWidth_);
+
 	groupName = "Weapon";
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
@@ -39,8 +42,33 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "ScaleRate", weapon_.scaleRate_);
 	globalVariables_->AddItem(groupName, "LocalPosition", weapon_.localPosition_);
 	globalVariables_->AddItem(groupName, "AngleDot", weapon_.collisionDot_);
+	globalVariables_->AddItem(groupName, "KickBackCooltime", weapon_.kickBackCooltime_);
 
-	ApplyGlobalVariables(); 
+
+	groupName = "SpearJump";
+	// グループを追加
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, "HorizontalPower", spearJump_.horizontalPower_);
+	globalVariables_->AddItem(groupName, "OnSpearWaitFrame", spearJump_.onSpearWaitFrame_);
+	globalVariables_->AddItem(groupName, "SpearJumpPower", spearJump_.highJumpPower_);
+	globalVariables_->AddItem(groupName, "AerialAcceleration", spearJump_.aerialAcceleration_);
+	globalVariables_->AddItem(groupName, "inverceRatio", spearJump_.invAerialRatio_);
+	globalVariables_->AddItem(groupName, "Gravity", spearJump_.jumpGravity_);
+
+	groupName = "Camera";
+	// グループを追加
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, "Offset", camera_.offset_);
+
+	groupName = "Dash";
+	// グループを追加
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, "AcceptFrame", dash_.acceptFrame_);
+	globalVariables_->AddItem(groupName, "DashPower", dash_.dashPower_);
+	globalVariables_->AddItem(groupName, "SlowFrame", dash_.slowFrame_);
+	globalVariables_->AddItem(groupName, "SlowRatio", dash_.slowRatio_);
+
+	ApplyGlobalVariables();
 
 
 }
@@ -51,17 +79,15 @@ void GameObjectData::ApplyGlobalVariables()
 	const char* groupName = "Common";
 	common_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	common_.slowMotionFactor_ = globalVariables_->GetFloatValue(groupName, "SlowFactor");
+	common_.stickDeadZone_ = globalVariables_->GetFloatValue(groupName, "DeadZone");
 
 	// プレイヤー
 	groupName = "Player";
 	player_.jumpData_.normalJumpPower_ = globalVariables_->GetFloatValue(groupName, "NormalJumpPower");
-	player_.jumpData_.highJumpPower_ = globalVariables_->GetFloatValue(groupName, "SpearJumpPower");
 	player_.jumpData_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
-	player_.jumpData_.horizontalPower_ = globalVariables_->GetFloatValue(groupName, "HorizontalPower");
-
+	player_.jumpData_.aerialInActiveDecelerateRatio_ = globalVariables_->GetFloatValue(groupName, "AerialInActiveDecelerateRatio");
+	player_.jumpData_.aerialActiveDecelerateRatio_ = globalVariables_->GetFloatValue(groupName, "AerialActiveDecelerateRatio");
 	player_.moveData_.moveValue_ = globalVariables_->GetFloatValue(groupName, "MoveSpeed");
-	player_.moveData_.aerialAcceleration_ = globalVariables_->GetFloatValue(groupName, "AerialAcceleration");
-	player_.moveData_.invAerialRatio_ = globalVariables_->GetFloatValue(groupName, "inverceRatio");
 
 	player_.recoil.time_ = globalVariables_->GetFloatValue(groupName, "RecoilFrame");
 	player_.recoil.ratio_ = globalVariables_->GetFloatValue(groupName, "RecoilRatio");
@@ -70,11 +96,37 @@ void GameObjectData::ApplyGlobalVariables()
 	player_.hpData_.hp_ = globalVariables_->GetIntValue(groupName, "HitPoint");
 	player_.hpData_.invTimer_ = globalVariables_->GetFloatValue(groupName, "HitInvisibleFrame");
 
+	// 補正用
+	groupName = "AimCorrection";
+	aimCorrect_.InitLength_ = globalVariables_->GetFloatValue(groupName, "InitLength");
+	aimCorrect_.rotationWidth_ = globalVariables_->GetFloatValue(groupName, "RotateWidth");
+	aimCorrect_.assistWidth_ = globalVariables_->GetFloatValue(groupName, "AssistWidth");
+
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	weapon_.speedRatio_ = globalVariables_->GetFloatValue(groupName, "SpeedRatio");
 	weapon_.scaleRate_ = globalVariables_->GetFloatValue(groupName, "ScaleRate");
 	weapon_.localPosition_ = globalVariables_->GetVector3Value(groupName, "LocalPosition");
-	weapon_.collisionDot_ = globalVariables_->GetFloatValue(groupName, "AngleDot"); 
+	weapon_.collisionDot_ = globalVariables_->GetFloatValue(groupName, "AngleDot");
+	weapon_.kickBackCooltime_ = globalVariables_->GetFloatValue(groupName, "KickBackCooltime");
+
+	groupName = "SpearJump";
+	spearJump_.horizontalPower_ = globalVariables_->GetFloatValue(groupName, "HorizontalPower");
+	spearJump_.onSpearWaitFrame_ = globalVariables_->GetFloatValue(groupName, "OnSpearWaitFrame");
+	spearJump_.highJumpPower_ = globalVariables_->GetFloatValue(groupName, "SpearJumpPower");
+	spearJump_.aerialAcceleration_ = globalVariables_->GetFloatValue(groupName, "AerialAcceleration");
+	spearJump_.invAerialRatio_ = globalVariables_->GetFloatValue(groupName, "inverceRatio");
+	spearJump_.jumpGravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
+
+	groupName = "Camera";
+	// グループを追加
+	camera_.offset_ = globalVariables_->GetVector3Value(groupName, "Offset");
+
+	groupName = "Dash";
+	// グループを追加
+	dash_.acceptFrame_ = globalVariables_->GetFloatValue(groupName, "AcceptFrame");
+	dash_.dashPower_ = globalVariables_->GetFloatValue(groupName, "DashPower");
+	dash_.slowFrame_ = globalVariables_->GetFloatValue(groupName, "SlowFrame");
+	dash_.slowRatio_ = globalVariables_->GetFloatValue(groupName, "SlowRatio");
 
 }

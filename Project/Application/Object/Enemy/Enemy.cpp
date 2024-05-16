@@ -23,6 +23,8 @@ void Enemy::Initialize()
 	serialNum_ = sSerialNumber_;
 	sSerialNumber_++;
 
+	name_ = "Enemy" + std::to_string(serialNum_);
+
 	isDead_ = false;
 	isGround_ = false;
 }
@@ -30,13 +32,17 @@ void Enemy::Initialize()
 void Enemy::Update()
 {
 	prevPosition_ = { transform_.translate.x,transform_.translate.y };
+	// 前フレーム座標取得
+	prevTranslate_ = transform_.translate;
 	// 設定した状態の処理
 	if (state_) {
 		state_->Update();
 	}
-
+	interval_.Update();
 	//transform_.translate = {}
-
+	if (parentEmitter_) {
+		CheckParent();
+	}
 	MatrixUpdate();
 	// 2D更新
 	position2D_ = { worldMatrix_.m[3][0],worldMatrix_.m[3][1] };
@@ -47,12 +53,20 @@ void Enemy::Update()
 
 void Enemy::ImGuiDraw()
 {
-	std::string name = "Enemy" + std::to_string(serialNum_);
 	//ImGui::Begin(name.c_str());
-	ImGui::SeparatorText(name.c_str());
+	ImGui::SeparatorText(name_.c_str());
 	ImGui::DragFloat3("WorldPosition", &transform_.translate.x);
+	std::string rot = "transform" + name_;
+	ImGui::DragFloat3(rot.c_str(), &transform_.rotate.x, 0.01f);
 	ImGui::DragFloat2("scale", &scale2D_.x);
 	ImGui::Text("%d", isDead_);
+	std::string name = typeid(*state_).name();
+	ImGui::Text(name.c_str());
+
+	if (ImGui::Button("Release")) {
+		this->ReleaseParent();
+	}
+
 
 	//ImGui::End();
 
@@ -84,9 +98,28 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			}
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
+				weapon_ = (*weapon);
+				// 槍が刺さった効果音を再生
+				weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearSting);
 			}
 		}
-		else {
+		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
+		//	std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
+		else if((*weapon)->IsPlayerJump()){
+			// 死亡パーティクル再生
+			EmitterDesc desc;
+			desc.transform = &transform_;
+			desc.instanceCount = 25;
+			desc.frequency = 0.01f;
+			desc.lifeTime = 0.01f; 
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kEnemyDeadParticle;
+
+			ParticleManager::GetInstance()->MakeEmitter(desc, 0);
+
+			// 敵を倒す効果音を再生
+			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
+
 			isDead_ = true;
 		}
 
@@ -158,4 +191,18 @@ void Enemy::ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::Atta
 	newState->Initialize();
 
 	state_ = std::move(newState);
+}
+
+void Enemy::CheckParent()
+{
+	if (!parent_) {
+		//if (!parentEmitter_->IsRotateReturn() && (goalAngle_ == parentEmitter_->GetNowAngle())) {
+		if (!interval_.IsActive() && (goalAngle_ == parentEmitter_->GetNowAngle())) {
+			if (weapon_) {
+				weapon_->ChangeRequest(Weapon::StateName::kReturn);
+			}
+			ResetParent();
+			ChangeState(std::make_unique<EnemyAerialState>(), static_cast<IEnemyState::AttackPattern>(0));
+		}
+	}
 }

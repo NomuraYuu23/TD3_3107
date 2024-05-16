@@ -20,18 +20,26 @@ public:
 	/// <param name="enemyManager">エネミーマネージャー</param>
 	void Update(EnemyManager* enemyManager);
 
+	void ImGuiDraw();
+
 private:
 
-	// 確認する範囲（半径）
-	const float kInitLengthMin_ = 30.0f;
-
-	// 回転幅
-	const float kRotationWidth_ = 0.15f;
+	void NearLockOn(EnemyManager* enemyManager);
 
 	// プレイヤーポインタ
 	Player* player_;
 
 	Vector3 NearEnemyLockOn(EnemyManager* enemyManager);
 
+	Vector3 StickAimAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
+
+	Vector3 LeftStickAimAssist(EnemyManager* enemyManager, const Vector3& stickDirect);
+
+	Vector2 prevLeftStick_ = {};
+
 	bool isInNearArea_ = false;
+
+	Vector3 targetDirect_ = {};
+
+	OneOfManyObjects* targetPointer_ = nullptr;
 };

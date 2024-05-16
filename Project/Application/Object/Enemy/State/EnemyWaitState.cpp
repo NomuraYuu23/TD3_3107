@@ -5,12 +5,10 @@ void EnemyWaitState::Initialize()
 {
 	enemy_->SetState(this);
 
-	enemy_->transform_.translate = enemy_->GetWorldPosition();
-	enemy_->SetParent(nullptr);
-	enemy_->MatrixUpdate();
+	enemy_->ReleaseParent();
 }
 
 void EnemyWaitState::Update()
 {
-
+	//enemy_->transform_.translate.y += 0.1f;
 }

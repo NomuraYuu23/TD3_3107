@@ -3,6 +3,13 @@
 
 enum GameAudioNameIndex {
 	kGameAudioNameIndexSample, // サンプル
+	kPlayerJump,
+	kPlayerLand,
+	kPlayerDamage,
+	kSpearCatch,
+	kSpearSting,
+	kThrowSpear,
+	kEliminateEnemy,
 	kGameAudioNameIndexOfCount // 数
 };
 
@@ -39,6 +46,13 @@ private: // メンバ変数
 	std::array<const std::string, GameAudioNameIndex::kGameAudioNameIndexOfCount> audioNames_ = 
 	{
 		"default/Alarm01.mp3",
+		"Audio/SE/Jump.mp3",
+		"Audio/SE/Land.mp3",
+		"Audio/SE/PlayerDamage.mp3",
+		"Audio/SE/Spear_Catch.mp3",
+		"Audio/SE/Spear_Sting.mp3",
+		"Audio/SE/ThrowSpear.mp3",
+		"Audio/SE/EnemyDeadSound.mp3",
 	};
 
 };

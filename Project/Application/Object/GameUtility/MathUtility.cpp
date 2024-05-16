@@ -26,16 +26,16 @@ float MathUtility::CalcAngle(const Vector2& direction)
     // 方向ベクトルの長さを計算
     float diMag = Vector2::Length(direct);
 
-    // 位置ベクトルを考慮しないため、位置ベクトルの長さを0とします
+    // 位置ベクトルを考慮しないため、位置ベクトルの長さを0に
     float obMag = Vector2::Length({ 1,1 });
 
     // 位置ベクトルと方向ベクトルの内積を計算
     float dot = Vector2::Dot({1,1}, direct);
 
-    // cosθ を計算
+    // cos を計算
     float cos = dot / (obMag * diMag);
 
-    // アークコサインを使用してラジアンを計算
+    // acos を使用してラジアンを計算
     float radians = std::acosf(cos);
 
     // ラジアンを度数に変換して返す
@@ -84,12 +84,21 @@ bool MathUtility::CheckOutScreen(const Vector3& worldPosition, float offset, con
 
 Vector3 MathUtility::RotateVector(const Vector3& direct, float theta)
 {
-    float cosTheta = std::cosf(theta);
-    float sinTheta = std::sinf(theta);
+    float rad = theta * 3.14f / 180.0f;
+
+    float cosTheta = std::cosf(rad);
+    float sinTheta = std::sinf(rad);
 
     Vector3 result = {};
     result.x = direct.x * cosTheta - direct.y * sinTheta;
     result.y = direct.x * sinTheta + direct.y * cosTheta;
 
+    return result;
+}
+
+Vector2 MathUtility::ScreenPositionRatio(const Vector3& worldPosition, BaseCamera* camera)
+{
+    Vector2 screenPosition = WorldToScreen(worldPosition, camera);
+    Vector2 result = { screenPosition.x / (float)WinApp::kWindowWidth,screenPosition.y / (float)WinApp::kWindowHeight };
     return result;
 }

@@ -20,5 +20,4 @@ void IEnemyState::Update()
 {
 
 	enemy_->transform_.translate += enemy_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-
 }
