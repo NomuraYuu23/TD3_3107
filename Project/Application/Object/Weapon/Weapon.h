@@ -55,7 +55,7 @@ public: // 継承
 	void OnCollision(ColliderParentObject2D target) override;
 
 	void SetPlayer(Player* player) { player_ = player; }
-
+	Player* GetPlayer() { return player_; }
 	/// <summary>
 	/// システムの初期化
 	/// </summary>
@@ -113,8 +113,9 @@ public: // 外部で行う設定関数
 	/// </summary>
 	/// <param name="adress"></param>
 	void SettingParent() {
-		worldtransform_.SetParent(parentAdress_);
-		worldtransform_.transform_.translate = GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
+		//worldtransform_.SetParent(parentAdress_);
+		worldtransform_.transform_.translate = parentAdress_->GetWorldPosition();
+		worldtransform_.transform_.translate += GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
 	}
 
 	/// <summary>
