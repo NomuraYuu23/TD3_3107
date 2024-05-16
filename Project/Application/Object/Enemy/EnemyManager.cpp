@@ -15,6 +15,7 @@ void EnemyManager::Initialize(Model* model)
 
 	enemyEditor_ = std::make_unique<EnemyEditor>();
 	enemyEditor_->LoadFiles();
+	LoadEnemyData();
 
 }
 
@@ -69,7 +70,6 @@ void EnemyManager::ImGuiDraw()
 		(*itr)->ImGuiDraw();
 		ImGui::Separator();
 	}
-
 
 	ImGui::End();
 

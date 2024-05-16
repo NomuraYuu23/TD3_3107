@@ -78,17 +78,15 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	worldTransform_.transform_.translate = transformPosition;
 	distance_ = distance;
 	maxCount_ = enemyCount;
-	worldTransform_.UpdateMatrix();
 	// 敵の角度生成
 	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
-	Vector3 center = worldTransform_.GetWorldPosition();
 	// 敵の生成
 	for (uint32_t i = 0; i < maxCount_; ++i) {
 		// 角度からオフセットの計算
 		float angle = i * angleIncrement;
 		Vector3 newPosition = {};
-		newPosition.x = center.x + (std::cosf(angle) * distance_);
-		newPosition.y = center.y + (std::sinf(angle) * distance_);
+		newPosition.x = (std::cosf(angle) * distance_);
+		newPosition.y = (std::sinf(angle) * distance_);
 
 		// 生成
 		std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
