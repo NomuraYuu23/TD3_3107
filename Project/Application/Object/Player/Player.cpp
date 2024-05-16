@@ -32,7 +32,12 @@ void Player::Initialize(Model* model)
 	ChangeState(std::make_unique<GroundState>());
 
 	// 武器の親設定
-	weapon_->SettingParent();
+	//weapon_->SettingParent();
+	worldtransform_.UpdateMatrix();
+	weapon_->SetParentAdress(&worldtransform_);
+	// ステート変更
+	weapon_->ChangeRequest(Weapon::StateName::kHold);
+
 	isGround_ = false;
 
 	// アニメーション関連初期化

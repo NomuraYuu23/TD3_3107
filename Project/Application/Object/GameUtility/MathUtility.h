@@ -12,6 +12,13 @@ public:
 	static float Lerp(float start, float end, float t) {
 		return start + (end - start) * t;
 	}
+	static Vector3 Lerp(const Vector3& start, const Vector3& end, float t) {
+		Vector3 result = {};
+		result.x = start.x + (end.x - start.x) * t;
+		result.y = start.y + (end.y - start.y) * t;
+		result.z = start.z + (end.z - start.z) * t;
+		return result;
+	}
 
 	template <typename T>
 	static T LerpT(T start, T end, float t) {

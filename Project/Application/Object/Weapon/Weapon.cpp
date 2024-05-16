@@ -31,7 +31,7 @@ void Weapon::Initialize(Model* model)
 	boxCollider_.SetCollisionMask(kCollisionAttributePlayer);
 
 	// ステート変更
-	ChangeState(std::make_unique<HoldState>());
+	//ChangeState(std::make_unique<HoldState>());
 	// 戻るレート
 	returnRate_ = 1.3f;
 	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
