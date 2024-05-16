@@ -13,7 +13,11 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { -70.0f,10.0f,0 };
+	worldtransform_.transform_.translate = { 0.0f,10.0f,0 };
+
+	// ライティング有効
+	enableLighting_ = EnableLighting::HalfLambert;
+	material_->SetEnableLighting(enableLighting_);
 
 	// コライダーの初期化
 	circleCollider_.radius_ = 0.985f;
@@ -36,7 +40,10 @@ void Player::Initialize(Model* model)
 
 	isGround_ = false;
 
-	
+	// アニメーション関連初期化
+	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
+	anim_->Init(this);							   // 初期化
+
 }
 
 void Player::Update()
@@ -56,8 +63,29 @@ void Player::Update()
 		weapon_->Update();
 	}
 
+	// ポニーテール更新
+	if (ponytail_ != nullptr) {
+		// 行列を求める
+		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[12].matrix * worldtransform_.worldMatrix_;
+		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
+		//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
+
+		// アンカー設定
+		ponytail_->SetAnchor(0, true);
+
+		// 追従先座標を渡す
+		ponytail_->SetPosition(0, ponyAnchorPos_);
+
+		// 更新
+		ponytail_->Update();
+	}
+
 	// 基底クラスの更新
 	IObject::Update();
+
+	// アニメーション更新
+	anim_->Update();
+
 	// コライダー
 	CircleColliderUpdate();
 	// 足元のコライダー
@@ -89,7 +117,13 @@ void Player::Draw(const BaseCamera& camera)
 	desc.material = material_.get();
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
-	ModelDraw::AnimObjectDraw(desc);
+
+	if (anim_->GetIsRight()) {
+		ModelDraw::AnimObjectDraw(desc);
+	}
+	else {
+		ModelDraw::AnimInverseObjectDraw(desc);
+	}
 
 	// 武器の描画
 	if (weapon_) {
@@ -98,6 +132,11 @@ void Player::Draw(const BaseCamera& camera)
 	// 足場のモデル描画
 	if (isDebugDraw_) {
 		footCollider_.DebugDraw(camera);
+	}
+
+	// ポニーテール描画
+	if (ponytail_ != nullptr) {
+		ponytail_->Draw(const_cast<BaseCamera&>(camera));
 	}
 }
 
@@ -192,6 +231,9 @@ void Player::ImGuiDraw()
 		// タブバーを終了
 		ImGui::EndTabBar();
 	}
+
+	ImGui::Text("\n PonyTailTransfporm");
+	ImGui::DragFloat3("AnchorPos", &ponyAnchorPos_.x);
 
 	ImGui::End();
 
@@ -658,6 +700,37 @@ void Player::SetFallTimer()
 {
 	float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
 	this->fallTimer_.StartSetting(fallTimerFrame);
+}
+
+void Player::SetPonyTail(Model* model)
+{
+	// 行列を求める
+	Matrix4x4 result = localMatrixManager_->GetNodeDatas()[12].matrix * worldtransform_.worldMatrix_;
+	ponyAnchorPos_ = { result.m[3][0], result.m[3][1], 0.0f };
+	//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
+
+	// ポニーテール用紐生成
+	ponytail_ = std::make_unique<String>();
+	// 初期化
+	ponytail_->Initialize(
+		model,
+		ponyAnchorPos_,
+		0.1f,
+		750.0f,
+		2.0f,
+		0.5f);
+
+	// アンカー設定
+	ponytail_->SetAnchor(0, true);
+
+	// 初期化の段階で全ばねの座標をセットする
+	for (int i = 0; i < ponytail_->GetSpring().size(); i++) {
+		// 追従先座標を渡す
+		ponytail_->SetPosition(i, ponyAnchorPos_);
+	}
+
+	// 更新
+	ponytail_->Update();
 }
 
 void Player::SystemInitialize()

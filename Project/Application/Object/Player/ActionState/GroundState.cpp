@@ -15,6 +15,13 @@ void GroundState::Initialize()
 
 	// 槍を踏んだかのフラグ
 	player_->isOneStepOn_ = false;
+
+
+	// 着地アニメーションの再生
+	if (player_->GetAnimManager() != nullptr) {
+		player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::Landing);
+	}
+	
 	player_->KnockBackOnGround();
 	player_->EndAssistDash();
 }

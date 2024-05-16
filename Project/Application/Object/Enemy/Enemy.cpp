@@ -27,11 +27,25 @@ void Enemy::Initialize()
 
 	isDead_ = false;
 	isGround_ = false;
+
+	// 回転行列を使用する
+	usedDirection_ = true;
+}
+
+void Enemy::Initialize(const std::string& name)
+{
+
+	Enemy::Initialize();
+
+	name_ = name;
+
 }
 
 void Enemy::Update()
 {
 	prevPosition_ = { transform_.translate.x,transform_.translate.y };
+	// 前フレーム座標取得
+	prevTranslate_ = transform_.translate;
 	// 設定した状態の処理
 	if (state_) {
 		state_->Update();

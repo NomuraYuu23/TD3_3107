@@ -91,12 +91,15 @@ void GameScene::Initialize() {
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
 	player_->Initialize(playerModel_.get());
+	// ポニーテール
+	player_->SetPonyTail(ponyTailModel_.get());
+
 	// 更新
 	//countTime_ = 0;
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(terrainModel_.get());
+	enemyManager_->Initialize(enemyModel_.get());
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -108,6 +111,10 @@ void GameScene::Initialize() {
 	mapManager_ = std::make_unique<MapManager>();
 	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	mapManager_->Initialize(terrainModel_.get());
+
+	// 背景用オブジェクト
+	backGround_ = std::make_unique<BackGround>();
+	backGround_->Initialize(backGroundModel_.get());
 
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
@@ -124,6 +131,18 @@ void GameScene::Initialize() {
 	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
 	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
 	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y, player_->throwDirect_.x));
+
+	/// ポストエフェクトの値初期化
+	// ブルーム
+	PostEffect* pe = PostEffect::GetInstance();
+	pe->SetThreshold(0.15f);
+	pe->SetKernelSize(10);
+	pe->SetSigma(12.5f);
+
+	FogManager* fm = FogManager::GetInstance();
+	fm->SetColor({ 0.0f, 0.35f, 1.0f, 1.0f });
+	fm->SetNear(50.0f);
+	fm->SetRadius(2500.0f);
 
 	// Jsonデータのクラス
 #ifdef _DEBUG
@@ -216,6 +235,9 @@ void GameScene::Update() {
 	// スカイドーム
 	skydome_->Update();
 
+	// 背景更新
+	backGround_->Update();
+
 	//uiManager_->Update();
 
 	// デバッグカメラ
@@ -268,6 +290,9 @@ void GameScene::Draw() {
 
 	// ブロック用
 	mapManager_->Draw(camera_);
+
+	// 背景
+	backGround_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(enemyTexture_);
@@ -375,6 +400,9 @@ void GameScene::ImguiDraw() {
 	// ボス
 	//bossEnemy_->ImGuiDraw();
 
+	// 背景
+	backGround_->ImGuiDraw();
+
 	// スカイドーム
 	skydome_->ImGuiDraw();
 
@@ -387,6 +415,11 @@ void GameScene::ImguiDraw() {
 	followCamera_->ImGuiDraw();
 
 	gameData_->ApplyGlobalVariables();
+
+	// ポストエフェクトのImGuiを表示
+	PostEffect::GetInstance()->ImGuiDraw();
+	// フォグのImGuiの表示
+	FogManager::GetInstance()->ImGuiDraw();
 
 #endif // _DEBUG
 
@@ -447,14 +480,18 @@ void GameScene::ModelCreate()
 	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// プレイヤーモデル
-	playerModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
-	weaponModel_.reset(Model::Create("Resources/GameObject/SpearB/", "SpearB.obj", dxCommon_, textureHandleManager_.get()));
+	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
+	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
 
+	// 背景モデル
+	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
+
 	// 敵モデル
-	enemyModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
+	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_, textureHandleManager_.get()));
 
 }
 
@@ -467,7 +504,7 @@ void GameScene::TextureLoad()
 	};
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-	enemyTexture_ = TextureManager::Load("Resources/default/red2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 

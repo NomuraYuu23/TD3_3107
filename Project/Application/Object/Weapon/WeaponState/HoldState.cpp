@@ -18,6 +18,9 @@ void HoldState::Initialize()
 	// オフセット
 	offset_ = GlobalVariables::GetInstance()->GetVector3Value("Weapon", "LocalPosition");
 	interTarget_ = weapon_->GetTargetPosition() + offset_;
+
+	// 槍の保持フラグをtrueに
+	weapon_->isHold_ = true;
 }
 
 void HoldState::Update()

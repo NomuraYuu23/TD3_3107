@@ -19,6 +19,10 @@ public:
 	/// </summary>
 	void Initialize() override;
 	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize(const std::string& name);
+	/// <summary>
 	/// 更新
 	/// </summary>
 	void Update() override;
@@ -102,6 +106,8 @@ public:
 	IEnemyState* GetNowState() { return state_.get(); }
 	EnemyState GetState() { return judState_; }
 
+	std::string GetName() { return name_; }
+
 private:
 
 	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern);
@@ -134,6 +140,9 @@ public:
 	Vector2 scale2D_ = {};
 
 	Vector2 prevPosition_ = {};
+
+	// 敵の移動方向を求めるための前フレーム座標
+	Vector3 prevTranslate_ = {};
 
 	// コライダー
 	Box boxCollider_;

@@ -28,6 +28,10 @@ void Skydome::Initialize(Model* model) {
 	localMatrixManager_ = std::make_unique<LocalMatrixManager>();
 	localMatrixManager_->Initialize(model_->GetRootNode());
 
+	// uvTransformの初期化
+	uvTransform_.Initialize();
+	uvTransform_.transform_.scale = { 10.0f, 10.0f, 10.0f };
+
 }
 
 /// <summary>
@@ -40,6 +44,11 @@ void Skydome::Update() {
 	worldTransform_.UpdateMatrix();
 
 	localMatrixManager_->Map();
+
+	// uvTransformの更新
+	uvTransform_.UpdateMatrix();
+	// UVトランスフォームのセット
+	material_->SetUvTransform(uvTransform_.transform_);
 
 }
 
@@ -64,6 +73,12 @@ void Skydome::ImGuiDraw()
 
 	ImGui::Begin("Skydome");
 	ImGui::DragFloat("rotateSpeed", &rotateSpeed_, 0.001f);
+
+	ImGui::Text("uvTransform");
+	ImGui::DragFloat3("uvTransform_Scale", &uvTransform_.transform_.scale.x);
+	ImGui::DragFloat3("uvTransform_Rotate", &uvTransform_.transform_.rotate.x);
+	ImGui::DragFloat3("uvTransform_Translate", &uvTransform_.transform_.translate.x);
+
 	ImGui::End();
 
 }

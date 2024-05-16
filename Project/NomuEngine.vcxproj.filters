@@ -191,15 +191,20 @@
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\KnockBack.cpp" />
     <ClCompile Include="Engine\Animation\LocalMatrixDraw.cpp" />
+    <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
     <ClCompile Include="Engine\3D\Outline.cpp" />
     <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
     <ClCompile Include="Engine\base\CrashHandler.cpp" />
     <ClCompile Include="Engine\base\WindowSprite.cpp" />
     <ClCompile Include="Engine\PostEffect\Velocity2DManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
+    <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\AutoComeBack.cpp" />
     <ClCompile Include="Application\Object\Player\System\AssistDash\AssistDash.cpp" />
+    <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
+    <ClCompile Include="Application\Object\Map\MapEditor.cpp" />
+    <ClCompile Include="Application\Object\Enemy\EnemyEditor.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
     <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
   </ItemGroup>
@@ -416,7 +421,9 @@
     <ClInclude Include="Application\Object\Enemy\IEnemyEmitter.h" />
     <ClInclude Include="Engine\2D\LineForGPU.h" />
     <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
+    <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
     <ClInclude Include="Engine\Particle\EmitterDesc.h" />
+    <ClInclude Include="Application\Object\BackGround\BackGround.h" />
     <ClInclude Include="Engine\3D\Outline.h" />
     <ClInclude Include="Engine\3D\OutlineData.h" />
     <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
@@ -426,8 +433,14 @@
     <ClInclude Include="Engine\PostEffect\Velocity2DManager.h" />
     <ClInclude Include="Application\Object\Weapon\System\AutoComeBack.h" />
     <ClInclude Include="Application\Object\Player\System\AssistDash\AssistDash.h" />
+    <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
     <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
+    <ClInclude Include="Application\Object\Map\MapEditor.h" />
+    <ClInclude Include="Application\Object\Map\MapBlockData.h" />
+    <ClInclude Include="Application\Object\Enemy\EnemyEditor.h" />
+    <ClInclude Include="Application\Object\Enemy\SingleEnemyData.h" />
+    <ClInclude Include="Application\Object\Enemy\MultiEnemyData.h" />
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
     <ClInclude Include="Application\Object\Map\Goal\GoalObject.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointObject.h" />

@@ -18,5 +18,8 @@
 #include "Map/Terrain.h"
 #include "Map/Goal/GoalObject.h"
 
+// 背景
+#include "BackGround/BackGround.h"
+
 // カメラ
 #include "GameCamera/FollowCamera.h"

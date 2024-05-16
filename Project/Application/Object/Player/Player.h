@@ -11,6 +11,10 @@
 
 #include "PlayerFootCollider.h"
 
+#include "Anim/PlayerAnimManager.h"
+
+#include "../../../Engine/Physics/String.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -108,6 +112,14 @@ public: // メンバ関数
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
 
+public: // アニメーション関連関数群
+
+	/// <summary>
+	/// アニメーションマネージャーゲッター
+	/// </summary>
+	/// <returns>アニメーションマネージャー</returns>
+	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
+
 public:
 	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
@@ -134,6 +146,13 @@ public:
 	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
 
 	void KnockBackOnGround() { knockBackSystem_.SetIsHit(false); }
+
+	/// <summary>
+	/// ポニーテール用のモデルセッター
+	/// </summary>
+	/// <param name="model">モデル</param>
+	void SetPonyTail(Model* model);
+
 
 	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
 	void EndAssistDash() { assistDash_.SlowCancel(); }
@@ -206,6 +225,16 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+private: // アニメーション関連
+
+	// ポニーテール用紐クラス
+	std::unique_ptr<String> ponytail_;
+	// ポニテ用座標
+	Vector3 ponyAnchorPos_ = {};
+
+	// アニメーションマネージャー
+	std::unique_ptr<PlayerAnimManager> anim_;
 
 	// 空中ダッシュシステム
 	AssistDash assistDash_;

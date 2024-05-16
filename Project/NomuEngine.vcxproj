@@ -118,6 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
+    <ClCompile Include="Application\Object\Enemy\EnemyEditor.cpp" />
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
@@ -126,6 +127,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
+    <ClCompile Include="Application\Object\Map\MapEditor.cpp" />
     <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AerialState.cpp" />
@@ -151,6 +153,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Scene\TutorialScene\TutorialScene.cpp" />
     <ClCompile Include="Application\UI\UI.cpp" />
     <ClCompile Include="Application\UI\UIManager.cpp" />
+    <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\3D\FogManager.cpp" />
@@ -284,6 +287,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\System\Recoil\PlayerRecoil.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\SpearAerialState.cpp" />
     <ClCompile Include="Application\Object\Player\PlayerFootCollider.cpp" />
+    <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
+    <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -297,8 +302,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\State\WaveAttackState.h" />
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
+    <ClInclude Include="Application\Object\Enemy\EnemyEditor.h" />
     <ClInclude Include="Application\Object\Enemy\IEnemyEmitter.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
+    <ClInclude Include="Application\Object\Enemy\MultiEnemyData.h" />
+    <ClInclude Include="Application\Object\Enemy\SingleEnemyData.h" />
     <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />
@@ -306,6 +314,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\State\EnemyWaitState.h" />
     <ClInclude Include="Application\Object\Enemy\State\IEnemyState.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
+    <ClInclude Include="Application\Object\Map\MapBlockData.h" />
+    <ClInclude Include="Application\Object\Map\MapEditor.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointObject.h" />
     <ClInclude Include="Application\Object\Map\Goal\GoalObject.h" />
@@ -347,6 +357,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Scene\TutorialScene\TutorialScene.h" />
     <ClInclude Include="Application\UI\UI.h" />
     <ClInclude Include="Application\UI\UIManager.h" />
+    <ClInclude Include="Application\Object\BackGround\BackGround.h" />
     <ClInclude Include="Engine\2D\ColorVertexData.h" />
     <ClInclude Include="Engine\2D\DrawLine.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
@@ -514,6 +525,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\ActionState\SpearAerialState.h" />
     <ClInclude Include="Application\Object\Player\PlayerFootCollider.h" />
     <ClInclude Include="Application\Object\GameObjectData.h" />
+    <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
+    <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

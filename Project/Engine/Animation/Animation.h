@@ -66,6 +66,13 @@ public:
 	void SetMoveT(float moveT) { moveT_ = moveT; }
 
 	/// <summary>
+	/// 引数で指定したアニメーションの実行状態の取得
+	/// </summary>
+	/// <param name="count">取得するアニメーション番号</param>
+	/// <returns>アニメーションの実行状態</returns>
+	bool GetRunningAnimation(int count) { return animationDatas_[count].isRun; };
+
+	/// <summary>
 	/// アニメーションの実行状態取得
 	/// </summary>
 	/// <returns>アニメーションの実行状態</returns>
