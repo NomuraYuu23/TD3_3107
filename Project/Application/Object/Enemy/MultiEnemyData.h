@@ -7,7 +7,7 @@
 struct MultiEnemyData {
 	Vector3 position;
 	float distance;
-	uint32_t enemyMaxCount;
+	int32_t enemyMaxCount;
 };
 
 
@@ -28,7 +28,7 @@ inline void from_json(const nlohmann::json& json, MultiEnemyData& value) {
 
         value.position = json["position"].get<Vector3>();
         value.distance = json["distance"].get<float>();
-        value.distance = json["enemyMaxCount"].get<uint32_t>();
+        value.enemyMaxCount = json["enemyMaxCount"].get<int32_t>();
 
     }
 

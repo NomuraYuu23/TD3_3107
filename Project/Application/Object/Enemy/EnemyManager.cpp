@@ -12,6 +12,10 @@ void EnemyManager::Initialize(Model* model)
 	CreateEmitter({ {-20.0f,10.0f},7.0f,3 });
 
 	CreateSingleEnemy();
+
+	enemyEditor_ = std::make_unique<EnemyEditor>();
+	//enemyEditor_->LoadFiles();
+
 }
 
 void EnemyManager::Update()
@@ -65,6 +69,9 @@ void EnemyManager::ImGuiDraw()
 
 
 	ImGui::End();
+
+	enemyEditor_->ImGuiDraw();
+
 }
 
 void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera)

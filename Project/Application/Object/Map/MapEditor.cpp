@@ -102,8 +102,6 @@ void MapEditor::ImGuiDraw()
 
 		// ブロックの値の修正
 		ImGui::SeparatorText("TerrainEdit");
-		// ブロックの数だけ回す
-		uint32_t count = 0;
 
 		for (std::map<std::string, Item>::iterator groupItr = group.begin();
 			groupItr != group.end(); ++groupItr) {
@@ -118,8 +116,6 @@ void MapEditor::ImGuiDraw()
 
 			ImGui::DragFloat2(namePosition.c_str(), &item.position.x, imGuiSpeed);
 			ImGui::DragFloat2(nameSize.c_str(), &item.size.x, imGuiSpeed);
-
-			count++;
 
 		}
 

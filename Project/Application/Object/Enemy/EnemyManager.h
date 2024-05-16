@@ -5,6 +5,9 @@
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
 #include "../../../Engine/Animation/Animation.h"
+#include "SingleEnemyData.h"
+#include "MultiEnemyData.h"
+#include "EnemyEditor.h"
 
 class EnemyManager
 {
@@ -78,5 +81,8 @@ private:
 	Model* model_;
 	// アニメーション本体
 	Animation anim_;
+
+	// エネミーエディタ
+	std::unique_ptr<EnemyEditor> enemyEditor_;
 
 };

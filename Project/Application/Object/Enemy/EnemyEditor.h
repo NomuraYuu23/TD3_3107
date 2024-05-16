@@ -7,6 +7,12 @@
 class EnemyEditor
 {
 
+public:
+
+	//項目
+	using EnemyEditorItem = std::variant<SingleEnemyData, MultiEnemyData>;
+	using EnemyEditorGroup = std::map<std::string, EnemyEditorItem>; // ブロック番号, アイテム
+
 public: // メンバ変数(編集)
 
 	void ImGuiDraw();
@@ -62,14 +68,23 @@ public: // メンバ関数(読み込みなど)
 	/// <param name="groupName"></param>
 	void SaveFile(const std::string& groupName);
 
-	std::map<std::string, std::map<std::string, std::vector<SingleEnemyData, MultiEnemyData>>>* GetDatas() { return &datas_; }
+	std::map<std::string, EnemyEditorGroup>* GetDatas() { return &datas_; }
+
+private: // 関数
+
+	/// <summary>
+	/// シングル用
+	/// </summary>
+	void ImGuiSingleEnemy();
+
+	/// <summary>
+	/// マルチ用
+	/// </summary>
+	void ImGuiMultiEnemy();
 
 private: // 変数
 
-	//項目
-	using Item = std::variant<SingleEnemyData, MultiEnemyData>;
-	using Group = std::map<std::string, Item>; // ブロック番号, アイテム
-	std::map<std::string, Group> datas_; // ステージ番号、Group
+	std::map<std::string, EnemyEditorGroup> datas_; // ステージ番号、Group
 
 	// グローバル変数の保存先ファイルパス
 	const std::string kDirectoryPath = "Resources/Enemy/";
@@ -87,5 +102,15 @@ private: // 変数
 	int32_t addSingleEnemyNum_;
 	// シングル削除番号
 	int32_t deleteSingleEnemyNum_;
+
+	// マルチ追加データ
+	MultiEnemyData addMultieEnemyData_;
+	// マルチ追加番号
+	int32_t addMultiEnemyNum_;
+	// マルチ削除番号
+	int32_t deleteMultiEnemyNum_;
+
+	// モード
+	int32_t mode_;
 
 };

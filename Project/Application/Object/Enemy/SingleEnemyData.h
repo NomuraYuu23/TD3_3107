@@ -6,7 +6,7 @@
 /// </summary>
 struct SingleEnemyData {
 	Vector3 position;
-	uint32_t typeNum;
+	int32_t typeNum;
 };
 
 inline void to_json(nlohmann::json& json, const SingleEnemyData& value) {
@@ -23,7 +23,7 @@ inline void from_json(const nlohmann::json& json, SingleEnemyData& value) {
         json.contains("typeNum") && json["typeNum"].is_array()) {
 
         value.position = json["position"].get<Vector3>();
-        value.typeNum = json["typeNum"].get<uint32_t>();
+        value.typeNum = json["typeNum"].get<int32_t>();
     }
 
 }
