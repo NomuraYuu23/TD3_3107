@@ -25,6 +25,7 @@
     <FxCompile Include="Resources\shaders\WindowSprite.VS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSpriteStorage.CS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSpriteUAV.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\AnimModel.CS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
@@ -417,6 +418,7 @@
     <ClInclude Include="Engine\base\OutputLog.h" />
     <ClInclude Include="Engine\base\WindowSprite.h" />
     <ClInclude Include="Engine\PostEffect\Velocity2DManager.h" />
+    <ClInclude Include="Engine\Animation\SkinningInformation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
