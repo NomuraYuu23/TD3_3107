@@ -15,13 +15,16 @@ void EnemyManager::Initialize(Model* model)
 
 	enemyEditor_ = std::make_unique<EnemyEditor>();
 	enemyEditor_->LoadFiles();
+	LoadEnemyData();
 
 }
 
 void EnemyManager::Update()
 {
 
+#ifdef _DEBUG
 	LoadEnemyData();
+#endif // _DEBUG
 
 	// 更新をLargeのやつごとに
 	for (std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator it = enemyEmitters_.begin();
@@ -69,7 +72,6 @@ void EnemyManager::ImGuiDraw()
 		(*itr)->ImGuiDraw();
 		ImGui::Separator();
 	}
-
 
 	ImGui::End();
 
