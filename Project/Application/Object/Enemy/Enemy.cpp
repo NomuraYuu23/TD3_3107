@@ -29,7 +29,7 @@ void Enemy::Initialize()
 	isGround_ = false;
 
 	// 回転行列を使用する
-	usedDirection_ = true;
+	//usedDirection_ = true;
 }
 
 void Enemy::Update()
@@ -189,5 +189,8 @@ void Enemy::CheckParent()
 			ResetParent();
 			ChangeState(std::make_unique<EnemyAerialState>(), static_cast<IEnemyState::AttackPattern>(0));
 		}
+	}
+	else {
+		transform_.rotate = parent_->transform_.rotate * (1.0f);
 	}
 }
