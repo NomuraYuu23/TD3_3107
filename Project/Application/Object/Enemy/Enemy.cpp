@@ -105,6 +105,17 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
 		//	std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
 		else if((*weapon)->IsPlayerJump()){
+			// 死亡パーティクル再生
+			EmitterDesc desc;
+			desc.transform = &transform_;
+			desc.instanceCount = 25;
+			desc.frequency = 0.01f;
+			desc.lifeTime = 0.01f; 
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kEnemyDeadParticle;
+
+			ParticleManager::GetInstance()->MakeEmitter(desc, 0);
+
 			isDead_ = true;
 		}
 

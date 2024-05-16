@@ -2,5 +2,6 @@
 
 enum ParticleName {
 	kDefaultParticle,
+	kEnemyDeadParticle,
 	kCountOfParticleName,
 };

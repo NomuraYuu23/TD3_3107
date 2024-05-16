@@ -122,11 +122,17 @@ void PlayerController::ControllerProcess()
 
 				// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
 				if (player_->weapon_->isHold_) {
-
+					player_->weapon_->throwDirect_ = player_->throwDirect_;
 				}
 
 			}
 			else {
+
+				// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
+				if (player_->weapon_->isHold_) {
+					player_->weapon_->throwDirect_ = { 0,1,0 };
+				}
+
 				// 何も再生されていなければ待機アニメーション再生
 				if (player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation()) {
 					player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);

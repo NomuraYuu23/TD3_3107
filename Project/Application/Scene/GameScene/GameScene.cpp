@@ -314,7 +314,7 @@ void GameScene::Draw() {
 #pragma region パーティクル描画
 
 	// パーティクルはここ
-	//particleManager_->Draw(camera_.GetViewProjectionMatrix(), dxCommon_->GetCommadList());
+	particleManager_->Draw(camera_.GetViewProjectionMatrix(), dxCommon_->GetCommadList());
 
 #pragma endregion
 

@@ -21,6 +21,8 @@ void FreeFallState::Initialize()
 
 	// 所持状態フラグをfalse
 	weapon_->isHold_ = false;
+
+	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
 }
 
 void FreeFallState::Update()
