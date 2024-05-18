@@ -12,7 +12,7 @@ public: // メンバ関数
 	/// 初期化関数
 	/// </summary>
 	/// <param name="emitterDesc">エミッタ設定構造体</param>
-	void Initialize(const EmitterDesc& emitterDesc) override;
+	void Initialize(EmitterDesc* emitterDesc) override;
 
 	/// <summary>
 	/// 更新関数
