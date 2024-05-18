@@ -86,8 +86,6 @@ private:
 
 	// 全体のモデル
 	Model* model_;
-	// アニメーション本体
-	Animation anim_;
 
 	// エネミーエディタ
 	std::unique_ptr<EnemyEditor> enemyEditor_;

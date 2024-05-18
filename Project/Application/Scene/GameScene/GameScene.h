@@ -158,4 +158,6 @@ private:
 	bool isShift_ = false;
 	float glitchTime_ = 0.0f;
 
+	bool isImpact_ = false;
+
 };

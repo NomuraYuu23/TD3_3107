@@ -54,6 +54,23 @@ void PlayerAnimManager::Update()
 			// アニメーション再生
 			anim_.StartAnimation(Run, true);
 		}
+
+		EulerTransform transform = player_->worldtransform_.transform_;
+		transform.translate.y -= 1.0f;
+
+		if (player_->isGround_) {
+			// 走りパーティクル
+			EmitterDesc desc;
+			desc.transform = &transform;
+			desc.instanceCount = 1;
+			desc.frequency = 0.01f;
+			desc.lifeTime = 0.01f;
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kRunSmokeParticle;
+
+			ParticleManager::GetInstance()->MakeEmitter(desc, 0);
+		}
+		
 	}
 	else if(player_->isGround_ && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(SpearJump) && !anim_.GetRunningAnimation(Landing)){
 		// 待機アニメーションが再生されていない場合

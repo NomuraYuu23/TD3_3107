@@ -1,6 +1,8 @@
 #include "IEnemyEmitter.h"
 #include "Enemy.h"
 #include "../../../Engine/2D/ImguiManager.h"
+#include "../../../Engine/base/SRVDescriptorHerpManager.h"
+#include "../../../Engine/3D/ModelDraw.h"
 
 #include <numbers>
 #include <cmath>
@@ -20,6 +22,19 @@ void IEnemyEmitter::Initialize(Model* model)
 	name_ = "EnemyEmitter:" + std::to_string(serialNum_);
 	// 初期化
 	isRotateReturn_ = false;
+
+	//// アニメーション取得と初期化
+	//anim_.Initialize(
+	//	model_->GetNodeAnimationData(),
+	//	localMatrixManager_->GetInitTransform(),
+	//	localMatrixManager_->GetNodeNames());
+
+	//// アニメーション開始
+	//anim_.StartAnimation(0, true);
+
+	//// アニメーションの更新
+	//localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	//localMatrixManager_->Map();
 
 }
 
@@ -61,6 +76,10 @@ void IEnemyEmitter::Update()
 		interval_.Start(10.0f);
 	}
 
+	//// アニメーションの更新
+	//localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	//localMatrixManager_->Map();
+
 	worldTransform_.transform_.rotate.z = nowAngle_;
 	worldTransform_.UpdateMatrix();
 }
@@ -95,12 +114,31 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 		static_cast<Enemy*>(obj.get())->SetEmitter(this);
 		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
 		obj->transform_.translate = newPosition;
+		//obj->transform_.rotate.z = transformAngle;
+		//transformAngle += addAngle;
 		// 初期化
 		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), 0);
 		// リストに追加
 		objects_.push_back(std::move(obj));
 	}
 
+}
+
+void IEnemyEmitter::Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles)
+{
+	Map(camera.GetViewProjectionMatrix());
+
+	ModelDraw::ManyAnimObjectsDesc desc;
+	desc.camera = &camera;
+	desc.materialsHandle = &materialsHandleGPU_;
+	desc.model = model_;
+	desc.numInstance = numInstance_;
+	if (textureHnadles) {
+		desc.textureHandles = *textureHnadles;
+	}
+	desc.transformationMatrixesHandle = &transformationMatrixesHandleGPU_;
+	desc.localMatrixManager = localMatrixManager_.get();
+	ModelDraw::ManyAnimObjectsDraw(desc);
 }
 
 void IEnemyEmitter::ImGuiDraw()

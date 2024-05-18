@@ -45,6 +45,9 @@ void PlayerHitManager::OnHit()
 		// 無敵開始
 		invisibleTimer_.Start(invMaxFrame_);
 
+		// ジャンプ効果音を再生
+		player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerDamage);
+
 		hitEffectTimer_.Start(15.0f);
 		hitEffect_.bShift = { 3.0f,0 };
 		hitEffect_.gShift = { -3.0f,0 };
@@ -65,6 +68,9 @@ void PlayerHitManager::OnHit(uint32_t decrement)
 	if (!invisibleTimer_.IsActive()) {
 		// 無敵開始
 		invisibleTimer_.Start(invMaxFrame_);
+
+		// ジャンプ効果音を再生
+		player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerDamage);
 
 		// エフェクトの仮
 		hitEffectTimer_.Start(15.0f);

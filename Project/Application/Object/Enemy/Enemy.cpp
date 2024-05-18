@@ -27,9 +27,6 @@ void Enemy::Initialize()
 
 	isDead_ = false;
 	isGround_ = false;
-
-	// 回転行列を使用する
-	usedDirection_ = true;
 }
 
 void Enemy::Initialize(const std::string& name)
@@ -68,6 +65,8 @@ void Enemy::ImGuiDraw()
 	//ImGui::Begin(name.c_str());
 	ImGui::SeparatorText(name_.c_str());
 	ImGui::DragFloat3("WorldPosition", &transform_.translate.x);
+	std::string rot = "transform" + name_;
+	ImGui::DragFloat3(rot.c_str(), &transform_.rotate.x, 0.01f);
 	ImGui::DragFloat2("scale", &scale2D_.x);
 	ImGui::Text("%d", isDead_);
 	std::string name = typeid(*state_).name();
@@ -109,11 +108,27 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
 				weapon_ = (*weapon);
+				// 槍が刺さった効果音を再生
+				weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearSting);
 			}
 		}
 		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
 		//	std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
 		else if((*weapon)->IsPlayerJump()){
+			// 死亡パーティクル再生
+			EmitterDesc desc;
+			desc.transform = &transform_;
+			desc.instanceCount = 25;
+			desc.frequency = 0.01f;
+			desc.lifeTime = 0.01f; 
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kEnemyDeadParticle;
+
+			ParticleManager::GetInstance()->MakeEmitter(desc, 0);
+
+			// 敵を倒す効果音を再生
+			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
+
 			isDead_ = true;
 		}
 
@@ -198,8 +213,5 @@ void Enemy::CheckParent()
 			ResetParent();
 			ChangeState(std::make_unique<EnemyAerialState>(), static_cast<IEnemyState::AttackPattern>(0));
 		}
-	}
-	else {
-		transform_.rotate = parent_->transform_.rotate * (1.0f);
 	}
 }

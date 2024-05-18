@@ -15,6 +15,8 @@
 
 #include "../../../Engine/Physics/String.h"
 
+#include "../../AudioManager/GameAudioManager.h"
+
 class EnemyManager;
 
 class Player : public IObject
@@ -189,6 +191,9 @@ public:
 	EnemyManager* enemyManager_;
 
 	TimerLib spearJumpAccepter_;
+
+	// オーディオマネージャー
+	GameAudioManager* gameAudioManager_ = nullptr;
 
 private: // フラグ
 	// ゲームスピード

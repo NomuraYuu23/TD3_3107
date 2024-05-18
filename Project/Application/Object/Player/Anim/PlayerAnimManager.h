@@ -15,7 +15,7 @@ public: // サブクラス
 	/// <summary>
 	/// 再生中アニメーション
 	/// </summary>
-	enum playingAnim {
+	enum playerAnim {
 		Idle, // 待機
 		Run, // 走り
 		JumpStart, // ジャンプ開始

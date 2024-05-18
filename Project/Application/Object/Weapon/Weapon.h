@@ -11,6 +11,7 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 #include "Anim/SpearAnimManager.h"
+#include "../../../Engine/PostEffect/ShockWaveManager.h"
 
 class Player;
 
@@ -58,6 +59,8 @@ public: // 継承
 
 	void SetPlayer(Player* player) { player_ = player; }
 	Player* GetPlayer() { return player_; }
+
+private:
 	/// <summary>
 	/// システムの初期化
 	/// </summary>
@@ -163,6 +166,8 @@ public: // 外部で行う設定関数
 
 	// 槍を持っているかのフラグ
 	bool isHold_ = true;
+	// 槍を狙っている方向に向けるかのフラグ
+	bool isThrowDirect_ = false;
 
 private:
 	/// <summary>
@@ -209,6 +214,5 @@ private: // アニメーション関連
 	bool isPlayerJumpAccept_ = false;
 private:
 	ShockEffectSystem shockEffect_;
-
 };
 

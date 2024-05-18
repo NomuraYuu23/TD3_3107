@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
 #include "../GameUtility/TimerLib.h"
+#include "../../../Engine/Animation/Animation.h"
 
 class IEnemyEmitter : public LargeNumberOfObjects
 {
@@ -40,6 +41,13 @@ public:
 	void CreateEnemy(const Vector3& transformPosition, float distance, uint32_t enemyCount);
 
 	/// <summary>
+	/// 描画関数
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <param name="textureHnadles">テクスチャ</param>
+	void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles) override;
+
+	/// <summary>
 	/// ワールドトランスフォームの取得
 	/// </summary>
 	/// <returns></returns>
@@ -73,4 +81,7 @@ private:
 	bool isRotateReturn_ = false;
 
 	TimerLib interval_;
+
+	// アニメーション本体
+	Animation anim_;
 };

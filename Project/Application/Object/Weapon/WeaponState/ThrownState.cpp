@@ -3,6 +3,7 @@
 #include "../../../Engine/Math/DeltaTime.h"
 #include "../../../Engine/Math/Ease.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../../Player/Player.h"
 
 void ThrownState::Initialize()
 {
@@ -29,6 +30,12 @@ void ThrownState::Initialize()
 	weapon_->worldtransform_.direction_ = weapon_->throwDirect_;
 	weapon_->throwInvTimer_.Start(1.0f);
 	//weapon_->safeLaunchTimer_.Start(2.0f);
+
+	// 槍投げアニメーション開始
+	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearThrow);
+
+	// 投げ効果音を再生
+	weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kThrowSpear);
 }
 
 void ThrownState::Update()

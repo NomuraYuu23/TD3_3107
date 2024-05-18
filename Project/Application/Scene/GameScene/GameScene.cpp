@@ -166,11 +166,12 @@ void GameScene::Update() {
 		requestSceneNo_ = kTitle;
 	}
 
+
+#endif
 	if (input_->TriggerKey(DIK_R)) {
 		this->Initialize();
 	}
 
-#endif
 	if (input_->TriggerKey(DIK_L)) {
 		requestSceneNo_ = kTitle;
 	}
@@ -313,7 +314,7 @@ void GameScene::Draw() {
 #pragma region パーティクル描画
 
 	// パーティクルはここ
-	//particleManager_->Draw(camera_.GetViewProjectionMatrix(), dxCommon_->GetCommadList());
+	particleManager_->Draw(camera_.GetViewProjectionMatrix(), dxCommon_->GetCommadList());
 
 #pragma endregion
 
@@ -346,7 +347,7 @@ void GameScene::Draw() {
 		PlayerHitManager::Effect instance = player_->GetEffectInfo();
 		PostEffect::GetInstance()->SetRShift(instance.rShift);
 		PostEffect::GetInstance()->SetGShift(instance.gShift);
-		PostEffect::GetInstance()->SetBShift(instance.bShift);
+		PostEffect::GetInstance()->SetBShift(instance.rShift);
 		PostEffect::GetInstance()->SetTime(instance.time);
 		PostEffect::GetInstance()->Execution(
 			dxCommon_->GetCommadList(),
@@ -389,6 +390,7 @@ void GameScene::ImguiDraw() {
 	ImGui::DragFloat2("shiftVelocity_", &shiftVelocity_.x, 0.01f, -abs, abs);
 	ImGui::DragFloat("gti", &glitchTime_, 0.01f);
 	ImGui::Checkbox("IsShift", &isShift_);
+	ImGui::Checkbox("IsImpact", &isImpact_);
 	ImGui::End();
 
 	//Obj
@@ -404,11 +406,11 @@ void GameScene::ImguiDraw() {
 	backGround_->ImGuiDraw();
 
 	// スカイドーム
-	skydome_->ImGuiDraw();
+	//skydome_->ImGuiDraw();
 
 	debugCamera_->ImGuiDraw();
 
-	collision2DDebugDraw_->ImGuiDraw();
+	//collision2DDebugDraw_->ImGuiDraw();
 
 	gameCamera_->ImGuiDraw();
 
@@ -417,9 +419,9 @@ void GameScene::ImguiDraw() {
 	gameData_->ApplyGlobalVariables();
 
 	// ポストエフェクトのImGuiを表示
-	PostEffect::GetInstance()->ImGuiDraw();
+	//PostEffect::GetInstance()->ImGuiDraw();
 	// フォグのImGuiの表示
-	FogManager::GetInstance()->ImGuiDraw();
+	//FogManager::GetInstance()->ImGuiDraw();
 
 #endif // _DEBUG
 
@@ -429,7 +431,7 @@ void GameScene::DebugCameraUpdate()
 {
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_RETURN)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;
 		}

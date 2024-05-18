@@ -22,7 +22,7 @@ void Weapon::Initialize(Model* model)
 	worldtransform_.usedDirection_ = true;
 	float scaleRate = globalVariables->GetFloatValue("Weapon", "ScaleRate");
 	//float scaleRate = 2.5f;
-	worldtransform_.transform_.scale = { 1.0f,1.0f,scaleRate };
+	worldtransform_.transform_.scale = { 1.0f,1.0f,1.0f };
 	scale2D_ = { scaleRate * 2.0f,0.10f };
 
 	// コライダーの初期化
@@ -49,7 +49,7 @@ void Weapon::Update()
 	isGravity_ = false;
 	isEnemyImpaled_ = false;
 	isPlayerJumpAccept_ = player_->spearJumpAccepter_.IsActive();
-
+	//shockWaveManager_->SetCenter({ worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y });
 	prevDirect_ = { worldtransform_.direction_.x,worldtransform_.direction_.y };
 
 	// 状態ごとの更新
@@ -62,7 +62,7 @@ void Weapon::Update()
 		isTread_ = false;
 	}
 	// システム更新
-	SystemUpdate();
+	this->SystemUpdate();
 
 	// 基底クラスの更新
 	IObject::Update();
@@ -110,6 +110,7 @@ void Weapon::ImGuiDraw()
 	shockEffect_.ImGuiDraw();
 	ImGui::Text("\n");
 
+	ImGui::Separator();
 	// 親子変更
 	if (ImGui::Button("ParentDelete")) {
 		ReleaseParent();
