@@ -180,6 +180,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\GraphicsPipelineState\SamplerManager.cpp" />
     <ClCompile Include="Engine\base\ITextureHandleManager.cpp" />
     <ClCompile Include="Engine\base\Log.cpp" />
+    <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
     <ClCompile Include="Engine\base\RenderTargetTexture.cpp" />
     <ClCompile Include="Engine\base\RTVDescriptorHerpManager.cpp" />
     <ClCompile Include="Engine\base\SRVDescriptorHerpManager.cpp" />
@@ -390,6 +391,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\ITextureHandleManager.h" />
     <ClInclude Include="Engine\base\Log.h" />
     <ClInclude Include="Engine\base\OutputLog.h" />
+    <ClInclude Include="Engine\base\QueryTimestamp.h" />
     <ClInclude Include="Engine\base\RenderTargetTexture.h" />
     <ClInclude Include="Engine\base\RTVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h" />

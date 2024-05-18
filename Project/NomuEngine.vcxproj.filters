@@ -205,6 +205,7 @@
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
+    <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -439,6 +440,7 @@
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
     <ClInclude Include="Engine\Animation\SkinningInformation.h" />
+    <ClInclude Include="Engine\base\QueryTimestamp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
