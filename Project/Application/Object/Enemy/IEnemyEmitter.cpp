@@ -117,7 +117,7 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 		//obj->transform_.rotate.z = transformAngle;
 		//transformAngle += addAngle;
 		// 初期化
-		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), 0);
+		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
 		// リストに追加
 		objects_.push_back(std::move(obj));
 	}

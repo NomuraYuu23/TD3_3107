@@ -35,8 +35,8 @@
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
-    <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
-    <ClCompile Include="Application\Object\Enemy\State\EnemyGroundState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\SingleEnemyState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\GroupEnemyState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
@@ -223,8 +223,8 @@
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
-    <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
-    <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />
+    <ClInclude Include="Application\Object\Enemy\State\SingleEnemyState.h" />
+    <ClInclude Include="Application\Object\Enemy\State\GroupEnemyState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />
     <ClInclude Include="Application\Object\Enemy\State\IEnemyState.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />

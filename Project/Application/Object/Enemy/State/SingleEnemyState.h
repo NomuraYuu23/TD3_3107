@@ -1,18 +1,17 @@
 #pragma once
 #include "IEnemyState.h"
-#include <array>
 
-class EnemyGroundState : public IEnemyState
+class SingleEnemyState : public IEnemyState
 {
 public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	 void Initialize() override;
+	void Initialize() override;
 	/// <summary>
 	/// 更新
 	/// </summary>
-	 void Update() override;
+	void Update() override;
 private:
 	// 近距離
 	void MeleeInitialize() override;
@@ -21,9 +20,6 @@ private:
 	// 遠距離
 	void RangedInitialize() override;
 	void RangedUpdate() override;
-private:
-
-	void MoveUpdate();
 
 private:
 	// 行動の関数ポインタを持たせた配列
@@ -31,5 +27,4 @@ private:
 		MovementFunc{&IEnemyState::MeleeInitialize,&IEnemyState::MeleeUpdate,},
 		MovementFunc{&IEnemyState::RangedInitialize,&IEnemyState::RangedUpdate,}
 	};
-
 };

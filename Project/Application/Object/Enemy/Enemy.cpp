@@ -211,7 +211,7 @@ void Enemy::CheckParent()
 				weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 			ResetParent();
-			ChangeState(std::make_unique<EnemyAerialState>(), static_cast<IEnemyState::AttackPattern>(0));
+			ChangeState(std::make_unique<SingleEnemyState>(), static_cast<IEnemyState::AttackPattern>(0));
 		}
 	}
 }

@@ -234,7 +234,7 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data)
 	obj->Initialize();
 	obj->transform_.translate = data.position;
 	// 初期化
-	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), data.typeNum);
+	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), data.typeNum);
 	
 	// 追加
 	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
@@ -248,7 +248,7 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data, const std::string&
 	static_cast<Enemy*>(obj.get())->Initialize(name);
 	obj->transform_.translate = data.position;
 	// 初期化
-	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<EnemyGroundState>(), data.typeNum);
+	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), data.typeNum);
 
 	// 追加
 	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));

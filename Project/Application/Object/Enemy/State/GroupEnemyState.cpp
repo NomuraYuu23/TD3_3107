@@ -1,8 +1,8 @@
-#include "EnemyGroundState.h"
+#include "GroupEnemyState.h"
 #include "../Enemy.h"
 #include "../../../Engine/Math/DeltaTime.h"
 
-void EnemyGroundState::Initialize()
+void GroupEnemyState::Initialize()
 {
 	enemy_->SetState(this);
 	// 行動の初期化
@@ -10,7 +10,7 @@ void EnemyGroundState::Initialize()
 	enemy_->velocity_.y = 0.0f;
 }
 
-void EnemyGroundState::Update()
+void GroupEnemyState::Update()
 {
 	// 速度処理
 	if (!enemy_->IsGround()) {
@@ -27,27 +27,27 @@ void EnemyGroundState::Update()
 
 }
 
-void EnemyGroundState::MeleeInitialize()
+void GroupEnemyState::MeleeInitialize()
 {
 
 }
 
-void EnemyGroundState::MeleeUpdate()
+void GroupEnemyState::MeleeUpdate()
 {
 
 }
 
-void EnemyGroundState::RangedInitialize()
+void GroupEnemyState::RangedInitialize()
 {
 
 }
 
-void EnemyGroundState::RangedUpdate()
+void GroupEnemyState::RangedUpdate()
 {
 
 }
 
-void EnemyGroundState::MoveUpdate()
+void GroupEnemyState::MoveUpdate()
 {
 
 }
