@@ -16,6 +16,7 @@
 // マップ
 #include "Map/MapManager.h"
 #include "Map/Terrain.h"
+#include "Map/Goal/GoalObject.h"
 
 // 背景
 #include "BackGround/BackGround.h"

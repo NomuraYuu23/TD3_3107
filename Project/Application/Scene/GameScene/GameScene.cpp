@@ -92,9 +92,7 @@ void GameScene::Initialize() {
 	// 初期化
 	player_->Initialize(playerModel_.get());
 	// ポニーテール
-	player_->SetPonyTail(ponyTailModel_.get());
-	// オーディオマネージャーを渡す
-	player_->gameAudioManager_ = audioManager_.get();
+	//player_->SetPonyTail(ponyTailModel_.get());
 
 	// 更新
 	//countTime_ = 0;
@@ -369,7 +367,14 @@ void GameScene::Draw() {
 			&desc);
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
-
+	if (player_->isSlowNow_) {
+		PostEffect::GetInstance()->SetTime(3.0f);
+		PostEffect::GetInstance()->Execution(
+			dxCommon_->GetCommadList(),
+			renderTargetTexture_,
+			PostEffect::kCommandIndexGrayScale);
+		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	}
 }
 
 void GameScene::ImguiDraw() {
@@ -401,11 +406,11 @@ void GameScene::ImguiDraw() {
 	backGround_->ImGuiDraw();
 
 	// スカイドーム
-	skydome_->ImGuiDraw();
+	//skydome_->ImGuiDraw();
 
 	debugCamera_->ImGuiDraw();
 
-	collision2DDebugDraw_->ImGuiDraw();
+	//collision2DDebugDraw_->ImGuiDraw();
 
 	gameCamera_->ImGuiDraw();
 
@@ -414,9 +419,9 @@ void GameScene::ImguiDraw() {
 	gameData_->ApplyGlobalVariables();
 
 	// ポストエフェクトのImGuiを表示
-	PostEffect::GetInstance()->ImGuiDraw();
+	//PostEffect::GetInstance()->ImGuiDraw();
 	// フォグのImGuiの表示
-	FogManager::GetInstance()->ImGuiDraw();
+	//FogManager::GetInstance()->ImGuiDraw();
 
 #endif // _DEBUG
 
@@ -426,7 +431,7 @@ void GameScene::DebugCameraUpdate()
 {
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_RETURN)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;
 		}
@@ -477,8 +482,7 @@ void GameScene::ModelCreate()
 	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// プレイヤーモデル
-	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
-	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
+	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_, textureHandleManager_.get()));
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 地形ブロック
@@ -488,7 +492,7 @@ void GameScene::ModelCreate()
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 敵モデル
-	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_, textureHandleManager_.get()));
+	enemyModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
 
 }
 

@@ -97,6 +97,7 @@ void PlayerController::ControllerProcess()
 
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
+		player_->isSlowNow_ = false;
 
 		// スローモーション
 		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
@@ -106,51 +107,21 @@ void PlayerController::ControllerProcess()
 			if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
 				!player_->IsRecoil()) {
 				if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
-					// スローの倍率
-					player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 					// UI表示
 					player_->isArrowUiDraw_ = true;
+					player_->isSlowNow_ = true;
 				}
-				else {
-					player_->sPlaySpeed = 1.0f;
-				}
-
-				// 槍のエイムアニメーション再生
-				if (!player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation(SpearAnimManager::SpearAim)) {
-					player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearAim);
-				}
-
-				// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
-				if (player_->weapon_->isHold_) {
-					player_->weapon_->throwDirect_ = player_->throwDirect_;
-				}
-
 			}
-			else {
+		}
 
-				// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
-				if (player_->weapon_->isHold_) {
-					player_->weapon_->throwDirect_ = { 0,1,0 };
-				}
-
-				// 何も再生されていなければ待機アニメーション再生
-				if (player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation()) {
-					player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
-				}
-
-				player_->sPlaySpeed = 1.0f;
-			}
+		// スローの判定
+		if (player_->isSlowNow_) {
+			// スローの倍率
+			player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 		}
 		else {
 			player_->sPlaySpeed = 1.0f;
 		}
-		//Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
-
-		//if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
-		//	// 投げる方向ベクトル
-		//	player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
-
-		//}
 
 	}
 	// 座標更新

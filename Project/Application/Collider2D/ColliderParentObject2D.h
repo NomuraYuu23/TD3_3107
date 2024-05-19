@@ -17,5 +17,6 @@ class Terrain;
 class Enemy;
 // 仮の名前
 class PrevSmallBoss;
+class GoalObject;
 
-using ColliderParentObject2D = std::variant<Terrain*, Player*, PlayerFootCollider*, CameraRay*, Weapon*, Enemy*, PrevSmallBoss*>;
+using ColliderParentObject2D = std::variant<Terrain*, Player*, PlayerFootCollider*, CameraRay*, Weapon*, Enemy*, PrevSmallBoss*, GoalObject*>;

@@ -14,11 +14,9 @@ public: // サブクラス
 
 	// パイプライン番号
 	enum PipelineStateIndex {
-		kPipelineStateIndexAnimModel, // アニメーションモデル
-		kPipelineStateIndexNormalModel, // アニメーション無しモデル
-		kPipelineStateIndexAnimInverseModel, // アニメーション反転モデル(右手座標系)
-		kPipelineStateIndexManyAnimObjects, // 複数のアニメーションオブジェクト(アニメーションは同じ)
-		kPipelineStateIndexManyNormalObjects, // 複数のアニメーション無しオブジェクト
+		kPipelineStateIndexModel, // モデル
+		kPipelineStateIndexInverseModel, // 反転モデル(右手座標系)
+		kPipelineStateIndexManyObjects, // 複数のアニメーション無しオブジェクト
 
 
 		kPipelineStateIndexNormalOutline, // アニメーション無しアウトライン
@@ -107,6 +105,11 @@ public:
 	// 現在のパイプライン番号
 	static PipelineStateIndex currentPipelineStateIndex_;
 
+	// ルートシグネチャCS
+	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignatureCS_;
+	// パイプラインステートオブジェクトCS
+	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineStateCS_;
+
 public: //関数（描画以外）
 
 	/// <summary>
@@ -165,6 +168,12 @@ public: // 描画
 	/// 
 	/// </summary>
 	static void NormalOutlineDraw(NormalOutlineDesc& desc);
+
+private: // 関数
+
+	static void UpdateVertexUAV(
+		Model* model,
+		LocalMatrixManager* localMatrixManager);
 
 };
 

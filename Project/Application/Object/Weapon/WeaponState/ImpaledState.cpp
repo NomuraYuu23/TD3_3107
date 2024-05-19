@@ -12,7 +12,7 @@ void ImpaledState::Initialize()
 	weapon_->worldtransform_.UpdateMatrix();
 
 	// 待機アニメーション開始
-	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+	//weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
 
 }
 

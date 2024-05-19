@@ -128,6 +128,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Map\MapEditor.cpp" />
+    <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\AerialState.cpp" />
     <ClCompile Include="Application\AudioManager\ClearAudioManager.cpp" />
@@ -182,6 +183,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\GraphicsPipelineState\SamplerManager.cpp" />
     <ClCompile Include="Engine\base\ITextureHandleManager.cpp" />
     <ClCompile Include="Engine\base\Log.cpp" />
+    <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
     <ClCompile Include="Engine\base\RenderTargetTexture.cpp" />
     <ClCompile Include="Engine\base\RTVDescriptorHerpManager.cpp" />
     <ClCompile Include="Engine\base\SRVDescriptorHerpManager.cpp" />
@@ -318,6 +320,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\Map\MapBlockData.h" />
     <ClInclude Include="Application\Object\Map\MapEditor.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointObject.h" />
+    <ClInclude Include="Application\Object\Map\Goal\GoalObject.h" />
     <ClInclude Include="Application\Object\Player\ActionState\ActionWaitState.h" />
     <ClInclude Include="Application\Object\GameUtility\CommonConfig.h" />
     <ClInclude Include="Application\Object\ObjectList.h" />
@@ -383,6 +388,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Animation\LocalMatrixDraw.h" />
     <ClInclude Include="Engine\Animation\LocalMatrixManager.h" />
     <ClInclude Include="Engine\Animation\NodeAnimationData.h" />
+    <ClInclude Include="Engine\Animation\SkinningInformation.h" />
     <ClInclude Include="Engine\Audio\AudioManager.h" />
     <ClInclude Include="Engine\base\CompileShader.h" />
     <ClInclude Include="Engine\base\CrashHandler.h" />
@@ -396,6 +402,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\ITextureHandleManager.h" />
     <ClInclude Include="Engine\base\Log.h" />
     <ClInclude Include="Engine\base\OutputLog.h" />
+    <ClInclude Include="Engine\base\QueryTimestamp.h" />
     <ClInclude Include="Engine\base\RenderTargetTexture.h" />
     <ClInclude Include="Engine\base\RTVDescriptorHerpManager.h" />
     <ClInclude Include="Engine\base\SRVDescriptorHerpManager.h" />
@@ -587,11 +594,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\shaders\AnimInverseModel.VS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\AnimModel.VS.hlsl">
+    <FxCompile Include="Resources\shaders\AnimModel.CS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
@@ -608,10 +611,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Resources\shaders\Line.VS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ManyAnimModels.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

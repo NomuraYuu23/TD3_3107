@@ -32,10 +32,10 @@ void ThrownState::Initialize()
 	//weapon_->safeLaunchTimer_.Start(2.0f);
 
 	// 槍投げアニメーション開始
-	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearThrow);
+	//weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearThrow);
 
 	// 投げ効果音を再生
-	weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kThrowSpear);
+	//weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kThrowSpear);
 }
 
 void ThrownState::Update()
