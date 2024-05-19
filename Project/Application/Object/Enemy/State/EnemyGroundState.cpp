@@ -29,34 +29,25 @@ void EnemyGroundState::Update()
 
 void EnemyGroundState::MeleeInitialize()
 {
-	enemy_->velocity_.x = 0.0f;
+
 }
 
 void EnemyGroundState::MeleeUpdate()
 {
-	//enemy_->velocity_.x += kDeltaTime_* (1.0f / IObject::sPlaySpeed);
-	//enemy_->transform_.translate += enemy_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+
 }
 
 void EnemyGroundState::RangedInitialize()
 {
-	enemy_->velocity_.y = 3.0f;
+
 }
 
 void EnemyGroundState::RangedUpdate()
 {
-	//enemy_->velocity_.x += kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	//enemy_->transform_.translate += enemy_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+
 }
 
 void EnemyGroundState::MoveUpdate()
 {
-	//if (enemy_->GetIsGround()) {
-
-	//}
-	//else {
-
-	//}
-
 
 }
