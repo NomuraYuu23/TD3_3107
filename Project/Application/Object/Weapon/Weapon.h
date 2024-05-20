@@ -47,6 +47,11 @@ public: // 継承
 	/// <param name="camera"></param>
 	void Draw(const BaseCamera& camera) override;
 	/// <summary>
+	/// 武器のリング描画
+	/// </summary>
+	/// <param name="camera">描画に使用するカメラ</param>
+	void RingDraw(const BaseCamera& camera);
+	/// <summary>
 	/// ImGui
 	/// </summary>
 	void ImGuiDraw() override;

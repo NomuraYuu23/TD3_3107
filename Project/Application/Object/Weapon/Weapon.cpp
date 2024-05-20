@@ -128,7 +128,10 @@ void Weapon::Draw(const BaseCamera& camera)
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
 	ModelDraw::AnimObjectDraw(desc);
+}
 
+void Weapon::RingDraw(const BaseCamera& camera)
+{
 	// リング描画
 	if (isDrawRing_) {
 		// 武器リングの描画

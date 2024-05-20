@@ -315,6 +315,9 @@ void GameScene::Draw() {
 	// 敵
 	enemyManager_->Draw(camera_, &tmpTextures_);
 
+	// プレイヤーのリングは透過するため最後に描画
+	player_->weapon_->RingDraw(camera_);
+
 	ModelDraw::PostDraw();
 
 #pragma endregion
