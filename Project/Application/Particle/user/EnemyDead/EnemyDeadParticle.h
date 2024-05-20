@@ -13,7 +13,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="position">初期座標</param>
 	/// <param name="size">大きさ</param>
-	void Initialize(const Vector3& position, const Vector3& size) override;
+	void Initialize(ParticleDesc* particleDesc) override;
 
 	/// <summary>
 	/// 更新関数

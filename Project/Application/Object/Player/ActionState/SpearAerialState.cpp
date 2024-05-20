@@ -30,12 +30,18 @@ void SpearAerialState::Initialize()
 
 	player_->weapon_->GetEffectSystem()->StartShockWave(15.0f);
 
+#ifndef _DEBUG
+
 	// 槍ジャンアニメーションの再生
-	//player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::SpearJump);
+	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::SpearJump);
 
 	// 槍のバウンドアニメーション再生
-	//player_->weapon_->GetAnimManager()->PlayAnimation(3);
+	player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearBounce);
 
+	// ジャンプ効果音を再生
+	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
+
+#endif // !_DEBUG
 }
 
 void SpearAerialState::Update()

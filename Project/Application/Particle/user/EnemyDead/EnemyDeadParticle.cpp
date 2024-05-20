@@ -1,26 +1,26 @@
 #include "EnemyDeadParticle.h"
 #include "../../../../Engine/Math/RandomEngine.h"
 
-void EnemyDeadParticle::Initialize(const Vector3& position, const Vector3& size)
+void EnemyDeadParticle::Initialize(ParticleDesc* particleDesc)
 {
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
-	Vector3 distributionMax = { position.x + size.x / 2.0f,
-								position.y + size.y / 2.0f,
-								position.z + size.z / 2.0f };
-	Vector3 distributionMin = { position.x - size.x / 2.0f,
-								position.y - size.y / 2.0f,
-								position.z - size.z / 2.0f };
+	Vector3 distributionMax = { particleDesc->position.x + particleDesc->size.x / 2.0f,
+								particleDesc->position.y + particleDesc->size.y / 2.0f,
+								particleDesc->position.z + particleDesc->size.z / 2.0f };
+	Vector3 distributionMin = { particleDesc->position.x - particleDesc->size.x / 2.0f,
+								particleDesc->position.y - particleDesc->size.y / 2.0f,
+								particleDesc->position.z - particleDesc->size.z / 2.0f };
 
 	// 最小スケール
-	Vector3 minScale = { size.x / 1.5f,
-						 size.y / 1.5f,
-						 size.z / 1.5f };
+	Vector3 minScale = { particleDesc->size.x / 1.5f,
+						 particleDesc->size.y / 1.5f,
+						 particleDesc->size.z / 1.5f };
 	// 最大スケール
-	Vector3 maxScale = { size.x * 1.5f,
-						 size.y * 1.5f,
-						 size.z * 1.5f };
+	Vector3 maxScale = { particleDesc->size.x * 1.5f,
+						 particleDesc->size.y * 1.5f,
+						 particleDesc->size.z * 1.5f };
 
 	// 最小ベクトル
 	Vector3 minVector = { -0.45f,
@@ -41,7 +41,7 @@ void EnemyDeadParticle::Initialize(const Vector3& position, const Vector3& size)
 	float distantScale = distScale(randomEngine);
 	transform_.scale = { distantScale,distantScale,1.0f };
 	transform_.rotate = { 0.0f,0.0f,0.0f };
-	transform_.translate = position;
+	transform_.translate = particleDesc->position;
 
 	velocity_ = { distVectorX(randomEngine), distVectorY(randomEngine), 0.0f};
 

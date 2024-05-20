@@ -42,10 +42,12 @@ void Player::Initialize(Model* model)
 
 	isGround_ = false;
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// アニメーション関連初期化
-	//anim_ = std::make_unique<PlayerAnimManager>(); // 生成
-	//anim_->Init(this);							   // 初期化
-
+	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
+	anim_->Init(this);							   // 初期化
+	#endif // !_DEBUG
 }
 
 void Player::Update()
@@ -70,7 +72,6 @@ void Player::Update()
 		// 行列を求める
 		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[10].matrix * worldtransform_.worldMatrix_;
 		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
-		//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
 
 		// アンカー設定
 		ponytail_->SetAnchor(0, true);
@@ -85,8 +86,10 @@ void Player::Update()
 	// 基底クラスの更新
 	IObject::Update();
 
+	#ifndef _DEBUG
 	// アニメーション更新
-	//anim_->Update();
+	anim_->Update();
+	#endif // !_DEBUG
 
 	// コライダー
 	CircleColliderUpdate();
@@ -120,7 +123,19 @@ void Player::Draw(const BaseCamera& camera)
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	if (anim_->GetIsRight()) {
+		ModelDraw::AnimObjectDraw(desc);
+}
+	else {
+		ModelDraw::AnimInverseObjectDraw(desc);
+	}
+	#endif // !_DEBUG
+	// デバッグのみで行う
+	#ifdef _DEBUG
 	ModelDraw::AnimObjectDraw(desc);
+	#endif // _DEBUG
 
 	// 武器の描画
 	if (weapon_) {

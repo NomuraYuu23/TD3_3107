@@ -22,7 +22,11 @@ void FreeFallState::Initialize()
 	// 所持状態フラグをfalse
 	weapon_->isHold_ = false;
 
-	//weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	// アイドルアニメーション再生
+	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+	#endif // !_DEBUG
 }
 
 void FreeFallState::Update()

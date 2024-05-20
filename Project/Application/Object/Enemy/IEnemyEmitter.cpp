@@ -23,19 +23,21 @@ void IEnemyEmitter::Initialize(Model* model)
 	// 初期化
 	isRotateReturn_ = false;
 
-	//// アニメーション取得と初期化
-	//anim_.Initialize(
-	//	model_->GetNodeAnimationData(),
-	//	localMatrixManager_->GetInitTransform(),
-	//	localMatrixManager_->GetNodeNames());
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	// アニメーション取得と初期化
+	anim_.Initialize(
+		model_->GetNodeAnimationData(),
+		localMatrixManager_->GetInitTransform(),
+		localMatrixManager_->GetNodeNames());
 
-	//// アニメーション開始
-	//anim_.StartAnimation(0, true);
+	// アニメーション開始
+	anim_.StartAnimation(0, true);
 
-	//// アニメーションの更新
-	//localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
-	//localMatrixManager_->Map();
-
+	// アニメーションの更新
+	localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	localMatrixManager_->Map();
+	#endif // !
 }
 
 void IEnemyEmitter::Initialize(Model* model,const std::string& name)
@@ -76,9 +78,14 @@ void IEnemyEmitter::Update()
 		interval_.Start(10.0f);
 	}
 
-	//// アニメーションの更新
-	//localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
-	//localMatrixManager_->Map();
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+
+	// アニメーションの更新
+	localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	localMatrixManager_->Map();
+
+	#endif // !_DEBUG
 
 	worldTransform_.transform_.rotate.z = nowAngle_;
 	worldTransform_.UpdateMatrix();
