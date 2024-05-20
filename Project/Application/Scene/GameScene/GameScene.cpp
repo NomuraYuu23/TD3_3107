@@ -293,21 +293,21 @@ void GameScene::Draw() {
 
 	//3Dオブジェクトはここ
 
+	// スカイドーム
+	skydome_->Draw(camera_);
+
+	// 背景
+	backGround_->Draw(camera_);
+
 	//Obj
 	player_->Draw(camera_);
 	//bossEnemy_->Draw(camera_);
-
-	// スカイドーム
-	skydome_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(blockTexture_);
 
 	// ブロック用
 	mapManager_->Draw(camera_);
-
-	// 背景
-	backGround_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(enemyTexture_);
