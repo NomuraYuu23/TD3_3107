@@ -368,7 +368,8 @@ void GameScene::Draw() {
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
 	if (player_->isSlowNow_) {
-		PostEffect::GetInstance()->SetTime(3.0f);
+		//PostEffect::GetInstance()->SetParaSize(10.0f);
+		//PostEffect::GetInstance()->
 		PostEffect::GetInstance()->Execution(
 			dxCommon_->GetCommadList(),
 			renderTargetTexture_,

@@ -36,5 +36,7 @@ public: // アクセッサ
 	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
 	Box GetBoxCollider() override { return boxCollider_; }
+	// 座標
+	void SetPosition(const Vector3& position) { worldtransform_.transform_.translate = position; }
 
 };

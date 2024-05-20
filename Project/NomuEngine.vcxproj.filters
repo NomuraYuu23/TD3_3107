@@ -210,6 +210,7 @@
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
     <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
+    <ClCompile Include="Application\Object\Map\Game\GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -459,6 +460,7 @@
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
     <ClInclude Include="Application\Object\Enemy\System\DetectionSystem.h" />
     <ClInclude Include="Application\Object\Enemy\System\EnemySytemList.h" />
+    <ClInclude Include="Application\Object\Map\Game\GameManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

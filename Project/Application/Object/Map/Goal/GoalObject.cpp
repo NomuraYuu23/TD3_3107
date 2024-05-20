@@ -39,6 +39,7 @@ void GoalObject::Draw(const BaseCamera& camera)
 
 void GoalObject::ImGuiDraw()
 {
+
 }
 
 void GoalObject::OnCollision(ColliderParentObject2D target)
