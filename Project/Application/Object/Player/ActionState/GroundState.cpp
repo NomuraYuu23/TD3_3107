@@ -18,12 +18,10 @@ void GroundState::Initialize()
 
 
 	// 着地アニメーションの再生
-	if (player_->GetAnimManager() != nullptr) {
+	/*if (player_->GetAnimManager() != nullptr) {
 		player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::Landing);
-		// 着地効果音を再生
-		player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerLand);
-	}
-
+	}*/
+	
 	player_->KnockBackOnGround();
 	player_->EndAssistDash();
 }

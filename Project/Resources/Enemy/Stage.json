@@ -1,59 +1,56 @@
 {
     "Stage0": {
-        "Enemy0": {
-            "position": [
-                139.1999969482422,
-                40.5,
-                0.0
-            ],
-            "typeNum": 0
-        },
-        "Enemy1": {
-            "position": [
-                176.1999969482422,
-                40.0,
-                0.0
-            ],
-            "typeNum": 0
-        },
-        "Enemy2": {
-            "position": [
-                217.0,
-                45.0,
-                0.0
-            ],
-            "typeNum": 0
-        },
-        "Enemy3": {
-            "position": [
-                231.60000610351563,
-                41.70000076293945,
-                0.0
-            ],
-            "typeNum": 0
-        },
-        "Enemy4": {
-            "position": [
-                276.20001220703125,
-                42.099998474121094,
-                0.0
-            ],
-            "typeNum": 0
-        },
-        "Enemy5": {
-            "position": [
-                261.1000061035156,
-                50.0,
-                0.0
-            ],
-            "typeNum": 0
-        },
         "EnemyEmitter:1": {
-            "distance": 10.0,
+            "distance": 6.800000190734863,
             "enemyMaxCount": 5,
             "position": [
-                0.0,
-                0.0,
+                -10.899999618530273,
+                10.100000381469727,
+                0.0
+            ]
+        },
+        "EnemyEmitter:2": {
+            "distance": 6.800000190734863,
+            "enemyMaxCount": 5,
+            "position": [
+                16.0,
+                10.100000381469727,
+                0.0
+            ]
+        },
+        "EnemyEmitter:3": {
+            "distance": 5.0,
+            "enemyMaxCount": 6,
+            "position": [
+                60.0,
+                21.200000762939453,
+                0.0
+            ]
+        },
+        "EnemyEmitter:4": {
+            "distance": 6.0,
+            "enemyMaxCount": 5,
+            "position": [
+                42.900001525878906,
+                35.400001525878906,
+                0.0
+            ]
+        },
+        "EnemyEmitter:5": {
+            "distance": 13.399999618530273,
+            "enemyMaxCount": 8,
+            "position": [
+                81.19999694824219,
+                36.20000076293945,
+                0.0
+            ]
+        },
+        "EnemyEmitter:6": {
+            "distance": 8.0,
+            "enemyMaxCount": 5,
+            "position": [
+                160.89999389648438,
+                78.0,
                 0.0
             ]
         }

@@ -35,8 +35,8 @@
     <ClCompile Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.cpp" />
     <ClCompile Include="Application\Object\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
-    <ClCompile Include="Application\Object\Enemy\State\EnemyAerialState.cpp" />
-    <ClCompile Include="Application\Object\Enemy\State\EnemyGroundState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\SingleEnemyState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\GroupEnemyState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
@@ -206,6 +206,7 @@
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.cpp" />
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
+    <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
     <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
   </ItemGroup>
@@ -222,8 +223,8 @@
     <ClInclude Include="Application\Object\BossEnemy\SmallBoss\Weapon\WaveAttack.h" />
     <ClInclude Include="Application\Object\Enemy\Enemy.h" />
     <ClInclude Include="Application\Object\Enemy\EnemyManager.h" />
-    <ClInclude Include="Application\Object\Enemy\State\EnemyAerialState.h" />
-    <ClInclude Include="Application\Object\Enemy\State\EnemyGroundState.h" />
+    <ClInclude Include="Application\Object\Enemy\State\SingleEnemyState.h" />
+    <ClInclude Include="Application\Object\Enemy\State\GroupEnemyState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />
     <ClInclude Include="Application\Object\Enemy\State\IEnemyState.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
@@ -445,9 +446,16 @@
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
+    <ClInclude Include="Application\Object\Map\Goal\GoalObject.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointObject.h" />
+    <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
     <ClInclude Include="Engine\Animation\SkinningInformation.h" />
     <ClInclude Include="Engine\base\QueryTimestamp.h" />
+    <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
+    <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
+    <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
+    <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

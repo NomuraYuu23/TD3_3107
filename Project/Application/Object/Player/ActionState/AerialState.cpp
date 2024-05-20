@@ -22,10 +22,10 @@ void AerialState::Initialize()
 	velocity_ = player_->velocity_;
 
 	// ジャンプ効果音を再生
-	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
+	//player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
 
 	// ジャンプ開始アニメーション
-	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
+	//player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
 }
 
 void AerialState::Update()

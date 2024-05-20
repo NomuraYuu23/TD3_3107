@@ -43,8 +43,8 @@ void Player::Initialize(Model* model)
 	isGround_ = false;
 
 	// アニメーション関連初期化
-	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
-	anim_->Init(this);							   // 初期化
+	//anim_ = std::make_unique<PlayerAnimManager>(); // 生成
+	//anim_->Init(this);							   // 初期化
 
 }
 
@@ -86,7 +86,7 @@ void Player::Update()
 	IObject::Update();
 
 	// アニメーション更新
-	anim_->Update();
+	//anim_->Update();
 
 	// コライダー
 	CircleColliderUpdate();
@@ -120,12 +120,7 @@ void Player::Draw(const BaseCamera& camera)
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
 
-	if (anim_->GetIsRight()) {
-		ModelDraw::AnimObjectDraw(desc);
-	}
-	else {
-		ModelDraw::AnimInverseObjectDraw(desc);
-	}
+	ModelDraw::AnimObjectDraw(desc);
 
 	// 武器の描画
 	if (weapon_) {
