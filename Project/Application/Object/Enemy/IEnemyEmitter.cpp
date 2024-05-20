@@ -26,16 +26,16 @@ void IEnemyEmitter::Initialize(Model* model)
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// アニメーション取得と初期化
-	anim_.Initialize(
+	spearAnim_.Initialize(
 		model_->GetNodeAnimationData(),
 		localMatrixManager_->GetInitTransform(),
 		localMatrixManager_->GetNodeNames());
 
 	// アニメーション開始
-	anim_.StartAnimation(0, true);
+	spearAnim_.StartAnimation(0, true);
 
 	// アニメーションの更新
-	localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	localMatrixManager_->SetNodeLocalMatrix(spearAnim_.AnimationUpdate());
 	localMatrixManager_->Map();
 	#endif // !
 }
@@ -82,7 +82,7 @@ void IEnemyEmitter::Update()
 	#ifndef _DEBUG
 
 	// アニメーションの更新
-	localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	localMatrixManager_->SetNodeLocalMatrix(spearAnim_.AnimationUpdate());
 	localMatrixManager_->Map();
 
 	#endif // !_DEBUG

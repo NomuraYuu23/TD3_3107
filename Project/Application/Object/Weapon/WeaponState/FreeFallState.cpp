@@ -25,7 +25,7 @@ void FreeFallState::Initialize()
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// アイドルアニメーション再生
-	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+	weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
 	#endif // !_DEBUG
 }
 

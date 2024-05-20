@@ -28,7 +28,7 @@ void AerialState::Initialize()
 	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
 
 	// ジャンプ開始アニメーション
-	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
+	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::JumpStart);
 
 #endif // !_DEBUG
 }

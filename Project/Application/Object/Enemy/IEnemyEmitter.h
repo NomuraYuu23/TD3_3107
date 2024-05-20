@@ -83,5 +83,5 @@ private:
 	TimerLib interval_;
 
 	// アニメーション本体
-	Animation anim_;
+	Animation spearAnim_;
 };

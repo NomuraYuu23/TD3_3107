@@ -116,9 +116,9 @@ void PlayerController::ControllerProcess()
 			// デバッグ以外の場合行う
 			#ifndef _DEBUG
 			// 槍のエイムアニメーション再生
-			if (!player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation(SpearAnimManager::SpearAim)) {
-				player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearAim);
-		}
+			if (!player_->weapon_->GetAnimManager()->GetSpearAnim().GetRunningAnimation(SpearAnimManager::SpearAim)) {
+				player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearAim);
+			}
 			#endif // !_DEBUG
 
 			// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
@@ -134,8 +134,8 @@ void PlayerController::ControllerProcess()
 
 			#ifndef _DEBUG
 			// 何も再生されていなければ待機アニメーション再生
-			if (player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation()) {
-				player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+			if (player_->weapon_->GetAnimManager()->GetSpearAnim().GetRunningAnimation()) {
+				player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
 		}
 			#endif // !_DEBUG
 		}

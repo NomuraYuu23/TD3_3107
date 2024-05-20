@@ -20,7 +20,7 @@ void GroundState::Initialize()
 
 	// 着地アニメーションの再生
 	if (player_->GetAnimManager() != nullptr) {
-		player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::Landing);
+		player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::Landing);
 
 		// 着地効果音を再生
 		player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerLand);

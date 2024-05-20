@@ -33,10 +33,10 @@ void SpearAerialState::Initialize()
 #ifndef _DEBUG
 
 	// 槍ジャンアニメーションの再生
-	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::SpearJump);
+	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::SpearJump);
 
 	// 槍のバウンドアニメーション再生
-	player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearBounce);
+	player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearBounce);
 
 	// ジャンプ効果音を再生
 	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);

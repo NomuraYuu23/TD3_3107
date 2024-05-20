@@ -14,7 +14,7 @@ void ImpaledState::Initialize()
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// 待機アニメーション開始
-	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+	weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
 	#endif // !_DEBUG
 }
 

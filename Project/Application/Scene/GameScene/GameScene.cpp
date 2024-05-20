@@ -82,6 +82,14 @@ void GameScene::Initialize() {
 	std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>();
 	// 初期化
 	weapon->Initialize(weaponModel_.get());
+	
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	// リングモデルを渡す
+	weapon->SetRingModel(ringModel_.get());
+	#endif // !_DEBUG
+
+
 	// 生成
 	player_ = std::make_unique<Player>();
 	// テクスチャの読み込み
@@ -496,6 +504,11 @@ void GameScene::ModelCreate()
 	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_, textureHandleManager_.get()));
 	#endif // _DEBUG
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
+	ringModel_.reset(Model::Create("Resources/Model/Spear/", "Ring.gltf", dxCommon_, textureHandleManager_.get()));
+	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
+
+	#endif // !_DEBUG
+
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));

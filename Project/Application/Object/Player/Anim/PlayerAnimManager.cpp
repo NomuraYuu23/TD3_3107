@@ -10,19 +10,19 @@ void PlayerAnimManager::Init(Player* player)
 	player_ = player;
 
 	// アニメーション取得と初期化
-	anim_.Initialize(
+	spearAnim_.Initialize(
 		player_->model_->GetNodeAnimationData(),
 		player_->localMatrixManager_->GetInitTransform(),
 		player_->localMatrixManager_->GetNodeNames());
 
 	// アニメーション開始
-	anim_.StartAnimation(0, true);
+	spearAnim_.StartAnimation(0, true);
 
 	// 角度の初期設定
 	player_->worldtransform_.transform_.rotate.y = (static_cast<float>(std::numbers::pi) / 2.0f) * -1.0f;
 
 	// アニメーションの更新
-	player_->localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	player_->localMatrixManager_->SetNodeLocalMatrix(spearAnim_.AnimationUpdate());
 	player_->localMatrixManager_->Map();
 }
 
@@ -48,11 +48,11 @@ void PlayerAnimManager::Update()
 		}
 
 		// 走りアニメーションが再生されていない場合
-		if (!anim_.GetRunningAnimation(Run) && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(SpearJump) && player_->isGround_) {
+		if (!spearAnim_.GetRunningAnimation(Run) && !spearAnim_.GetRunningAnimation(JumpStart) && !spearAnim_.GetRunningAnimation(SpearJump) && player_->isGround_) {
 			// 全アニメーション停止
-			StopAnimationAll();
+			StopSpearAnimationAll();
 			// アニメーション再生
-			anim_.StartAnimation(Run, true);
+			spearAnim_.StartAnimation(Run, true);
 		}
 
 		EulerTransform transform = player_->worldtransform_.transform_;
@@ -72,45 +72,45 @@ void PlayerAnimManager::Update()
 		}
 		
 	}
-	else if(player_->isGround_ && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(SpearJump) && !anim_.GetRunningAnimation(Landing)){
+	else if(player_->isGround_ && !spearAnim_.GetRunningAnimation(JumpStart) && !spearAnim_.GetRunningAnimation(SpearJump) && !spearAnim_.GetRunningAnimation(Landing)){
 		// 待機アニメーションが再生されていない場合
-		if (!anim_.GetRunningAnimation(Idle)) {
+		if (!spearAnim_.GetRunningAnimation(Idle)) {
 			// 全アニメーション停止
-			StopAnimationAll();
+			StopSpearAnimationAll();
 			// アニメーション再生
-			anim_.StartAnimation(Idle, true);
+			spearAnim_.StartAnimation(Idle, true);
 		}
 	}
 
 	// 落下中アニメーションが再生されていない場合
-	if (!anim_.GetRunningAnimation(Jumping) && !anim_.GetRunningAnimation(JumpStart) && !anim_.GetRunningAnimation(SpearJump) && !player_->isGround_) {
+	if (!spearAnim_.GetRunningAnimation(Jumping) && !spearAnim_.GetRunningAnimation(JumpStart) && !spearAnim_.GetRunningAnimation(SpearJump) && !player_->isGround_) {
 		// 全アニメーション停止
-		StopAnimationAll();
+		StopSpearAnimationAll();
 		// アニメーション再生
-		anim_.StartAnimation(Jumping, true);
+		spearAnim_.StartAnimation(Jumping, true);
 	}
 
 	// アニメーションの更新
-	player_->localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());
+	player_->localMatrixManager_->SetNodeLocalMatrix(spearAnim_.AnimationUpdate());
 	player_->localMatrixManager_->Map();
 }
 
-void PlayerAnimManager::PlayAnimation(int32_t animNum, bool isLoop, bool isFinish)
+void PlayerAnimManager::PlaySpearAnimation(int32_t animNum, bool isLoop, bool isFinish)
 {
 	// アニメーション停止トリガーで分岐
 	if (isFinish) {
 		// 全アニメーション停止
-		StopAnimationAll();
+		StopSpearAnimationAll();
 	}
 
 	// 指定した番号のアニメーション再生
-	anim_.StartAnimation(animNum, isLoop);
+	spearAnim_.StartAnimation(animNum, isLoop);
 }
 
-void PlayerAnimManager::StopAnimationAll()
+void PlayerAnimManager::StopSpearAnimationAll()
 {
 	// 全アニメーション分ループ
-	for (int i = 0; i < SpearJump; i++) {
-		anim_.StopAnimation(i);
+	for (int i = 0; i < PlayerAnimCount; i++) {
+		spearAnim_.StopAnimation(i);
 	}
 }
