@@ -4,6 +4,7 @@
 #include "../../../Engine/3D/OneOfManyObjects.h"
 #include "IEnemyEmitter.h"
 #include "../GameUtility/TimerLib.h"
+#include "System/EnemySytemList.h"
 
 class Enemy : public OneOfManyObjects
 {
