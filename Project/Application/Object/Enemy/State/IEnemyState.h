@@ -8,12 +8,12 @@ class IEnemyState
 {
 public:
 	/// <summary>
-	/// 攻撃パターン
+	/// 行動パターン
 	/// </summary>
-	enum class AttackPattern : uint32_t
+	enum class ActionMode : uint32_t
 	{
-		kMelee,	 // 近距離
-		kRanged, // 遠距離
+		kPatrolMode,	// 巡回
+		kChaseMode,		// 追跡
 
 		kMaxSize, // 最大値
 	};
@@ -21,10 +21,11 @@ public:
 public:
 	/// <summary>
 	/// 前初期化
-	/// 0 : 近接
-	/// 1 : 遠距離
+	/// 回転する集団は関係ない
+	/// 0 : 巡回
+	/// 1 : 追跡
 	/// </summary>
-	void PreInitialize(Enemy* enemy, AttackPattern pattern);
+	void PreInitialize(Enemy* enemy, ActionMode pattern);
 
 
 	void PreInitialize(Enemy* enemy);
@@ -40,12 +41,12 @@ public:
 
 protected: // それぞれの行動関数
 	// 近距離
-	virtual void MeleeInitialize() {};
-	virtual void MeleeUpdate() {};
+	virtual void PatrolInitialize() {};
+	virtual void PatrolUpdate() {};
 
 	// 遠距離
-	virtual void RangedUpdate() {};
-	virtual void RangedInitialize() {};
+	virtual void ChaseInitialize() {};
+	virtual void ChaseUpdate() {};
 
 protected:
 	// 関数ポインタの構造体
@@ -54,18 +55,13 @@ protected:
 		void(IEnemyState::* updateFunc_)() = nullptr;
 	};
 
-	//std::array<MovementFunc, static_cast<uint32_t>(AttackPattern::kMaxSize)> actionFuncs_{
-	//	MovementFunc{&IEnemyState::MeleeInitialize,&IEnemyState::MeleeUpdate,},
-	//	MovementFunc{&IEnemyState::RangedInitialize,&IEnemyState::RangedUpdate,}
-	//};
-
 protected:
 	// 親のエネミーポインタ
 	Enemy* enemy_ = nullptr;
 	// 落下フラグ
 	bool isFall_ = false;
-	// 攻撃のパターン
-	uint32_t attackPattern_;
+	// 行動のパターン
+	uint32_t actionPattern_;
 
 private:
 

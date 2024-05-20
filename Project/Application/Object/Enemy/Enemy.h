@@ -111,7 +111,7 @@ public:
 
 private:
 
-	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern);
+	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::ActionMode pattern);
 
 	void CheckParent();
 

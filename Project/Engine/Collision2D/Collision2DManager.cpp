@@ -55,22 +55,30 @@ void Collision2DManager::CheckCollisionPair(ColliderShape2D colliderA, ColliderS
 		//	return;
 		//}
 
+		// お互いの場合スキップ
 		if (a->GetCollisionAttribute() == b->GetCollisionAttribute()) {
 			return;
 		}
 
+		// 敵と地形の処理をスキップ
 		if ((a->GetCollisionAttribute() == kCollisionAttributeEnemy && b->GetCollisionAttribute() == kCollisionAttributeTerrain) ||
 			(a->GetCollisionAttribute() == kCollisionAttributeTerrain && b->GetCollisionAttribute() == kCollisionAttributeEnemy)) {
 			return;
 		}
 
-		//if (a->GetCollisionAttribute() == kCollisionAttributeRay || b->GetCollisionAttribute() == kCollisionAttributeRay) {
-		//	return;
-		//}
-		//if (b->GetCollisionAttribute() == kCollisionAttributeRay) {
-		//	return;
-		//}
+		// ゴールとの判定をプレイヤー以外スキップ
+		if (a->GetCollisionAttribute() == kCollisionAttributeGoalObject) {
+			if (b->GetCollisionAttribute() != kCollisionAttributePlayer) {
+				return;
+			}
+		}
+		else if (b->GetCollisionAttribute() == kCollisionAttributeGoalObject) {
+			if (a->GetCollisionAttribute() != kCollisionAttributePlayer) {
+				return;
+			}
+		}
 
+	
 		if (Collision2D::IsCollision(*a, *b)) {
 			if (a->GetCollisionAttribute() == kCollisionAttributeRay) {
 				// 衝突処理

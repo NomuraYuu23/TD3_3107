@@ -15,21 +15,21 @@ public:
 	 void Update() override;
 private:
 	// 近距離
-	void MeleeInitialize() override;
-	void MeleeUpdate() override;
+	void PatrolInitialize() override;
+	void PatrolUpdate() override;
 
 	// 遠距離
-	void RangedInitialize() override;
-	void RangedUpdate() override;
+	void ChaseInitialize() override;
+	void ChaseUpdate() override;
 private:
 
 	void MoveUpdate();
 
 private:
 	// 行動の関数ポインタを持たせた配列
-	inline static const std::array<MovementFunc, static_cast<uint32_t>(AttackPattern::kMaxSize)> actionFuncs_{
-		MovementFunc{&IEnemyState::MeleeInitialize,&IEnemyState::MeleeUpdate,},
-		MovementFunc{&IEnemyState::RangedInitialize,&IEnemyState::RangedUpdate,}
+	inline static const std::array<MovementFunc, static_cast<uint32_t>(ActionMode::kMaxSize)> actionFuncs_{
+		MovementFunc{&IEnemyState::PatrolInitialize,&IEnemyState::PatrolUpdate,},
+		MovementFunc{&IEnemyState::ChaseInitialize,&IEnemyState::ChaseUpdate,}
 	};
 
 };
