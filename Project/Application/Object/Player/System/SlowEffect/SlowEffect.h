@@ -114,5 +114,19 @@ private: // 変数
 	// 前フレームの状態
 	StateIndex preState_ = kStateIndexSlowEnd;
 
+private: // お試し
+
+	// イージングするか
+	bool isEase_ = false;
+	// イージング番号
+	int32_t easeNum_ = 0;
+
+	// サイズの媒介変数
+	float sizeT_ = 0.0f;
+	// サイズの媒介変数速度
+	float sizeTSpeed_ = 0.01f;
+
+
+
 };
 

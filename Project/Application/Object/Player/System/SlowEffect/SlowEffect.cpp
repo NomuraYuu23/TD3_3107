@@ -1,5 +1,6 @@
 #include "SlowEffect.h"
 #include "../../Player.h"
+#include "../../../../../Engine/Math/Ease.h"
 
 // 最大の大きさ
 Vector2 SlowEffect::kMaxSize = { 5.0f, 5.0f };
@@ -41,6 +42,18 @@ void SlowEffect::Initalize(Player* player)
 
 	// 現在の状態
 	state_ = kStateIndexSlowEnd;
+
+	// イージング
+	isEase_ = false;
+
+	// イージング番号
+	easeNum_ = 0;
+
+	// サイズの媒介変数
+	sizeT_ = 0.0f;
+
+	// サイズの媒介変数速度
+	sizeTSpeed_ = 0.01f;
 
 }
 
@@ -98,6 +111,14 @@ void SlowEffect::ImGuiDraw()
 	ImGui::DragFloat("大きくなる加速度", &kSizeAcceleration_, 0.01f, 0.01f);
 	// 色の変更加速度
 	ImGui::DragFloat("色の変更加速度", &kColorAcceleration_, 0.01f, 0.01f);
+	// サイズの媒介変数速度
+	ImGui::DragFloat("サイズの媒介変数速度", &sizeTSpeed_, 0.01f, 0.01f);
+	// イージングするか
+	ImGui::Checkbox("イージングするか", &isEase_);
+	// イージング番号
+	ImGui::DragInt("イージング番号", &easeNum_, 0.01f, 0, static_cast<int32_t>(Ease::EaseName::Lerp));
+
+	ImGui::Separator();
 
 }
 
@@ -108,6 +129,8 @@ void SlowEffect::SetUp()
 	colorVelocity_ = 0.0f;
 	// エフェクト起動
 	running_ = true;
+
+	sizeT_ = 0.0f;
 }
 
 void SlowEffect::SlowNowUpdate()
@@ -117,8 +140,14 @@ void SlowEffect::SlowNowUpdate()
 	sizeVelocity_ = std::clamp(sizeVelocity_ + kSizeAcceleration_, 0.0f, kMaxSizeVelocity);
 
 	// 大きさ変更
-	size_.x = std::clamp(size_.x + sizeVelocity_, 0.0f, kMaxSize.x);
-	size_.y = std::clamp(size_.y + sizeVelocity_, 0.0f, kMaxSize.y);
+	if (isEase_) {
+		sizeT_ = std::clamp(sizeT_ + sizeTSpeed_, 0.0f, 1.0f);
+		size_ = Ease::Easing(static_cast<Ease::EaseName>(easeNum_), Vector2{0.0f,0.0f}, kMaxSize, sizeT_);
+	}
+	else {
+		size_.x = std::clamp(size_.x + sizeVelocity_, 0.0f, kMaxSize.x);
+		size_.y = std::clamp(size_.y + sizeVelocity_, 0.0f, kMaxSize.y);
+	}
 
 	// 色速度
 	colorVelocity_ = std::clamp(colorVelocity_ + kColorAcceleration_, 0.0f, kMaxColorVelocity);
