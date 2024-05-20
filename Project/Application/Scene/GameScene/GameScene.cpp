@@ -93,6 +93,7 @@ void GameScene::Initialize() {
 	player_->Initialize(playerModel_.get());
 	// ポニーテール
 	//player_->SetPonyTail(ponyTailModel_.get());
+	player_->GetSlowEffect()->SetCamera(&camera_);
 
 	// 更新
 	//countTime_ = 0;
@@ -367,7 +368,10 @@ void GameScene::Draw() {
 			&desc);
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
-	if (player_->isSlowNow_) {
+	if (player_->GetSlowEffect()->GetRunning()) {
+		PostEffect::GetInstance()->SetColorPosition(player_->GetSlowEffect()->GetCenter());
+		PostEffect::GetInstance()->SetColorSize(player_->GetSlowEffect()->GetSize());
+		PostEffect::GetInstance()->SetColorLerpT(player_->GetSlowEffect()->GetColorT());
 		PostEffect::GetInstance()->SetTime(3.0f);
 		PostEffect::GetInstance()->Execution(
 			dxCommon_->GetCommadList(),
