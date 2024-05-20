@@ -68,7 +68,7 @@ void PlayerAnimManager::Update()
 			desc.particleModelNum = kCircle;
 			desc.paeticleName = kRunSmokeParticle;
 
-			ParticleManager::GetInstance()->MakeEmitter(desc, 0);
+			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 		}
 		
 	}

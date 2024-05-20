@@ -401,11 +401,11 @@ void GameScene::ImguiDraw() {
 	backGround_->ImGuiDraw();
 
 	// スカイドーム
-	skydome_->ImGuiDraw();
+	//skydome_->ImGuiDraw();
 
 	debugCamera_->ImGuiDraw();
 
-	collision2DDebugDraw_->ImGuiDraw();
+	//collision2DDebugDraw_->ImGuiDraw();
 
 	gameCamera_->ImGuiDraw();
 
@@ -414,9 +414,9 @@ void GameScene::ImguiDraw() {
 	gameData_->ApplyGlobalVariables();
 
 	// ポストエフェクトのImGuiを表示
-	PostEffect::GetInstance()->ImGuiDraw();
+	//PostEffect::GetInstance()->ImGuiDraw();
 	// フォグのImGuiの表示
-	FogManager::GetInstance()->ImGuiDraw();
+	//FogManager::GetInstance()->ImGuiDraw();
 
 #endif // _DEBUG
 
@@ -426,7 +426,7 @@ void GameScene::DebugCameraUpdate()
 {
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_RETURN)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;
 		}

@@ -124,7 +124,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			desc.particleModelNum = kCircle;
 			desc.paeticleName = kEnemyDeadParticle;
 
-			ParticleManager::GetInstance()->MakeEmitter(desc, 0);
+			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 
 			// 敵を倒す効果音を再生
 			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);

@@ -10,21 +10,19 @@
     <FxCompile Include="Resources\shaders\Particle.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\ManyAnimModels.VS.hlsl" />
     <FxCompile Include="Resources\shaders\ManyModels.PS.hlsl" />
     <FxCompile Include="Resources\shaders\ManyNormalModels.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Model.PS.hlsl" />
     <FxCompile Include="Resources\shaders\NormalModel.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Outline.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Outline.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\AnimInverseModel.VS.hlsl" />
-    <FxCompile Include="Resources\shaders\AnimModel.VS.hlsl" />
     <FxCompile Include="Resources\shaders\PostEffectCalc.CS.hlsl" />
     <FxCompile Include="Resources\shaders\PostEffect.CS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSprite.VS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSpriteStorage.CS.hlsl" />
     <FxCompile Include="Resources\shaders\WindowSpriteUAV.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\AnimModel.CS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
@@ -209,6 +207,7 @@
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
+    <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -447,6 +446,8 @@
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
+    <ClInclude Include="Engine\Animation\SkinningInformation.h" />
+    <ClInclude Include="Engine\base\QueryTimestamp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
