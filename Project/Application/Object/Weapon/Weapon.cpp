@@ -39,9 +39,13 @@ void Weapon::Initialize(Model* model)
 	// システム初期化
 	SystemInitialize();
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// アニメーション関連初期化
-	//anim_ = std::make_unique<SpearAnimManager>();  // 生成
-	//anim_->Init(this);							   // 初期化
+	anim_ = std::make_unique<SpearAnimManager>();  // 生成
+	anim_->Init(this);							   // 初期化
+	#endif // !_DEBUG
+
 }
 
 void Weapon::Update()
@@ -67,8 +71,11 @@ void Weapon::Update()
 	// 基底クラスの更新
 	IObject::Update();
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// アニメーション更新
-	//anim_->Update();
+	anim_->Update();
+	#endif // !_DEBUG
 
 	// コライダー
 	Vector3 direct = worldtransform_.direction_;
@@ -90,16 +97,13 @@ void Weapon::Draw(const BaseCamera& camera)
 		}
 	}
 
-	if (!isHold_) {
-		ModelDraw::AnimObjectDesc desc;
-		desc.camera = &const_cast<BaseCamera&>(camera);
-		desc.localMatrixManager = localMatrixManager_.get();
-		desc.material = material_.get();
-		desc.model = model_;
-		desc.worldTransform = &worldtransform_;
-		ModelDraw::AnimObjectDraw(desc);
-	}
-
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.worldTransform = &worldtransform_;
+	ModelDraw::AnimObjectDraw(desc);
 }
 
 void Weapon::ImGuiDraw()

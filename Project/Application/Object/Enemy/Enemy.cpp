@@ -108,8 +108,12 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
 				weapon_ = (*weapon);
+
+				// デバッグ以外の場合行う
+				#ifndef _DEBUG
 				// 槍が刺さった効果音を再生
-				//weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearSting);
+				weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearSting);
+				#endif // !_DEBUG
 			}
 		}
 		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
@@ -126,8 +130,11 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 
 			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 
+			// デバッグ以外の場合行う
+			#ifndef _DEBUG
 			// 敵を倒す効果音を再生
-			//(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
+			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
+			#endif // !_DEBUG
 
 			isDead_ = true;
 		}

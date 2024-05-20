@@ -112,6 +112,32 @@ void PlayerController::ControllerProcess()
 					player_->isSlowNow_ = true;
 				}
 			}
+
+			// デバッグ以外の場合行う
+			#ifndef _DEBUG
+			// 槍のエイムアニメーション再生
+			if (!player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation(SpearAnimManager::SpearAim)) {
+				player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearAim);
+		}
+			#endif // !_DEBUG
+
+			// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
+			if (player_->weapon_->isHold_) {
+				player_->weapon_->throwDirect_ = player_->throwDirect_;
+			}
+		}
+		else {
+			// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
+			if (player_->weapon_->isHold_) {
+				player_->weapon_->throwDirect_ = { 0,1,0 };
+			}
+
+			#ifndef _DEBUG
+			// 何も再生されていなければ待機アニメーション再生
+			if (player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation()) {
+				player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
+		}
+			#endif // !_DEBUG
 		}
 
 		// スローの判定
