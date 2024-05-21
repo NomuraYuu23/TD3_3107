@@ -1,5 +1,33 @@
 {
     "Stage0": {
+        "Enemy0": {
+            "easeEndPosition": [
+                20.700000762939453,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                28.0,
+                7.099999904632568,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy1": {
+            "easeEndPosition": [
+                20.700000762939453,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                0.30000001192092896,
+                7.099999904632568,
+                0.0
+            ],
+            "typeNum": 0
+        },
         "EnemyEmitter:1": {
             "distance": 6.800000190734863,
             "enemyMaxCount": 5,

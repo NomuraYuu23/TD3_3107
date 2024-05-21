@@ -35,7 +35,9 @@ void SingleEnemyState::SettingMoveInfo(const Vector3& endPoint, float easeFrame,
 void SingleEnemyState::PatrolInitialize()
 {
 	// タイマースタート
-	moveChangeTimer_.Start(moveChangeFrame_);
+	//if (!moveChangeTimer_.IsActive()) {
+		moveChangeTimer_.Start(moveChangeFrame_);
+	//}
 }
 
 void SingleEnemyState::PatrolUpdate()

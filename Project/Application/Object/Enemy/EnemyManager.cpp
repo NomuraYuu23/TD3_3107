@@ -236,8 +236,9 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data)
 	// 初期化
 	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), data.typeNum);
 	// 単体のやつ専用
-	Vector3 end = obj->GetWorldPosition() + Vector3(25.0f, 0, 0);
+	Vector3 end = obj->GetWorldPosition() + data.endPosition;
 	static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SettingMoveInfo(end);
+	static_cast<Enemy*>(obj.get())->SetPlayer(player_);
 	// 追加
 	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
 
@@ -252,8 +253,9 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data, const std::string&
 	// 初期化
 	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), data.typeNum);
 	// 単体のやつ専用
-	Vector3 end = obj->GetWorldPosition() + Vector3(25.0f, 0, 0);
+	Vector3 end = obj->GetWorldPosition() + data.endPosition;
 	static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SettingMoveInfo(end);
+	static_cast<Enemy*>(obj.get())->SetPlayer(player_);
 	// 追加
 	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
 

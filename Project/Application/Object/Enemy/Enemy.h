@@ -6,6 +6,8 @@
 #include "../GameUtility/TimerLib.h"
 #include "System/EnemySytemList.h"
 
+class Player;
+
 class Enemy : public OneOfManyObjects
 {
 private:
@@ -109,6 +111,14 @@ public:
 
 	std::string GetName() { return name_; }
 
+	/// <summary>
+	/// プレイヤーのセッター
+	/// </summary>
+	/// <param name="player"></param>
+	void SetPlayer(Player* player) { player_ = player; }
+
+	
+
 private:
 
 	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::ActionMode pattern);
@@ -133,6 +143,7 @@ private:
 	std::unique_ptr<IEnemyState> state_;
 
 	Weapon* weapon_ = nullptr;
+	Player* player_ = nullptr;
 
 public:
 
