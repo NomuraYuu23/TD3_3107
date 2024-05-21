@@ -17,10 +17,17 @@ void FreeFallState::Initialize()
 	weapon_->velocity_.y = 40.0f;
 
 	// 最初の衝突を回避する時間
-	weapon_->attractInvTimer_.Start(2.0f);
+	weapon_->attractInvTimer_.Start(1.0f);
 
 	// 所持状態フラグをfalse
 	weapon_->isHold_ = false;
+
+	if (weapon_->worldtransform_.direction_.x > 0) {
+		weapon_->worldtransform_.direction_ = Vector3::Normalize({ 1,1,0 });
+	}
+	else {
+		weapon_->worldtransform_.direction_ = Vector3::Normalize({ -1,1,0 });
+	}
 
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
