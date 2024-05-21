@@ -17,7 +17,7 @@ void FreeFallState::Initialize()
 	weapon_->velocity_.y = 40.0f;
 
 	// 最初の衝突を回避する時間
-	weapon_->attractInvTimer_.Start(5.0f);
+	weapon_->attractInvTimer_.Start(2.0f);
 
 	// 所持状態フラグをfalse
 	weapon_->isHold_ = false;

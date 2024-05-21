@@ -14,6 +14,7 @@ void FollowCamera::Initialize()
 	minY = 1.0f;
 	maxY = 30.0f;
 	defaultFovY_ = fovY_;
+	pullMax_ = 15.0f;
 }
 
 void FollowCamera::Update(float elapsedTime)
@@ -55,7 +56,7 @@ void FollowCamera::ImGuiDraw()
 
 	ImGui::DragFloat("Length", &length);
 	ImGui::DragFloat("size", &newSize);
-
+	ImGui::DragFloat("PullSize", &pullMax_, 0.01f);
 	ImGui::End();
 
 }
@@ -70,7 +71,7 @@ void FollowCamera::ScalingUpDown()
 
 	Vector3 defaultOff = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
 
-	float maxOffset = defaultOff.z - 15.0f;
+	float maxOffset = defaultOff.z - pullMax_;
 
 	if (minY > length) {
 		nowFovY_ = 0.45f;

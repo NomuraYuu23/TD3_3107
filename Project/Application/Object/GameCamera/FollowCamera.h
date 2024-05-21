@@ -45,6 +45,7 @@ private:
 
 	float defaultFovY_ = 0;
 	float nowFovY_ = 0;
+	float pullMax_ = 0;
 
 	TimerLib correctTimer_;
 
