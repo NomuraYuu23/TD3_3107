@@ -10,6 +10,11 @@ class GoalObject;
 class GameSystemManager
 {
 public:
+	static uint32_t sNowStageNum;
+	static float sGameSpeed;
+
+
+public:
 	/// <summary>
 	/// 初期化
 	/// </summary>

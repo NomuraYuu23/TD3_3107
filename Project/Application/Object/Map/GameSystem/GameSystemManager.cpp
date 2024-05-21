@@ -2,6 +2,9 @@
 #include "../../ObjectList.h"
 #include "../../../Engine/2D/ImguiManager.h"
 
+uint32_t GameSystemManager::sNowStageNum = 0;
+float GameSystemManager::sGameSpeed = 1.0f;
+
 void GameSystemManager::Initialize(Model* goalModel)
 {
 	assert(goalModel);
@@ -24,6 +27,8 @@ void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)
 void GameSystemManager::ImGuiDraw()
 {
 	ImGui::Begin("GameSystem");
+
+	ImGui::DragFloat("sGameSpeed", &sGameSpeed);
 
 	goal_->ImGuiDraw();
 
