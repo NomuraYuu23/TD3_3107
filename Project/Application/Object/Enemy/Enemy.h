@@ -140,8 +140,6 @@ public:
 	Vector2 position2D_ = {};
 	Vector2 scale2D_ = {};
 
-	Vector2 prevPosition_ = {};
-
 	// 敵の移動方向を求めるための前フレーム座標
 	Vector3 prevTranslate_ = {};
 

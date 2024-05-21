@@ -32,6 +32,8 @@ public:
 	/// <returns></returns>
 	bool IsChase() { return isChase_; }
 
+	//bool IsInRange();
+
 private:
 	// エネミー本体
 	Enemy* enemy_;

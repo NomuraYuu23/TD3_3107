@@ -40,7 +40,6 @@ void Enemy::Initialize(const std::string& name)
 
 void Enemy::Update()
 {
-	prevPosition_ = { transform_.translate.x,transform_.translate.y };
 	// 前フレーム座標取得
 	prevTranslate_ = transform_.translate;
 	// 設定した状態の処理
@@ -158,10 +157,10 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			//velocity_.y *= -1.0f;
 			isGround_ = true;
 			velocity_.y = 0;
-			if (targetPos.y > prevPosition_.y) {
+			if (targetPos.y > prevTranslate_.y) {
 				transform_.translate.y = targetPos.y - targetRad.y;
 			}
-			else if (targetPos.y < prevPosition_.y) {
+			else if (targetPos.y < prevTranslate_.y) {
 				transform_.translate.y = targetPos.y + targetRad.y;
 			}
 		}
