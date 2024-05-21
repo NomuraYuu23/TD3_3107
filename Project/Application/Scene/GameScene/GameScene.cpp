@@ -106,8 +106,11 @@ void GameScene::Initialize() {
 	//countTime_ = 0;
 
 	// ゲームシステム
-	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(sampleObjModel_.get());
+	//gameSystemManager_ = std::make_unique<SystemManager>();
+	//gameSystemManager_->Initialize(sampleObjModel_.get());
+
+	//gameSystem_ = std::make_unique<GameSystem>();
+	//gameSystem_->Intiailize(terrainModel_.get());
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -211,7 +214,7 @@ void GameScene::Update() {
 	spotLightManager_->Update(spotLightDatas_);
 
 	// ゲームシステム
-	gameSystemManager_->Update();
+	//gameSystemManager_->Update();
 
 	if (player_->GetEffectInfo().isStop) {
 		player_->HitUpdate();
@@ -308,7 +311,7 @@ void GameScene::Draw() {
 	// ブロック用
 	mapManager_->Draw(camera_);
 	// ゴール系
-	gameSystemManager_->Draw(camera_);
+	//gameSystemManager_->Draw(camera_);
 
 	// 背景
 	backGround_->Draw(camera_);
@@ -431,7 +434,7 @@ void GameScene::ImguiDraw() {
 
 	debugCamera_->ImGuiDraw();
 
-	gameSystemManager_->ImGuiDraw();
+	//gameSystemManager_->ImGuiDraw();
 
 	//collision2DDebugDraw_->ImGuiDraw();
 
@@ -612,7 +615,7 @@ void GameScene::CollisionUpdate()
 	enemyManager_->CollisionRegister(collision2DManager_.get(), camera_);
 
 	// ゲームシステム関係（ゴール・チェックポイント）
-	gameSystemManager_->CollisionRegister(collision2DManager_.get());
+	//gameSystemManager_->CollisionRegister(collision2DManager_.get());
 
 	collision2DManager_->CheakAllCollision();
 

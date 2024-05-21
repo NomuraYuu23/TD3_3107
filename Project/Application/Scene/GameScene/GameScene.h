@@ -13,7 +13,7 @@
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
 #include "../../Object/GameObjectData.h"
 #include "../../Object/GameCamera/GameBasicCamera.h"
-#include "../../Object/GameSystem/GameSystemManager.h"
+#include "../../Object/Map/System/GameSystem.h"
 
 #include "../../Object/Enemy/EnemyManager.h"
 
@@ -119,13 +119,14 @@ private:
 	std::array<uint32_t, Collision2DDebugDraw::kTexutureNameOfCount> collision2DDebugDrawTextures_;
 	
 	// ゲーム管理
-	std::unique_ptr<GameSystemManager> gameSystemManager_;
-
+	//std::unique_ptr<SystemManager> gameSystemManager_;
 	// プレイヤー
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Model> playerModel_;
 	std::unique_ptr<Model> ponyTailModel_;
 	std::unique_ptr<Model> weaponModel_;
+
+	//std::unique_ptr<GameSystem> gameSystem_;
 
 	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;

@@ -45,7 +45,6 @@
     <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointObject.cpp" />
-    <ClCompile Include="Application\Object\GameSystem\GameSystemManager.cpp" />
     <ClCompile Include="Application\Object\Map\MapEditor.cpp" />
     <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
@@ -213,6 +212,7 @@
     <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
+    <ClCompile Include="Application\Object\Map\System\GameSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -240,7 +240,6 @@
     <ClInclude Include="Application\Object\Enemy\System\DetectionSystem.h" />
     <ClInclude Include="Application\Object\Enemy\System\EnemySystemList.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
-    <ClInclude Include="Application\Object\GameSystem\GameSystemManager.h" />
     <ClInclude Include="Application\Object\Map\MapBlockData.h" />
     <ClInclude Include="Application\Object\Map\MapEditor.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />
@@ -460,6 +459,7 @@
     <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
     <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
+    <ClInclude Include="Application\Object\Map\System\GameSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
