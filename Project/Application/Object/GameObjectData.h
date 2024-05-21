@@ -135,7 +135,20 @@ private: // データ用構造体クラス
 	};
 
 	struct CameraData {
+		// プレイヤーからのオフセットdefault
 		Vector3 offset_;
+		// 引きカメラの最大オフセット
+		float pullMaxOffset_;
+
+		// 視野角の最低値
+		float minFov_;
+		// 視野角の最大値
+		float maxFov_;
+
+		// 最小距離の値
+		float minRange_;
+		// 最大距離の値
+		float maxRange_;
 	};
 
 	struct DashData {

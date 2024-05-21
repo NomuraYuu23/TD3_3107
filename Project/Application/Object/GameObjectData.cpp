@@ -59,6 +59,11 @@ void GameObjectData::Initialize()
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "Offset", camera_.offset_);
+	globalVariables_->AddItem(groupName, "PullOffset", camera_.pullMaxOffset_);
+	globalVariables_->AddItem(groupName, "MinFov", camera_.minFov_);
+	globalVariables_->AddItem(groupName, "MaxFov", camera_.maxFov_);
+	globalVariables_->AddItem(groupName, "MinRange", camera_.minRange_);
+	globalVariables_->AddItem(groupName, "MaxRange", camera_.maxRange_);
 
 	groupName = "Dash";
 	// グループを追加
@@ -125,6 +130,11 @@ void GameObjectData::ApplyGlobalVariables()
 	groupName = "Camera";
 	// グループを追加
 	camera_.offset_ = globalVariables_->GetVector3Value(groupName, "Offset");
+	camera_.pullMaxOffset_ = globalVariables_->GetFloatValue(groupName, "PullOffset");
+	camera_.minFov_ = globalVariables_->GetFloatValue(groupName, "MinFov");
+	camera_.maxFov_ = globalVariables_->GetFloatValue(groupName, "MaxFov");
+	camera_.minRange_ = globalVariables_->GetFloatValue(groupName, "MinRange");
+	camera_.maxRange_ = globalVariables_->GetFloatValue(groupName, "MaxRange");
 
 	groupName = "Dash";
 	// グループを追加

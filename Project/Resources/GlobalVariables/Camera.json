@@ -1,9 +1,14 @@
 {
     "Camera": {
+        "MaxFov": 0.550000011920929,
+        "MaxRange": 30.0,
+        "MinFov": 0.44999998807907104,
+        "MinRange": 1.0,
         "Offset": [
             0.0,
             5.0,
             -60.0
-        ]
+        ],
+        "PullOffset": 30.0
     }
 }

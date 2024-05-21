@@ -11,10 +11,7 @@ void FollowCamera::Initialize()
 
 	// 初期値の設定
 	defaultOffset_ = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
-	minY = 1.0f;
-	maxY = 30.0f;
 	defaultFovY_ = fovY_;
-	pullMax_ = 15.0f;
 }
 
 void FollowCamera::Update(float elapsedTime)
@@ -47,38 +44,50 @@ void FollowCamera::ImGuiDraw()
 	Vector2 screenPlayer = MathUtility::WorldToScreen(player_->worldtransform_.GetWorldPosition(), this);
 	ImGui::DragFloat2("playerScreen", &screenPlayer.x);
 
-	ImGui::DragFloat("Min", &minY, 0.01f, 0, 20.0f);
-	ImGui::DragFloat("Max", &maxY, 0.01f, 0, 100.0f);
 
 	ImGui::DragFloat("FovY", &fovY_);
 	float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
-	float newSize = std::clamp(length, minY, maxY);
 
 	ImGui::DragFloat("Length", &length);
-	ImGui::DragFloat("size", &newSize);
-	ImGui::DragFloat("PullSize", &pullMax_, 0.01f);
 	ImGui::End();
 
 }
 
 void FollowCamera::ScalingUpDown()
 {
+	// 距離
 	float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
-	float newSize = std::clamp(length, minY, maxY);
+
+	// 距離の最大と最小の値
+	float minRange = GlobalVariables::GetInstance()->GetFloatValue("Camera", "MinRange");
+	float maxRange = GlobalVariables::GetInstance()->GetFloatValue("Camera", "MaxRange");
+
+	// 新しい長さ
+	float newSize = std::clamp(length, minRange, maxRange);
 
 	// 割合計算
-	float rate = newSize / maxY;
+	float rate = newSize / maxRange;
 
+	// オフセットと引きの最大の値
 	Vector3 defaultOff = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
+	float pullMax = GlobalVariables::GetInstance()->GetFloatValue("Camera", "PullOffset");
 
-	float maxOffset = defaultOff.z - pullMax_;
+	// 視野角の最大と最小
+	float minFov = GlobalVariables::GetInstance()->GetFloatValue("Camera", "MinFov");
+	float maxFov = GlobalVariables::GetInstance()->GetFloatValue("Camera", "MaxFov");
 
-	if (minY > length) {
-		nowFovY_ = 0.45f;
+	// 引きカメラの最大
+	float maxOffset = defaultOff.z - pullMax;
+
+	// 距離が最低より短い場合
+	if (minRange > length) {
+		nowFovY_ = minFov;
 		defaultOffset_.z = defaultOff.z;
 	}
+	// それより長い
 	else {
-		nowFovY_ = MathUtility::Ratio(0.45f, 0.55f, rate);
+		// 割合に合わせた値
+		nowFovY_ = MathUtility::Ratio(minFov, maxFov, rate);
 		defaultOffset_.z = MathUtility::Ratio(defaultOff.z, maxOffset, rate);
 	}
 
