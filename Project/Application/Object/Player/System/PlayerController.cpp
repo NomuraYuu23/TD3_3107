@@ -143,9 +143,11 @@ void PlayerController::ControllerProcess()
 		// スローの判定
 		if (player_->isSlowNow_) {
 			// スローの倍率
+			GameSystemManager::sGameSpeed = 5.0f;
 			player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 		}
 		else {
+			GameSystemManager::sGameSpeed = 1.0f;
 			player_->sPlaySpeed = 1.0f;
 		}
 

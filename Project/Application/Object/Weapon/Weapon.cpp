@@ -88,7 +88,8 @@ void Weapon::Update()
 
 void Weapon::Draw(const BaseCamera& camera)
 {
-	if (std::holds_alternative<ThrownState*>(nowState_))
+	//if (std::holds_alternative<ThrownState*>(nowState_) || std::holds_alternative<FreeFallState*>(nowState_))
+	if (!std::holds_alternative<HoldState*>(nowState_))
 	{
 		// 画面外に出たら戻るステートに変更
 		float deadLength = 750.0f;

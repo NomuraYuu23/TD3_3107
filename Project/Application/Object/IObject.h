@@ -2,6 +2,7 @@
 #include "../../Engine/3D/Model.h"
 #include "../../Engine/Collider2D/ColliderShape2D.h"
 #include "GameUtility/CommonConfig.h"
+#include "GameSystem/GameSystemManager.h"
 
 class IObject
 {

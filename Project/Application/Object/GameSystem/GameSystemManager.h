@@ -1,5 +1,5 @@
 #pragma once
-#include "../../IObject.h"
+#include "../IObject.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 
 class GoalObject;
@@ -9,6 +9,12 @@ class GoalObject;
 /// </summary>
 class GameSystemManager
 {
+public:
+	// 現在のステージ番号
+	static uint32_t sNowStageNum;
+	// ゲームの速度
+	static float sGameSpeed;
+
 public:
 	/// <summary>
 	/// 初期化
