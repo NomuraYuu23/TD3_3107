@@ -10,15 +10,21 @@ void GameSystemManager::Initialize(Model* goalModel)
 	assert(goalModel);
 	goalModel_ = goalModel;
 	GenarateGoal({ 40.0f,5.0f,0 });
+	deathHeight_ = -60.0f;
 }
 
 void GameSystemManager::Update(Player* player)
 {
 	goal_->Update();
 
+	if (player->worldtransform_.GetWorldPosition().y < deathHeight_) {
+		player->SetIsDead(true);
+	}
+
 	if (player->IsDead()) {
 		player->Reset();
 	}
+
 
 }
 

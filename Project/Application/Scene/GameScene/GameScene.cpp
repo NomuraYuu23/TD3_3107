@@ -212,7 +212,7 @@ void GameScene::Update() {
 	spotLightManager_->Update(spotLightDatas_);
 
 	// ゲームシステム
-	gameSystemManager_->Update();
+	gameSystemManager_->Update(player_.get());
 
 	if (player_->GetEffectInfo().isStop) {
 		player_->HitUpdate();

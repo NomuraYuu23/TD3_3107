@@ -173,10 +173,7 @@ void Player::ImGuiDraw()
 	ImGui::Text(name.c_str());
 	// 座標リセット
 	if (ImGui::Button("PosReset")) {
-		worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
-		velocity_ = {};
-		worldtransform_.UpdateMatrix();
-		isGround_ = true;
+		Reset();
 	}
 
 	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
@@ -712,7 +709,11 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 
 void Player::Reset()
 {
-
+	worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
+	velocity_ = {};
+	worldtransform_.UpdateMatrix();
+	isGround_ = true;
+	isDead_ = false;
 }
 
 void Player::SetFallTimer()
