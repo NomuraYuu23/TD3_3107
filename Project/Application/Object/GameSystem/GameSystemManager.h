@@ -3,6 +3,7 @@
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 
 class GoalObject;
+class Player;
 
 /// <summary>
 /// ゲームシステム関係をまとめたクラス
@@ -23,7 +24,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(Player* player);
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -45,12 +46,20 @@ private:
 	/// <param name="position"></param>
 	void GenarateGoal(const Vector3& position);
 
+private:
+	// ゲームクリア
+	bool isGameClear_ = false;
+	// ゲームオーバー
+	bool isGameOver_ = false;
+
+	// プレイヤーの死ぬ高さ
+	float deathHeight_ = 0.0f;
 
 private:
 	// ゴール
 	std::unique_ptr<GoalObject> goal_;
 
 	Model* goalModel_ = nullptr;
-	Model* checkPointMode_ = nullptr;
+	Model* checkPointModel_ = nullptr;
 
 };

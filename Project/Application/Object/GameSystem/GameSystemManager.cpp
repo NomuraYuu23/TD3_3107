@@ -12,9 +12,14 @@ void GameSystemManager::Initialize(Model* goalModel)
 	GenarateGoal({ 40.0f,5.0f,0 });
 }
 
-void GameSystemManager::Update()
+void GameSystemManager::Update(Player* player)
 {
 	goal_->Update();
+
+	if (player->IsDead()) {
+		player->Reset();
+	}
+
 }
 
 void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)

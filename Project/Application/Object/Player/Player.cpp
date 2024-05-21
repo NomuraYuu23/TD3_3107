@@ -710,6 +710,11 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 
 }
 
+void Player::Reset()
+{
+
+}
+
 void Player::SetFallTimer()
 {
 	float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");
