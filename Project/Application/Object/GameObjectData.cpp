@@ -68,6 +68,10 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "SlowFrame", dash_.slowFrame_);
 	globalVariables_->AddItem(groupName, "SlowRatio", dash_.slowRatio_);
 
+	groupName = "Enemy";
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, "EaseEndFrame", enemy_.easeEndFrame);
+
 	ApplyGlobalVariables();
 
 
@@ -128,5 +132,8 @@ void GameObjectData::ApplyGlobalVariables()
 	dash_.dashPower_ = globalVariables_->GetFloatValue(groupName, "DashPower");
 	dash_.slowFrame_ = globalVariables_->GetFloatValue(groupName, "SlowFrame");
 	dash_.slowRatio_ = globalVariables_->GetFloatValue(groupName, "SlowRatio");
+
+	groupName = "Enemy";
+	enemy_.easeEndFrame = globalVariables_->GetFloatValue(groupName, "EaseEndFrame");
 
 }

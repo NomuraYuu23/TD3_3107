@@ -158,10 +158,12 @@ void Player::ImGuiDraw()
 	controller_.ImGuiDraw();
 	hpManager_.ImGuiDraw();
 	correctSystem_.ImGuiDraw();
+	slowEffect_->ImGuiDraw();
+
 	// ゲームスピード
-	float ratio = IObject::sPlaySpeed;
-	ImGui::DragFloat("playTime", &ratio);
-	sPlaySpeed = ratio;
+	//float ratio = IObject::sPlaySpeed;
+	//ImGui::DragFloat("playTime", &ratio);
+	//sPlaySpeed = ratio;
 	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
 	int tex = IsCanReturn();
@@ -768,6 +770,10 @@ void Player::SystemInitialize()
 	// レイ
 	rayLength_ = -100.0f;
 	cameraRay_.Initialize(this);
+	// スローエフェクト
+	slowEffect_ = std::make_unique<SlowEffect>();
+	slowEffect_->Initalize(this);
+
 }
 
 void Player::SystemUpdate()
@@ -788,4 +794,6 @@ void Player::SystemUpdate()
 	spearJumpAccepter_.Update();
 	// 空中ダッシュ
 	assistDash_.Update();
+	// スローエフェクト
+	slowEffect_->Update();
 }

@@ -8,6 +8,7 @@
 
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerSystemList.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include "PlayerFootCollider.h"
 
@@ -16,6 +17,8 @@
 #include "../../../Engine/Physics/String.h"
 
 #include "../../AudioManager/GameAudioManager.h"
+
+#include "System/SlowEffect/SlowEffect.h"
 
 class EnemyManager;
 
@@ -62,6 +65,8 @@ public: // アクセッサ
 
 	PlayerHitManager::Effect GetEffectInfo() { return hpManager_.hitEffect_; }
 	PlayerHitManager GetHitManager() { return hpManager_; }
+
+	SlowEffect* GetSlowEffect() { return slowEffect_.get(); }
 
 public: // メンバ関数
 	/// <summary>
@@ -216,6 +221,8 @@ private: // システム
 	ComboCounter jumpCombo_;
 	// 自由落下の武器を回収するためのシステム
 	FreeFallTimer fallTimer_;
+	// スローエフェクト
+	std::unique_ptr<SlowEffect> slowEffect_;
 
 	//--- オンヒットシステム ---//
 	// 反動管理クラス

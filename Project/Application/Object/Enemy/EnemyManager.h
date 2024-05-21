@@ -9,6 +9,8 @@
 #include "MultiEnemyData.h"
 #include "EnemyEditor.h"
 
+class Player;
+
 class EnemyManager
 {
 private:
@@ -51,6 +53,12 @@ public:
 	/// <returns></returns>
 	std::list<std::unique_ptr<LargeNumberOfObjects>>* GetEmitterLists() { return &enemyEmitters_; }
 
+	/// <summary>
+	/// プレイヤーのセッター
+	/// </summary>
+	/// <param name="player"></param>
+	void SetPlayer(Player* player) { player_ = player; }
+
 private:
 	/// <summary>
 	/// 敵の追加
@@ -86,6 +94,8 @@ private:
 
 	// 全体のモデル
 	Model* model_;
+
+	Player* player_ = nullptr;
 
 	// エネミーエディタ
 	std::unique_ptr<EnemyEditor> enemyEditor_;

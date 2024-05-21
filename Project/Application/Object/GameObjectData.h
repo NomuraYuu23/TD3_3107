@@ -85,7 +85,12 @@ private: // データ用構造体クラス
 		float gravity_;
 		// スティックのif分用のDeadZone
 		float stickDeadZone_;
+		
+	};
 
+	struct EnemyData {
+		// 横移動の終了フレーム
+		float easeEndFrame;
 	};
 
 	// 武器の情報
@@ -175,5 +180,7 @@ private:
 	CameraData camera_;
 	// ダッシュ関係
 	DashData dash_;
+	// 敵の共通データ
+	EnemyData enemy_;
 };
 
