@@ -209,6 +209,7 @@
     <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
     <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
+    <ClCompile Include="Application\Object\Player\System\SlowEffect\SlowEffect.cpp" />
     <ClCompile Include="Application\UI\GameUIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -457,6 +458,7 @@
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
+    <ClInclude Include="Application\Object\Player\System\SlowEffect\SlowEffect.h" />
     <ClInclude Include="Application\UI\GameUIManager.h" />
   </ItemGroup>
   <ItemGroup>
