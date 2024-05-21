@@ -135,7 +135,7 @@ void PlayerController::ControllerProcess()
 			#ifndef _DEBUG
 			// 何も再生されていなければ待機アニメーション再生
 			if (player_->weapon_->GetAnimManager()->GetSpearAnim().GetRunningAnimation()) {
-				player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
+				//player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
 		}
 			#endif // !_DEBUG
 		}
