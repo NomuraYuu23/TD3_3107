@@ -98,6 +98,8 @@ void GameScene::Initialize() {
 	// オーディオマネージャーを渡す
 	player_->gameAudioManager_ = audioManager_.get();
 	#endif // !_DEBUG
+	//player_->SetPonyTail(ponyTailModel_.get());
+	player_->GetSlowEffect()->SetCamera(&camera_);
 
 
 	// 更新
@@ -383,9 +385,11 @@ void GameScene::Draw() {
 			&desc);
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
-	if (player_->isSlowNow_) {
-		//PostEffect::GetInstance()->SetParaSize(10.0f);
-		//PostEffect::GetInstance()->
+	if (player_->GetSlowEffect()->GetRunning()) {
+		PostEffect::GetInstance()->SetColorPosition(player_->GetSlowEffect()->GetCenter());
+		PostEffect::GetInstance()->SetColorSize(player_->GetSlowEffect()->GetSize());
+		PostEffect::GetInstance()->SetColorLerpT(player_->GetSlowEffect()->GetColorT());
+		PostEffect::GetInstance()->SetTime(3.0f);
 		PostEffect::GetInstance()->Execution(
 			dxCommon_->GetCommadList(),
 			renderTargetTexture_,

@@ -212,6 +212,7 @@
     <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
     <ClCompile Include="Application\Object\Map\GameSystem\GameSystemManager.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointObject.cpp" />
+    <ClCompile Include="Application\Object\Player\System\SlowEffect\SlowEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -462,6 +463,7 @@
     <ClInclude Include="Application\Object\Enemy\System\DetectionSystem.h" />
     <ClInclude Include="Application\Object\Enemy\System\EnemySytemList.h" />
     <ClInclude Include="Application\Object\Map\GameSystem\GameSystemManager.h" />
+    <ClInclude Include="Application\Object\Player\System\SlowEffect\SlowEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
