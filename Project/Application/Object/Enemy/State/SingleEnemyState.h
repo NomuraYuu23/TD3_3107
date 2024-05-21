@@ -23,7 +23,7 @@ public:
 	void Update() override;
 
 
-	void SettingMoveInfo(const Vector3& endPoint,float easeFrame = 60.0f, Ease::EaseName name = Ease::EaseName::Lerp);
+	void SettingMoveInfo(const Vector3& endPoint, Ease::EaseName name = Ease::EaseName::Lerp);
 
 private:
 	// 近距離

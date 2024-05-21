@@ -1,5 +1,6 @@
 #include "SingleEnemyState.h"
 #include "../Enemy.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 void SingleEnemyState::Initialize()
 {
@@ -20,13 +21,11 @@ void SingleEnemyState::Update()
 
 }
 
-void SingleEnemyState::SettingMoveInfo(const Vector3& endPoint, float easeFrame, Ease::EaseName name)
+void SingleEnemyState::SettingMoveInfo(const Vector3& endPoint, Ease::EaseName name)
 {
 	// イージングする座標
 	startPoint_ = { enemy_->GetWorldPosition(),true };
 	endPoint_ = { endPoint,false };
-	// 終了フラグ
-	moveChangeFrame_ = easeFrame;
 	// イージングパターン
 	easeName_ = name;
 
@@ -36,7 +35,9 @@ void SingleEnemyState::PatrolInitialize()
 {
 	// タイマースタート
 	//if (!moveChangeTimer_.IsActive()) {
-		moveChangeTimer_.Start(moveChangeFrame_);
+	// 終了フレーム
+	moveChangeFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Enemy", "EaseEndFrame");
+	moveChangeTimer_.Start(moveChangeFrame_);
 	//}
 }
 
