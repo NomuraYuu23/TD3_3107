@@ -28,7 +28,12 @@ void SelectSystem::Initialize(
 	stagePhot_ = std::make_unique<StagePhot>();
 	stagePhot_->Initialize(stagePhotTextureHandles);
 	// UI
-	std::unique_ptr<StageSelectUI> stageSelectUI_ = nullptr;
+	stageSelectUI_ = std::make_unique<StageSelectUI>();
+	stageSelectUI_->Initialize(stageUITextureHandles);
+
+	// セッティング
+	stageSelectUI_->SetStageNum(stageNum_);
+	stagePhot_->Setting(stageNum_);
 
 }
 
@@ -92,12 +97,37 @@ void SelectSystem::Update()
 
 void SelectSystem::Draw()
 {
+
+	stagePhot_->Draw();
+
+	stageSelectUI_->Draw(!isMoveLeft_ && !isMoveRight_);
+
 }
 
 void SelectSystem::MoveRight()
 {
+
+	easeTimer_ += easeSpeed_;
+	if (easeTimer_ >= 1.0f) {
+		isMoveRight_ = false;
+		stagePhot_->MoveRight(1.0f);
+	}
+	else {
+		stagePhot_->MoveRight(easeTimer_);
+	}
+
 }
 
 void SelectSystem::MoveLeft()
 {
+
+	easeTimer_ += easeSpeed_;
+	if (easeTimer_ >= 1.0f) {
+		isMoveLeft_ = false;
+		stagePhot_->MoveLeft(1.0f);
+	}
+	else {
+		stagePhot_->MoveLeft(easeTimer_);
+	}
+
 }

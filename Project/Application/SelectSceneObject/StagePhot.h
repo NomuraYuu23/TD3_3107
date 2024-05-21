@@ -3,6 +3,7 @@
 
 #include "../../Engine/Math/Vector2.h"
 #include "../../Engine/2D/Sprite.h"
+#include "StageMax.h"
 
 class StagePhot
 {

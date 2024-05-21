@@ -43,5 +43,8 @@ private: // 変数
 	// セレクトシステム
 	std::unique_ptr<SelectSystem> selectSystem_;
 
+	// シーン遷移が始まったか
+	bool hasTheSceneTransitionStarted_;
+
 };
 

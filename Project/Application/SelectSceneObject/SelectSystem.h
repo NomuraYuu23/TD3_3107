@@ -11,45 +11,57 @@ class SelectSystem
 public: // 関数
 
 	/// <summary>
-	/// 
+	/// 初期化
 	/// </summary>
+	/// <param name="stagePhotTextureHandles">ステージの写真ハンドル</param>
+	/// <param name="stageUITextureHandles">UIハンドル</param>
 	void Initialize(
 		const std::array<uint32_t, kStageMax>& stagePhotTextureHandles, 
 		const std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount>& stageUITextureHandles);
 
 	/// <summary>
-	/// 
+	/// 更新処理
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// 
+	/// 描画
 	/// </summary>
 	void Draw();
 
 private: // メンバ関数
 
-	// 右移動
+	/// <summary>
+	/// 右移動
+	/// </summary>
 	void MoveRight();
 
-	// 左移動
+	/// <summary>
+	/// 左移動
+	/// </summary>
 	void MoveLeft();
 
 public: // アクセッサ
 
-	StageSelectUI* GetStageSelectUI() { return stageSelectUI_.get(); }
+	uint32_t GetStageNum() { return stageNum_; }
+
+	bool GetGotoGameScene() { return gotoGameScene_; }
+
+	bool GetGotoTitleScene() { return gotoTitleScene_; }
 
 private: // 変数
 	
 	// 入力
 	Input* input_ = nullptr;
 
-	// 動いているか
+	// 右に動いているか
 	bool isMoveRight_;
+	// 左に動いているか
 	bool isMoveLeft_;
 
-	// イージング
+	// イージングタイマー
 	float easeTimer_;
+	// イージングスピード
 	float easeSpeed_;
 	
 	// ステージ番号

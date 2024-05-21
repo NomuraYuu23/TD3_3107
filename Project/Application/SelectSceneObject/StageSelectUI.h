@@ -67,11 +67,6 @@ public: // メンバ関数
 	void Draw(bool notMove);
 
 	/// <summary>
-	/// 設定
-	/// </summary>
-	void Setting();
-
-	/// <summary>
 	/// ステージナンバーセット
 	/// </summary>
 	/// <param name="stageNum"></param>
@@ -96,10 +91,6 @@ private: // 変数
 
 	// ステージナンバー
 	uint32_t stageNum_;
-
-	// 動きの変数
-	float waveAnimationT_;
-	Vector2 waveVelocity_ = {};
 
 };
 

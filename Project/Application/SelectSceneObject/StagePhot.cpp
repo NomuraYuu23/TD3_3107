@@ -2,7 +2,6 @@
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
 #include <numbers>
 #include "../../Engine/Math/Ease.h"
-#include "StageMax.h"
 
 void StagePhot::Initialize(const std::array<uint32_t, kStageMax>& stagePhotTextureHandles)
 {
@@ -202,4 +201,28 @@ void StagePhot::TextureHandleChange()
 
 void StagePhot::ApplyGlobalVariables()
 {
+
+	// 調整項目クラスのインスタンス取得
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	// グループ名の設定
+	const char* groupName = "StagePhot";
+
+	positions_[0] = globalVariables->GetVector2Value(groupName, "offScreenLeftPos");
+	positions_[1] = globalVariables->GetVector2Value(groupName, "screenLeftPos");
+	positions_[2] = globalVariables->GetVector2Value(groupName, "screenCenterPos");
+	positions_[3] = globalVariables->GetVector2Value(groupName, "screenRightPos");
+	positions_[4] = globalVariables->GetVector2Value(groupName, "offScreenRightPos");
+
+	// サイズ
+	sizes_[0] = globalVariables->GetVector2Value(groupName, "offScreenLeftSize");
+	sizes_[1] = globalVariables->GetVector2Value(groupName, "screenLeftSize");
+	sizes_[2] = globalVariables->GetVector2Value(groupName, "screenCenterSize");
+	sizes_[3] = globalVariables->GetVector2Value(groupName, "screenRightSize");
+	sizes_[4] = globalVariables->GetVector2Value(groupName, "offScreenRightSize");
+
+	// 振幅
+	amplitude_ = globalVariables->GetFloatValue(groupName, "amplitude");
+	// フレーム
+	fre_ = globalVariables->GetFloatValue(groupName, "fre");
+
 }
