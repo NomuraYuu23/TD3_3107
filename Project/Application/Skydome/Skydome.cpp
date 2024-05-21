@@ -30,7 +30,7 @@ void Skydome::Initialize(Model* model) {
 
 	// uvTransformの初期化
 	uvTransform_.Initialize();
-	uvTransform_.transform_.scale = { 10.0f, 10.0f, 10.0f };
+	//uvTransform_.transform_.scale = { 10.0f, 10.0f, 10.0f };
 
 }
 
@@ -39,7 +39,7 @@ void Skydome::Initialize(Model* model) {
 /// </summary>
 void Skydome::Update() {
 
-	worldTransform_.transform_.rotate.y = fmodf(worldTransform_.transform_.rotate.y + rotateSpeed_, static_cast<float>(std::numbers::pi) * 2.0f);
+	//worldTransform_.transform_.rotate.y = fmodf(worldTransform_.transform_.rotate.y + rotateSpeed_, static_cast<float>(std::numbers::pi) * 2.0f);
 
 	worldTransform_.UpdateMatrix();
 

@@ -156,7 +156,7 @@ void GameScene::Initialize() {
 	pe->SetSigma(5.0f);
 
 	FogManager* fm = FogManager::GetInstance();
-	fm->SetColor({ 0.0f, 0.35f, 1.0f, 1.0f });
+	fm->SetColor({ 0.65f, 0.6f, 0.0f, 1.0f });
 	fm->SetNear(50.0f);
 	fm->SetRadius(2500.0f);
 

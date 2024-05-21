@@ -78,5 +78,5 @@ void Terrain::OnCollision(ColliderParentObject2D target)
 void Terrain::MaterialUpdate()
 {
 	// UVトランスフォームをスケールに合わせて調整
-	materialData_.uvTransform = Matrix4x4::MakeAffineMatrix(transform_.scale, Vector3{ 0.0f,0.0f,0.0f }, Vector3{ 0.0f,0.0f,0.0f });
+	materialData_.uvTransform = Matrix4x4::MakeAffineMatrix({ transform_.scale.x / 2.0f, 1.0f, 1.0f }, Vector3{ 0.0f,0.0f,0.0f }, Vector3{ 0.0f,0.0f,0.0f });
 }
