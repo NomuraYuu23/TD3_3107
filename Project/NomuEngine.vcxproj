@@ -129,7 +129,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointObject.cpp" />
-    <ClCompile Include="Application\Object\Map\GameSystem\GameSystemManager.cpp" />
+    <ClCompile Include="Application\Object\GameSystem\GameSystemManager.cpp" />
     <ClCompile Include="Application\Object\Map\MapEditor.cpp" />
     <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
@@ -324,7 +324,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\System\DetectionSystem.h" />
     <ClInclude Include="Application\Object\Enemy\System\EnemySytemList.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
-    <ClInclude Include="Application\Object\Map\GameSystem\GameSystemManager.h" />
+    <ClInclude Include="Application\Object\GameSystem\GameSystemManager.h" />
     <ClInclude Include="Application\Object\Map\MapBlockData.h" />
     <ClInclude Include="Application\Object\Map\MapEditor.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../IObject.h"
+#include "../IObject.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 
 class GoalObject;

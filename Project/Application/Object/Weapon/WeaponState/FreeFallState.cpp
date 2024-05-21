@@ -34,12 +34,12 @@ void FreeFallState::Update()
 
 	// 速度処理
 	weapon_->velocity_.x = MathUtility::Lerp(weapon_->velocity_.x, 0, 0.01f);
-	weapon_->velocity_.y += (kGravity * 12.5f) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	weapon_->velocity_.y += (kGravity * 12.5f) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 
 	// 回転
 	//weapon_->worldtransform_.direction_ = MathUtility::RotateVector(weapon_->worldtransform_.direction_, (3.14f / 24.0f));
 
 	// 座標移動
-	weapon_->worldtransform_.transform_.translate += weapon_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	weapon_->worldtransform_.transform_.translate += weapon_->velocity_ * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 
 }

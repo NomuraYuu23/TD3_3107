@@ -8,6 +8,7 @@
 
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerSystemList.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include "PlayerFootCollider.h"
 

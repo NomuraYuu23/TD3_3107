@@ -37,7 +37,7 @@ void GroundState::Update()
 	// 接地していない場合
 	if (!player_->isGround_) {
 		player_->velocity_.y += fallPower_ + (kGravity) * kDeltaTime_;
-		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
 
 	// 速度制限

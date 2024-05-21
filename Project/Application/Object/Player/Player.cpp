@@ -161,9 +161,9 @@ void Player::ImGuiDraw()
 	slowEffect_->ImGuiDraw();
 
 	// ゲームスピード
-	float ratio = IObject::sPlaySpeed;
-	ImGui::DragFloat("playTime", &ratio);
-	sPlaySpeed = ratio;
+	//float ratio = IObject::sPlaySpeed;
+	//ImGui::DragFloat("playTime", &ratio);
+	//sPlaySpeed = ratio;
 	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
 	int tex = IsCanReturn();

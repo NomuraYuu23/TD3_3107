@@ -1,6 +1,7 @@
 #include "IEnemyState.h"
 #include "../Enemy.h"
 #include "../../../Engine/Math/DeltaTime.h"
+#include "../../GameSystem/GameSystemManager.h"
 
 void IEnemyState::PreInitialize(Enemy* enemy, ActionMode pattern)
 {
@@ -19,5 +20,5 @@ void IEnemyState::PreInitialize(Enemy* enemy)
 void IEnemyState::Update()
 {
 
-	enemy_->transform_.translate += enemy_->velocity_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	enemy_->transform_.translate += enemy_->velocity_ * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 }

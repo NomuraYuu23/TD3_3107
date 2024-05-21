@@ -98,7 +98,7 @@ void GameScene::Initialize() {
 	// オーディオマネージャーを渡す
 	player_->gameAudioManager_ = audioManager_.get();
 	#endif // !_DEBUG
-	//player_->SetPonyTail(ponyTailModel_.get());
+
 	player_->GetSlowEffect()->SetCamera(&camera_);
 
 

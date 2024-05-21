@@ -13,7 +13,7 @@
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
 #include "../../Object/GameObjectData.h"
 #include "../../Object/GameCamera/GameBasicCamera.h"
-#include "../../Object/Map/GameSystem/GameSystemManager.h"
+#include "../../Object/GameSystem/GameSystemManager.h"
 
 #include "../../Object/Enemy/EnemyManager.h"
 

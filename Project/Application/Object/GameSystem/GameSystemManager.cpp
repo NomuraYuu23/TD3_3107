@@ -1,5 +1,5 @@
 #include "GameSystemManager.h"
-#include "../../ObjectList.h"
+#include "../ObjectList.h"
 #include "../../../Engine/2D/ImguiManager.h"
 
 uint32_t GameSystemManager::sNowStageNum = 0;

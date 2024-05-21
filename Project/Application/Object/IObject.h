@@ -9,7 +9,6 @@ public:
 	IObject() {};
 	~IObject() = default;
 
-	static float sPlaySpeed;
 public:
 	
 	enum CollisionType {
