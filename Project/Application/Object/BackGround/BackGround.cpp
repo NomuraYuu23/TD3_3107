@@ -8,8 +8,8 @@ void BackGround::Initialize(Model* model)
 	IObject::Initialize(model);
 
 	// トランスフォーム初期化
-	worldtransform_.transform_.translate = { 100.0f, -65.0f, 30.0f };
-	worldtransform_.transform_.scale = { 5.0f, 5.0f, 5.0f };
+	worldtransform_.transform_.translate = { 100.0f, -0.0f, 300.0f };
+	worldtransform_.transform_.scale = { 3.0f, 3.0f, 3.0f };
 
 	// ライティング有効
 	enableLighting_ = EnableLighting::HalfLambert;

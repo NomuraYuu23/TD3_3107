@@ -151,9 +151,9 @@ void GameScene::Initialize() {
 	/// ポストエフェクトの値初期化
 	// ブルーム
 	PostEffect* pe = PostEffect::GetInstance();
-	pe->SetThreshold(0.15f);
-	pe->SetKernelSize(10);
-	pe->SetSigma(12.5f);
+	pe->SetThreshold(0.05f);
+	pe->SetKernelSize(5);
+	pe->SetSigma(5.0f);
 
 	FogManager* fm = FogManager::GetInstance();
 	fm->SetColor({ 0.0f, 0.35f, 1.0f, 1.0f });
@@ -397,6 +397,12 @@ void GameScene::Draw() {
 			PostEffect::kCommandIndexGrayScale);
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
+
+	/*PostEffect::GetInstance()->Execution(
+		dxCommon_->GetCommadList(),
+		renderTargetTexture_,
+		PostEffect::kCommandIndexBloom);
+	WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());*/
 }
 
 void GameScene::ImguiDraw() {
@@ -441,9 +447,9 @@ void GameScene::ImguiDraw() {
 	gameData_->ApplyGlobalVariables();
 
 	// ポストエフェクトのImGuiを表示
-	//PostEffect::GetInstance()->ImGuiDraw();
+	PostEffect::GetInstance()->ImGuiDraw();
 	// フォグのImGuiの表示
-	//FogManager::GetInstance()->ImGuiDraw();
+	FogManager::GetInstance()->ImGuiDraw();
 
 #endif // _DEBUG
 
@@ -522,7 +528,7 @@ void GameScene::ModelCreate()
 	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 背景モデル
-	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
+	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
 
 	// 敵モデル
 	// プレイヤーモデル
