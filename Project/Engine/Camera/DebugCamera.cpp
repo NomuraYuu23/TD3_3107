@@ -9,7 +9,7 @@ void DebugCamera::Initialize() {
 
 	BaseCamera::Initialize();
 
-	moveSpeed_ = 0.1f;
+	moveSpeed_ = 0.5f;
 	rotateSpeed_ = 0.01f;
 
 }
