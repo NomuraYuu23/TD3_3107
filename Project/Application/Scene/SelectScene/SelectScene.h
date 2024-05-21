@@ -1,5 +1,8 @@
 #pragma once
 #include "../../../Engine/Scene/IScene/IScene.h"
+#include "../../SelectSceneObject/SelectSystem.h"
+#include "../../SelectSceneObject/StageMax.h"
+
 class SelectScene : public IScene{
 
 public: // メンバ関数
@@ -30,6 +33,15 @@ private: // メンバ関数
 	/// テクスチャロード
 	/// </summary>
 	void TextureLoad() override;
+
+private: // 変数
+
+	// テクスチャハンドル
+	std::array<uint32_t, kStageMax> stagePhotTextureHandles_;
+	std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount> stageUITextureHandles_;
+
+	// セレクトシステム
+	std::unique_ptr<SelectSystem> selectSystem_;
 
 };
 

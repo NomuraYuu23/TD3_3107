@@ -210,6 +210,9 @@
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
     <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
     <ClCompile Include="Application\Object\Player\System\SlowEffect\SlowEffect.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StagePhot.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\SelectSystem.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StageSelectUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -458,6 +461,9 @@
     <ClInclude Include="Application\Object\Weapon\System\ShockEffectSystem.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
     <ClInclude Include="Application\Object\Player\System\SlowEffect\SlowEffect.h" />
+    <ClInclude Include="Application\SelectSceneObject\StagePhot.h" />
+    <ClInclude Include="Application\SelectSceneObject\SelectSystem.h" />
+    <ClInclude Include="Application\SelectSceneObject\StageSelectUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

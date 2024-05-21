@@ -8,6 +8,9 @@ void SelectScene::Initialize()
 	ModelCreate();
 	TextureLoad();
 
+	selectSystem_ = std::make_unique<SelectSystem>();
+	selectSystem_->Initialize(stagePhotTextureHandles_, stageUITextureHandles_);
+
 }
 
 void SelectScene::Update()
@@ -30,4 +33,9 @@ void SelectScene::ModelCreate()
 
 void SelectScene::TextureLoad()
 {
+
+	stagePhotTextureHandles_ = {
+
+	}
+
 }

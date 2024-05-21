@@ -152,6 +152,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Scene\SelectScene\SelectScene.cpp" />
     <ClCompile Include="Application\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Application\Scene\TutorialScene\TutorialScene.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\SelectSystem.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StagePhot.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StageSelectUI.cpp" />
     <ClCompile Include="Application\UI\UI.cpp" />
     <ClCompile Include="Application\UI\UIManager.cpp" />
     <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
@@ -361,6 +364,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Scene\SelectScene\SelectScene.h" />
     <ClInclude Include="Application\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Application\Scene\TutorialScene\TutorialScene.h" />
+    <ClInclude Include="Application\SelectSceneObject\SelectSystem.h" />
+    <ClInclude Include="Application\SelectSceneObject\StagePhot.h" />
+    <ClInclude Include="Application\SelectSceneObject\StageSelectUI.h" />
     <ClInclude Include="Application\UI\UI.h" />
     <ClInclude Include="Application\UI\UIManager.h" />
     <ClInclude Include="Application\Object\BackGround\BackGround.h" />
