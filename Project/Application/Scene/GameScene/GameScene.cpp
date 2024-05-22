@@ -7,6 +7,7 @@
 #include "../../Particle/EmitterName.h"
 #include "../../../Engine/Math/DeltaTime.h"
 #include "../../../Engine/base/WindowSprite.h"
+#include "../../AllSceneObject/StageNumberManager.h"
 
 GameScene::~GameScene()
 {
@@ -421,6 +422,8 @@ void GameScene::ImguiDraw() {
 	followCamera_->ImGuiDraw();
 
 	gameData_->ApplyGlobalVariables();
+
+	StageNumberManager::ImGuiDraw();
 
 	// ポストエフェクトのImGuiを表示
 	//PostEffect::GetInstance()->ImGuiDraw();

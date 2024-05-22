@@ -3,6 +3,13 @@
 class StageNumberManager
 {
 
+public : // 関数
+
+	/// <summary>
+	/// ImGui描画
+	/// </summary>
+	void ImGuiDraw();
+
 public: // 変数
 
 	// ステージ番号
