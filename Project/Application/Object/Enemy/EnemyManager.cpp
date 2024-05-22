@@ -100,7 +100,7 @@ void EnemyManager::CreateEmitter(const MultiEnemyData& data)
 	// 敵生成
 	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
 	// エミッターの設定
-	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(90.0f);
+	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(data.rotateSpeed);
 	// リストに
 	enemyEmitters_.push_back(std::move(obj));
 
@@ -114,7 +114,7 @@ void EnemyManager::CreateEmitter(const MultiEnemyData& data, const std::string& 
 	// 敵生成
 	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
 	// エミッターの設定
-	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(90.0f);
+	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(data.rotateSpeed);
 	// リストに
 	enemyEmitters_.push_back(std::move(obj));
 
