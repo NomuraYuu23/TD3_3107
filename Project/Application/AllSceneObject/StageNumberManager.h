@@ -8,7 +8,7 @@ public : // 関数
 	/// <summary>
 	/// ImGui描画
 	/// </summary>
-	void ImGuiDraw();
+	static void ImGuiDraw();
 
 public: // 変数
 
