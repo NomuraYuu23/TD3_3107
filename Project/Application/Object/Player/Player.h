@@ -20,6 +20,7 @@
 #include "System/SlowEffect/SlowEffect.h"
 
 class EnemyManager;
+class GameUIManager;
 
 class Player : public IObject
 {
@@ -159,6 +160,11 @@ public:
 	/// <param name="model">モデル</param>
 	void SetPonyTail(Model* model);
 
+	/// <summary>
+	/// UIマネージャーセッター
+	/// </summary>
+	/// <param name="uiManager">UIマネージャー</param>
+	void SetUIManager(GameUIManager* uiManager) { uiManager_ = uiManager; }
 
 	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
 	void EndAssistDash() { assistDash_.SlowCancel(); }
@@ -236,6 +242,11 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+private: // UI関連
+
+	// UIマネージャー
+	GameUIManager* uiManager_ = nullptr;
 
 private: // アニメーション関連
 

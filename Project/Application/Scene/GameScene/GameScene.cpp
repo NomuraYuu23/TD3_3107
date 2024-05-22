@@ -141,6 +141,12 @@ void GameScene::Initialize() {
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_.get());
 
+	// UIマネージャーの生成
+	gameUIManager_ = std::make_unique<GameUIManager>();		// 生成
+	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
+	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
+	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
+
 	// 矢印のUI
 	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
 	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
@@ -239,6 +245,9 @@ void GameScene::Update() {
 	else {
 		arrowSprite_->SetIsInvisible(true);
 	}
+
+	// UIマネージャー更新
+	gameUIManager_->Update();
 
 	arrowSprite_->SetPosition(player_->screenPos_);
 	arrowSprite_->SetRotate(std::atan2f(-player_->throwDirect_.y, player_->throwDirect_.x));
@@ -358,6 +367,9 @@ void GameScene::Draw() {
 
 	// UIマネージャー
 	//uiManager_->Draw();
+
+	// UIマネージャー描画
+	gameUIManager_->Draw();
 	arrowSprite_->Draw();
 
 	// 前景スプライト描画後処理
@@ -452,6 +464,9 @@ void GameScene::ImguiDraw() {
 	PostEffect::GetInstance()->ImGuiDraw();
 	// フォグのImGuiの表示
 	FogManager::GetInstance()->ImGuiDraw();
+
+	// UIマネージャー用
+	gameUIManager_->DisplayImGui();
 
 #endif // _DEBUG
 

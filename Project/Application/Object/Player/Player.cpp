@@ -7,6 +7,7 @@
 #include "../../../Engine/Math/Math.h"
 #include "../ObjectList.h"
 #include "../GameUtility/MathUtility.h"
+#include "../../UI/GameUIManager.h"
 
 void Player::Initialize(Model* model)
 {
@@ -90,6 +91,11 @@ void Player::Update()
 	// アニメーション更新
 	anim_->Update();
 	#endif // !_DEBUG
+
+	// UIマネージャーに接地状態を渡す
+	if (uiManager_ != nullptr) {
+		uiManager_->SetIsGround(isGround_);
+	}
 
 	// コライダー
 	CircleColliderUpdate();
