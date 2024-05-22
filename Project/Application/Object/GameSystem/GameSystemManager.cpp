@@ -15,7 +15,7 @@ void GameSystemManager::Initialize(Model* goalModel, Player* player)
 	// プレイヤー
 	player_ = player;
 
-	GenarateGoal({ 40.0f,5.0f,0 });
+	GenarateGoal({ 459.0f,78.0f,0 });
 	deathHeight_ = GlobalVariables::GetInstance()->GetFloatValue("Common", "DeathHeight");
 }
 
