@@ -115,7 +115,7 @@ void GameScene::Initialize() {
 
 	// ゲームシステム
 	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(sampleObjModel_.get(), player_.get());
+	gameSystemManager_->Initialize(goalModel_.get(), player_.get());
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -560,6 +560,8 @@ void GameScene::ModelCreate()
 
 	// 背景モデル
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
+
+	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 敵モデル
 	// プレイヤーモデル

@@ -137,6 +137,7 @@ private:
 	// 背景
 	std::unique_ptr<BackGround> backGround_;
 	std::unique_ptr<Model> backGroundModel_;
+	std::unique_ptr<Model> goalModel_;
 
 	// 敵
 	std::unique_ptr<EnemyManager> enemyManager_;
