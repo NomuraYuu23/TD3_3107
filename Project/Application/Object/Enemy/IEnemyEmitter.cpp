@@ -124,7 +124,13 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	// 敵の角度生成
 	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
 
-	float rotateZAngle = 0;
+	float transformAngle = 0;
+	float addAngle = 0;
+
+	if (maxCount_ == 5) {
+		transformAngle = 1.5f;
+		addAngle = 0.5f;
+	}
 
 	// 敵の生成
 	for (uint32_t i = 0; i < maxCount_; ++i) {
@@ -141,8 +147,8 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 		static_cast<Enemy*>(obj.get())->SetEmitter(this);
 		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
 		obj->transform_.translate = newPosition;
-		//obj->transform_.rotate.z = transformAngle;
-		//transformAngle += addAngle;
+		obj->transform_.rotate.z = transformAngle;
+		transformAngle += addAngle;
 		// 初期化
 		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
 		// リストに追加
