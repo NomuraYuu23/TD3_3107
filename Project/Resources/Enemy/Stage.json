@@ -1,1 +1,18 @@
-{}
+{
+    "Stage0": {
+        "Enemy0": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                160.0,
+                15.0,
+                0.0
+            ],
+            "typeNum": 0
+        }
+    }
+}
