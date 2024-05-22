@@ -68,7 +68,7 @@ void IEnemyEmitter::Update()
 		});
 
 	// 回転処理
-	nowAngle_ += 1.0f / rotation_;
+	//nowAngle_ += 1.0f / rotation_;
 
 	// 雑な一周リセット処理
 	//float oneLap = 6.28f;
@@ -130,7 +130,11 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	if (maxCount_ == 5) {
 		if (rotation_ > 0) {
 			transformAngle = 1.5f;
-			addAngle = 0.75f;
+			addAngle = 1.25f;
+		}
+		else if (rotation_ < 0) {
+			transformAngle = 0;
+			addAngle = -0.5f;
 		}
 	}
 
@@ -192,10 +196,10 @@ void IEnemyEmitter::ImGuiDraw()
 	fullPath = name_ + "rotation";
 	ImGui::DragFloat(fullPath.c_str(), &rotation_, 0.01f);
 
-	//for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
-	//	it != objects_.end(); ++it) {
-	//	static_cast<Enemy*>((*it).get())->ImGuiDraw();
-	//}
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+		static_cast<Enemy*>((*it).get())->ImGuiDraw();
+	}
 
 
 	ImGui::Text("\n");

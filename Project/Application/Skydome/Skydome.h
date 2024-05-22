@@ -31,12 +31,14 @@ public:
 	/// </summary>
 	void ImGuiDraw();
 
-	void SetParent(WorldTransform* parent) { worldTransform_.parent_ = parent; }
+	void SetParent(WorldTransform* parent) { parent_ = parent; }
 
 private:
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;
+	// 座標のみ
+	WorldTransform* parent_;
 	// モデル
 	Model* model_ = nullptr;
 	//マテリアル

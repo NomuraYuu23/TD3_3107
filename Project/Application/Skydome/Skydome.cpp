@@ -41,6 +41,10 @@ void Skydome::Update() {
 
 	//worldTransform_.transform_.rotate.y = fmodf(worldTransform_.transform_.rotate.y + rotateSpeed_, static_cast<float>(std::numbers::pi) * 2.0f);
 
+	if (parent_) {
+		worldTransform_.transform_.translate = parent_->GetWorldPosition();
+	}
+
 	worldTransform_.UpdateMatrix();
 
 	localMatrixManager_->Map();
