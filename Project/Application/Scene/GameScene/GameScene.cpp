@@ -107,15 +107,20 @@ void GameScene::Initialize() {
 	player_->gameAudioManager_ = audioManager_.get();
 	#endif // !_DEBUG
 
-	//player_->SetPonyTail(ponyTailModel_.get());
 	player_->GetSlowEffect()->SetCamera(&camera_);
+
 
 	// 更新
 	//countTime_ = 0;
 
+	// ゲームシステム
+	gameSystemManager_ = std::make_unique<GameSystemManager>();
+	gameSystemManager_->Initialize(sampleObjModel_.get(), player_.get());
+
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->Initialize(enemyModel_.get());
+	enemyManager_->SetPlayer(player_.get());
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -217,6 +222,9 @@ void GameScene::Update() {
 	pointLightManager_->Update(pointLightDatas_);
 	spotLightManager_->Update(spotLightDatas_);
 
+	// ゲームシステム
+	gameSystemManager_->Update();
+
 	if (player_->GetEffectInfo().isStop) {
 		player_->HitUpdate();
 		// デバッグカメラ
@@ -232,7 +240,8 @@ void GameScene::Update() {
 	player_->DrawLinesMap(drawLine_);
 	// 敵
 	enemyManager_->Update();
-	//bossEnemy_->Update();
+
+
 
 	if (player_->isArrowUiDraw_) {
 		arrowSprite_->SetIsInvisible(false);
@@ -313,6 +322,8 @@ void GameScene::Draw() {
 
 	// ブロック用
 	mapManager_->Draw(camera_);
+	// ゴール系
+	gameSystemManager_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(enemyTexture_);
@@ -441,9 +452,11 @@ void GameScene::ImguiDraw() {
 
 	debugCamera_->ImGuiDraw();
 
+	gameSystemManager_->ImGuiDraw();
+
 	//collision2DDebugDraw_->ImGuiDraw();
 
-	gameCamera_->ImGuiDraw();
+	//gameCamera_->ImGuiDraw();
 
 	followCamera_->ImGuiDraw();
 
@@ -619,6 +632,9 @@ void GameScene::CollisionUpdate()
 	mapManager_->CollisionRegister(collision2DManager_.get(), camera_);
 
 	enemyManager_->CollisionRegister(collision2DManager_.get(), camera_);
+
+	// ゲームシステム関係（ゴール・チェックポイント）
+	gameSystemManager_->CollisionRegister(collision2DManager_.get());
 
 	collision2DManager_->CheakAllCollision();
 

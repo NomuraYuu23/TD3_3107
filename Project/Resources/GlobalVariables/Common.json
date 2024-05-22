@@ -1,6 +1,7 @@
 {
     "Common": {
         "DeadZone": 0.6000000238418579,
+        "DeathHeight": -100.0,
         "Gravity": -9.800000190734863,
         "SlowFactor": 5.0
     }

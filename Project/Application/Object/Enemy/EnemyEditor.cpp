@@ -134,7 +134,7 @@ void EnemyEditor::LoadFile(const std::string& groupName)
 			const std::string& itemName = itItem.key();
 			size_t tmp = itItem->size();
 			// SingleEnemyData型の値を保持していれば
-			if (itItem->is_object() && itItem->size() == 2) {
+			if (itItem->is_object() && itItem->size() == 4) {
 				// SingleEnemyData型の値を登録
 				SingleEnemyData value = itItem->get<SingleEnemyData>();
 				SetValue(name, itemName, value);
@@ -298,6 +298,8 @@ void EnemyEditor::ImGuiSingleEnemy()
 		ImGui::DragFloat3("AddPosition", &addSingleEnemyData_.position.x, imGuiSpeed);
 		ImGui::DragInt("AddTypeNum", &addSingleEnemyData_.typeNum, imGuiSpeed, 0);
 		ImGui::DragInt("AddSingleEnemyNum", &addSingleEnemyNum_, 0.1f, 0);
+		ImGui::DragFloat3("AddEaseEndPosition", &addSingleEnemyData_.endPosition.x, imGuiSpeed);
+		ImGui::DragInt("AddPadding", &addSingleEnemyData_.pad, 0.1f, 0);
 
 		if (addSingleEnemyNum_ < 0) {
 			addSingleEnemyNum_ = 0;
@@ -358,9 +360,13 @@ void EnemyEditor::ImGuiSingleEnemy()
 
 				std::string namePosition = stageName + name + "Position";
 				std::string nameTypeNum = stageName + name + "TypeNum";
+				std::string nameEaseEndPosition = stageName + name + "EndPosition";
+				std::string namePad = stageName + name + "pad";
 
 				ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
 				ImGui::DragInt(nameTypeNum.c_str(), &item.typeNum, imGuiSpeed);
+				ImGui::DragFloat3(nameEaseEndPosition.c_str(), &item.endPosition.x, imGuiSpeed);
+				ImGui::DragInt(namePad.c_str(), &item.pad, imGuiSpeed);
 
 				if (item.typeNum < 0) {
 					item.typeNum = 0;
@@ -401,6 +407,8 @@ void EnemyEditor::ImGuiMultiEnemy()
 		ImGui::DragFloat("AddDistance", &addMultieEnemyData_.distance, imGuiSpeed, 0);
 		ImGui::DragInt("AddEnemyMaxCount", &addMultieEnemyData_.enemyMaxCount, imGuiSpeed, 0);
 		ImGui::DragInt("AddMultiEnemyNum", &addMultiEnemyNum_, 0.1f, 0);
+		ImGui::DragFloat("AddRotateSpeed", &addMultieEnemyData_.rotateSpeed, imGuiSpeed, 0);
+		ImGui::DragInt("AddPadding", &addMultieEnemyData_.padding, 0.1f, 0);
 
 		if (addMultieEnemyData_.enemyMaxCount < 0) {
 			addMultieEnemyData_.enemyMaxCount = 0;
@@ -457,10 +465,14 @@ void EnemyEditor::ImGuiMultiEnemy()
 				std::string namePosition = stageName + name + "Position";
 				std::string nameDistance = stageName + name + "Distance";
 				std::string nameEnemyMaxCount = stageName + name + "EnemyMaxCount";
+				std::string nameRotateSpeed = stageName + name + "RotateSpeed";
+				std::string namePadding = stageName + name + "Padding";
 
 				ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
 				ImGui::DragFloat(nameDistance.c_str(), &item.distance, imGuiSpeed, 0);
 				ImGui::DragInt(nameEnemyMaxCount.c_str(), &item.enemyMaxCount, imGuiSpeed, 0);
+				ImGui::DragFloat(nameRotateSpeed.c_str(), &item.rotateSpeed, imGuiSpeed, 0);
+				ImGui::DragInt(namePadding.c_str(), &item.padding, imGuiSpeed, 0);
 
 				if (item.enemyMaxCount < 0) {
 					item.enemyMaxCount = 0;

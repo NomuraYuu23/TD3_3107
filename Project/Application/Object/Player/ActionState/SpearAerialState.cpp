@@ -63,19 +63,19 @@ void SpearAerialState::Update()
 	if (player_->IsNowAssistDash()) {
 		float ratio = GlobalVariables::GetInstance()->GetFloatValue("Dash", "SlowRatio");
 		if (player_->velocity_.y < 0) {
-			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 		else {
-			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 	}
 	else {
-		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
 
 	// 移動処理
-	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
+	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 }
 
 void SpearAerialState::InitializeDirection(const Vector2& direct)

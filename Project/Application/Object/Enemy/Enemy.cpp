@@ -106,7 +106,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 				return;
 			}
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
-				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::AttackPattern::kMaxSize);
+				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::ActionMode::kMaxSize);
 				weapon_ = (*weapon);
 
 				// デバッグ以外の場合行う
@@ -188,16 +188,16 @@ void Enemy::GenerateSetting()
 void Enemy::StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t attackPattern)
 {
 	// ステートの初期化前の情報設定
-	newState->PreInitialize(this, static_cast<IEnemyState::AttackPattern>(attackPattern));
+	newState->PreInitialize(this, static_cast<IEnemyState::ActionMode>(attackPattern));
 	// ステートの初期化
 	newState->Initialize();
 	// ステートの設定
 	state_ = std::move(newState);
 }
 
-void Enemy::ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern)
+void Enemy::ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::ActionMode pattern)
 {
-	if (pattern == IEnemyState::AttackPattern::kMaxSize) {
+	if (pattern == IEnemyState::ActionMode::kMaxSize) {
 		newState->PreInitialize(this);
 	}
 	else {
@@ -218,7 +218,7 @@ void Enemy::CheckParent()
 				weapon_->ChangeRequest(Weapon::StateName::kReturn);
 			}
 			ResetParent();
-			ChangeState(std::make_unique<SingleEnemyState>(), static_cast<IEnemyState::AttackPattern>(0));
+			ChangeState(std::make_unique<SingleEnemyState>(), static_cast<IEnemyState::ActionMode>(0));
 		}
 	}
 }

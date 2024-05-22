@@ -5,6 +5,7 @@
 #include "WeaponState/StateList.h"
 
 #include "System/ShockEffectSystem.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include "../Map/Terrain.h"
 

@@ -85,7 +85,14 @@ private: // データ用構造体クラス
 		float gravity_;
 		// スティックのif分用のDeadZone
 		float stickDeadZone_;
+		
+		// 死ぬまでの高さ
+		float deathHeight_;
+	};
 
+	struct EnemyData {
+		// 横移動の終了フレーム
+		float easeEndFrame;
 	};
 
 	// 武器の情報
@@ -130,7 +137,20 @@ private: // データ用構造体クラス
 	};
 
 	struct CameraData {
+		// プレイヤーからのオフセットdefault
 		Vector3 offset_;
+		// 引きカメラの最大オフセット
+		float pullMaxOffset_;
+
+		// 視野角の最低値
+		float minFov_;
+		// 視野角の最大値
+		float maxFov_;
+
+		// 最小距離の値
+		float minRange_;
+		// 最大距離の値
+		float maxRange_;
 	};
 
 	struct DashData {
@@ -175,5 +195,7 @@ private:
 	CameraData camera_;
 	// ダッシュ関係
 	DashData dash_;
+	// 敵の共通データ
+	EnemyData enemy_;
 };
 

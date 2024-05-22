@@ -1,10 +1,9 @@
 #pragma once
 #include "../../IObject.h"
-
 #include "../../../Engine/3D/Model.h"
 #include "../../../Engine/Collider2D/Box.h"
 
-class GoalObject : IObject
+class GoalObject : public IObject
 {
 public: // 継承
 	/// <summary>
@@ -32,9 +31,23 @@ public: // 継承
 	/// <param name="tag"></param>
 	void OnCollision(ColliderParentObject2D target) override;
 
+private:
+	void SystemInitialize();
+
 public: // アクセッサ
+	// コライダー関係
 	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
 	Box GetBoxCollider() override { return boxCollider_; }
+	// 座標
+	void SetPosition(const Vector3& position) { worldtransform_.transform_.translate = position; }
+
+
+	// ゴールフラグ取得
+	bool IsGoal() { return isGoal_; }
+
+private:
+	// ゴールフラグ
+	bool isGoal_ = false;
 
 };

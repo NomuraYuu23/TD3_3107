@@ -8,6 +8,7 @@
 
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerSystemList.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include "PlayerFootCollider.h"
 
@@ -117,6 +118,11 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
+
+	/// <summary>
+	/// 死んだ時に呼び出すやつ
+	/// </summary>
+	void Reset();
 
 public: // アニメーション関連関数群
 

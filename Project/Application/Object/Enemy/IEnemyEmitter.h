@@ -3,6 +3,8 @@
 #include "../GameUtility/TimerLib.h"
 #include "../../../Engine/Animation/Animation.h"
 
+class Player;
+
 class IEnemyEmitter : public LargeNumberOfObjects
 {
 private:
