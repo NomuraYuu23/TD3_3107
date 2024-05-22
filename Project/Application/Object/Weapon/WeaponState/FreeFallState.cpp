@@ -22,11 +22,20 @@ void FreeFallState::Initialize()
 	// 所持状態フラグをfalse
 	weapon_->isHold_ = false;
 
-	if (weapon_->worldtransform_.direction_.x > 0) {
+	if (weapon_->worldtransform_.direction_.x > 0 && weapon_->worldtransform_.direction_.y > 0) {
 		weapon_->worldtransform_.direction_ = Vector3::Normalize({ 1,1,0 });
 	}
-	else {
+	else if (weapon_->worldtransform_.direction_.x < 0 && weapon_->worldtransform_.direction_.y > 0) {
 		weapon_->worldtransform_.direction_ = Vector3::Normalize({ -1,1,0 });
+	}
+	else if (weapon_->worldtransform_.direction_.x > 0 && weapon_->worldtransform_.direction_.y < 0) {
+		weapon_->worldtransform_.direction_ = Vector3::Normalize({ 1,-1,0 });
+	}
+	else if (weapon_->worldtransform_.direction_.x < 0 && weapon_->worldtransform_.direction_.y < 0) {
+		weapon_->worldtransform_.direction_ = Vector3::Normalize({ -1,-1,0 });
+	}
+	else {
+		weapon_->worldtransform_.direction_ = Vector3::Normalize({ 1,0,0 });
 	}
 
 	// デバッグ以外の場合行う
