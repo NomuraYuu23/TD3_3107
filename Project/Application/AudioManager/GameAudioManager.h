@@ -3,6 +3,7 @@
 
 enum GameAudioNameIndex {
 	kGameAudioNameIndexSample, // サンプル
+	kGameSceneBGM,
 	kPlayerJump,
 	kPlayerLand,
 	kPlayerDamage,
@@ -46,6 +47,7 @@ private: // メンバ変数
 	std::array<const std::string, GameAudioNameIndex::kGameAudioNameIndexOfCount> audioNames_ = 
 	{
 		"default/Alarm01.mp3",
+		"Audio/BGM/GameSceneBGM.mp3",
 		"Audio/SE/Jump.mp3",
 		"Audio/SE/Land.mp3",
 		"Audio/SE/PlayerDamage.mp3",

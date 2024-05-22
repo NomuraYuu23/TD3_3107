@@ -159,6 +159,9 @@ void GameScene::Initialize() {
 	fm->SetNear(50.0f);
 	fm->SetRadius(2500.0f);
 
+	// ゲームシーン用BGMの再生
+	audioManager_->PlayWave(kGameSceneBGM);
+
 	// Jsonデータのクラス
 #ifdef _DEBUG
 
