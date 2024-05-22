@@ -519,7 +519,6 @@ void GameScene::TextureLoad()
 void GameScene::LowerVolumeBGM()
 {
 
-
 	const uint32_t startHandleIndex = 3;
 
 	//for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {

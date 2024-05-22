@@ -2,7 +2,7 @@
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
 
 // ステージ番号の大きさ
-const Vector2 StageSelectUI::kStageNumSize;
+const Vector2 StageSelectUI::kStageNumSize = {64.0f, 64.0f};
 
 void StageSelectUI::Initialize(const std::array<uint32_t, SpriteIndex::kSpriteIndexOfCount> textureHandles)
 {
@@ -82,7 +82,7 @@ void StageSelectUI::SetStageNum(uint32_t stageNum)
 {
 
 	stageNum_ = stageNum;
-	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ spriteDatas_[kSpriteIndexStageNumber].size_.x * stageNum, 0.0f });
+	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ kStageNumSize.x * stageNum, 0.0f });
 
 }
 
@@ -146,8 +146,5 @@ void StageSelectUI::SpriteStruct::Initialize(
 	
 	// スプライトの大きさ
 	sprite_->SetSize(size_);
-
-	// スプライトの表示部分
-	sprite_->SetTextureSize(size_);
 
 }

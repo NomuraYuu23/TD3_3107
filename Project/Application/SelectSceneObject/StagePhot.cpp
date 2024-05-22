@@ -18,11 +18,11 @@ void StagePhot::Initialize(const std::array<uint32_t, kStageMax>& stagePhotTextu
 	positions_[4] = { 2240.0f,  432.0f };
 
 	// サイズ
-	sizes_[0] = { 512.0f, 360.f };
-	sizes_[1] = { 512.0f, 360.f };
-	sizes_[2] = { 768.0f, 432.0f }; //中央
-	sizes_[3] = { 512.0f, 360.f };
-	sizes_[4] = { 512.0f, 360.f };
+	sizes_[0] = { 540.0f, 360.f };
+	sizes_[1] = { 540.0f, 360.f };
+	sizes_[2] = { 630.0f, 420.0f }; //中央
+	sizes_[3] = { 540.0f, 360.f };
+	sizes_[4] = { 540.0f, 360.f };
 
 	// スプライト
 	Vector4 color = { 1.0f,1.0f,1.0f,1.0f };

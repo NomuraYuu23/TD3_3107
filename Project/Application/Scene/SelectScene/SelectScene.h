@@ -2,6 +2,7 @@
 #include "../../../Engine/Scene/IScene/IScene.h"
 #include "../../SelectSceneObject/SelectSystem.h"
 #include "../../SelectSceneObject/StageMax.h"
+#include "../../Skydome/Skydome.h"
 
 class SelectScene : public IScene{
 
@@ -45,6 +46,10 @@ private: // 変数
 
 	// シーン遷移が始まったか
 	bool hasTheSceneTransitionStarted_;
+
+	// スカイドーム
+	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<Model> skydomeModel_;
 
 };
 

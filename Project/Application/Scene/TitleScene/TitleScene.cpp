@@ -50,7 +50,7 @@ void TitleScene::Update()
 	if ((input_->TriggerJoystick(JoystickButton::kJoystickButtonA) || input_->TriggerKey(DIK_SPACE)) &&
 		requestSceneNo_ == kTitle) {
 		// 行きたいシーンへ
-		requestSceneNo_ = kGame;
+		requestSceneNo_ = kSelect;
 	}
 
 	// BGM音量下げる

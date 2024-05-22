@@ -14,7 +14,7 @@ void SelectSystem::Initialize(
 
 	// イージング
 	easeTimer_ = 0.0f;
-	easeSpeed_ = 0.01f;
+	easeSpeed_ = 0.05f;
 
 	// ステージ番号	
 	stageNum_ = 0;
