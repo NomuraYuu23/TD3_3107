@@ -106,6 +106,9 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	maxCount_ = enemyCount;
 	// 敵の角度生成
 	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
+
+	float rotateZAngle = 0;
+
 	// 敵の生成
 	for (uint32_t i = 0; i < maxCount_; ++i) {
 		// 角度からオフセットの計算
