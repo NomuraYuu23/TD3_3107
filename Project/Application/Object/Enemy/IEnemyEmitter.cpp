@@ -71,13 +71,21 @@ void IEnemyEmitter::Update()
 	nowAngle_ += 1.0f / rotation_;
 
 	// 雑な一周リセット処理
-	float oneLap = 6.28f;
-	if (nowAngle_ >= oneLap) {
-		nowAngle_ = 0;
-		isRotateReturn_ = true;
-		interval_.Start(10.0f);
+	//float oneLap = 6.28f;
+	if (isMinusRotation_) {
+		if (nowAngle_ <= oneLapAngle_) {
+			nowAngle_ = 0;
+			isRotateReturn_ = true;
+			interval_.Start(10.0f);
+		}
 	}
-
+	else {
+		if (nowAngle_ >= oneLapAngle_) {
+			nowAngle_ = 0;
+			isRotateReturn_ = true;
+			interval_.Start(10.0f);
+		}
+	}
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 
@@ -95,6 +103,15 @@ void IEnemyEmitter::InitializeEmitter(float spinSpeed)
 {
 
 	rotation_ = spinSpeed;
+
+	if (rotation_ > 0) {
+		oneLapAngle_ = 6.28f;
+		isMinusRotation_ = false;
+	}
+	else {
+		oneLapAngle_ = -6.28f;
+		isMinusRotation_ = true;
+	}
 
 }
 
@@ -161,11 +178,16 @@ void IEnemyEmitter::ImGuiDraw()
 	ImGui::DragFloat3(fullPath.c_str(), &worldTransform_.transform_.translate.x, 0.01f, -100, 100);
 	fullPath = name_ + "Rotate";
 	ImGui::DragFloat3(fullPath.c_str(), &worldTransform_.transform_.rotate.x, 0.01f, 0, 100);
+	fullPath = name_ + "NowAngle";
+	ImGui::DragFloat(fullPath.c_str(), &nowAngle_, 0.01f);
 	
-	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
-		it != objects_.end(); ++it) {
-		static_cast<Enemy*>((*it).get())->ImGuiDraw();
-	}
+	fullPath = name_ + "rotation";
+	ImGui::DragFloat(fullPath.c_str(), &rotation_, 0.01f);
+
+	//for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+	//	it != objects_.end(); ++it) {
+	//	static_cast<Enemy*>((*it).get())->ImGuiDraw();
+	//}
 
 
 	ImGui::Text("\n");

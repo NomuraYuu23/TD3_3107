@@ -179,7 +179,7 @@ void GameScene::Initialize() {
 	gameData_->Initialize();
 
 #endif // _DEBUG
-
+	skydome_->SetParent(&player_->worldtransform_);
 }
 
 /// <summary>

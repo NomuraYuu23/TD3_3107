@@ -79,6 +79,9 @@ private:
 	// フレーム単位の回転速度
 	float rotation_ = 0.0f;
 
+	float oneLapAngle_ = 0.0f;
+	bool isMinusRotation_ = false;
+
 	// 一周したか？
 	bool isRotateReturn_ = false;
 

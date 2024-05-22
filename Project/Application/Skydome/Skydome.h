@@ -31,6 +31,8 @@ public:
 	/// </summary>
 	void ImGuiDraw();
 
+	void SetParent(WorldTransform* parent) { worldTransform_.SetParent(&worldTransform_); }
+
 private:
 
 	// ワールド変換データ

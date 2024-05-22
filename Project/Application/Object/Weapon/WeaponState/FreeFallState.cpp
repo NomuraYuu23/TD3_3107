@@ -35,7 +35,8 @@ void FreeFallState::Initialize()
 		weapon_->worldtransform_.direction_ = Vector3::Normalize({ -1,-1,0 });
 	}
 	else {
-		weapon_->worldtransform_.direction_ = Vector3::Normalize({ 1,0,0 });
+		weapon_->worldtransform_.direction_ = Vector3::Normalize({ 0,1,0 });
+		weapon_->velocity_.y += 15.0f;
 	}
 
 	// デバッグ以外の場合行う
