@@ -20,11 +20,11 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="goalModel"></param>
-	void Initialize(Model* goalModel);
+	void Initialize(Model* goalModel, Player* player);
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(Player* player);
+	void Update();
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -39,6 +39,12 @@ public:
 	/// </summary>
 	/// <param name="collisionManager"></param>
 	void CollisionRegister(Collision2DManager* collisionManager);
+
+	/// <summary>
+	/// ゲームオーバー時の処理
+	/// </summary>
+	void GameOverProcess();
+
 private:
 	/// <summary>
 	/// ゴール生成関数
@@ -58,6 +64,9 @@ private:
 private:
 	// ゴール
 	std::unique_ptr<GoalObject> goal_;
+
+	// プレイヤー
+	Player* player_ = nullptr;
 
 	Model* goalModel_ = nullptr;
 	Model* checkPointModel_ = nullptr;

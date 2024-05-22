@@ -10,6 +10,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "Gravity", common_.gravity_);
 	globalVariables_->AddItem(groupName, "SlowFactor", common_.slowMotionFactor_);
 	globalVariables_->AddItem(groupName, "DeadZone", common_.stickDeadZone_);
+	globalVariables_->AddItem(groupName, "DeathHeight", common_.deathHeight_);
 
 	groupName = "Player";
 	// グループを追加
@@ -89,6 +90,7 @@ void GameObjectData::ApplyGlobalVariables()
 	common_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	common_.slowMotionFactor_ = globalVariables_->GetFloatValue(groupName, "SlowFactor");
 	common_.stickDeadZone_ = globalVariables_->GetFloatValue(groupName, "DeadZone");
+	common_.deathHeight_ = globalVariables_->GetFloatValue(groupName, "DeathHeight");
 
 	// プレイヤー
 	groupName = "Player";

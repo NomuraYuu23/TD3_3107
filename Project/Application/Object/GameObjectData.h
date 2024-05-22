@@ -86,6 +86,8 @@ private: // データ用構造体クラス
 		// スティックのif分用のDeadZone
 		float stickDeadZone_;
 		
+		// 死ぬまでの高さ
+		float deathHeight_;
 	};
 
 	struct EnemyData {

@@ -1,30 +1,34 @@
 #include "GameSystemManager.h"
 #include "../ObjectList.h"
 #include "../../../Engine/2D/ImguiManager.h"
+#include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
 uint32_t GameSystemManager::sNowStageNum = 0;
 float GameSystemManager::sGameSpeed = 1.0f;
 
-void GameSystemManager::Initialize(Model* goalModel)
+void GameSystemManager::Initialize(Model* goalModel, Player* player)
 {
 	assert(goalModel);
+	// ゴールなどのオブジェクト
 	goalModel_ = goalModel;
+
+	// プレイヤー
+	player_ = player;
+
 	GenarateGoal({ 40.0f,5.0f,0 });
-	deathHeight_ = -60.0f;
+	deathHeight_ = GlobalVariables::GetInstance()->GetFloatValue("Common", "DeathHeight");
 }
 
-void GameSystemManager::Update(Player* player)
+void GameSystemManager::Update()
 {
 	goal_->Update();
 
-	if (player->worldtransform_.GetWorldPosition().y < deathHeight_) {
-		player->SetIsDead(true);
+	// 落下の死亡処理
+	if (player_->worldtransform_.GetWorldPosition().y < deathHeight_) {
+		player_->SetIsDead(true);
 	}
 
-	if (player->IsDead()) {
-		player->Reset();
-	}
-
+	GameOverProcess();
 
 }
 
@@ -33,6 +37,13 @@ void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)
 
 	collisionManager->ListRegister(&goal_->boxCollider_);
 	//&goal_
+}
+
+void GameSystemManager::GameOverProcess()
+{
+	if (player_->IsDead()) {
+		player_->Reset();
+	}
 }
 
 void GameSystemManager::ImGuiDraw()

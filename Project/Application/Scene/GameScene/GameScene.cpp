@@ -107,7 +107,7 @@ void GameScene::Initialize() {
 
 	// ゲームシステム
 	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(sampleObjModel_.get());
+	gameSystemManager_->Initialize(sampleObjModel_.get(), player_.get());
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -212,7 +212,7 @@ void GameScene::Update() {
 	spotLightManager_->Update(spotLightDatas_);
 
 	// ゲームシステム
-	gameSystemManager_->Update(player_.get());
+	gameSystemManager_->Update();
 
 	if (player_->GetEffectInfo().isStop) {
 		player_->HitUpdate();
