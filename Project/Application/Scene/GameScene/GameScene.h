@@ -24,6 +24,8 @@
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/Collision2D/Collision2DDebugDraw.h"
 
+#include "../../UI/GameUIManager.h"
+
 class GameScene : public IScene
 {
 
@@ -144,6 +146,9 @@ private:
 	// カメラ
 	std::unique_ptr<GameBasicCamera> gameCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
+
+	// UIマネージャー
+	std::unique_ptr<GameUIManager> gameUIManager_;
 
 	std::unique_ptr<Sprite> arrowSprite_;
 	uint32_t arrowTexture_ = 0u;
