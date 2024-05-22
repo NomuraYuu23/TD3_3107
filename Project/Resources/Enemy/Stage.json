@@ -13,6 +13,85 @@
                 0.0
             ],
             "typeNum": 0
+        },
+        "Enemy1": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                170.0,
+                15.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy2": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                432.0,
+                83.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy3": {
+            "easeEndPosition": [
+                20.0,
+                0.0,
+                9.699999809265137
+            ],
+            "pad": 0,
+            "position": [
+                412.0,
+                83.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy4": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                308.0,
+                37.29999923706055,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy5": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                180.0,
+                15.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "EnemyEmitter:0": {
+            "distance": 7.599999904632568,
+            "enemyMaxCount": 5,
+            "position": [
+                429.79998779296875,
+                48.099998474121094,
+                0.0
+            ]
         }
     }
 }
