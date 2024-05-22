@@ -69,8 +69,7 @@ public: // メンバ関数
 	/// <summary>
 	/// ステージナンバーセット
 	/// </summary>
-	/// <param name="stageNum"></param>
-	void SetStageNum(uint32_t stageNum);
+	void SetStageNum();
 
 private: //メンバ関数
 
@@ -88,9 +87,6 @@ private: // 変数
 
 	// スプライトデータ
 	std::array<SpriteStruct, SpriteIndex::kSpriteIndexOfCount> spriteDatas_;
-
-	// ステージナンバー
-	uint32_t stageNum_;
 
 };
 

@@ -1,7 +1,6 @@
 #pragma once
 #include "../../../Engine/Scene/IScene/IScene.h"
 #include "../../SelectSceneObject/SelectSystem.h"
-#include "../../SelectSceneObject/StageMax.h"
 #include "../../Skydome/Skydome.h"
 
 class SelectScene : public IScene{
@@ -38,7 +37,7 @@ private: // メンバ関数
 private: // 変数
 
 	// テクスチャハンドル
-	std::array<uint32_t, kStageMax> stagePhotTextureHandles_;
+	std::array<uint32_t, StageNumberManager::kStageMax> stagePhotTextureHandles_;
 	std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount> stageUITextureHandles_;
 
 	// セレクトシステム

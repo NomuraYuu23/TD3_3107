@@ -1,5 +1,6 @@
 #include "StageSelectUI.h"
 #include "../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../AllSceneObject/StageNumberManager.h"
 
 // ステージ番号の大きさ
 const Vector2 StageSelectUI::kStageNumSize = {64.0f, 64.0f};
@@ -23,7 +24,7 @@ void StageSelectUI::Initialize(const std::array<uint32_t, SpriteIndex::kSpriteIn
 	// ステージ番号の大きさ
 	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureSize(kStageNumSize);
 
-	SetStageNum(0);
+	SetStageNum();
 
 #pragma region 調整項目クラス
 	// 調整項目クラスのインスタンス取得
@@ -78,11 +79,10 @@ void StageSelectUI::Draw(bool notMove)
 
 }
 
-void StageSelectUI::SetStageNum(uint32_t stageNum)
+void StageSelectUI::SetStageNum()
 {
 
-	stageNum_ = stageNum;
-	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ kStageNumSize.x * stageNum, 0.0f });
+	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ kStageNumSize.x * StageNumberManager::stageNum_, 0.0f });
 
 }
 

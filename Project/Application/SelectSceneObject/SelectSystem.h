@@ -3,7 +3,7 @@
 #include "../../Engine/Input/Input.h"
 #include "StagePhot.h"
 #include "StageSelectUI.h"
-#include "StageMax.h"
+#include "../AllSceneObject/StageNumberManager.h"
 
 class SelectSystem
 {
@@ -16,7 +16,7 @@ public: // 関数
 	/// <param name="stagePhotTextureHandles">ステージの写真ハンドル</param>
 	/// <param name="stageUITextureHandles">UIハンドル</param>
 	void Initialize(
-		const std::array<uint32_t, kStageMax>& stagePhotTextureHandles, 
+		const std::array<uint32_t, StageNumberManager::kStageMax>& stagePhotTextureHandles,
 		const std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount>& stageUITextureHandles);
 
 	/// <summary>
@@ -43,8 +43,6 @@ private: // メンバ関数
 
 public: // アクセッサ
 
-	uint32_t GetStageNum() { return stageNum_; }
-
 	bool GetGotoGameScene() { return gotoGameScene_; }
 
 	bool GetGotoTitleScene() { return gotoTitleScene_; }
@@ -63,9 +61,6 @@ private: // 変数
 	float easeTimer_;
 	// イージングスピード
 	float easeSpeed_;
-	
-	// ステージ番号
-	uint32_t stageNum_;
 
 	// ゲームシーンフラグ
 	bool gotoGameScene_ = false;

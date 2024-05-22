@@ -3,9 +3,8 @@
 #include <numbers>
 #include "../../Engine/Math/Ease.h"
 
-void StagePhot::Initialize(const std::array<uint32_t, kStageMax>& stagePhotTextureHandles)
+void StagePhot::Initialize(const std::array<uint32_t, StageNumberManager::kStageMax>& stagePhotTextureHandles)
 {
-
 
 	// テクスチャハンドル
 	textureHandles_ = stagePhotTextureHandles;
@@ -68,7 +67,7 @@ void StagePhot::Initialize(const std::array<uint32_t, kStageMax>& stagePhotTextu
 
 	centerPositions_ = positions_[2];
 
-	Setting(0);
+	Setting();
 
 }
 
@@ -101,11 +100,8 @@ void StagePhot::Draw()
 
 }
 
-void StagePhot::Setting(size_t stageNum)
+void StagePhot::Setting()
 {
-
-	// ステージナンバー
-	stageNum_ = stageNum;
 	// スプライトのテクスチャ
 	TextureHandleChange();
 
@@ -120,10 +116,6 @@ void StagePhot::MoveRight(float t)
 		sprite_[i]->Update();
 	}
 	if (t >= 1.0f) {
-		stageNum_++;
-		if (kStageMax == stageNum_) {
-			stageNum_ = 0;
-		}
 		TextureHandleChange();
 	}
 
@@ -138,10 +130,6 @@ void StagePhot::MoveLeft(float t)
 		sprite_[i]->Update();
 	}
 	if (t >= 1.0f) {
-		stageNum_--;
-		if (-1 == stageNum_) {
-			stageNum_ = kStageMax - 1;
-		}
 		TextureHandleChange();
 	}
 
@@ -151,44 +139,44 @@ void StagePhot::TextureHandleChange()
 {
 
 	// stageNum_ == 0
-	if (stageNum_ == 0) {
-		sprite_[0]->SetTextureHandle(textureHandles_[kStageMax - 2]);
-		sprite_[1]->SetTextureHandle(textureHandles_[kStageMax - 1]);
-		sprite_[2]->SetTextureHandle(textureHandles_[stageNum_]);
-		sprite_[3]->SetTextureHandle(textureHandles_[stageNum_ + 1]);
-		sprite_[4]->SetTextureHandle(textureHandles_[stageNum_ + 2]);
+	if (StageNumberManager::stageNum_ == 0) {
+		sprite_[0]->SetTextureHandle(textureHandles_[StageNumberManager::kStageMax - 2]);
+		sprite_[1]->SetTextureHandle(textureHandles_[StageNumberManager::kStageMax - 1]);
+		sprite_[2]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_]);
+		sprite_[3]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ + 1]);
+		sprite_[4]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ + 2]);
 	}
 	// stageNum_ == 1
-	else if (stageNum_ == 1) {
-		sprite_[0]->SetTextureHandle(textureHandles_[kStageMax - 1]);
-		sprite_[1]->SetTextureHandle(textureHandles_[stageNum_ - 1]);
-		sprite_[2]->SetTextureHandle(textureHandles_[stageNum_]);
-		sprite_[3]->SetTextureHandle(textureHandles_[stageNum_ + 1]);
-		sprite_[4]->SetTextureHandle(textureHandles_[stageNum_ + 2]);
+	else if (StageNumberManager::stageNum_ == 1) {
+		sprite_[0]->SetTextureHandle(textureHandles_[StageNumberManager::kStageMax - 1]);
+		sprite_[1]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ - 1]);
+		sprite_[2]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_]);
+		sprite_[3]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ + 1]);
+		sprite_[4]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ + 2]);
 	}
 	// stageNum_ == stageMax_- 2
-	else if (stageNum_ == kStageMax - 2) {
-		sprite_[0]->SetTextureHandle(textureHandles_[stageNum_ - 2]);
-		sprite_[1]->SetTextureHandle(textureHandles_[stageNum_ - 1]);
-		sprite_[2]->SetTextureHandle(textureHandles_[stageNum_]);
-		sprite_[3]->SetTextureHandle(textureHandles_[stageNum_ + 1]);
+	else if (StageNumberManager::stageNum_ == StageNumberManager::kStageMax - 2) {
+		sprite_[0]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ - 2]);
+		sprite_[1]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ - 1]);
+		sprite_[2]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_]);
+		sprite_[3]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ + 1]);
 		sprite_[4]->SetTextureHandle(textureHandles_[0]);
 	}
 	// stageNum_ == stageMax_- 1
-	else if (stageNum_ == kStageMax - 1) {
-		sprite_[0]->SetTextureHandle(textureHandles_[stageNum_ - 2]);
-		sprite_[1]->SetTextureHandle(textureHandles_[stageNum_ - 1]);
-		sprite_[2]->SetTextureHandle(textureHandles_[stageNum_]);
+	else if (StageNumberManager::stageNum_ == StageNumberManager::kStageMax - 1) {
+		sprite_[0]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ - 2]);
+		sprite_[1]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ - 1]);
+		sprite_[2]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_]);
 		sprite_[3]->SetTextureHandle(textureHandles_[0]);
 		sprite_[4]->SetTextureHandle(textureHandles_[1]);
 	}
 	// それ以外
 	else {
-		sprite_[0]->SetTextureHandle(textureHandles_[stageNum_ - 2]);
-		sprite_[1]->SetTextureHandle(textureHandles_[stageNum_ - 1]);
-		sprite_[2]->SetTextureHandle(textureHandles_[stageNum_]);
-		sprite_[3]->SetTextureHandle(textureHandles_[stageNum_ + 1]);
-		sprite_[4]->SetTextureHandle(textureHandles_[stageNum_ + 2]);
+		sprite_[0]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ - 2]);
+		sprite_[1]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ - 1]);
+		sprite_[2]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_]);
+		sprite_[3]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ + 1]);
+		sprite_[4]->SetTextureHandle(textureHandles_[StageNumberManager::stageNum_ + 2]);
 	}
 
 	for (size_t i = 0; i < 5; i++) {

@@ -1,7 +1,7 @@
 #include "SelectSystem.h"
 
 void SelectSystem::Initialize(
-	const std::array<uint32_t, kStageMax>& stagePhotTextureHandles,
+	const std::array<uint32_t, StageNumberManager::kStageMax>& stagePhotTextureHandles,
 	const std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount>& stageUITextureHandles)
 {
 
@@ -17,7 +17,7 @@ void SelectSystem::Initialize(
 	easeSpeed_ = 0.05f;
 
 	// ステージ番号	
-	stageNum_ = 0;
+	StageNumberManager::stageNum_ = 0;
 
 	// ゲームシーンフラグ
 	gotoGameScene_ = false;
@@ -32,8 +32,8 @@ void SelectSystem::Initialize(
 	stageSelectUI_->Initialize(stageUITextureHandles);
 
 	// セッティング
-	stageSelectUI_->SetStageNum(stageNum_);
-	stagePhot_->Setting(stageNum_);
+	stageSelectUI_->SetStageNum();
+	stagePhot_->Setting();
 
 }
 
@@ -60,22 +60,22 @@ void SelectSystem::Update()
 
 			isMoveRight_ = true;
 			easeTimer_ = 0.0f;
-			stageNum_++;
-			if (stageNum_ == kStageMax) {
-				stageNum_ = 0;
+			StageNumberManager::stageNum_++;
+			if (StageNumberManager::stageNum_ == StageNumberManager::kStageMax) {
+				StageNumberManager::stageNum_ = 0;
 			}
-			stageSelectUI_->SetStageNum(stageNum_);
+			stageSelectUI_->SetStageNum();
 		}
 		// 左移動
 		else if (leftStick.x < 0.0f) {
 
 			isMoveLeft_ = true;
 			easeTimer_ = 0.0f;
-			stageNum_--;
-			if (stageNum_ == -1) {
-				stageNum_ = kStageMax - 1;
+			StageNumberManager::stageNum_--;
+			if (StageNumberManager::stageNum_ == -1) {
+				StageNumberManager::stageNum_ = StageNumberManager::kStageMax - 1;
 			}
-			stageSelectUI_->SetStageNum(stageNum_);
+			stageSelectUI_->SetStageNum();
 		}
 		// ゲームシーンへ
 		else if (input_->PushJoystick(JoystickButton::kJoystickButtonA)) {

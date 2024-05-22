@@ -3,7 +3,7 @@
 
 #include "../../Engine/Math/Vector2.h"
 #include "../../Engine/2D/Sprite.h"
-#include "StageMax.h"
+#include "../AllSceneObject/StageNumberManager.h"
 
 class StagePhot
 {
@@ -14,7 +14,7 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="textureHandles"></param>
-	void Initialize(const std::array<uint32_t, kStageMax>& stagePhotTextureHandles);
+	void Initialize(const std::array<uint32_t, StageNumberManager::kStageMax>& stagePhotTextureHandles);
 
 	/// <summary>
 	/// 更新処理
@@ -29,7 +29,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 設定
 	/// </summary>
-	void Setting(size_t stageNum);
+	void Setting();
 
 	/// <summary>
 	/// 右移動
@@ -69,7 +69,7 @@ private: // 定数
 private:
 
 	// テクスチャハンドル
-	std::array<uint32_t, kStageMax> textureHandles_;
+	std::array<uint32_t, StageNumberManager::kStageMax> textureHandles_;
 
 	// スプライト5つ
 	std::array<std::unique_ptr<Sprite>, kSpriteNum> sprite_;
@@ -79,9 +79,6 @@ private:
 
 	// サイズ
 	std::array<Vector2, kSpriteNum> sizes_;
-
-	// ステージナンバー
-	size_t stageNum_;
 
 	// 動きの変数
 	float waveAnimation_t_;
