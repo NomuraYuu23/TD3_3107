@@ -41,7 +41,8 @@ void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)
 
 void GameSystemManager::GameOverProcess()
 {
-	if (player_->IsDead()) {
+	if (player_->IsDead() || goal_->IsGoal()) {
+		goal_->SetIsGoal(false);
 		player_->Reset();
 	}
 }

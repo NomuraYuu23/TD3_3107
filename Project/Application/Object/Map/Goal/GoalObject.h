@@ -45,6 +45,7 @@ public: // アクセッサ
 
 	// ゴールフラグ取得
 	bool IsGoal() { return isGoal_; }
+	void SetIsGoal(bool isGoal) { isGoal_ = isGoal; }
 
 private:
 	// ゴールフラグ

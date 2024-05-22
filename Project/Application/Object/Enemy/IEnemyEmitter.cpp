@@ -128,8 +128,10 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	float addAngle = 0;
 
 	if (maxCount_ == 5) {
-		transformAngle = 1.5f;
-		addAngle = 0.5f;
+		if (rotation_ > 0) {
+			transformAngle = 1.5f;
+			addAngle = 0.75f;
+		}
 	}
 
 	// 敵の生成

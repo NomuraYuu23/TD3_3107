@@ -31,7 +31,7 @@ public:
 	/// </summary>
 	void ImGuiDraw();
 
-	void SetParent(WorldTransform* parent) { worldTransform_.SetParent(&worldTransform_); }
+	void SetParent(WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
 private:
 
