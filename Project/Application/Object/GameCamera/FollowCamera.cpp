@@ -12,6 +12,16 @@ void FollowCamera::Initialize()
 	// 初期値の設定
 	defaultOffset_ = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
 	defaultFovY_ = fovY_;
+
+	// ターゲット
+	defaultOffsetTarget_ = {10.0f, 0.0f, 0.0f };
+
+	defaultOffset_.y = 30.0f;
+	// 補間係数
+	targetT_ = 0.5f;
+
+	transform_.rotate.x = 0.3f;
+
 }
 
 void FollowCamera::Update(float elapsedTime)
@@ -19,7 +29,7 @@ void FollowCamera::Update(float elapsedTime)
 	// 追従処理
 	if (targetTransform_) {
 
-		transform_.translate = targetTransform_->transform_.translate + defaultOffset_;
+		transform_.translate = targetTransform_->transform_.translate + defaultOffset_ + defaultOffsetAdd_;
 
 	}
 
@@ -27,6 +37,7 @@ void FollowCamera::Update(float elapsedTime)
 	if (player_) {
 
 		ScalingUpDown();
+		MoveCameraForward();
 	}
 	// 基底クラス更新
 	BaseCamera::Update(elapsedTime);
@@ -49,6 +60,10 @@ void FollowCamera::ImGuiDraw()
 	float length = std::sqrtf(std::powf(player_->floorPrevY_ - player_->worldtransform_.GetWorldPosition().y, 2));
 
 	ImGui::DragFloat("Length", &length);
+
+	ImGui::DragFloat3("defaultOffsetTarget_", &defaultOffsetTarget_.x, 0.01f, 0.0f, 20.0f);
+	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.01f, 0.0f, 20.0f);
+
 	ImGui::End();
 
 }
@@ -79,20 +94,36 @@ void FollowCamera::ScalingUpDown()
 	// 引きカメラの最大
 	float maxOffset = defaultOff.z - pullMax;
 
-	// 距離が最低より短い場合
-	if (minRange > length) {
-		nowFovY_ = minFov;
-		defaultOffset_.z = defaultOff.z;
-	}
-	// それより長い
-	else {
-		// 割合に合わせた値
-		nowFovY_ = MathUtility::Ratio(minFov, maxFov, rate);
-		defaultOffset_.z = MathUtility::Ratio(defaultOff.z, maxOffset, rate);
-	}
+	// 割合に合わせた値
+	nowFovY_ = MathUtility::Ratio(minFov, maxFov, rate);
+	defaultOffset_.z = MathUtility::Ratio(defaultOff.z, maxOffset, rate);
 
 	SetFovY(nowFovY_);
 	// タイマーセット
 	float returnTime = 10.0f;
 	correctTimer_.Start(returnTime);
+}
+
+void FollowCamera::MoveCameraForward()
+{
+
+	Input* input = Input::GetInstance();
+
+	// 左
+	if (input->GetLeftAnalogstick().x < 0.0f) {
+		targetT_ -= 0.01f;
+		if (targetT_ < 0.0f) {
+			targetT_ = 0.0f;
+		}
+	}
+	// 右
+	else if (input->GetLeftAnalogstick().x > 0.0f) {
+		targetT_ += 0.01f;
+		if (targetT_ > 1.0f) {
+			targetT_ = 1.0f;
+		}
+	}
+
+	defaultOffsetAdd_.x = Ease::Easing(Ease::EaseName::EaseInOutQuart, -defaultOffsetTarget_.x, defaultOffsetTarget_.x, targetT_);
+
 }
