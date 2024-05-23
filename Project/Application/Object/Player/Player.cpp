@@ -720,6 +720,24 @@ void Player::Reset()
 	worldtransform_.UpdateMatrix();
 	isGround_ = true;
 	isDead_ = false;
+
+	localMatrixManager_->Map();
+
+	// ポニーテールがセットされてる場合
+	if (ponytail_ != nullptr) {
+		// 行列を求める
+		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[11].matrix * worldtransform_.worldMatrix_;
+		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
+
+		// 初期化の段階で全ばねの座標をセットする
+		for (int i = 0; i < ponytail_->GetSpring().size(); i++) {
+			// 追従先座標を渡す
+			ponytail_->SetPosition(i, ponyAnchorPos_);
+		}
+
+		// 更新
+		ponytail_->Update();
+	}
 }
 
 void Player::SetFallTimer()
