@@ -25,7 +25,7 @@ void TimerLib::End()
 	isActive_ = false;
 }
 
-void TimerLib::Update()
+void TimerLib::Update(float slowRatio)
 {
 
 	if (isActive_) {
@@ -37,7 +37,7 @@ void TimerLib::Update()
 			return;
 		}
 
-		this->nowFrame_ += (1.0f / endFrame_);
+		this->nowFrame_ += (1.0f / endFrame_ * slowRatio)/* * (1.0f / slowRatio)*/;
 
 	}
 }

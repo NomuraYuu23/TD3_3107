@@ -10,10 +10,11 @@ void FreeFallState::Initialize()
 	// ステート更新
 	SetNowState(this);
 	// 仮の値
-	float valueX = 2.0f;
+	float valueX = 20.0f;
 	// 速度設定
 	// weapon_->velocity_ = {};
-	weapon_->velocity_.x = weapon_->velocity_.x * valueX;
+	//weapon_->velocity_.x = weapon_->velocity_.x * valueX;
+	weapon_->velocity_.x = valueX;
 	weapon_->velocity_.y = 40.0f;
 
 	// 最初の衝突を回避する時間
