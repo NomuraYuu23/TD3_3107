@@ -3,6 +3,7 @@
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/base/SRVDescriptorHerpManager.h"
 #include "../../../Engine/3D/ModelDraw.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include <numbers>
 #include <cmath>
@@ -68,7 +69,7 @@ void IEnemyEmitter::Update()
 		});
 
 	// 回転処理
-	nowAngle_ += 1.0f / rotation_;
+	nowAngle_ += 1.0f / (rotation_ * GameSystemManager::sGameSpeed);
 
 	// 雑な一周リセット処理
 	//float oneLap = 6.28f;

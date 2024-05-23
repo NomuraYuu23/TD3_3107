@@ -37,7 +37,7 @@ void TimerLib::Update(float slowRatio)
 			return;
 		}
 
-		this->nowFrame_ += (1.0f / endFrame_ * slowRatio)/* * (1.0f / slowRatio)*/;
+		this->nowFrame_ += (1.0f / (endFrame_ * slowRatio))/* * (1.0f / slowRatio)*/;
 
 	}
 }
