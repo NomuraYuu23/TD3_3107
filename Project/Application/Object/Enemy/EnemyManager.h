@@ -59,6 +59,12 @@ public:
 	/// <param name="player"></param>
 	void SetPlayer(Player* player) { player_ = player; }
 
+public:
+	/// <summary>
+	/// ロードエネミーデータ
+	/// </summary>
+	void LoadEnemyData();
+
 private:
 	/// <summary>
 	/// 敵の追加
@@ -79,13 +85,8 @@ private:
 	void CreateEmitter(const MultiEnemyData& data);
 	void CreateEmitter(const MultiEnemyData& data, const std::string& name);
 
-	/// <summary>
-	/// ロードエネミーデータ
-	/// </summary>
-	void LoadEnemyData();
-
 	Vector3 resPoint_ = {};
-	
+
 	// エミッター単位で敵を管理
 	std::list<std::unique_ptr<LargeNumberOfObjects>> enemyEmitters_;
 
