@@ -68,7 +68,7 @@ void IEnemyEmitter::Update()
 		});
 
 	// 回転処理
-	//nowAngle_ += 1.0f / rotation_;
+	nowAngle_ += 1.0f / rotation_;
 
 	// 雑な一周リセット処理
 	//float oneLap = 6.28f;
@@ -141,7 +141,7 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	// 敵の生成
 	for (uint32_t i = 0; i < maxCount_; ++i) {
 		// 角度からオフセットの計算
-		float angle = i * angleIncrement;
+		float angle = i * angleIncrement + (float)std::numbers::pi / 2.0f;
 		Vector3 newPosition = {};
 		newPosition.x = (std::cosf(angle) * distance_);
 		newPosition.y = (std::sinf(angle) * distance_);
