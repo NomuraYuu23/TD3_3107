@@ -39,7 +39,7 @@ void FreeFallState::Initialize()
 		weapon_->worldtransform_.direction_ = Vector3::Normalize({ 0,1,0 });
 		weapon_->velocity_.y += 15.0f;
 	}
-
+	//weapon_->worldtransform_.usedDirection_ = true;
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// アイドルアニメーション再生
@@ -55,7 +55,8 @@ void FreeFallState::Update()
 	weapon_->velocity_.y += (kGravity * 12.5f) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 
 	// 回転
-	//weapon_->worldtransform_.direction_ = MathUtility::RotateVector(weapon_->worldtransform_.direction_, (3.14f / 24.0f));
+	float rotateSpeed = 8.0f;
+	weapon_->worldtransform_.direction_ = MathUtility::RotateVector(weapon_->worldtransform_.direction_, rotateSpeed);
 
 	// 座標移動
 	weapon_->worldtransform_.transform_.translate += weapon_->velocity_ * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
