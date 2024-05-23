@@ -3,6 +3,7 @@
 #include "../GameUtility/MathUtility.h"
 #include "State/EnemyStateList.h"
 #include "SingleEnemyRegister.h"
+#include "../../AllSceneObject/StageNumberManager.h"
 
 void EnemyManager::Initialize(Model* model)
 {
@@ -127,7 +128,7 @@ void EnemyManager::LoadEnemyData()
 	std::map<std::string, EnemyEditor::EnemyEditorGroup>* mapDatas = enemyEditor_->GetDatas();
 
 	// ステージ
-	std::string stageName = "Stage0";
+	std::string stageName = "Stage" + std::to_string(StageNumberManager::stageNum_);
 
 	// シングル用
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemySingle0 = enemyEmitters_.begin();
