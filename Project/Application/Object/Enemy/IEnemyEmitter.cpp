@@ -124,42 +124,21 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	// 敵の角度生成
 	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
 
-	float transformAngle = 0;
-	float addAngle = 0;
+	float tAngle = 0;
+	float add = 0;
 
 	if (maxCount_ == 5) {
 		if (rotation_ > 0) {
-			transformAngle = 1.5f;
-			addAngle = 1.25f;
+			tAngle = 1.5f;
+			add = 1.25f;
 		}
 		else if (rotation_ < 0) {
-			transformAngle = 0;
-			addAngle = -0.5f;
+			tAngle = 0;
+			add = -0.5f;
 		}
 	}
 
-	// 敵の生成
-	for (uint32_t i = 0; i < maxCount_; ++i) {
-		// 角度からオフセットの計算
-		float angle = i * angleIncrement + (float)std::numbers::pi / 2.0f;
-		Vector3 newPosition = {};
-		newPosition.x = (std::cosf(angle) * distance_);
-		newPosition.y = (std::sinf(angle) * distance_);
-
-		// 生成
-		std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
-		obj->Initialize();
-		//static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
-		static_cast<Enemy*>(obj.get())->SetEmitter(this);
-		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
-		obj->transform_.translate = newPosition;
-		obj->transform_.rotate.z = transformAngle;
-		transformAngle += addAngle;
-		// 初期化
-		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
-		// リストに追加
-		objects_.push_back(std::move(obj));
-	}
+	GenerateEnemys(angleIncrement, tAngle, add);
 
 }
 
@@ -204,4 +183,30 @@ void IEnemyEmitter::ImGuiDraw()
 
 	ImGui::Text("\n");
 
+}
+
+void IEnemyEmitter::GenerateEnemys(float positionAngle, float transformAngle, float addAngle)
+{
+	// 敵の生成
+	for (uint32_t i = 0; i < maxCount_; ++i) {
+		// 角度からオフセットの計算
+		float angle = i * positionAngle + (float)std::numbers::pi / 2.0f;
+		Vector3 newPosition = {};
+		newPosition.x = (std::cosf(angle) * distance_);
+		newPosition.y = (std::sinf(angle) * distance_);
+
+		// 生成
+		std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
+		obj->Initialize();
+		//static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
+		static_cast<Enemy*>(obj.get())->SetEmitter(this);
+		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
+		obj->transform_.translate = newPosition;
+		obj->transform_.rotate.z = transformAngle;
+		transformAngle += addAngle;
+		// 初期化
+		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
+		// リストに追加
+		objects_.push_back(std::move(obj));
+	}
 }
