@@ -39,9 +39,13 @@ void Weapon::Initialize(Model* model)
 	// システム初期化
 	SystemInitialize();
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// アニメーション関連初期化
-	//anim_ = std::make_unique<SpearAnimManager>();  // 生成
-	//anim_->Init(this);							   // 初期化
+	spearAnim_ = std::make_unique<SpearAnimManager>();  // 生成
+	spearAnim_->Init(this);							   // 初期化
+	#endif // !_DEBUG
+
 }
 
 void Weapon::Update()
@@ -67,8 +71,35 @@ void Weapon::Update()
 	// 基底クラスの更新
 	IObject::Update();
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+
+	// プレイヤーが槍を保持している場合
+	if (isHold_) {
+		// 武器にリングを追従
+		ringTransform_.transform_ = worldtransform_.transform_;
+		ringTransform_.direction_ = worldtransform_.direction_;
+		// ワールドトランスフォームの更新
+		ringTransform_.UpdateMatrix();
+	}
+
+	// リングアニメーションが再生されていない場合
+	if (!spearAnim_->GetRingAnim().GetRunningAnimation(SpearAnimManager::RingShot)) {
+		spearAnim_->PlayRingAnimation(SpearAnimManager::RingIdle, true);
+	}
+	else {
+		// 再生中であればそのアニメーションに合わせてマテリアルを透明にしていく
+		ringColor_ = { 1.0f, 1.0f, 1.0f, MathUtility::Lerp(1.0f, 0.0f, spearAnim_->GetRingAnim().GetAnimationProgress(SpearAnimManager::RingShot)) };
+		// マテリアル色を設定
+		ringMaterial_->SetColor(ringColor_);
+
+		// マテリアル更新
+		ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f);
+	}
+
 	// アニメーション更新
-	//anim_->Update();
+	spearAnim_->Update();
+	#endif // !_DEBUG
 
 	// コライダー
 	Vector3 direct = worldtransform_.direction_;
@@ -90,16 +121,28 @@ void Weapon::Draw(const BaseCamera& camera)
 		}
 	}
 
-	if (!isHold_) {
-		ModelDraw::AnimObjectDesc desc;
-		desc.camera = &const_cast<BaseCamera&>(camera);
-		desc.localMatrixManager = localMatrixManager_.get();
-		desc.material = material_.get();
-		desc.model = model_;
-		desc.worldTransform = &worldtransform_;
-		ModelDraw::AnimObjectDraw(desc);
-	}
+	ModelDraw::AnimObjectDesc desc;
+	desc.camera = &const_cast<BaseCamera&>(camera);
+	desc.localMatrixManager = localMatrixManager_.get();
+	desc.material = material_.get();
+	desc.model = model_;
+	desc.worldTransform = &worldtransform_;
+	ModelDraw::AnimObjectDraw(desc);
+}
 
+void Weapon::RingDraw(const BaseCamera& camera)
+{
+	// リング描画
+	if (isDrawRing_) {
+		// 武器リングの描画
+		ModelDraw::AnimObjectDesc ringDesc;
+		ringDesc.camera = &const_cast<BaseCamera&>(camera);
+		ringDesc.localMatrixManager = ringLocalMatrix_.get();
+		ringDesc.material = ringMaterial_.get();
+		ringDesc.model = ringModel_;
+		ringDesc.worldTransform = &ringTransform_;
+		ModelDraw::AnimObjectDraw(ringDesc);
+	}
 }
 
 void Weapon::ImGuiDraw()
@@ -418,6 +461,34 @@ void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
 	newState->Initialize();
 	// ステート渡し
 	state_ = std::move(newState);
+}
+
+void Weapon::SetRingModel(Model* model)
+{
+	// モデル取得
+	ringModel_ = model;
+
+	// マテリアル生成
+	ringMaterial_.reset(Material::Create());
+
+	// トランスフォーム初期化
+	ringTransform_.Initialize(ringModel_->GetRootNode());
+	// DirectiontoDirectionを使用
+	ringTransform_.usedDirection_ = true;
+	// トランスフォーム更新
+	ringTransform_.UpdateMatrix();
+
+	// ローカル行列マネージャ初期化
+	ringLocalMatrix_ = std::make_unique<LocalMatrixManager>();
+	ringLocalMatrix_->Initialize(ringModel_->GetRootNode());
+
+	// リングアニメーションのセットアップを開始する
+	spearAnim_->SetUpRingAnim();
+
+	// uvトランスフォームの初期化
+	ringUVTransform_.Initialize();
+	// 更新
+	ringUVTransform_.UpdateMatrix();
 }
 
 void Weapon::ChangeRequest(Weapon::StateName request)

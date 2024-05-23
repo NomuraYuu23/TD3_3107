@@ -30,12 +30,18 @@ void SpearAerialState::Initialize()
 
 	player_->weapon_->GetEffectSystem()->StartShockWave(15.0f);
 
+#ifndef _DEBUG
+
 	// 槍ジャンアニメーションの再生
-	//player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::SpearJump);
+	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::SpearJump);
 
 	// 槍のバウンドアニメーション再生
-	//player_->weapon_->GetAnimManager()->PlayAnimation(3);
+	player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearBounce);
 
+	// ジャンプ効果音を再生
+	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
+
+#endif // !_DEBUG
 }
 
 void SpearAerialState::Update()
@@ -57,19 +63,19 @@ void SpearAerialState::Update()
 	if (player_->IsNowAssistDash()) {
 		float ratio = GlobalVariables::GetInstance()->GetFloatValue("Dash", "SlowRatio");
 		if (player_->velocity_.y < 0) {
-			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 		else {
-			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 	}
 	else {
-		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
 
 	// 移動処理
-	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
+	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 }
 
 void SpearAerialState::InitializeDirection(const Vector2& direct)

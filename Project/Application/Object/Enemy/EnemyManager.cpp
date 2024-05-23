@@ -98,10 +98,10 @@ void EnemyManager::CreateEmitter(const MultiEnemyData& data)
 	std::unique_ptr<LargeNumberOfObjects> obj = std::make_unique<IEnemyEmitter>();
 	// 初期化
 	obj->Initialize(model_);
+	// エミッターの設定
+	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(data.rotateSpeed);
 	// 敵生成
 	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
-	// エミッターの設定
-	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(90.0f);
 	// リストに
 	enemyEmitters_.push_back(std::move(obj));
 
@@ -112,10 +112,10 @@ void EnemyManager::CreateEmitter(const MultiEnemyData& data, const std::string& 
 	std::unique_ptr<LargeNumberOfObjects> obj = std::make_unique<IEnemyEmitter>();
 	// 初期化
 	static_cast<IEnemyEmitter*>(obj.get())->Initialize(model_, name);
+	// エミッターの設定
+	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(data.rotateSpeed);
 	// 敵生成
 	static_cast<IEnemyEmitter*>(obj.get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
-	// エミッターの設定
-	static_cast<IEnemyEmitter*>(obj.get())->InitializeEmitter(90.0f);
 	// リストに
 	enemyEmitters_.push_back(std::move(obj));
 
@@ -235,8 +235,11 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data)
 	obj->Initialize();
 	obj->transform_.translate = data.position;
 	// 初期化
-	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), data.typeNum);
-	
+	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), data.typeNum);
+	// 単体のやつ専用
+	Vector3 end = obj->GetWorldPosition() + data.endPosition;
+	static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SettingMoveInfo(end);
+	static_cast<Enemy*>(obj.get())->SetPlayer(player_);
 	// 追加
 	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
 
@@ -249,8 +252,11 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data, const std::string&
 	static_cast<Enemy*>(obj.get())->Initialize(name);
 	obj->transform_.translate = data.position;
 	// 初期化
-	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), data.typeNum);
-
+	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), data.typeNum);
+	// 単体のやつ専用
+	Vector3 end = obj->GetWorldPosition() + data.endPosition;
+	static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SettingMoveInfo(end);
+	static_cast<Enemy*>(obj.get())->SetPlayer(player_);
 	// 追加
 	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
 
@@ -265,7 +271,7 @@ void EnemyManager::CreateSingleEnemy()
 
 	// Largeの奴でまとめるためにリストにプッシュ
 	enemyEmitters_.push_back(std::move(singleEnemys_));
-
+	//RegisterSingleEnemy({ {10,10,0},0 }, "na");
 	///---ここに敵単体ごとに登録する---//
 	//RegisterEnemy({ {10,10,0},0 });
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include "AnimationData.h"
 #include "../3D/TransformStructure.h"
 
@@ -83,6 +84,13 @@ public:
 	/// </summary>
 	/// <returns>アニメーションの実行状態</returns>
 	std::vector<bool> GetRunningAnimations();
+
+	/// <summary>
+	/// 引数で指定されたアニメーションの進行度を0 ~ 1 で返す
+	/// </summary>
+	/// <param name="count">取得するアニメーションの番号</param>
+	/// <returns></returns>
+	float GetAnimationProgress(int count) const;
 
 private:
 

@@ -8,6 +8,7 @@
 
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerSystemList.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include "PlayerFootCollider.h"
 
@@ -20,6 +21,7 @@
 #include "System/SlowEffect/SlowEffect.h"
 
 class EnemyManager;
+class GameUIManager;
 
 class Player : public IObject
 {
@@ -118,6 +120,11 @@ public: // メンバ関数
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
 
+	/// <summary>
+	/// 死んだ時に呼び出すやつ
+	/// </summary>
+	void Reset();
+
 public: // アニメーション関連関数群
 
 	/// <summary>
@@ -159,6 +166,11 @@ public:
 	/// <param name="model">モデル</param>
 	void SetPonyTail(Model* model);
 
+	/// <summary>
+	/// UIマネージャーセッター
+	/// </summary>
+	/// <param name="uiManager">UIマネージャー</param>
+	void SetUIManager(GameUIManager* uiManager) { uiManager_ = uiManager; }
 
 	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
 	void EndAssistDash() { assistDash_.SlowCancel(); }
@@ -236,6 +248,11 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+private: // UI関連
+
+	// UIマネージャー
+	GameUIManager* uiManager_ = nullptr;
 
 private: // アニメーション関連
 

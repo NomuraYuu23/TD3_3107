@@ -15,6 +15,9 @@ void GoalObject::Initialize(Model* model)
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeGoalObject);
 	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
+	// システム関係の初期化
+	SystemInitialize();
+
 }
 
 void GoalObject::Update()
@@ -39,9 +42,24 @@ void GoalObject::Draw(const BaseCamera& camera)
 
 void GoalObject::ImGuiDraw()
 {
+	if (ImGui::TreeNode("GoalObject")) {
+		ImGui::SeparatorText("GoalObject");
+		int goalFlag = isGoal_;
+		ImGui::InputInt("IsGoal", &goalFlag);
+		ImGui::TreePop();
+	}
+
+	ImGui::Text("\n");
 }
 
 void GoalObject::OnCollision(ColliderParentObject2D target)
 {
-	target;
+	if (std::holds_alternative<Player*>(target)) {
+		isGoal_ = true;
+	}
+}
+
+void GoalObject::SystemInitialize()
+{
+	isGoal_ = false;
 }

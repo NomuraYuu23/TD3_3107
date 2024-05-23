@@ -3,6 +3,8 @@
 #include "../GameUtility/TimerLib.h"
 #include "../../../Engine/Animation/Animation.h"
 
+class Player;
+
 class IEnemyEmitter : public LargeNumberOfObjects
 {
 private:
@@ -62,6 +64,9 @@ public:
 	std::string GetName() { return name_; }
 
 private:
+	void GenerateEnemys(float positionAngle, float transformAngle, float addAngle);
+
+private:
 	// 
 	std::string name_;
 
@@ -77,11 +82,14 @@ private:
 	// フレーム単位の回転速度
 	float rotation_ = 0.0f;
 
+	float oneLapAngle_ = 0.0f;
+	bool isMinusRotation_ = false;
+
 	// 一周したか？
 	bool isRotateReturn_ = false;
 
 	TimerLib interval_;
 
 	// アニメーション本体
-	Animation anim_;
+	Animation spearAnim_;
 };

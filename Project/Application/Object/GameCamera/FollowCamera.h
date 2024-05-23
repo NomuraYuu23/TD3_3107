@@ -29,6 +29,9 @@ public:
 		targetTransform_ = &player_->worldtransform_;
 	}
 
+	/// <summary>
+	/// カメラの引きを調整する関数
+	/// </summary>
 	void ScalingUpDown();
 
 private:
@@ -39,9 +42,6 @@ private:
 
 	// カメラのオフセット
 	Vector3 defaultOffset_ = {};
-
-	float minY = 0;
-	float maxY = 0;
 
 	float defaultFovY_ = 0;
 	float nowFovY_ = 0;

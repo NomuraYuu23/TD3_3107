@@ -6,6 +6,9 @@ void EnemyWaitState::Initialize()
 	enemy_->SetState(this);
 
 	enemy_->ReleaseParent();
+	if (enemy_->parentEmitter_) {
+		enemy_->goalAngle_ = enemy_->parentEmitter_->GetNowAngle();
+	}
 }
 
 void EnemyWaitState::Update()

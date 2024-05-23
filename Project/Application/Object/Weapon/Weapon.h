@@ -5,6 +5,7 @@
 #include "WeaponState/StateList.h"
 
 #include "System/ShockEffectSystem.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include "../Map/Terrain.h"
 
@@ -46,6 +47,11 @@ public: // 継承
 	/// </summary>
 	/// <param name="camera"></param>
 	void Draw(const BaseCamera& camera) override;
+	/// <summary>
+	/// 武器のリング描画
+	/// </summary>
+	/// <param name="camera">描画に使用するカメラ</param>
+	void RingDraw(const BaseCamera& camera);
 	/// <summary>
 	/// ImGui
 	/// </summary>
@@ -106,11 +112,28 @@ public: // アクセッサ
 	/// アニメーションマネージャーゲッター
 	/// </summary>
 	/// <returns>アニメーションマネージャー</returns>
-	SpearAnimManager* GetAnimManager() { return anim_.get(); }
+	SpearAnimManager* GetAnimManager() { return spearAnim_.get(); }
 
 	bool IsPlayerJump() { return isPlayerJumpAccept_; }
 
 	ShockEffectSystem* GetEffectSystem() { return &shockEffect_; }
+
+	/// <summary>
+	/// 槍投擲時のリングモデルセッター
+	/// </summary>
+	/// <param name="model">リングモデル</param>
+	void SetRingModel(Model* model);
+	/// <summary>
+	/// リングモデルゲッター
+	/// </summary>
+	/// <returns>リングモデル</returns>
+	Model* GetRingModel() { return ringModel_; }
+
+	/// <summary>
+	/// リング用のローカル行列マネージャゲッター
+	/// </summary>
+	/// <returns>リング用のローカル行列マネージャ</returns>
+	LocalMatrixManager* GetRingLocalMatrix() { return ringLocalMatrix_.get(); }
 
 public: // 外部で行う設定関数
 	/// <summary>
@@ -169,6 +192,9 @@ public: // 外部で行う設定関数
 	// 槍を狙っている方向に向けるかのフラグ
 	bool isThrowDirect_ = false;
 
+	// リング表示フラグ
+	bool isDrawRing_ = false;
+
 private:
 	/// <summary>
 	/// ステート変更
@@ -177,6 +203,7 @@ private:
 	void ChangeState(std::unique_ptr<IWeaponState> newState);
 
 private:
+
 	// ステート
 	std::unique_ptr<IWeaponState> state_;
 	// 親のワールドトランスフォーム
@@ -205,10 +232,24 @@ private:
 
 	Player* player_ = nullptr;
 
+	// リング用モデル
+	Model* ringModel_ = nullptr;
+	// リング用マテリアル
+	std::unique_ptr<Material> ringMaterial_;
+	// リング用トランスフォーム
+	WorldTransform ringTransform_;
+	// リング用UVトランスフォーム
+	WorldTransform ringUVTransform_;
+	// リング色
+	Vector4 ringColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	// リング用ローカル行列
+	std::unique_ptr<LocalMatrixManager> ringLocalMatrix_;
+
 private: // アニメーション関連
 
 	// 槍用アニメーションマネージャー
-	std::unique_ptr<SpearAnimManager> anim_;
+	std::unique_ptr<SpearAnimManager> spearAnim_;
 
 	// 槍ジャンプを行ったかどうか
 	bool isPlayerJumpAccept_ = false;

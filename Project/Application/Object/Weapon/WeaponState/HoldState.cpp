@@ -22,6 +22,18 @@ void HoldState::Initialize()
 
 	// 槍の保持フラグをtrueに
 	weapon_->isHold_ = true;
+
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	// 槍のアイドルアニメーション開始
+	if (weapon_->GetAnimManager() != nullptr) {
+		weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
+		if (weapon_->GetPlayer()->gameAudioManager_ != nullptr) {
+			// 取得効果音を再生
+			weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearCatch);
+		}
+	}
+	#endif // !_DEBUG
 }
 
 void HoldState::Update()

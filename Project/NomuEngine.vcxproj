@@ -127,7 +127,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\State\GroupEnemyState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
+    <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
+    <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointObject.cpp" />
+    <ClCompile Include="Application\Object\GameSystem\GameSystemManager.cpp" />
     <ClCompile Include="Application\Object\Map\MapEditor.cpp" />
     <ClCompile Include="Application\Object\Map\Goal\GoalObject.cpp" />
     <ClCompile Include="Application\Object\Player\ActionState\ActionWaitState.cpp" />
@@ -161,6 +164,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\BackGround\BackGround.cpp" />
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.cpp" />
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
+    <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
     <ClCompile Include="Engine\2D\DrawLine.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\3D\FogManager.cpp" />
@@ -262,6 +266,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Weapon\WeaponState\ImpaledState.cpp" />
     <ClCompile Include="Application\Object\GameCamera\GameBasicCamera.cpp" />
     <ClCompile Include="Application\Object\GameObjectData.cpp" />
+    <ClCompile Include="Application\UI\GameUIManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3D\Material.cpp" />
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
@@ -323,7 +328,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyWaitState.h" />
     <ClInclude Include="Application\Object\Enemy\State\IEnemyState.h" />
+    <ClInclude Include="Application\Object\Enemy\System\DetectionSystem.h" />
+    <ClInclude Include="Application\Object\Enemy\System\EnemySytemList.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
+    <ClInclude Include="Application\Object\GameSystem\GameSystemManager.h" />
     <ClInclude Include="Application\Object\Map\MapBlockData.h" />
     <ClInclude Include="Application\Object\Map\MapEditor.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointManager.h" />
@@ -374,6 +382,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\BackGround\BackGround.h" />
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
+    <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
     <ClInclude Include="Engine\2D\ColorVertexData.h" />
     <ClInclude Include="Engine\2D\DrawLine.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
@@ -546,6 +555,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
     <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
+    <ClInclude Include="Application\UI\GameUIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

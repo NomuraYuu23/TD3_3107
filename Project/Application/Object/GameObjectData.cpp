@@ -10,6 +10,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "Gravity", common_.gravity_);
 	globalVariables_->AddItem(groupName, "SlowFactor", common_.slowMotionFactor_);
 	globalVariables_->AddItem(groupName, "DeadZone", common_.stickDeadZone_);
+	globalVariables_->AddItem(groupName, "DeathHeight", common_.deathHeight_);
 
 	groupName = "Player";
 	// グループを追加
@@ -59,6 +60,11 @@ void GameObjectData::Initialize()
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "Offset", camera_.offset_);
+	globalVariables_->AddItem(groupName, "PullOffset", camera_.pullMaxOffset_);
+	globalVariables_->AddItem(groupName, "MinFov", camera_.minFov_);
+	globalVariables_->AddItem(groupName, "MaxFov", camera_.maxFov_);
+	globalVariables_->AddItem(groupName, "MinRange", camera_.minRange_);
+	globalVariables_->AddItem(groupName, "MaxRange", camera_.maxRange_);
 
 	groupName = "Dash";
 	// グループを追加
@@ -67,6 +73,10 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "DashPower", dash_.dashPower_);
 	globalVariables_->AddItem(groupName, "SlowFrame", dash_.slowFrame_);
 	globalVariables_->AddItem(groupName, "SlowRatio", dash_.slowRatio_);
+
+	groupName = "Enemy";
+	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, "EaseEndFrame", enemy_.easeEndFrame);
 
 	ApplyGlobalVariables();
 
@@ -80,6 +90,7 @@ void GameObjectData::ApplyGlobalVariables()
 	common_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	common_.slowMotionFactor_ = globalVariables_->GetFloatValue(groupName, "SlowFactor");
 	common_.stickDeadZone_ = globalVariables_->GetFloatValue(groupName, "DeadZone");
+	common_.deathHeight_ = globalVariables_->GetFloatValue(groupName, "DeathHeight");
 
 	// プレイヤー
 	groupName = "Player";
@@ -121,6 +132,11 @@ void GameObjectData::ApplyGlobalVariables()
 	groupName = "Camera";
 	// グループを追加
 	camera_.offset_ = globalVariables_->GetVector3Value(groupName, "Offset");
+	camera_.pullMaxOffset_ = globalVariables_->GetFloatValue(groupName, "PullOffset");
+	camera_.minFov_ = globalVariables_->GetFloatValue(groupName, "MinFov");
+	camera_.maxFov_ = globalVariables_->GetFloatValue(groupName, "MaxFov");
+	camera_.minRange_ = globalVariables_->GetFloatValue(groupName, "MinRange");
+	camera_.maxRange_ = globalVariables_->GetFloatValue(groupName, "MaxRange");
 
 	groupName = "Dash";
 	// グループを追加
@@ -128,5 +144,8 @@ void GameObjectData::ApplyGlobalVariables()
 	dash_.dashPower_ = globalVariables_->GetFloatValue(groupName, "DashPower");
 	dash_.slowFrame_ = globalVariables_->GetFloatValue(groupName, "SlowFrame");
 	dash_.slowRatio_ = globalVariables_->GetFloatValue(groupName, "SlowRatio");
+
+	groupName = "Enemy";
+	enemy_.easeEndFrame = globalVariables_->GetFloatValue(groupName, "EaseEndFrame");
 
 }

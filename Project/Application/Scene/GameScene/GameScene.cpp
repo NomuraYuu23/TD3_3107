@@ -83,6 +83,14 @@ void GameScene::Initialize() {
 	std::unique_ptr<Weapon> weapon = std::make_unique<Weapon>();
 	// 初期化
 	weapon->Initialize(weaponModel_.get());
+	
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	// リングモデルを渡す
+	weapon->SetRingModel(ringModel_.get());
+	#endif // !_DEBUG
+
+
 	// 生成
 	player_ = std::make_unique<Player>();
 	// テクスチャの読み込み
@@ -92,16 +100,28 @@ void GameScene::Initialize() {
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
 	player_->Initialize(playerModel_.get());
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// ポニーテール
-	//player_->SetPonyTail(ponyTailModel_.get());
+	player_->SetPonyTail(ponyTailModel_.get());
+	// オーディオマネージャーを渡す
+	player_->gameAudioManager_ = audioManager_.get();
+	#endif // !_DEBUG
+
 	player_->GetSlowEffect()->SetCamera(&camera_);
+
 
 	// 更新
 	//countTime_ = 0;
 
+	// ゲームシステム
+	gameSystemManager_ = std::make_unique<GameSystemManager>();
+	gameSystemManager_->Initialize(goalModel_.get(), player_.get());
+
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->Initialize(enemyModel_.get());
+	enemyManager_->SetPlayer(player_.get());
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -127,6 +147,11 @@ void GameScene::Initialize() {
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_.get());
 
+	// UIマネージャーの生成
+	gameUIManager_ = std::make_unique<GameUIManager>();		// 生成
+	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
+	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
+	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
 
 	// 矢印のUI
 	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
@@ -137,14 +162,22 @@ void GameScene::Initialize() {
 	/// ポストエフェクトの値初期化
 	// ブルーム
 	PostEffect* pe = PostEffect::GetInstance();
-	pe->SetThreshold(0.15f);
-	pe->SetKernelSize(10);
-	pe->SetSigma(12.5f);
+	pe->SetThreshold(0.05f);
+	pe->SetKernelSize(5);
+	pe->SetSigma(5.0f);
 
 	FogManager* fm = FogManager::GetInstance();
-	fm->SetColor({ 0.0f, 0.35f, 1.0f, 1.0f });
+	fm->SetColor({ 0.0f, 0.25f, .65f, 1.0f });
 	fm->SetNear(50.0f);
 	fm->SetRadius(2500.0f);
+
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+
+	// ゲームシーン用BGMの再生
+	audioManager_->PlayWave(kGameSceneBGM);
+
+	#endif // !_DEBUG
 
 	// Jsonデータのクラス
 #ifdef _DEBUG
@@ -153,7 +186,10 @@ void GameScene::Initialize() {
 	gameData_->Initialize();
 
 #endif // _DEBUG
+	skydome_->SetParent(&player_->worldtransform_);
 
+	// ゲームシステムにポインタ登録
+	gameSystemManager_->SetEnemyManager(enemyManager_.get());
 }
 
 /// <summary>
@@ -170,9 +206,6 @@ void GameScene::Update() {
 
 
 #endif
-	if (input_->TriggerKey(DIK_R)) {
-		this->Initialize();
-	}
 
 	if (input_->TriggerKey(DIK_L)) {
 		requestSceneNo_ = kTitle;
@@ -188,17 +221,19 @@ void GameScene::Update() {
 	}
 
 	// リスタート
-	//if () {
-	//	resetScene_ = true;
-	//	isBeingReset_ = true;
-	//	isDecreasingVolume = true;
-	//}
-
+	if (input_->TriggerKey(DIK_R)) {
+		resetScene_ = true;
+		isBeingReset_ = true;
+		isDecreasingVolume = true;
+	}
 
 	directionalLight_->Update(directionalLightData_);
 
 	pointLightManager_->Update(pointLightDatas_);
 	spotLightManager_->Update(spotLightDatas_);
+
+	// ゲームシステム
+	gameSystemManager_->Update();
 
 	if (player_->GetEffectInfo().isStop) {
 		player_->HitUpdate();
@@ -215,7 +250,8 @@ void GameScene::Update() {
 	player_->DrawLinesMap(drawLine_);
 	// 敵
 	enemyManager_->Update();
-	//bossEnemy_->Update();
+
+
 
 	if (player_->isArrowUiDraw_) {
 		arrowSprite_->SetIsInvisible(false);
@@ -223,6 +259,9 @@ void GameScene::Update() {
 	else {
 		arrowSprite_->SetIsInvisible(true);
 	}
+
+	// UIマネージャー更新
+	gameUIManager_->Update();
 
 	arrowSprite_->SetPosition(player_->screenPos_);
 	arrowSprite_->SetRotate(std::atan2f(-player_->throwDirect_.y, player_->throwDirect_.x));
@@ -281,27 +320,32 @@ void GameScene::Draw() {
 
 	//3Dオブジェクトはここ
 
+	// スカイドーム
+	skydome_->Draw(camera_);
+
+	// 背景
+	backGround_->Draw(camera_);
+
 	//Obj
 	player_->Draw(camera_);
 	//bossEnemy_->Draw(camera_);
-
-	// スカイドーム
-	skydome_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(blockTexture_);
 
 	// ブロック用
 	mapManager_->Draw(camera_);
-
-	// 背景
-	backGround_->Draw(camera_);
+	// ゴール系
+	gameSystemManager_->Draw(camera_);
 
 	tmpTextures_.clear();
 	tmpTextures_.push_back(enemyTexture_);
 
 	// 敵
 	enemyManager_->Draw(camera_, &tmpTextures_);
+
+	// プレイヤーのリングは透過するため最後に描画
+	player_->weapon_->RingDraw(camera_);
 
 	ModelDraw::PostDraw();
 
@@ -339,6 +383,9 @@ void GameScene::Draw() {
 
 	// UIマネージャー
 	//uiManager_->Draw();
+
+	// UIマネージャー描画
+	gameUIManager_->Draw();
 	arrowSprite_->Draw();
 
 	// 前景スプライト描画後処理
@@ -380,6 +427,12 @@ void GameScene::Draw() {
 			PostEffect::kCommandIndexGrayScale);
 		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
 	}
+
+	/*PostEffect::GetInstance()->Execution(
+		dxCommon_->GetCommadList(),
+		renderTargetTexture_,
+		PostEffect::kCommandIndexBloom);
+	WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());*/
 }
 
 void GameScene::ImguiDraw() {
@@ -415,9 +468,11 @@ void GameScene::ImguiDraw() {
 
 	debugCamera_->ImGuiDraw();
 
+	gameSystemManager_->ImGuiDraw();
+
 	//collision2DDebugDraw_->ImGuiDraw();
 
-	gameCamera_->ImGuiDraw();
+	//gameCamera_->ImGuiDraw();
 
 	followCamera_->ImGuiDraw();
 
@@ -426,9 +481,12 @@ void GameScene::ImguiDraw() {
 	StageNumberManager::ImGuiDraw();
 
 	// ポストエフェクトのImGuiを表示
-	//PostEffect::GetInstance()->ImGuiDraw();
+	PostEffect::GetInstance()->ImGuiDraw();
 	// フォグのImGuiの表示
-	//FogManager::GetInstance()->ImGuiDraw();
+	FogManager::GetInstance()->ImGuiDraw();
+
+	// UIマネージャー用
+	gameUIManager_->DisplayImGui();
 
 #endif // _DEBUG
 
@@ -489,17 +547,36 @@ void GameScene::ModelCreate()
 	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// プレイヤーモデル
+	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
+	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
+	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
+	#endif // !_DEBUG
+	#ifdef _DEBUG // デバッグの場合低負荷モデルを読み込む
 	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_, textureHandleManager_.get()));
+	#endif // _DEBUG
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
+	ringModel_.reset(Model::Create("Resources/Model/Spear/", "Ring.gltf", dxCommon_, textureHandleManager_.get()));
+	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
+
+	#endif // !_DEBUG
+
 
 	// 地形ブロック
 	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 背景モデル
-	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.gltf", dxCommon_, textureHandleManager_.get()));
+	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
+
+	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// 敵モデル
+	// プレイヤーモデル
+	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
+	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_, textureHandleManager_.get()));
+	#endif // !_DEBUG
+	#ifdef _DEBUG // デバッグの場合低負荷モデルを読み込む
 	enemyModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
+	#endif // _DEBUG
 
 }
 
@@ -524,21 +601,17 @@ void GameScene::LowerVolumeBGM()
 
 	const uint32_t startHandleIndex = 3;
 
-	//for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
-	//	if (audioManager_->GetPlayingSoundDatas()[i].handle_ == kGameAudioNameIndexBGM + startHandleIndex) {
-	//		float decreasingVolume = 1.0f / 60.0f;
-	//		float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
-	//		if (volume < 0.0f) {
-	//			volume = 0.0f;
-	//			audioManager_->StopWave(i);
-	//			isDecreasingVolume = false;
-	//		}
-	//		else {
-	//			audioManager_->SetPlayingSoundDataVolume(i, volume);
-	//			audioManager_->SetVolume(i, audioManager_->GetPlayingSoundDatas()[i].volume_);
-	//		}
-	//	}
-	//}
+	float decreasingVolume = 1.0f / 60.0f;
+	float volume = audioManager_->GetPlayingSoundDatas()[kGameSceneBGM].volume_ - decreasingVolume;
+	if (volume < 0.0f) {
+		volume = 0.0f;
+		audioManager_->StopWave(kGameSceneBGM);
+		isDecreasingVolume = false;
+	}
+	else {
+		audioManager_->SetPlayingSoundDataVolume(kGameSceneBGM, volume);
+		audioManager_->SetVolume(kGameSceneBGM, audioManager_->GetPlayingSoundDatas()[kGameSceneBGM].volume_);
+	}
 
 }
 
@@ -581,6 +654,9 @@ void GameScene::CollisionUpdate()
 	mapManager_->CollisionRegister(collision2DManager_.get(), camera_);
 
 	enemyManager_->CollisionRegister(collision2DManager_.get(), camera_);
+
+	// ゲームシステム関係（ゴール・チェックポイント）
+	gameSystemManager_->CollisionRegister(collision2DManager_.get());
 
 	collision2DManager_->CheakAllCollision();
 

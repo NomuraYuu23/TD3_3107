@@ -7,6 +7,7 @@
 #include "../../../Engine/Math/Math.h"
 #include "../ObjectList.h"
 #include "../GameUtility/MathUtility.h"
+#include "../../UI/GameUIManager.h"
 
 void Player::Initialize(Model* model)
 {
@@ -42,10 +43,12 @@ void Player::Initialize(Model* model)
 
 	isGround_ = false;
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// アニメーション関連初期化
-	//anim_ = std::make_unique<PlayerAnimManager>(); // 生成
-	//anim_->Init(this);							   // 初期化
-
+	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
+	anim_->Init(this);							   // 初期化
+	#endif // !_DEBUG
 }
 
 void Player::Update()
@@ -70,7 +73,6 @@ void Player::Update()
 		// 行列を求める
 		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[10].matrix * worldtransform_.worldMatrix_;
 		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
-		//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
 
 		// アンカー設定
 		ponytail_->SetAnchor(0, true);
@@ -85,8 +87,15 @@ void Player::Update()
 	// 基底クラスの更新
 	IObject::Update();
 
+	#ifndef _DEBUG
 	// アニメーション更新
-	//anim_->Update();
+	anim_->Update();
+	#endif // !_DEBUG
+
+	// UIマネージャーに接地状態を渡す
+	if (uiManager_ != nullptr) {
+		uiManager_->SetIsGround(isGround_);
+	}
 
 	// コライダー
 	CircleColliderUpdate();
@@ -120,7 +129,19 @@ void Player::Draw(const BaseCamera& camera)
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	if (anim_->GetIsRight()) {
+		ModelDraw::AnimObjectDraw(desc);
+}
+	else {
+		ModelDraw::AnimInverseObjectDraw(desc);
+	}
+	#endif // !_DEBUG
+	// デバッグのみで行う
+	#ifdef _DEBUG
 	ModelDraw::AnimObjectDraw(desc);
+	#endif // _DEBUG
 
 	// 武器の描画
 	if (weapon_) {
@@ -146,9 +167,9 @@ void Player::ImGuiDraw()
 	slowEffect_->ImGuiDraw();
 
 	// ゲームスピード
-	float ratio = IObject::sPlaySpeed;
-	ImGui::DragFloat("playTime", &ratio);
-	sPlaySpeed = ratio;
+	//float ratio = IObject::sPlaySpeed;
+	//ImGui::DragFloat("playTime", &ratio);
+	//sPlaySpeed = ratio;
 	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
 	int tex = IsCanReturn();
@@ -158,10 +179,7 @@ void Player::ImGuiDraw()
 	ImGui::Text(name.c_str());
 	// 座標リセット
 	if (ImGui::Button("PosReset")) {
-		worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
-		velocity_ = {};
-		worldtransform_.UpdateMatrix();
-		isGround_ = true;
+		Reset();
 	}
 
 	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
@@ -693,6 +711,35 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
 	drawLine->Map(lineForGPU);
 
+}
+
+void Player::Reset()
+{
+	worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
+	velocity_ = {};
+	worldtransform_.UpdateMatrix();
+	isGround_ = true;
+	isDead_ = false;
+
+	weapon_->ChangeRequest(Weapon::StateName::kHold);
+
+	localMatrixManager_->Map();
+
+	// ポニーテールがセットされてる場合
+	if (ponytail_ != nullptr) {
+		// 行列を求める
+		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[11].matrix * worldtransform_.worldMatrix_;
+		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
+
+		// 初期化の段階で全ばねの座標をセットする
+		for (int i = 0; i < ponytail_->GetSpring().size(); i++) {
+			// 追従先座標を渡す
+			ponytail_->SetPosition(i, ponyAnchorPos_);
+		}
+
+		// 更新
+		ponytail_->Update();
+	}
 }
 
 void Player::SetFallTimer()

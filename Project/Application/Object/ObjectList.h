@@ -17,6 +17,8 @@
 #include "Map/MapManager.h"
 #include "Map/Terrain.h"
 #include "Map/Goal/GoalObject.h"
+// ゲームシステムクラス
+#include "GameSystem/GameSystemManager.h"
 
 // 背景
 #include "BackGround/BackGround.h"
