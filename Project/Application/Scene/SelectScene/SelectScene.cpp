@@ -29,9 +29,6 @@ void SelectScene::Initialize()
 void SelectScene::Update()
 {
 
-	// システム更新
-	selectSystem_->Update();
-
 	// スカイドーム
 	skydome_->Update();
 
@@ -39,6 +36,9 @@ void SelectScene::Update()
 	if (hasTheSceneTransitionStarted_) {
 		return;
 	}
+
+	// システム更新
+	selectSystem_->Update();
 
 	// シーン移行するか?
 	if (selectSystem_->GetGotoGameScene()) {
