@@ -4,6 +4,7 @@
 
 class GoalObject;
 class Player;
+class EnemyManager;
 
 /// <summary>
 /// ゲームシステム関係をまとめたクラス
@@ -45,6 +46,8 @@ public:
 	/// </summary>
 	void GameOverProcess();
 
+	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
+
 private:
 	/// <summary>
 	/// ゴール生成関数
@@ -67,6 +70,8 @@ private:
 
 	// プレイヤー
 	Player* player_ = nullptr;
+	// 敵の管理クラス
+	EnemyManager* enemyManager_ = nullptr;
 
 	Model* goalModel_ = nullptr;
 	Model* checkPointModel_ = nullptr;

@@ -186,6 +186,9 @@ void GameScene::Initialize() {
 
 #endif // _DEBUG
 	skydome_->SetParent(&player_->worldtransform_);
+
+	// ゲームシステムにポインタ登録
+	gameSystemManager_->SetEnemyManager(enemyManager_.get());
 }
 
 /// <summary>

@@ -721,6 +721,8 @@ void Player::Reset()
 	isGround_ = true;
 	isDead_ = false;
 
+	weapon_->ChangeRequest(Weapon::StateName::kHold);
+
 	localMatrixManager_->Map();
 
 	// ポニーテールがセットされてる場合
