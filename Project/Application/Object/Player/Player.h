@@ -133,6 +133,12 @@ public: // アニメーション関連関数群
 	/// <returns>アニメーションマネージャー</returns>
 	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
 
+	/// <summary>
+	/// 補正システム
+	/// </summary>
+	/// <returns></returns>
+	SpearLandingAdjuster GetLandingAdjuster() { return landingAdjuster_; }
+
 public:
 	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }

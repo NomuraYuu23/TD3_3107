@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../GameUtility/TimerLib.h"
 #include "../../../Engine/Math/Vector3.h"
+#include "../../../Engine/Math/Vector2.h"
 
 class Player;
 class Weapon;
@@ -20,20 +21,27 @@ public:
 	/// <summary>
 	/// 中断
 	/// </summary>
-	void Cancel() { compTimer_.End(); }
+	void Cancel() {
+		compTimer_.End();
+		isRunOnce_ = false;
+	}
+
+	bool IsActive() { return compTimer_.IsActive(); }
 
 	void ImGuiDraw();
 
 private:
 	void SetUp();
 	float scaling_ = 0.5f;
-	float maxSize_ = 0.0f;
+	Vector2 maxSize_ = {};
 private: // 必要なオブジェクトのポインタ
 	Player* player_ = nullptr;
 	Weapon* weapon_ = nullptr;
 
 	// 
 	bool isInRange_ = false;
+	// 一度起動したか？
+	bool isRunOnce_ = false;
 
 	TimerLib compTimer_;
 
