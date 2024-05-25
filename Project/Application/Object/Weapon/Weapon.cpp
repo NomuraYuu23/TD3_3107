@@ -80,25 +80,27 @@ void Weapon::Update()
 	// プレイヤーが槍を保持している場合
 	if (isHold_) {
 		// 武器にリングを追従
-		ringTransform_.transform_ = worldtransform_.transform_;
-		ringTransform_.direction_ = worldtransform_.direction_;
+		ringUnderTransform_.transform_.translate = { worldtransform_.transform_.translate.x, worldtransform_.transform_.translate.y, worldtransform_.transform_.translate.z + 1.0f };
+		ringTopTransform_.transform_.translate = { worldtransform_.transform_.translate.x, worldtransform_.transform_.translate.y, worldtransform_.transform_.translate.z - 1.0f };
+		//ringTransform_.direction_ = worldtransform_.direction_;
 		// ワールドトランスフォームの更新
-		ringTransform_.UpdateMatrix();
+		ringUnderTransform_.UpdateMatrix();
+		ringTopTransform_.UpdateMatrix();
 	}
 
 	// リングアニメーションが再生されていない場合
-	if (!spearAnim_->GetRingAnim().GetRunningAnimation(SpearAnimManager::RingShot)) {
-		spearAnim_->PlayRingAnimation(SpearAnimManager::RingIdle, true);
-	}
-	else {
-		// 再生中であればそのアニメーションに合わせてマテリアルを透明にしていく
-		ringColor_ = { 1.0f, 1.0f, 1.0f, MathUtility::Lerp(1.0f, 0.0f, spearAnim_->GetRingAnim().GetAnimationProgress(SpearAnimManager::RingShot)) };
-		// マテリアル色を設定
-		ringMaterial_->SetColor(ringColor_);
+	//if (!spearAnim_->GetRingAnim().GetRunningAnimation(SpearAnimManager::RingShot)) {
+	//	spearAnim_->PlayRingAnimation(SpearAnimManager::RingIdle, true);
+	//}
+	//else {
+	//	// 再生中であればそのアニメーションに合わせてマテリアルを透明にしていく
+	//	ringColor_ = { 1.0f, 1.0f, 1.0f, MathUtility::Lerp(1.0f, 0.0f, spearAnim_->GetRingAnim().GetAnimationProgress(SpearAnimManager::RingShot)) };
+	//	// マテリアル色を設定
+	//	ringMaterial_->SetColor(ringColor_);
 
-		// マテリアル更新
-		ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f);
-	}
+	//	// マテリアル更新
+	//	ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f);
+	//}
 
 	// アニメーション更新
 	spearAnim_->Update();
@@ -110,7 +112,7 @@ void Weapon::Update()
 	float angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
 
-
+	isDrawRing_ = true;
 }
 
 void Weapon::Draw(const BaseCamera& camera)
@@ -133,7 +135,7 @@ void Weapon::Draw(const BaseCamera& camera)
 	ModelDraw::AnimObjectDraw(desc);
 }
 
-void Weapon::RingDraw(const BaseCamera& camera)
+void Weapon::UnderRingDraw(const BaseCamera& camera)
 {
 	// リング描画
 	if (isDrawRing_) {
@@ -142,8 +144,23 @@ void Weapon::RingDraw(const BaseCamera& camera)
 		ringDesc.camera = &const_cast<BaseCamera&>(camera);
 		ringDesc.localMatrixManager = ringLocalMatrix_.get();
 		ringDesc.material = ringMaterial_.get();
-		ringDesc.model = ringModel_;
-		ringDesc.worldTransform = &ringTransform_;
+		ringDesc.model = ringUnderModel_;
+		ringDesc.worldTransform = &ringUnderTransform_;
+		ModelDraw::AnimObjectDraw(ringDesc);
+	}
+}
+
+void Weapon::TopRingDraw(const BaseCamera& camera)
+{
+	// リング描画
+	if (isDrawRing_) {
+		// 武器リングの描画
+		ModelDraw::AnimObjectDesc ringDesc;
+		ringDesc.camera = &const_cast<BaseCamera&>(camera);
+		ringDesc.localMatrixManager = ringLocalMatrix_.get();
+		ringDesc.material = ringMaterial_.get();
+		ringDesc.model = ringTopModel_;
+		ringDesc.worldTransform = &ringTopTransform_;
 		ModelDraw::AnimObjectDraw(ringDesc);
 	}
 }
@@ -490,27 +507,30 @@ void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
 	state_ = std::move(newState);
 }
 
-void Weapon::SetRingModel(Model* model)
+void Weapon::SetRingModel(Model* upperModel, Model* underModel)
 {
 	// モデル取得
-	ringModel_ = model;
+	ringUnderModel_ = underModel;
+	ringTopModel_	= upperModel;
 
 	// マテリアル生成
 	ringMaterial_.reset(Material::Create());
 
 	// トランスフォーム初期化
-	ringTransform_.Initialize(ringModel_->GetRootNode());
+	ringUnderTransform_.Initialize(ringUnderModel_->GetRootNode());
+	ringTopTransform_.Initialize(ringTopModel_->GetRootNode());
 	// DirectiontoDirectionを使用
-	ringTransform_.usedDirection_ = true;
+	//ringTransform_.usedDirection_ = true;
 	// トランスフォーム更新
-	ringTransform_.UpdateMatrix();
+	ringUnderTransform_.UpdateMatrix();
+	ringTopTransform_.UpdateMatrix();
 
 	// ローカル行列マネージャ初期化
 	ringLocalMatrix_ = std::make_unique<LocalMatrixManager>();
-	ringLocalMatrix_->Initialize(ringModel_->GetRootNode());
+	ringLocalMatrix_->Initialize(ringUnderModel_->GetRootNode());
 
 	// リングアニメーションのセットアップを開始する
-	spearAnim_->SetUpRingAnim();
+	//spearAnim_->SetUpRingAnim();
 
 	// uvトランスフォームの初期化
 	ringUVTransform_.Initialize();
