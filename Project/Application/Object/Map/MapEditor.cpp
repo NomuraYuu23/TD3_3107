@@ -12,7 +12,7 @@ void MapEditor::ImGuiDraw()
 
 	const float imGuiSpeed = 0.1f;
 
-	ImGui::Begin("BlockEdit");
+	ImGui::Begin("MapEditor");
 
 	if (ImGui::Button("Save")) {
 		SaveFile("Stage");

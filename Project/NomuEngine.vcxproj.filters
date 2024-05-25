@@ -482,6 +482,7 @@
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
     <ClInclude Include="Application\UI\GameUIManager.h" />
     <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
+    <ClInclude Include="Engine\Particle\ParticleDesc.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -25,6 +25,11 @@ void EnemyEditor::ImGuiDraw()
 
 	if (ImGui::Button("StageAdd")) {
 		std::string stageName = "Stage" + std::to_string(stageAddNum_);
+
+		if (stageAddNum_ < 10) {
+			stageName = "Stage0" + std::to_string(stageAddNum_);
+		}
+
 		datas_[stageName];
 		maxStages_++;
 		stageAddNum_++;
@@ -38,6 +43,10 @@ void EnemyEditor::ImGuiDraw()
 	if (ImGui::Button("StageDelete")) {
 		// キー
 		std::string key = "Stage" + std::to_string(stageDeleteNum_);
+
+		if (stageDeleteNum_ < 10) {
+			key = "Stage0" + std::to_string(stageDeleteNum_);
+		}
 
 		// 指定グループに指定キーが存在するか
 		if (datas_.find(key) != datas_.end()) {
@@ -117,6 +126,10 @@ void EnemyEditor::LoadFile(const std::string& groupName)
 
 		// グループを検索
 		std::string name = groupName + std::to_string(maxStages_);
+
+		if (maxStages_ < 10) {
+			name = groupName + "0" + std::to_string(maxStages_);
+		}
 
 		json::iterator itGroup = root.find(name);
 
@@ -317,6 +330,11 @@ void EnemyEditor::ImGuiSingleEnemy()
 		if (ImGui::Button(nameSingleAdd.c_str())) {
 			// キー
 			std::string key = "Enemy" + std::to_string(addSingleEnemyNum_);
+
+			if (addSingleEnemyNum_ < 10) {
+				key = "Enemy0" + std::to_string(addSingleEnemyNum_);
+			}
+
 			// 追加
 			SetValue(stageName, key, addSingleEnemyData_);
 			addSingleEnemyNum_++;
@@ -336,6 +354,11 @@ void EnemyEditor::ImGuiSingleEnemy()
 		if (ImGui::Button(nameSingleDelete.c_str())) {
 			// キー
 			std::string key = "Enemy" + std::to_string(deleteSingleEnemyNum_);
+
+			if (deleteSingleEnemyNum_ < 10) {
+				key = "Enemy0" + std::to_string(deleteSingleEnemyNum_);
+			}
+
 
 			// 指定グループに指定キーが存在するか
 			if (datasItr->second.find(key) != datasItr->second.end()) {
@@ -422,6 +445,11 @@ void EnemyEditor::ImGuiMultiEnemy()
 		if (ImGui::Button(nameTerrainAdd.c_str())) {
 			// キー
 			std::string key = "EnemyEmitter:" + std::to_string(addMultiEnemyNum_);
+
+			if (addMultiEnemyNum_ < 10) {
+				key = "EnemyEmitter:0" + std::to_string(addMultiEnemyNum_);
+			}
+
 			// 追加
 			SetValue(stageName, key, addMultieEnemyData_);
 			addMultiEnemyNum_++;
@@ -440,6 +468,10 @@ void EnemyEditor::ImGuiMultiEnemy()
 		if (ImGui::Button(nameSingleDelete.c_str())) {
 			// キー
 			std::string key = "EnemyEmitter:" + std::to_string(deleteMultiEnemyNum_);
+
+			if (deleteMultiEnemyNum_ < 10) {
+				key = "EnemyEmitter:0" + std::to_string(deleteMultiEnemyNum_);
+			}
 
 			// 指定グループに指定キーが存在するか
 			if (datasItr->second.find(key) != datasItr->second.end()) {
