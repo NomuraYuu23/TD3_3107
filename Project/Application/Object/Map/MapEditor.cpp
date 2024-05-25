@@ -24,7 +24,13 @@ void MapEditor::ImGuiDraw()
 	ImGui::DragInt("StageAddNum", &stageAddNum_, 0.1f, 0);
 
 	if(ImGui::Button("StageAdd")) {
+
 		std::string stageName = "Stage" + std::to_string(stageAddNum_);
+
+		if (stageAddNum_ < 10) {
+			stageName = "Stage0" + std::to_string(stageAddNum_);
+		}
+
 		datas_[stageName];
 		maxStages_++;
 		stageAddNum_++;
@@ -38,6 +44,10 @@ void MapEditor::ImGuiDraw()
 	if (ImGui::Button("StageDelete")) {
 		// キー
 		std::string key = "Stage" + std::to_string(stageDeleteNum_);
+
+		if (stageDeleteNum_ < 10) {
+			key = "Stage0" + std::to_string(stageDeleteNum_);
+		}
 
 		// 指定グループに指定キーが存在するか
 		if (datas_.find(key) != datas_.end()) {
@@ -75,6 +85,11 @@ void MapEditor::ImGuiDraw()
 		if (ImGui::Button(nameTerrainAdd.c_str())) {
 			// キー
 			std::string key = "Terrain" + std::to_string(addMapBlockNum_);
+
+			if (addMapBlockNum_ < 10) {
+				key = "Terrain0" + std::to_string(addMapBlockNum_);
+			}
+
 			// 追加
 			SetValue(stageName, key, addMapBlockData_);
 			addMapBlockNum_++;
@@ -91,6 +106,10 @@ void MapEditor::ImGuiDraw()
 		if (ImGui::Button(nameTerrainDelete.c_str())) {
 			// キー
 			std::string key = "Terrain" + std::to_string(deleteMapBlockNum_);
+
+			if (deleteMapBlockNum_ < 10) {
+				key = "Terrain0" + std::to_string(deleteMapBlockNum_);
+			}
 
 			// 指定グループに指定キーが存在するか
 			if (datasItr->second.find(key) != datasItr->second.end()) {
@@ -183,6 +202,10 @@ void MapEditor::LoadFile(const std::string& groupName)
 
 		// グループを検索
 		std::string name = groupName + std::to_string(maxStages_);
+
+		if (maxStages_ < 10) {
+			name = groupName + "0" + std::to_string(maxStages_);
+		}
 
 		json::iterator itGroup = root.find(name);
 
