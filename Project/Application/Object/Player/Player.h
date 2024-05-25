@@ -264,6 +264,13 @@ private: // アニメーション関連
 	// アニメーションマネージャー
 	std::unique_ptr<PlayerAnimManager> anim_;
 
+private: // パーティクル生成関連変数
+
+	// 環境パーティクル生成用座標
+	std::unique_ptr<EulerTransform> emitTransform_;
+	// 環境パーティクル用設定構造体
+	EmitterDesc fallingLeafDesc_;
+
 	// 空中ダッシュシステム
 	AssistDash assistDash_;
 

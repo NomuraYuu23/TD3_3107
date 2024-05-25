@@ -5,5 +5,6 @@ enum ParticleName {
 	kEnemyDeadParticle,
 	kRunSmokeParticle,
 	kSpearCatchParticle,
+	kFallingLeafParticle,
 	kCountOfParticleName,
 };
