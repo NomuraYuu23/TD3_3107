@@ -462,7 +462,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			desc.instanceCount = 10;
 			desc.frequency = 0.01f;
 			desc.lifeTime = 0.01f;
-			desc.particleModelNum = kCircle;
+			desc.particleModelNum = kBambooLeaf;
 			desc.paeticleName = kSpearCatchParticle;
 			desc.velocity = { sub.x, sub.y, 0.0f };
 

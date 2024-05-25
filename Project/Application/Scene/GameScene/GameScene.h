@@ -95,6 +95,7 @@ private:
 	ParticleManager* particleManager_ = nullptr;
 	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
 	std::unique_ptr<Model> particleCircleModel_ = nullptr;
+	std::unique_ptr<Model> particleLeafModel_ = nullptr;
 
 	std::unique_ptr<CollisionManager> collisionManager_;
 
