@@ -201,6 +201,10 @@ public: // 外部で行う設定関数
 	// リング表示フラグ
 	bool isDrawRing_ = false;
 
+	// リング演出用現在時間
+	float ringCurrentTime_ = 0.0f;
+	float ringStagingTime_ = 0.35f;
+
 private:
 	/// <summary>
 	/// ステート変更

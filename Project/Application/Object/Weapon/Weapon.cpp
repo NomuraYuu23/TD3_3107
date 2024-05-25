@@ -79,13 +79,67 @@ void Weapon::Update()
 
 	// プレイヤーが槍を保持している場合
 	if (isHold_) {
+		// リングの角度を求める
+		float angle;
+
+		// ベクトルの大きさを計算
+		double magnitude = std::sqrt(throwDirect_.x * throwDirect_.x + throwDirect_.y * throwDirect_.y);
+
+		// x と y が両方とも 0 の場合は、角度が未定義なので、0を返す
+		if (magnitude == 0) {
+			angle = 0.0f;
+		};
+
+		// cosθ = x / magnitude を使って角度を計算
+		double cos_theta = throwDirect_.x / magnitude;
+		angle = static_cast<float>(std::acos(cos_theta));
+
+		// y が負の場合は、角度を反転させる
+		if (throwDirect_.y < 0.0f) {
+			angle = -angle;
+		}
+
 		// 武器にリングを追従
-		ringUnderTransform_.transform_.translate = { worldtransform_.transform_.translate.x, worldtransform_.transform_.translate.y, worldtransform_.transform_.translate.z + 1.0f };
-		ringTopTransform_.transform_.translate = { worldtransform_.transform_.translate.x, worldtransform_.transform_.translate.y, worldtransform_.transform_.translate.z - 1.0f };
-		//ringTransform_.direction_ = worldtransform_.direction_;
+		ringUnderTransform_.transform_.translate = worldtransform_.transform_.translate;
+		ringTopTransform_.transform_.translate = worldtransform_.transform_.translate;
+		ringUnderTransform_.transform_.rotate.z = angle;
+		ringTopTransform_.transform_.rotate.z = angle;
 		// ワールドトランスフォームの更新
 		ringUnderTransform_.UpdateMatrix();
 		ringTopTransform_.UpdateMatrix();
+	}
+	
+	// 槍が投げられている状態であれば
+	if (std::holds_alternative<ThrownState*>(nowState_) || std::holds_alternative<ImpaledState*>(nowState_)) {
+		ringUnderTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (ringCurrentTime_ / ringStagingTime_));
+		ringTopTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (ringCurrentTime_ / ringStagingTime_));
+		ringColor_.w = 1.0f - (ringCurrentTime_ / ringStagingTime_);
+		Vector3 ringColorRGB = Vector3::Lerp( { 1.0f, 1.0f, 0.0f }, { 0.0f, 1.0f, 0.1f }, (ringCurrentTime_ / ringStagingTime_));
+		ringColor_ = { ringColorRGB.x, ringColorRGB.y, ringColorRGB.z, ringColor_.w };
+
+		// ワールドトランスフォームの更新
+		ringUnderTransform_.UpdateMatrix();
+		ringTopTransform_.UpdateMatrix();
+
+		if (ringCurrentTime_ < ringStagingTime_) {
+			// 演出時間加算
+			ringCurrentTime_ += kDeltaTime_;
+		}
+		else { // 時間超過時
+			// 演出時間リセット
+			ringCurrentTime_ = ringStagingTime_;
+		}
+		
+		// マテリアル色を設定
+		ringMaterial_->SetColor(ringColor_);
+
+		// マテリアル更新
+		ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f);
+	}
+	else {
+		// サイズを0に
+		ringUnderTransform_.transform_.scale = { 0.0f, 0.0f, 0.0f };
+		ringTopTransform_.transform_.scale = { 0.0f, 0.0f, 0.0f };
 	}
 
 	// リングアニメーションが再生されていない場合
@@ -111,8 +165,6 @@ void Weapon::Update()
 	//float angle = MathUtility::CalcAngle({ direct.x,direct.y });
 	float angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
-
-	isDrawRing_ = true;
 }
 
 void Weapon::Draw(const BaseCamera& camera)
