@@ -55,6 +55,8 @@ public: // アクセッサ
 
 private: // メンバ変数
 
+	WorldTransform transform2_;
+
 	// 座標のみ
 	WorldTransform* parent_;
 
