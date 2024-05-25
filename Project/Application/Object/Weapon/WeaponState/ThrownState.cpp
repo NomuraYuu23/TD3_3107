@@ -34,7 +34,7 @@ void ThrownState::Initialize()
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// 槍投げアニメーション開始
-	weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearThrow);
+	//weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearThrow);
 	//weapon_->GetAnimManager()->PlayRingAnimation(SpearAnimManager::RingShot);
 	
 	// リングの描画を行う
