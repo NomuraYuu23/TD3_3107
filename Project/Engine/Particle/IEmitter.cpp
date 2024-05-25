@@ -20,6 +20,9 @@ void IEmitter::Initialize(EmitterDesc* emitterDesc)
 	// エミットする
 	toEmit_ = false;
 
+	// 生成する粒子速度取得
+	velocity_ = emitterDesc->velocity;
+
 	isDead_ = false;
 
 	particleModelNum_ = emitterDesc->particleModelNum;
@@ -49,7 +52,7 @@ std::list<IParticle*> IEmitter::Emit()
 	std::list<IParticle*> particles;
 	MakeParticle* makeParticle = MakeParticle::GetInstance();
 
-	ParticleDesc desc = { transform_.translate ,transform_.scale };
+	ParticleDesc desc = { transform_.translate ,transform_.scale, velocity_ };
 
 	for (uint32_t count = 0; count < instanceCount_; ++count) {
 		particles.push_back(makeParticle->Run(&desc, paeticleName_));

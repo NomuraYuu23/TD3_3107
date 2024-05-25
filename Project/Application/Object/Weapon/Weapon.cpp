@@ -7,6 +7,9 @@
 #include "../ObjectList.h"
 #include "../Player/Player.h"
 
+#include "../../Particle/EmitterName.h"
+#include "../../Particle/ParticleName.h"
+
 void Weapon::Initialize(Model* model)
 {
 	// 基底クラスの初期化
@@ -375,7 +378,31 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	{
 		// プレイヤーとの
 		if (std::holds_alternative<Player*>(target)) {
+			// 差分ベクトルを求める
+			Vector3 sub = player_->worldtransform_.transform_.translate - worldtransform_.transform_.translate;
+			// 求めた差分ベクトル
+			sub = Vector3::Normalize(sub);
+			sub *= 0.5f;
+
+			// デバッグ以外の場合行う
+			#ifndef _DEBUG
+
+			// キャッチ時パーティクル再生
+			EmitterDesc desc;
+			desc.transform = &player_->worldtransform_.transform_;
+			desc.instanceCount = 10;
+			desc.frequency = 0.01f;
+			desc.lifeTime = 0.01f;
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kSpearCatchParticle;
+			desc.velocity = { sub.x, sub.y, 0.0f };
+
+			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+			#endif // _DEBUG
+
 			ChangeRequest(Weapon::StateName::kHold);
+
 			return;
 		}
 	}

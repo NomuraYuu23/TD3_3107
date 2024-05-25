@@ -217,6 +217,7 @@
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
     <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
+    <ClCompile Include="Application\Particle\user\SpearCatch\SpearCatchParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -471,6 +472,8 @@
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
     <ClInclude Include="Application\UI\GameUIManager.h" />
     <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
+    <ClInclude Include="Application\Particle\user\SpearCatch\SpearCatchParticle.h" />
+    <ClInclude Include="Engine\Particle\ParticleDesc.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -6,5 +6,6 @@ struct ParticleDesc
 
 	Vector3 position;
 	Vector3 size;
+	Vector3 velocity;
 
 };
