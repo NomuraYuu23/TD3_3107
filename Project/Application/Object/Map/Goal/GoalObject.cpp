@@ -18,10 +18,41 @@ void GoalObject::Initialize(Model* model)
 	// システム関係の初期化
 	SystemInitialize();
 
+#pragma region 調整項目クラス
+	// 調整項目クラスのインスタンス取得
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	// グループ名設定
+	const char* groupName = "Goal";
+	// 指定した名前でグループ追加
+	globalVariables->CreateGroup(groupName);
+
+	// メンバ変数の調整したい項目をグローバル変数に追加
+
+	std::string name = "";
+
+	for (uint32_t i = 0; i < StageNumberManager::kStageMax; ++i) {
+		if (i < 10) {
+			name = "GoalPosition0" + std::to_string(i);
+		}
+		else {
+			name = "GoalPosition" + std::to_string(i);
+		}
+		globalVariables->AddItem(groupName, name, goalPositions_[i]);	
+	}
+
+	ApplyGlobalVariables();
+
+#pragma endregion
+
 }
 
 void GoalObject::Update()
 {
+
+#ifdef _DEBUG
+	ApplyGlobalVariables();
+#endif // _DEBUG
+
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
@@ -62,4 +93,34 @@ void GoalObject::OnCollision(ColliderParentObject2D target)
 void GoalObject::SystemInitialize()
 {
 	isGoal_ = false;
+}
+
+void GoalObject::ApplyGlobalVariables()
+{
+
+	// 調整項目クラスのインスタンス取得
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	// グループ名の設定
+	const char* groupName = "Goal";
+
+	std::string name = "";
+
+	for (uint32_t i = 0; i < StageNumberManager::kStageMax; ++i) {
+
+		if (i < 10) {
+			name = "GoalPosition0" + std::to_string(i);
+		}
+		else {
+			name = "GoalPosition" + std::to_string(i);
+		}
+		goalPositions_[i] = globalVariables->GetVector3Value(groupName, name);
+	}
+
+}
+
+void GoalObject::SetPosition()
+{
+
+	worldtransform_.transform_.translate = goalPositions_[StageNumberManager::stageNum_];
+
 }

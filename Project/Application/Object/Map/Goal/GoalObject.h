@@ -3,8 +3,11 @@
 #include "../../../Engine/3D/Model.h"
 #include "../../../Engine/Collider2D/Box.h"
 
+#include "../../../AllSceneObject/StageNumberManager.h"
+
 class GoalObject : public IObject
 {
+
 public: // 継承
 	/// <summary>
 	/// 初期化
@@ -34,14 +37,25 @@ public: // 継承
 private:
 	void SystemInitialize();
 
+private: //メンバ関数
+
+	/// <summary>
+	/// 調整項目適用関数
+	/// </summary>
+	void ApplyGlobalVariables();
+
+public: // 関数
+
+	/// <summary>
+	///	位置設定
+	/// </summary>
+	void SetPosition();
+
 public: // アクセッサ
 	// コライダー関係
 	Vector2 GetColliderPosition() override { return circleCollider_.position_; }
 	Vector2 GetColliderSize() override { return boxCollider_.scale_; }
 	Box GetBoxCollider() override { return boxCollider_; }
-	// 座標
-	void SetPosition(const Vector3& position) { worldtransform_.transform_.translate = position; }
-
 
 	// ゴールフラグ取得
 	bool IsGoal() { return isGoal_; }
@@ -50,5 +64,10 @@ public: // アクセッサ
 private:
 	// ゴールフラグ
 	bool isGoal_ = false;
+
+public: // 変数
+
+	// 各ステージのゴール
+	std::array<Vector3, StageNumberManager::kStageMax> goalPositions_;
 
 };
