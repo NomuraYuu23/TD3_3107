@@ -459,7 +459,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			// キャッチ時パーティクル再生
 			EmitterDesc desc;
 			desc.transform = &player_->worldtransform_.transform_;
-			desc.instanceCount = 10;
+			desc.instanceCount = 5;
 			desc.frequency = 0.01f;
 			desc.lifeTime = 0.01f;
 			desc.particleModelNum = kBambooLeaf;

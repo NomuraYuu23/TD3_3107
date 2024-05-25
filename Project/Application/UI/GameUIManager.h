@@ -49,7 +49,7 @@ private: // プライベートなサブクラス
 		LeftStickBackSprite, // 左スティック背景用
 		LeftStickSprite, // 左スティック用
 		DashSprite,		// ダッシュ画像
-		AButtonSprite,	 // Aボタン用
+		//AButtonSprite,	 // Aボタン用
 		LBButtonSprite,  // LBボタン用
 		JumpSprite,		// ジャンプ画像
 		RightStickBackSprite, // 右スティック背景用

@@ -9,20 +9,27 @@ void SpearCatchParticle::Initialize(ParticleDesc* particleDesc)
 	std::mt19937 randomEngine(seedGenerator());
 
 	// サイズのランダム変数を生成
-	Vector3 minScale = { particleDesc->size.x / 2.0f,
-						 particleDesc->size.y / 2.0f,
-						 particleDesc->size.z / 2.0f };
-	Vector3 maxScale = { particleDesc->size.x * 1.0f,
-						 particleDesc->size.y * 1.0f,
-						 particleDesc->size.z * 1.0f };
-	std::uniform_real_distribution<float> distScale(minScale.x, maxScale.x);
-	float scale = distScale(randomEngine);
+	float min = 0.0f;
+	float max = 2.0f;
+	std::uniform_real_distribution<float> distScale(min, max);
+	int scaleNumber = static_cast<int>(distScale(randomEngine));
+	float scale = 0.0f;
+	if (scaleNumber == 0) {
+		scale = 1.0f;
+	}
+	else if (scaleNumber == 1) {
+		scale = 0.5f;
+	}
+	else {
+		scale = 0.1f;
+	}
 
 	// 回転のランダム変数を生成
-	float minRotate = static_cast<float>(-std::numbers::pi) * 2.0f;
-	float maxRotate = static_cast<float>(std::numbers::pi) * 2.0f;
+	float r = static_cast<float>(std::numbers::pi) * 2.0f;
+	float minRotate = -r;
+	float maxRotate = r;
 	std::uniform_real_distribution<float> distRotate(minRotate, maxRotate);
-	float rotate = distScale(randomEngine);
+	float rotate = distRotate(randomEngine);
 
 	// 位置のランダム変数を生成
 	Vector3 positionMax = { particleDesc->position.x + 1.5f,
@@ -50,7 +57,7 @@ void SpearCatchParticle::Initialize(ParticleDesc* particleDesc)
 	transform_ .translate.y = randomPostionY(randomEngine);							 // 位置
 	transform_ .translate.z = randomPostionZ(randomEngine);							 // 位置
 	transform_.rotate.z		= rotate;												 // 回転を保持
-	transform_.scale		= { scale, scale, scale };								 // 大きさ
+	transform_.scale		= { scale, scale, 1.0f };								 // 大きさ
 	velocity_				= particleDesc->velocity * randomVelocity(randomEngine); // 速度
 	
 	// デフォルト大きさ値を取得

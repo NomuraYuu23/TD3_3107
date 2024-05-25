@@ -155,17 +155,17 @@ void GameUIManager::CreateSprite()
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
-	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // Aボタン用
-	uiSprites_.back().reset(Sprite::Create(texHandles_[AButtonNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
-	setPosition = { 60.0f, 635.0f };
-	setSize = { 64.0f, 64.0f };
-	uiSprites_.back()->SetPosition(setPosition);
-	uiSprites_.back()->SetSize(setSize);
+	//uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // Aボタン用
+	//uiSprites_.back().reset(Sprite::Create(texHandles_[AButtonNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	//setPosition = { 60.0f, 635.0f };
+	//setSize = { 64.0f, 64.0f };
+	//uiSprites_.back()->SetPosition(setPosition);
+	//uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // LBボタン用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[LeftThumbNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
-	setPosition = { 120.0f, 665.0f };
-	setSize = { 64.0f, 64.0f };
+	setPosition = { 80.0f, 645.0f };
+	setSize = { 96.0f, 96.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
@@ -233,12 +233,12 @@ void GameUIManager::JumpButtonUIUpdate()
 {
 	/// ボタン入力に応じてUIを動かす
 	// Aボタン
-	if (input_->PushJoystick(kJoystickButtonA)) {
-		uiSprites_[AButtonSprite]->SetTextureHandle(texHandles_[AButtonPressTex]);  // テクスチャ変更
-	}
-	else {
-		uiSprites_[AButtonSprite]->SetTextureHandle(texHandles_[AButtonNoneTex]);  // テクスチャ変更
-	}
+	//if (input_->PushJoystick(kJoystickButtonA)) {
+	//	uiSprites_[AButtonSprite]->SetTextureHandle(texHandles_[AButtonPressTex]);  // テクスチャ変更
+	//}
+	//else {
+	//	uiSprites_[AButtonSprite]->SetTextureHandle(texHandles_[AButtonNoneTex]);  // テクスチャ変更
+	//}
 	// LBボタン
 	if (input_->PushJoystick(kJoystickButtonLB)) {
 		uiSprites_[LBButtonSprite]->SetTextureHandle(texHandles_[LeftThumbPressTex]);  // テクスチャ変更
@@ -254,7 +254,7 @@ void GameUIManager::JumpButtonUIUpdate()
 	else {
 		jumpUIColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	}
-	uiSprites_[AButtonSprite]->SetColor(jumpUIColor_);
+	//uiSprites_[AButtonSprite]->SetColor(jumpUIColor_);
 	uiSprites_[LBButtonSprite]->SetColor(jumpUIColor_);
 	uiSprites_[JumpSprite]->SetColor(jumpUIColor_);
 }
