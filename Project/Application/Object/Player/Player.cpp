@@ -62,7 +62,7 @@ void Player::Initialize(Model* model)
 	// ここで環境パーティクルの再生を行う
 	fallingLeafDesc_.transform = emitTransform_.get();
 	fallingLeafDesc_.instanceCount = 1;
-	fallingLeafDesc_.frequency = 0.1f;
+	fallingLeafDesc_.frequency = 0.25f;
 	fallingLeafDesc_.lifeTime = 5.0f;
 	fallingLeafDesc_.particleModelNum = kBambooLeaf;
 	fallingLeafDesc_.paeticleName = kFallingLeafParticle;

@@ -55,6 +55,7 @@ public: // アクセッサ
 
 private: // メンバ変数
 
+	// 二個目の背景オブジェクトのトランスフォーム
 	WorldTransform transform2_;
 
 	// 座標のみ

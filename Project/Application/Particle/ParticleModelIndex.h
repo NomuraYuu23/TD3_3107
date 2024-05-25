@@ -6,5 +6,6 @@ enum ParticleModelIndex {
 	kUvChecker,
 	kCircle,
 	kBambooLeaf,
+	kSpearLeaf,
 	kCountofParticleModelIndex
 };
