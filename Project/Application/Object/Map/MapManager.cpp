@@ -5,6 +5,7 @@
 #include "../ObjectList.h"
 #include "../GameUtility/MathUtility.h"
 #include "../../../Engine/2D/ImguiManager.h"
+#include "../../AllSceneObject/StageNumberManager.h"
 
 void MapManager::Initialize(Model* model)
 {
@@ -374,7 +375,7 @@ void MapManager::EditorMapLoad()
 	std::map<std::string, std::map<std::string, MapBlockData>>* mapDatas = mapEditor_->GetDatas();
 	
 	// ステージ
-	std::string stageName = "Stage0";
+	std::string stageName = "Stage" + std::to_string(StageNumberManager::stageNum_);
 
 	for (std::map<std::string, std::map<std::string, MapBlockData>>::iterator stageItr = mapDatas->begin();
 		stageItr != mapDatas->end(); ++stageItr) {

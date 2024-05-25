@@ -34,6 +34,8 @@ public:
 	/// </summary>
 	void ScalingUpDown();
 
+	void MoveCameraForward();
+
 private:
 	// プレイヤー
 	Player* player_ = nullptr;
@@ -47,5 +49,16 @@ private:
 	float nowFovY_ = 0;
 
 	TimerLib correctTimer_;
+
+private: // お試し
+
+	// オフセット位置ターゲット
+	Vector3 defaultOffsetTarget_;
+
+	// オフセット位置追加分
+	Vector3 defaultOffsetAdd_;
+
+	// 補間係数
+	float targetT_;
 
 };

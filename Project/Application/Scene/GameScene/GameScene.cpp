@@ -7,6 +7,7 @@
 #include "../../Particle/EmitterName.h"
 #include "../../../Engine/Math/DeltaTime.h"
 #include "../../../Engine/base/WindowSprite.h"
+#include "../../AllSceneObject/StageNumberManager.h"
 
 GameScene::~GameScene()
 {
@@ -188,6 +189,9 @@ void GameScene::Initialize() {
 
 #endif // _DEBUG
 	skydome_->SetParent(&player_->worldtransform_);
+
+	// ゲームシステムにポインタ登録
+	gameSystemManager_->SetEnemyManager(enemyManager_.get());
 }
 
 /// <summary>
@@ -479,6 +483,8 @@ void GameScene::ImguiDraw() {
 
 	gameData_->ApplyGlobalVariables();
 
+	StageNumberManager::ImGuiDraw();
+
 	// ポストエフェクトのImGuiを表示
 	PostEffect::GetInstance()->ImGuiDraw();
 	// フォグのImGuiの表示
@@ -600,7 +606,6 @@ void GameScene::TextureLoad()
 
 void GameScene::LowerVolumeBGM()
 {
-
 
 	const uint32_t startHandleIndex = 3;
 

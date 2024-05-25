@@ -81,10 +81,12 @@ void SpearAerialState::Update()
 void SpearAerialState::InitializeDirection(const Vector2& direct)
 {
 	if (direct.x > 0) {
-		player_->velocity_.x = CreateNewSpeed(direct.x);
+		float moveDirect = 1.0f;
+		player_->velocity_.x = CreateNewSpeed(moveDirect);
 	}
 	else if (direct.x < 0) {
-		player_->velocity_.x = CreateNewSpeed(direct.x);
+		float moveDirect = -1.0f;
+		player_->velocity_.x = CreateNewSpeed(moveDirect);
 	}
 	else {
 		player_->velocity_.x = 0;

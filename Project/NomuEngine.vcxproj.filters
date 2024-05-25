@@ -216,6 +216,12 @@
     <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
+    <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
+    <ClCompile Include="Application\Object\Player\System\SlowEffect\SlowEffect.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StagePhot.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\SelectSystem.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StageSelectUI.cpp" />
+    <ClCompile Include="Application\AllSceneObject\StageNumberManager.cpp" />
     <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
     <ClCompile Include="Application\Particle\user\SpearCatch\SpearCatchParticle.cpp" />
     <ClCompile Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.cpp" />
@@ -472,6 +478,11 @@
     <ClInclude Include="Application\Object\Player\Anim\PlayerAnimManager.h" />
     <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
+    <ClInclude Include="Application\Object\Player\System\SlowEffect\SlowEffect.h" />
+    <ClInclude Include="Application\SelectSceneObject\StagePhot.h" />
+    <ClInclude Include="Application\SelectSceneObject\SelectSystem.h" />
+    <ClInclude Include="Application\SelectSceneObject\StageSelectUI.h" />
+    <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
     <ClInclude Include="Application\UI\GameUIManager.h" />
     <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
     <ClInclude Include="Application\Particle\user\SpearCatch\SpearCatchParticle.h" />

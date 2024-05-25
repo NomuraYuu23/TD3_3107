@@ -1,5 +1,6 @@
 #include "GameSystemManager.h"
 #include "../ObjectList.h"
+#include "../Enemy/EnemyManager.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 
@@ -44,6 +45,7 @@ void GameSystemManager::GameOverProcess()
 	if (player_->IsDead() || goal_->IsGoal()) {
 		goal_->SetIsGoal(false);
 		player_->Reset();
+		enemyManager_->LoadEnemyData();
 	}
 }
 

@@ -64,6 +64,9 @@ public:
 	std::string GetName() { return name_; }
 
 private:
+	void GenerateEnemys(float positionAngle, float transformAngle, float addAngle);
+
+private:
 	// 
 	std::string name_;
 

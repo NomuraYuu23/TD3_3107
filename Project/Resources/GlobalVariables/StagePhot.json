@@ -1,0 +1,46 @@
+{
+    "StagePhot": {
+        "amplitude": 0.30000001192092896,
+        "fre": 5.0,
+        "offScreenLeftPos": [
+            -960.0,
+            432.0
+        ],
+        "offScreenLeftSize": [
+            540.0,
+            360.0
+        ],
+        "offScreenRightPos": [
+            2240.0,
+            432.0
+        ],
+        "offScreenRightSize": [
+            540.0,
+            360.0
+        ],
+        "screenCenterPos": [
+            640.0,
+            360.0
+        ],
+        "screenCenterSize": [
+            630.0,
+            420.0
+        ],
+        "screenLeftPos": [
+            -160.0,
+            432.0
+        ],
+        "screenLeftSize": [
+            540.0,
+            360.0
+        ],
+        "screenRightPos": [
+            1440.0,
+            432.0
+        ],
+        "screenRightSize": [
+            540.0,
+            360.0
+        ]
+    }
+}
