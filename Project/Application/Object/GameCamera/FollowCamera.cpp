@@ -22,6 +22,9 @@ void FollowCamera::Initialize()
 
 	transform_.rotate.x = 0.3f;
 
+	scalingRate_ = 0.0f;
+	scalingRateT_ = 0.2f;
+
 }
 
 void FollowCamera::Update(float elapsedTime)
@@ -64,6 +67,8 @@ void FollowCamera::ImGuiDraw()
 	ImGui::DragFloat3("defaultOffsetTarget_", &defaultOffsetTarget_.x, 0.01f, 0.0f, 20.0f);
 	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.01f, 0.0f, 20.0f);
 
+	ImGui::DragFloat("ScalingRateT", &scalingRateT_, 0.01f, 0.0f, 1.0f);
+
 	ImGui::End();
 
 }
@@ -83,6 +88,8 @@ void FollowCamera::ScalingUpDown()
 	// 割合計算
 	float rate = newSize / maxRange;
 
+	scalingRate_ = Ease::Easing(Ease::EaseName::Lerp, scalingRate_, rate, scalingRateT_);
+
 	// オフセットと引きの最大の値
 	Vector3 defaultOff = GlobalVariables::GetInstance()->GetVector3Value("Camera", "Offset");
 	float pullMax = GlobalVariables::GetInstance()->GetFloatValue("Camera", "PullOffset");
@@ -95,8 +102,8 @@ void FollowCamera::ScalingUpDown()
 	float maxOffset = defaultOff.z - pullMax;
 
 	// 割合に合わせた値
-	nowFovY_ = MathUtility::Ratio(minFov, maxFov, rate);
-	defaultOffset_.z = MathUtility::Ratio(defaultOff.z, maxOffset, rate);
+	nowFovY_ = MathUtility::Ratio(minFov, maxFov, scalingRate_);
+	defaultOffset_.z = MathUtility::Ratio(defaultOff.z, maxOffset, scalingRate_);
 
 	SetFovY(nowFovY_);
 	// タイマーセット
