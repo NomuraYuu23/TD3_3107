@@ -18,6 +18,12 @@ void BackGround::Initialize(Model* model)
 
 void BackGround::Update()
 {
+	// 親がいる場合
+	if (parent_) {
+		worldtransform_.transform_.translate.x = parent_->GetWorldPosition().x + 50.0f;
+		worldtransform_.transform_.translate.y = parent_->GetWorldPosition().y;
+	}
+
 	// 基底クラスの更新
 	IObject::Update();
 }

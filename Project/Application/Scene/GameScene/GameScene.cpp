@@ -136,6 +136,7 @@ void GameScene::Initialize() {
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
+	backGround_->SetParent(&player_->worldtransform_);
 
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
