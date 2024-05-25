@@ -224,6 +224,7 @@
     <ClCompile Include="Application\AllSceneObject\StageNumberManager.cpp" />
     <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
     <ClCompile Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.cpp" />
+    <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />

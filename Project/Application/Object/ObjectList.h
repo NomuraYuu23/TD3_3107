@@ -17,6 +17,7 @@
 #include "Map/MapManager.h"
 #include "Map/Terrain.h"
 #include "Map/Goal/GoalObject.h"
+#include "Map/CheckPoint/CheckPointObject.h"
 // ゲームシステムクラス
 #include "GameSystem/GameSystemManager.h"
 

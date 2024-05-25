@@ -744,6 +744,16 @@ void Player::Reset()
 	}
 }
 
+void Player::Respawn(const Vector3& position)
+{
+
+	Reset();
+	// 座標
+	worldtransform_.transform_.translate = position;
+	// 更新
+	worldtransform_.UpdateMatrix();
+}
+
 void Player::SetFallTimer()
 {
 	float fallTimerFrame = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "KickBackCooltime");

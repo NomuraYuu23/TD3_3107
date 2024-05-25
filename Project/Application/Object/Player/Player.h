@@ -125,6 +125,11 @@ public: // メンバ関数
 	/// </summary>
 	void Reset();
 
+	/// <summary>
+	/// スポーン処理
+	/// </summary>
+	void Respawn(const Vector3& position);
+
 public: // アニメーション関連関数群
 
 	/// <summary>
