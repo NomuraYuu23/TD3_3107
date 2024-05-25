@@ -161,6 +161,7 @@ void Player::Draw(const BaseCamera& camera)
 void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
+	landingAdjuster_.ImGuiDraw();
 	controller_.ImGuiDraw();
 	hpManager_.ImGuiDraw();
 	correctSystem_.ImGuiDraw();
@@ -807,7 +808,8 @@ void Player::SystemInitialize()
 	// スローエフェクト
 	slowEffect_ = std::make_unique<SlowEffect>();
 	slowEffect_->Initalize(this);
-
+	// 着地アシスト
+	landingAdjuster_.Initialize(this, weapon_.get());
 }
 
 void Player::SystemUpdate()
@@ -830,4 +832,6 @@ void Player::SystemUpdate()
 	assistDash_.Update();
 	// スローエフェクト
 	slowEffect_->Update();
+	// 着地アシスト
+	landingAdjuster_.Update();
 }

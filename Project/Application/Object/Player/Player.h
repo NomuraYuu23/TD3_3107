@@ -249,6 +249,9 @@ private: // システム
 	// 補正用システム
 	CorrectSystem correctSystem_;
 
+	// 槍着地補正システム
+	SpearLandingAdjuster landingAdjuster_;
+
 private: // UI関連
 
 	// UIマネージャー

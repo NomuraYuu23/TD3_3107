@@ -223,6 +223,7 @@
     <ClCompile Include="Application\SelectSceneObject\StageSelectUI.cpp" />
     <ClCompile Include="Application\AllSceneObject\StageNumberManager.cpp" />
     <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
+    <ClCompile Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -482,6 +483,7 @@
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
     <ClInclude Include="Application\UI\GameUIManager.h" />
     <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
+    <ClInclude Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
