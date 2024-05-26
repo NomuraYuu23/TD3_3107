@@ -62,6 +62,12 @@ public: // アクセッサ
 	void SetIsGoal(bool isGoal) { isGoal_ = isGoal; }
 
 private:
+
+	// 環境パーティクル生成用座標
+	std::unique_ptr<EulerTransform> emitTransform_;
+	// 環境パーティクル用設定構造体
+	EmitterDesc goalParticleDesc_;
+
 	// ゴールフラグ
 	bool isGoal_ = false;
 

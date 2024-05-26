@@ -227,6 +227,7 @@
     <ClCompile Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.cpp" />
     <ClCompile Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.cpp" />
     <ClCompile Include="Application\Particle\user\SpearJump\SpearJumpParticle.cpp" />
+    <ClCompile Include="Application\Particle\user\GoalParticle\GoalParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -492,6 +493,7 @@
     <ClInclude Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.h" />
     <ClInclude Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.h" />
     <ClInclude Include="Application\Particle\user\SpearJump\SpearJumpParticle.h" />
+    <ClInclude Include="Application\Particle\user\GoalParticle\GoalParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

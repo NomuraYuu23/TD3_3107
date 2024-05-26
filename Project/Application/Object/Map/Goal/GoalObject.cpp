@@ -1,6 +1,7 @@
 #include "GoalObject.h"
 #include "../../ObjectList.h"
 #include "../../../Collider2D/CollisionConfig2D.h"
+#include "../../../Particle/EmitterName.h"
 
 void GoalObject::Initialize(Model* model)
 {
@@ -48,6 +49,26 @@ void GoalObject::Initialize(Model* model)
 
 #pragma endregion
 
+	// デバック以外の場合行う
+	#ifndef _DEBUG
+
+	// トランスフォーム生成
+	emitTransform_ = std::make_unique<EulerTransform>();
+	*emitTransform_ = worldtransform_.transform_;
+
+	// ここでゴールパーティクルの再生を行う
+	goalParticleDesc_.transform = emitTransform_.get();
+	goalParticleDesc_.instanceCount = 3;
+	goalParticleDesc_.frequency = 0.25f;
+	goalParticleDesc_.lifeTime = 5.0f;
+	goalParticleDesc_.particleModelNum = kCircle;
+	goalParticleDesc_.paeticleName = kGoalParticle;
+	goalParticleDesc_.velocity = { 0.0f, 1.0f, 0.0f };
+
+	// 無限生成エミッタで生成し続ける
+	ParticleManager::GetInstance()->MakeEmitter(&goalParticleDesc_, EmitterName::kInfiniteEmitter);
+
+	#endif // !_DEBUG
 }
 
 void GoalObject::Update()
@@ -56,6 +77,15 @@ void GoalObject::Update()
 #ifdef _DEBUG
 	ApplyGlobalVariables();
 #endif // _DEBUG
+
+	// デバック以外の場合行う
+	#ifndef _DEBUG
+
+	// 生成座標更新
+	*emitTransform_ = worldtransform_.transform_;
+	emitTransform_->translate.y += 1.5f;
+
+	#endif // !_DEBUG
 
 	// 基底クラスの更新
 	IObject::Update();

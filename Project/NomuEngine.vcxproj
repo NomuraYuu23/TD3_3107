@@ -269,6 +269,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\UI\GameUIManager.cpp" />
     <ClCompile Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.cpp" />
     <ClCompile Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.cpp" />
+    <ClCompile Include="Application\Particle\user\GoalParticle\GoalParticle.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\3D\Material.cpp" />
     <ClCompile Include="Engine\Math\Matrix4x4.cpp" />
@@ -565,6 +566,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.h" />
     <ClInclude Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.h" />
     <ClInclude Include="Application\Particle\user\SpearJump\SpearJumpParticle.h" />
+    <ClInclude Include="Application\Particle\user\GoalParticle\GoalParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
