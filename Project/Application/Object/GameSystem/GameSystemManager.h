@@ -56,8 +56,20 @@ public:
 	/// </summary>
 	void UpdateStageInfoOnCheckPoint();
 
+	/// <summary>
+	/// クリア時
+	/// </summary>
+	void GameClearProcess();
+
+	/// <summary>
+	/// クリア処理とゲームオーバー処理の判断、関数呼び出しを行う関数
+	/// </summary>
+	void CheckGameStatus();
+
 public: // アクセッサ
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
+
+	bool GetIsGameClear() { return isGameClear_; }
 
 private:
 	/// <summary>
