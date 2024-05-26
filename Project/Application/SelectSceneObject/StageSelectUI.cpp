@@ -3,7 +3,7 @@
 #include "../AllSceneObject/StageNumberManager.h"
 
 // ステージ番号の大きさ
-const Vector2 StageSelectUI::kStageNumSize = {64.0f, 64.0f};
+const Vector2 StageSelectUI::kStageNumSize = {128.0f, 128.0f};
 
 void StageSelectUI::Initialize(const std::array<uint32_t, SpriteIndex::kSpriteIndexOfCount> textureHandles)
 {

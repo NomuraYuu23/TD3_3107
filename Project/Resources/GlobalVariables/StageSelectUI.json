@@ -17,20 +17,20 @@
             128.0
         ],
         "stageNumberPostion": [
-            740.0,
-            105.0
+            800.0,
+            90.0
         ],
         "stageNumberSize": [
-            64.0,
-            64.0
+            128.0,
+            128.0
         ],
         "stageSelectPostion": [
-            608.0,
-            100.0
+            580.0,
+            90.0
         ],
         "stageSelectSize": [
-            200.0,
-            64.0
+            384.0,
+            128.0
         ],
         "stageUiPostion": [
             1000.0,
