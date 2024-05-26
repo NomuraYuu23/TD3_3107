@@ -61,6 +61,13 @@ void GameSystemManager::GameOverProcess()
 	}
 }
 
+void GameSystemManager::UpdateStageInfoOnCheckPoint()
+{
+
+
+
+}
+
 void GameSystemManager::ImGuiDraw()
 {
 	ImGui::Begin("GameSystem");

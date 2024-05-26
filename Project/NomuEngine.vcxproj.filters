@@ -225,6 +225,7 @@
     <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
     <ClCompile Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\ChaseEnemyState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -485,6 +486,7 @@
     <ClInclude Include="Application\UI\GameUIManager.h" />
     <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
     <ClInclude Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.h" />
+    <ClInclude Include="Application\Object\Enemy\State\ChaseEnemyState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
