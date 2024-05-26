@@ -15,6 +15,10 @@ void GoalObject::Initialize(Model* model)
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeGoalObject);
 	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
+	// ライティング有効
+	enableLighting_ = EnableLighting::HalfLambert;
+	material_->SetEnableLighting(enableLighting_);
+
 	// システム関係の初期化
 	SystemInitialize();
 
