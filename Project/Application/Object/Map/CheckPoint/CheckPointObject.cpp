@@ -43,7 +43,7 @@ void CheckPointObject::ImGuiDraw()
 void CheckPointObject::OnCollision(ColliderParentObject2D target)
 {
 	// 衝突時に書き換えの処理呼び出し（これより後の値だった場合書き換えない
-	checkPointManager_->CheckPointJudge(checkNum_);
+	checkPointManager_->CheckPointJudge(worldtransform_.GetWorldPosition(), checkNum_);
 }
 
 void CheckPointObject::Setting(const CheckPointData& data)

@@ -51,6 +51,10 @@ public:
 	/// </summary>
 	void GameOverProcess();
 
+	/// <summary>
+	/// 
+	/// </summary>
+	void UpdateStageInfoOnCheckPoint();
 
 public: // アクセッサ
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }

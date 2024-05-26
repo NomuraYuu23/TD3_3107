@@ -123,6 +123,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\IEnemyEmitter.cpp" />
     <ClCompile Include="Application\Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\SingleEnemyRegister.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\ChaseEnemyState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\SingleEnemyState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\GroupEnemyState.cpp" />
     <ClCompile Include="Application\Object\Enemy\State\EnemyWaitState.cpp" />
@@ -331,6 +332,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\MultiEnemyData.h" />
     <ClInclude Include="Application\Object\Enemy\SingleEnemyData.h" />
     <ClInclude Include="Application\Object\Enemy\SingleEnemyRegister.h" />
+    <ClInclude Include="Application\Object\Enemy\State\ChaseEnemyState.h" />
     <ClInclude Include="Application\Object\Enemy\State\SingleEnemyState.h" />
     <ClInclude Include="Application\Object\Enemy\State\GroupEnemyState.h" />
     <ClInclude Include="Application\Object\Enemy\State\EnemyStateList.h" />

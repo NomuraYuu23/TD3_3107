@@ -54,11 +54,25 @@ void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)
 
 void GameSystemManager::GameOverProcess()
 {
-	if (player_->IsDead() || goal_->IsGoal()) {
+	// 死亡処理
+	if (player_->IsDead()) {
 		goal_->SetIsGoal(false);
-		player_->Reset();
+		player_->Respawn(checkPointManager_->GetRespawnPosition());
 		enemyManager_->LoadEnemyData();
 	}
+	// ゴール処理
+	else if (goal_->IsGoal()) {
+		goal_->SetIsGoal(false);
+		player_->Respawn(checkPointManager_->GetRespawnPosition());
+		enemyManager_->LoadEnemyData();
+	}
+}
+
+void GameSystemManager::UpdateStageInfoOnCheckPoint()
+{
+
+
+
 }
 
 void GameSystemManager::ImGuiDraw()

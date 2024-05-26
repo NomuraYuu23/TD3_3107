@@ -223,6 +223,16 @@
     <ClCompile Include="Application\Object\Player\Anim\PlayerAnimManager.cpp" />
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
+    <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
+    <ClCompile Include="Application\Object\Player\System\SlowEffect\SlowEffect.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StagePhot.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\SelectSystem.cpp" />
+    <ClCompile Include="Application\SelectSceneObject\StageSelectUI.cpp" />
+    <ClCompile Include="Application\AllSceneObject\StageNumberManager.cpp" />
+    <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
+    <ClCompile Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.cpp" />
+    <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\ChaseEnemyState.cpp" />
     <ClCompile Include="Application\Particle\user\SpearCatch\SpearCatchParticle.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointEditor.cpp" />
     <ClCompile Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.cpp" />
@@ -484,6 +494,9 @@
     <ClInclude Include="Application\Object\Weapon\Anim\SpearAnimManager.h" />
     <ClInclude Include="Application\Particle\user\RunSmoke\RunSmoke.h" />
     <ClInclude Include="Application\UI\GameUIManager.h" />
+    <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
+    <ClInclude Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.h" />
+    <ClInclude Include="Application\Object\Enemy\State\ChaseEnemyState.h" />
     <ClInclude Include="Application\Particle\user\SpearCatch\SpearCatchParticle.h" />
     <ClInclude Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.h" />
     <ClInclude Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.h" />
