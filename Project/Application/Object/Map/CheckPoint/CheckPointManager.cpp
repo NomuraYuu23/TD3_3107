@@ -48,7 +48,7 @@ void CheckPointManager::GenerateCheckPoint(const Vector3& position, uint32_t che
 	std::unique_ptr<CheckPointObject> obj = std::make_unique<CheckPointObject>();
 	obj->Initialize(checkPointModel_);
 	obj->SetManager(this);
-	obj->Setting({ position,checkNumber });
+	obj->Setting({ position, static_cast<int32_t>(checkNumber) });
 	checkPoints_.push_back(std::move(obj));
 }
 

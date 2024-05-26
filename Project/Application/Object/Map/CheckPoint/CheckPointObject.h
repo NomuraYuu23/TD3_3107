@@ -2,6 +2,7 @@
 #include "../../IObject.h"
 #include "../../../Engine/3D/Model.h"
 #include "../../../Engine/Collider2D/Box.h"
+#include "CheckPointData.h"
 
 class CheckPointManager;
 
@@ -9,12 +10,6 @@ class CheckPointObject : public IObject
 {
 public:
 	static uint32_t sSerialNumber;
-
-	struct CheckPointData
-	{
-		Vector3 position;
-		uint32_t checkPointNumber;
-	};
 
 public: // 継承
 	/// <summary>

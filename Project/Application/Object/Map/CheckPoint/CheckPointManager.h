@@ -3,6 +3,8 @@
 #include "../../../Engine/3D/Model.h"
 #include "../../../Engine/Camera/BaseCamera.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
+#include "../../../AllSceneObject/StageNumberManager.h"
+#include "CheckPointData.h"
 #include <vector>
 #include <memory>
 
@@ -72,5 +74,9 @@ private:
 	uint32_t checkPointNum_ = 0u;
 	// 前のチェックポイント番号
 	uint32_t prevCheckPointNum_ = 0u;
+
+private: // 
+
+	std::array<std::vector<CheckPointData>, StageNumberManager::kStageMax> checkPointDatas_;
 
 };

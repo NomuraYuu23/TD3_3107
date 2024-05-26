@@ -3,6 +3,7 @@
 #include "../../../externals/nlohmann/json.hpp"
 #include <fstream>
 #include <cassert>
+#include "../../AllSceneObject/StageNumberManager.h"
 
 //名前空間
 using namespace nlohmann;
@@ -16,45 +17,6 @@ void EnemyEditor::ImGuiDraw()
 
 	if (ImGui::Button("Save")) {
 		SaveFile("Stage");
-	}
-
-	// ステージの追加
-	ImGui::SeparatorText("StageAdd");
-
-	ImGui::DragInt("StageAddNum", &stageAddNum_, 0.1f, 0);
-
-	if (ImGui::Button("StageAdd")) {
-		std::string stageName = "Stage" + std::to_string(stageAddNum_);
-
-		if (stageAddNum_ < 10) {
-			stageName = "Stage0" + std::to_string(stageAddNum_);
-		}
-
-		datas_[stageName];
-		maxStages_++;
-		stageAddNum_++;
-	}
-
-	// ステージの削除
-	ImGui::SeparatorText("StageDelete");
-
-	ImGui::DragInt("StageDeleteNum", &stageDeleteNum_, 0.1f, 0);
-
-	if (ImGui::Button("StageDelete")) {
-		// キー
-		std::string key = "Stage" + std::to_string(stageDeleteNum_);
-
-		if (stageDeleteNum_ < 10) {
-			key = "Stage0" + std::to_string(stageDeleteNum_);
-		}
-
-		// 指定グループに指定キーが存在するか
-		if (datas_.find(key) != datas_.end()) {
-			// 指定グループから指定のキーの値を取得
-			datas_.erase(key);
-			maxStages_--;
-		}
-
 	}
 
 	ImGui::RadioButton("SingleEnemy", &mode_, 0); ImGui::SameLine(); ImGui::RadioButton("MultiEnemy", &mode_, 1);
@@ -118,48 +80,53 @@ void EnemyEditor::LoadFile(const std::string& groupName)
 	// ファイルを閉じる
 	ifs.close();
 
-	// マップ数
-	maxStages_ = 0;
+	// ステージの数だけ回す
+	uint32_t stageCount = 0;
 
 	// ファイル読み込み
 	while (1) {
 
 		// グループを検索
-		std::string name = groupName + std::to_string(maxStages_);
+		std::string name = groupName + std::to_string(stageCount);
 
-		if (maxStages_ < 10) {
-			name = groupName + "0" + std::to_string(maxStages_);
+		if (stageCount < 10) {
+			name = groupName + "0" + std::to_string(stageCount);
 		}
 
 		json::iterator itGroup = root.find(name);
 
 		// 未登録チェック
 		if (itGroup == root.end()) {
-			break;
+			datas_[name];
 		}
 		else {
-			maxStages_++;
+			// 各アイテムについて
+			for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+				// アイテム名を取得
+				const std::string& itemName = itItem.key();
+				size_t tmp = itItem->size();
+				// SingleEnemyData型の値を保持していれば
+				if (itItem->is_object() && itItem->size() == 4) {
+					// SingleEnemyData型の値を登録
+					SingleEnemyData value = itItem->get<SingleEnemyData>();
+					SetValue(name, itemName, value);
+				}
+				// MultiEnemyData型の値を保持していれば
+				else {
+					// MultiEnemyData型の値を登録
+					MultiEnemyData value = itItem->get<MultiEnemyData>();
+					SetValue(name, itemName, value);
+				}
+
+			}
 		}
 
-		// 各アイテムについて
-		for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
-			// アイテム名を取得
-			const std::string& itemName = itItem.key();
-			size_t tmp = itItem->size();
-			// SingleEnemyData型の値を保持していれば
-			if (itItem->is_object() && itItem->size() == 4) {
-				// SingleEnemyData型の値を登録
-				SingleEnemyData value = itItem->get<SingleEnemyData>();
-				SetValue(name, itemName, value);
-			}
-			// MultiEnemyData型の値を保持していれば
-			else{
-				// MultiEnemyData型の値を登録
-				MultiEnemyData value = itItem->get<MultiEnemyData>();
-				SetValue(name, itemName, value);
-			}
-
+		// ループを抜ける
+		if (++stageCount == StageNumberManager::kStageMax) {
+			break;
 		}
+
+
 	}
 
 }
@@ -298,111 +265,129 @@ void EnemyEditor::ImGuiSingleEnemy()
 	// ステージの数だけ回す
 	uint32_t stageCount = 0;
 
-	for (std::map<std::string, EnemyEditorGroup>::iterator datasItr = datas_.begin();
-		datasItr != datas_.end(); ++datasItr) {
+	if (ImGui::BeginTabBar("StageNum")) {
 
-		std::string stageName = datasItr->first;
-		EnemyEditorGroup& group = datasItr->second;
-		ImGui::SeparatorText(stageName.c_str());
+		for (std::map<std::string, EnemyEditorGroup>::iterator datasItr = datas_.begin();
+			datasItr != datas_.end(); ++datasItr) {
 
-		// シングルエネミーの追加
-		ImGui::SeparatorText("SingleEnemyAdd");
+			std::string stageName = "Stage" + std::to_string(stageCount);
 
-		ImGui::DragFloat3("AddPosition", &addSingleEnemyData_.position.x, imGuiSpeed);
-		ImGui::DragInt("AddTypeNum", &addSingleEnemyData_.typeNum, imGuiSpeed, 0);
-		ImGui::DragInt("AddSingleEnemyNum", &addSingleEnemyNum_, 0.1f, 0);
-		ImGui::DragFloat3("AddEaseEndPosition", &addSingleEnemyData_.endPosition.x, imGuiSpeed);
-		ImGui::DragInt("AddPadding", &addSingleEnemyData_.pad, 0.1f, 0);
-
-		if (addSingleEnemyNum_ < 0) {
-			addSingleEnemyNum_ = 0;
-		}
-
-		if (addSingleEnemyData_.typeNum < 0) {
-			addSingleEnemyData_.typeNum = 0;
-		}
-		else if (addSingleEnemyData_.typeNum > 1) {
-			addSingleEnemyData_.typeNum = 1;
-		}
-
-		std::string nameSingleAdd = "SingleEnemyAdd" + std::to_string(stageCount);
-
-		if (ImGui::Button(nameSingleAdd.c_str())) {
-			// キー
-			std::string key = "Enemy" + std::to_string(addSingleEnemyNum_);
-
-			if (addSingleEnemyNum_ < 10) {
-				key = "Enemy0" + std::to_string(addSingleEnemyNum_);
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
 			}
 
-			// 追加
-			SetValue(stageName, key, addSingleEnemyData_);
-			addSingleEnemyNum_++;
-		}
+			if (ImGui::BeginTabItem(stageName.c_str())) {
 
-		// シングルエネミーの削除
-		ImGui::SeparatorText("SingleEnemyDelete");
+				std::string stageName = datasItr->first;
+				EnemyEditorGroup& group = datasItr->second;
 
-		ImGui::DragInt("DeleteSingleEnemyNum", &deleteSingleEnemyNum_, 0.1f, 0);
+				// シングルエネミーの追加
+				ImGui::SeparatorText("SingleEnemyAdd");
 
-		if (deleteSingleEnemyNum_ < 0) {
-			deleteSingleEnemyNum_ = 0;
-		}
+				ImGui::DragFloat3("AddPosition", &addSingleEnemyData_.position.x, imGuiSpeed);
+				ImGui::DragInt("AddTypeNum", &addSingleEnemyData_.typeNum, imGuiSpeed, 0);
+				ImGui::DragInt("AddSingleEnemyNum", &addSingleEnemyNum_, 0.1f, 0);
+				ImGui::DragFloat3("AddEaseEndPosition", &addSingleEnemyData_.endPosition.x, imGuiSpeed);
+				ImGui::DragInt("AddPadding", &addSingleEnemyData_.pad, 0.1f, 0);
 
-		std::string nameSingleDelete = "SingleEnemyDelete" + std::to_string(stageCount);
-
-		if (ImGui::Button(nameSingleDelete.c_str())) {
-			// キー
-			std::string key = "Enemy" + std::to_string(deleteSingleEnemyNum_);
-
-			if (deleteSingleEnemyNum_ < 10) {
-				key = "Enemy0" + std::to_string(deleteSingleEnemyNum_);
-			}
-
-
-			// 指定グループに指定キーが存在するか
-			if (datasItr->second.find(key) != datasItr->second.end()) {
-				// 指定グループから指定のキーの値を取得
-				datasItr->second.erase(key);
-			}
-
-		}
-
-		// シングルエネミーの値の修正
-		ImGui::SeparatorText("SingleEnemyEdit");
-
-		for (std::map<std::string, EnemyEditorItem>::iterator groupItr = group.begin();
-			groupItr != group.end(); ++groupItr) {
-
-			if (std::holds_alternative<SingleEnemyData>(groupItr->second)) {
-
-				SingleEnemyData& item = std::get<SingleEnemyData>(groupItr->second);
-
-				std::string name = groupItr->first;
-				ImGui::SeparatorText(name.c_str());
-
-				std::string namePosition = stageName + name + "Position";
-				std::string nameTypeNum = stageName + name + "TypeNum";
-				std::string nameEaseEndPosition = stageName + name + "EndPosition";
-				std::string namePad = stageName + name + "pad";
-
-				ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
-				ImGui::DragInt(nameTypeNum.c_str(), &item.typeNum, imGuiSpeed);
-				ImGui::DragFloat3(nameEaseEndPosition.c_str(), &item.endPosition.x, imGuiSpeed);
-				ImGui::DragInt(namePad.c_str(), &item.pad, imGuiSpeed);
-
-				if (item.typeNum < 0) {
-					item.typeNum = 0;
-				}
-				else if (item.typeNum > 1) {
-					item.typeNum = 1;
+				if (addSingleEnemyNum_ < 0) {
+					addSingleEnemyNum_ = 0;
 				}
 
+				if (addSingleEnemyData_.typeNum < 0) {
+					addSingleEnemyData_.typeNum = 0;
+				}
+				else if (addSingleEnemyData_.typeNum > 1) {
+					addSingleEnemyData_.typeNum = 1;
+				}
+
+				std::string nameSingleAdd = "SingleEnemyAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameSingleAdd.c_str())) {
+					// キー
+					std::string key = "Enemy" + std::to_string(addSingleEnemyNum_);
+
+					if (addSingleEnemyNum_ < 10) {
+						key = "Enemy0" + std::to_string(addSingleEnemyNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addSingleEnemyData_);
+					addSingleEnemyNum_++;
+				}
+
+				// シングルエネミーの削除
+				ImGui::SeparatorText("SingleEnemyDelete");
+
+				ImGui::DragInt("DeleteSingleEnemyNum", &deleteSingleEnemyNum_, 0.1f, 0);
+
+				if (deleteSingleEnemyNum_ < 0) {
+					deleteSingleEnemyNum_ = 0;
+				}
+
+				std::string nameSingleDelete = "SingleEnemyDelete" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameSingleDelete.c_str())) {
+					// キー
+					std::string key = "Enemy" + std::to_string(deleteSingleEnemyNum_);
+
+					if (deleteSingleEnemyNum_ < 10) {
+						key = "Enemy0" + std::to_string(deleteSingleEnemyNum_);
+					}
+
+
+					// 指定グループに指定キーが存在するか
+					if (datasItr->second.find(key) != datasItr->second.end()) {
+						// 指定グループから指定のキーの値を取得
+						datasItr->second.erase(key);
+					}
+
+				}
+
+				// シングルエネミーの値の修正
+				ImGui::SeparatorText("SingleEnemyEdit");
+
+				for (std::map<std::string, EnemyEditorItem>::iterator groupItr = group.begin();
+					groupItr != group.end(); ++groupItr) {
+
+					if (std::holds_alternative<SingleEnemyData>(groupItr->second)) {
+
+						SingleEnemyData& item = std::get<SingleEnemyData>(groupItr->second);
+
+						std::string name = groupItr->first;
+						ImGui::SeparatorText(name.c_str());
+
+						std::string namePosition = stageName + name + "Position";
+						std::string nameTypeNum = stageName + name + "TypeNum";
+						std::string nameEaseEndPosition = stageName + name + "EndPosition";
+						std::string namePad = stageName + name + "pad";
+
+						ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
+						ImGui::DragInt(nameTypeNum.c_str(), &item.typeNum, imGuiSpeed);
+						ImGui::DragFloat3(nameEaseEndPosition.c_str(), &item.endPosition.x, imGuiSpeed);
+						ImGui::DragInt(namePad.c_str(), &item.pad, imGuiSpeed);
+
+						if (item.typeNum < 0) {
+							item.typeNum = 0;
+						}
+						else if (item.typeNum > 1) {
+							item.typeNum = 1;
+						}
+
+					}
+
+				}
+
+				ImGui::EndTabItem();
+
 			}
+
+			stageCount++;
 
 		}
 
-		stageCount++;
+		// タブバーを終了
+		ImGui::EndTabBar();
 
 	}
 
@@ -416,105 +401,122 @@ void EnemyEditor::ImGuiMultiEnemy()
 	// ステージの数だけ回す
 	uint32_t stageCount = 0;
 
-	for (std::map<std::string, EnemyEditorGroup>::iterator datasItr = datas_.begin();
-		datasItr != datas_.end(); ++datasItr) {
+	if (ImGui::BeginTabBar("StageNum")) {
 
-		std::string stageName = datasItr->first;
-		EnemyEditorGroup& group = datasItr->second;
-		ImGui::SeparatorText(stageName.c_str());
+		for (std::map<std::string, EnemyEditorGroup>::iterator datasItr = datas_.begin();
+			datasItr != datas_.end(); ++datasItr) {
 
-		// マルチエネミーの追加
-		ImGui::SeparatorText("MultiEnemyAdd");
+			std::string stageName = "Stage" + std::to_string(stageCount);
 
-		ImGui::DragFloat3("AddPosition", &addMultieEnemyData_.position.x, imGuiSpeed);
-		ImGui::DragFloat("AddDistance", &addMultieEnemyData_.distance, imGuiSpeed, 0);
-		ImGui::DragInt("AddEnemyMaxCount", &addMultieEnemyData_.enemyMaxCount, imGuiSpeed, 0);
-		ImGui::DragInt("AddMultiEnemyNum", &addMultiEnemyNum_, 0.1f, 0);
-		ImGui::DragFloat("AddRotateSpeed", &addMultieEnemyData_.rotateSpeed, imGuiSpeed, 0);
-		ImGui::DragInt("AddPadding", &addMultieEnemyData_.padding, 0.1f, 0);
-
-		if (addMultieEnemyData_.enemyMaxCount < 0) {
-			addMultieEnemyData_.enemyMaxCount = 0;
-		}
-		if (addMultiEnemyNum_ < 0) {
-			addMultiEnemyNum_ = 0;
-		}
-
-		std::string nameTerrainAdd = "MultiEnemyAdd" + std::to_string(stageCount);
-
-		if (ImGui::Button(nameTerrainAdd.c_str())) {
-			// キー
-			std::string key = "EnemyEmitter:" + std::to_string(addMultiEnemyNum_);
-
-			if (addMultiEnemyNum_ < 10) {
-				key = "EnemyEmitter:0" + std::to_string(addMultiEnemyNum_);
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
 			}
 
-			// 追加
-			SetValue(stageName, key, addMultieEnemyData_);
-			addMultiEnemyNum_++;
-		}
+			if (ImGui::BeginTabItem(stageName.c_str())) {
 
-		// マルチエネミーの削除
-		ImGui::SeparatorText("MultiEnemyDelete");
+				std::string stageName = datasItr->first;
+				EnemyEditorGroup& group = datasItr->second;
 
-		ImGui::DragInt("DeleteMultiEnemyNum", &deleteMultiEnemyNum_, 0.1f, 0);
-		if (deleteMultiEnemyNum_ < 0) {
-			deleteMultiEnemyNum_ = 0;
-		}
+				// マルチエネミーの追加
+				ImGui::SeparatorText("MultiEnemyAdd");
 
-		std::string nameSingleDelete = "MultiEnemyDelete" + std::to_string(stageCount);
+				ImGui::DragFloat3("AddPosition", &addMultieEnemyData_.position.x, imGuiSpeed);
+				ImGui::DragFloat("AddDistance", &addMultieEnemyData_.distance, imGuiSpeed, 0);
+				ImGui::DragInt("AddEnemyMaxCount", &addMultieEnemyData_.enemyMaxCount, imGuiSpeed, 0);
+				ImGui::DragInt("AddMultiEnemyNum", &addMultiEnemyNum_, 0.1f, 0);
+				ImGui::DragFloat("AddRotateSpeed", &addMultieEnemyData_.rotateSpeed, imGuiSpeed, 0);
+				ImGui::DragInt("AddPadding", &addMultieEnemyData_.padding, 0.1f, 0);
 
-		if (ImGui::Button(nameSingleDelete.c_str())) {
-			// キー
-			std::string key = "EnemyEmitter:" + std::to_string(deleteMultiEnemyNum_);
-
-			if (deleteMultiEnemyNum_ < 10) {
-				key = "EnemyEmitter:0" + std::to_string(deleteMultiEnemyNum_);
-			}
-
-			// 指定グループに指定キーが存在するか
-			if (datasItr->second.find(key) != datasItr->second.end()) {
-				// 指定グループから指定のキーの値を取得
-				datasItr->second.erase(key);
-			}
-
-		}
-
-		// マルチエネミーの値の修正
-		ImGui::SeparatorText("MultiEnemyEdit");
-
-		for (std::map<std::string, EnemyEditorItem>::iterator groupItr = group.begin();
-			groupItr != group.end(); ++groupItr) {
-
-			if (std::holds_alternative<MultiEnemyData>(groupItr->second)) {
-
-				MultiEnemyData& item = std::get<MultiEnemyData>(groupItr->second);
-
-				std::string name = groupItr->first;
-				ImGui::SeparatorText(name.c_str());
-
-				std::string namePosition = stageName + name + "Position";
-				std::string nameDistance = stageName + name + "Distance";
-				std::string nameEnemyMaxCount = stageName + name + "EnemyMaxCount";
-				std::string nameRotateSpeed = stageName + name + "RotateSpeed";
-				std::string namePadding = stageName + name + "Padding";
-
-				ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
-				ImGui::DragFloat(nameDistance.c_str(), &item.distance, imGuiSpeed, 0);
-				ImGui::DragInt(nameEnemyMaxCount.c_str(), &item.enemyMaxCount, imGuiSpeed, 0);
-				ImGui::DragFloat(nameRotateSpeed.c_str(), &item.rotateSpeed, imGuiSpeed, 0);
-				ImGui::DragInt(namePadding.c_str(), &item.padding, imGuiSpeed, 0);
-
-				if (item.enemyMaxCount < 0) {
-					item.enemyMaxCount = 0;
+				if (addMultieEnemyData_.enemyMaxCount < 0) {
+					addMultieEnemyData_.enemyMaxCount = 0;
+				}
+				if (addMultiEnemyNum_ < 0) {
+					addMultiEnemyNum_ = 0;
 				}
 
+				std::string nameTerrainAdd = "MultiEnemyAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameTerrainAdd.c_str())) {
+					// キー
+					std::string key = "EnemyEmitter:" + std::to_string(addMultiEnemyNum_);
+
+					if (addMultiEnemyNum_ < 10) {
+						key = "EnemyEmitter:0" + std::to_string(addMultiEnemyNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addMultieEnemyData_);
+					addMultiEnemyNum_++;
+				}
+
+				// マルチエネミーの削除
+				ImGui::SeparatorText("MultiEnemyDelete");
+
+				ImGui::DragInt("DeleteMultiEnemyNum", &deleteMultiEnemyNum_, 0.1f, 0);
+				if (deleteMultiEnemyNum_ < 0) {
+					deleteMultiEnemyNum_ = 0;
+				}
+
+				std::string nameSingleDelete = "MultiEnemyDelete" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameSingleDelete.c_str())) {
+					// キー
+					std::string key = "EnemyEmitter:" + std::to_string(deleteMultiEnemyNum_);
+
+					if (deleteMultiEnemyNum_ < 10) {
+						key = "EnemyEmitter:0" + std::to_string(deleteMultiEnemyNum_);
+					}
+
+					// 指定グループに指定キーが存在するか
+					if (datasItr->second.find(key) != datasItr->second.end()) {
+						// 指定グループから指定のキーの値を取得
+						datasItr->second.erase(key);
+					}
+
+				}
+
+				// マルチエネミーの値の修正
+				ImGui::SeparatorText("MultiEnemyEdit");
+
+				for (std::map<std::string, EnemyEditorItem>::iterator groupItr = group.begin();
+					groupItr != group.end(); ++groupItr) {
+
+					if (std::holds_alternative<MultiEnemyData>(groupItr->second)) {
+
+						MultiEnemyData& item = std::get<MultiEnemyData>(groupItr->second);
+
+						std::string name = groupItr->first;
+						ImGui::SeparatorText(name.c_str());
+
+						std::string namePosition = stageName + name + "Position";
+						std::string nameDistance = stageName + name + "Distance";
+						std::string nameEnemyMaxCount = stageName + name + "EnemyMaxCount";
+						std::string nameRotateSpeed = stageName + name + "RotateSpeed";
+						std::string namePadding = stageName + name + "Padding";
+
+						ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
+						ImGui::DragFloat(nameDistance.c_str(), &item.distance, imGuiSpeed, 0);
+						ImGui::DragInt(nameEnemyMaxCount.c_str(), &item.enemyMaxCount, imGuiSpeed, 0);
+						ImGui::DragFloat(nameRotateSpeed.c_str(), &item.rotateSpeed, imGuiSpeed, 0);
+						ImGui::DragInt(namePadding.c_str(), &item.padding, imGuiSpeed, 0);
+
+						if (item.enemyMaxCount < 0) {
+							item.enemyMaxCount = 0;
+						}
+
+					}
+				}
+
+				ImGui::EndTabItem();
+
 			}
+
+			stageCount++;
 
 		}
 
-		stageCount++;
+		// タブバーを終了
+		ImGui::EndTabBar();
 
 	}
 
