@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
+#include "../../../Engine/Animation/Animation.h"
 
 class SingleEnemyRegister : public LargeNumberOfObjects
 {
@@ -21,6 +22,12 @@ public:
 	/// </summary>
 	void Update() override;
 	/// <summary>
+	/// 描画関数
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <param name="textureHnadles">テクスチャ</param>
+	void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles) override;
+	/// <summary>
 	/// ImGuiの描画
 	/// </summary>
 	void ImGuiDraw() override;
@@ -29,4 +36,7 @@ public:
 private:
 	// 
 	std::string name_;
+
+	// アニメーション本体
+	Animation anim_;
 };
