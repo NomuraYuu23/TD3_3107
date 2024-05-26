@@ -11,6 +11,10 @@ private:
 	// シリアルナンバー
 	uint32_t serialNum_ = 0;
 
+public: 
+	
+	static void ResetSerialNumber() { sSerialNumber_ = 0; }
+
 public:
 	/// <summary>
 	/// 初期化

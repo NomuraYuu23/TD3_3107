@@ -9,6 +9,8 @@ void EnemyManager::Initialize(Model* model)
 {
 	model_ = model;
 
+	SingleEnemyRegister::ResetSerialNumber();
+
 	CreateSingleEnemy();
 	////CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
 	//CreateEmitter({ {0.0f,10.0f},7.0f,5 });
@@ -199,10 +201,10 @@ void EnemyManager::LoadEnemyData()
 		}
 
 		// 削除
-		enemySingle0->get()->GetObjects()->remove_if([=](std::unique_ptr<OneOfManyObjects>& enemyEmitter) {
+		enemySingle0->get()->GetObjects()->remove_if([=](std::unique_ptr<OneOfManyObjects>& enemy) {
 
 			for (uint32_t i = 0; i < enemySingleNames.size(); ++i) {
-				std::string name = static_cast<Enemy*>(enemyEmitter.get())->GetName();
+				std::string name = static_cast<Enemy*>(enemy.get())->GetName();
 				if (enemySingleNames[i] == name) {
 					return false;
 				}
