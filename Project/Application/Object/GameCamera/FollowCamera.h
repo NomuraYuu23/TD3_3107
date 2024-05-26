@@ -61,4 +61,8 @@ private: // お試し
 	// 補間係数
 	float targetT_;
 
+	// 大きさレート
+	float scalingRate_ = 0.0f;
+	float scalingRateT_ = 0.2f;
+
 };

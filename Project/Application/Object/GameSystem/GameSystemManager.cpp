@@ -70,5 +70,5 @@ void GameSystemManager::GenarateGoal(const Vector3& position)
 {
 	goal_ = std::make_unique<GoalObject>();
 	goal_->Initialize(goalModel_);
-	goal_->SetPosition(position);
+	goal_->SetPosition();
 }

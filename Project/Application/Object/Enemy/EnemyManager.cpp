@@ -130,6 +130,10 @@ void EnemyManager::LoadEnemyData()
 	// ステージ
 	std::string stageName = "Stage" + std::to_string(StageNumberManager::stageNum_);
 
+	if (StageNumberManager::stageNum_ < 10) {
+		stageName = "Stage0" + std::to_string(StageNumberManager::stageNum_);
+	}
+
 	// シングル用
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemySingle0 = enemyEmitters_.begin();
 	enemySingle0->get()->GetObjects()->clear();

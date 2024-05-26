@@ -485,6 +485,7 @@
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
     <ClInclude Include="Application\UI\GameUIManager.h" />
     <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
+    <ClInclude Include="Engine\Particle\ParticleDesc.h" />
     <ClInclude Include="Application\Particle\user\SpearCatch\SpearCatchParticle.h" />
     <ClInclude Include="Engine\Particle\ParticleDesc.h" />
     <ClInclude Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.h" />
