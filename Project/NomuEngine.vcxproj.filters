@@ -226,6 +226,8 @@
     <ClCompile Include="Application\Particle\user\SpearCatch\SpearCatchParticle.cpp" />
     <ClCompile Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.cpp" />
     <ClCompile Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.cpp" />
+    <ClCompile Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.cpp" />
+    <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
@@ -490,6 +492,7 @@
     <ClInclude Include="Engine\Particle\ParticleDesc.h" />
     <ClInclude Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.h" />
     <ClInclude Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.h" />
+    <ClInclude Include="Application\Object\Player\System\CorrectSystem\SpearLandingAdjuster.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

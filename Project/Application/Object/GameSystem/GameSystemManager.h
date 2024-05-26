@@ -1,10 +1,15 @@
 #pragma once
 #include "../IObject.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
+#include "../Map/CheckPoint/CheckPointManager.h"
 
 class GoalObject;
 class Player;
 class EnemyManager;
+/// <summary>
+/// チェックポイント管理クラス
+/// </summary>
+//class CheckPointManager;
 
 /// <summary>
 /// ゲームシステム関係をまとめたクラス
@@ -15,7 +20,7 @@ public:
 	static uint32_t sNowStageNum;
 	static float sGameSpeed;
 
-
+	// ここでプレイヤーのスポーン関数を作成
 public:
 	/// <summary>
 	/// 初期化
@@ -46,6 +51,8 @@ public:
 	/// </summary>
 	void GameOverProcess();
 
+
+public: // アクセッサ
 	void SetEnemyManager(EnemyManager* enemyManager) { enemyManager_ = enemyManager; }
 
 private:
@@ -67,6 +74,8 @@ private:
 private:
 	// ゴール
 	std::unique_ptr<GoalObject> goal_;
+
+	std::unique_ptr<CheckPointManager> checkPointManager_;
 
 	// プレイヤー
 	Player* player_ = nullptr;

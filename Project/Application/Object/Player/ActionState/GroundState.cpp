@@ -30,6 +30,8 @@ void GroundState::Initialize()
 	
 	player_->KnockBackOnGround();
 	player_->EndAssistDash();
+	// 補正キャンセル
+	player_->GetLandingAdjuster().Cancel();
 }
 
 void GroundState::Update()

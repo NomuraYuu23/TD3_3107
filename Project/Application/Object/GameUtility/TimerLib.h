@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(float slowRatio = 1.0f);
 
 public: // アクセッサ
 

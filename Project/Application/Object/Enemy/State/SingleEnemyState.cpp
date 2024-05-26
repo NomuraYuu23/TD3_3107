@@ -1,6 +1,7 @@
 #include "SingleEnemyState.h"
 #include "../Enemy.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../../GameSystem/GameSystemManager.h"
 
 void SingleEnemyState::Initialize()
 {
@@ -44,7 +45,7 @@ void SingleEnemyState::PatrolInitialize()
 void SingleEnemyState::PatrolUpdate()
 {
 	// 移動時間計算
-	moveChangeTimer_.Update();
+	moveChangeTimer_.Update(GameSystemManager::sGameSpeed);
 	// アクティブ中の移動処理
 	if (moveChangeTimer_.IsActive()) {
 		if (startPoint_.isStart) {

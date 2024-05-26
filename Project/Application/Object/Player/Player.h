@@ -125,6 +125,11 @@ public: // メンバ関数
 	/// </summary>
 	void Reset();
 
+	/// <summary>
+	/// スポーン処理
+	/// </summary>
+	void Respawn(const Vector3& position);
+
 public: // アニメーション関連関数群
 
 	/// <summary>
@@ -132,6 +137,12 @@ public: // アニメーション関連関数群
 	/// </summary>
 	/// <returns>アニメーションマネージャー</returns>
 	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
+
+	/// <summary>
+	/// 補正システム
+	/// </summary>
+	/// <returns></returns>
+	SpearLandingAdjuster GetLandingAdjuster() { return landingAdjuster_; }
 
 public:
 	// 矢印モデル
@@ -248,6 +259,9 @@ private: // システム
 
 	// 補正用システム
 	CorrectSystem correctSystem_;
+
+	// 槍着地補正システム
+	SpearLandingAdjuster landingAdjuster_;
 
 private: // UI関連
 
