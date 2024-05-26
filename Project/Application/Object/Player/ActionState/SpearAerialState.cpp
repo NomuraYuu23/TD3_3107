@@ -32,6 +32,22 @@ void SpearAerialState::Initialize()
 
 #ifndef _DEBUG
 
+	// プレイヤーの移動ベクトルの逆ベクトルを求める
+	Vector3 v = Vector3::Normalize(player_->velocity_);
+	v *= -1.0f;
+
+	// 槍ジャンプパーティクル再生
+	EmitterDesc desc;
+	desc.transform = &player_->worldtransform_.transform_;
+	desc.instanceCount = 5;
+	desc.frequency = 0.01f;
+	desc.lifeTime = 0.025f;
+	desc.particleModelNum = kCircle;
+	desc.velocity = v;
+	desc.paeticleName = kSpearJumpParticle;
+
+	ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
 	// 槍ジャンアニメーションの再生
 	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::SpearJump);
 

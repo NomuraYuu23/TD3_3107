@@ -306,6 +306,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Weapon\Anim\SpearAnimManager.cpp" />
     <ClCompile Include="Application\Particle\user\RunSmoke\RunSmoke.cpp" />
     <ClCompile Include="Application\Particle\user\SpearCatch\SpearCatchParticle.cpp" />
+    <ClCompile Include="Application\Particle\user\SpearJump\SpearJumpParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -563,6 +564,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Particle\user\SpearCatch\SpearCatchParticle.h" />
     <ClInclude Include="Application\Particle\user\FallingLeaf\FallingLeafParticle.h" />
     <ClInclude Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.h" />
+    <ClInclude Include="Application\Particle\user\SpearJump\SpearJumpParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
