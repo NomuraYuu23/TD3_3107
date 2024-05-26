@@ -58,6 +58,10 @@ void SpearAerialState::Initialize()
 	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
 
 #endif // !_DEBUG
+
+	// 補正キャンセル
+	player_->GetLandingAdjuster().Cancel();
+
 }
 
 void SpearAerialState::Update()

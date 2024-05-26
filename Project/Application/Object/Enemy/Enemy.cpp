@@ -118,7 +118,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		}
 		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
 		//	std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
-		else if((*weapon)->IsPlayerJump()){
+		if((*weapon)->IsPlayerJump() || std::holds_alternative<FreeFallState*>((*weapon)->GetNowState())){
 			// 死亡パーティクル再生
 			EmitterDesc desc;
 			desc.transform = &transform_;

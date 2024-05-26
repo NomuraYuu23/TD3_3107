@@ -1,8 +1,8 @@
 #pragma once
+#include <map>
 #include <string>
-#include <variant>
-#include "MapBlockData.h"
-class MapEditor
+#include "CheckPointData.h"
+class CheckPointEditor
 {
 
 public: // メンバ変数(編集)
@@ -27,13 +27,13 @@ public: // メンバ関数(読み込みなど)
 	/// <param name="groupName"></param>
 	/// <param name="key"></param>
 	/// <param name="value"></param>
-	void SetValue(const std::string& groupName, const std::string& key, MapBlockData value);
+	void SetValue(const std::string& groupName, const std::string& key, CheckPointData value);
 
 	/// <summary>
 	/// 値の取得
 	/// </summary>
 	/// <returns></returns>
-	MapBlockData GetValue(const std::string& groupName, const std::string& key);
+	CheckPointData GetValue(const std::string& groupName, const std::string& key);
 
 	/// <summary>
 	/// ファイルに書き出し
@@ -41,12 +41,13 @@ public: // メンバ関数(読み込みなど)
 	/// <param name="groupName"></param>
 	void SaveFile(const std::string& groupName);
 
-	std::map<std::string, std::map<std::string, MapBlockData>>* GetDatas() { return &datas_; }
+	std::map<std::string, std::map<std::string, CheckPointData>>* GetDatas() { return &datas_; }
+
 
 private: // 変数
 
 	//項目
-	using Item = MapBlockData;
+	using Item = CheckPointData;
 	using Group = std::map<std::string, Item>; // ブロック番号, アイテム
 	std::map<std::string, Group> datas_; // ステージ番号、Group
 
@@ -54,12 +55,11 @@ private: // 変数
 	const std::string kDirectoryPath = "Resources/Map/";
 
 	// 追加用
-	MapBlockData addMapBlockData_;
-	int32_t addMapBlockNum_;
+	CheckPointData addCheckPointData_;
+	int32_t addCheckPointNum_;
 
 	// 削除用
-	int32_t deleteMapBlockNum_;
-
+	int32_t deleteCheckPointNum_;
 
 };
 

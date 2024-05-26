@@ -2,9 +2,15 @@
 #include "../../IObject.h"
 #include "../../../Engine/3D/Model.h"
 #include "../../../Engine/Collider2D/Box.h"
+#include "CheckPointData.h"
+
+class CheckPointManager;
 
 class CheckPointObject : public IObject
 {
+public:
+	static uint32_t sSerialNumber;
+
 public: // 継承
 	/// <summary>
 	/// 初期化
@@ -38,4 +44,11 @@ public: // アクセッサ
 	// 座標
 	void SetPosition(const Vector3& position) { worldtransform_.transform_.translate = position; }
 
+	void SetManager(CheckPointManager* checkPointManager) { checkPointManager_ = checkPointManager; }
+
+	void Setting(const CheckPointData& data);
+
+private: // チェックポイント用変数
+	uint32_t checkNum_ = 0u;
+	CheckPointManager* checkPointManager_ = nullptr;
 };

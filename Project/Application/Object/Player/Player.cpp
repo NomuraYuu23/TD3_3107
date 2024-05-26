@@ -194,6 +194,7 @@ void Player::Draw(const BaseCamera& camera)
 void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
+	landingAdjuster_.ImGuiDraw();
 	controller_.ImGuiDraw();
 	hpManager_.ImGuiDraw();
 	correctSystem_.ImGuiDraw();
@@ -375,7 +376,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
-
 		// 前の座標から現座標へのベクトル
 		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;
 		moveDirect = Vector3::Normalize(moveDirect);
@@ -734,15 +734,17 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 		parabola_.DrawMap(drawLine);
 	}
 
-	LineForGPU lineForGPU;
+	if (!std::holds_alternative<ThrownState*>(weapon_->GetNowState())) {
+		LineForGPU lineForGPU;
 
-	// 色
-	lineForGPU.color[0] = connectingSpearLineColor_;
-	lineForGPU.color[1] = connectingSpearLineColor_;
+		// 色
+		lineForGPU.color[0] = connectingSpearLineColor_;
+		lineForGPU.color[1] = connectingSpearLineColor_;
 
-	lineForGPU.position[0] = worldtransform_.GetWorldPosition();
-	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
-	drawLine->Map(lineForGPU);
+		lineForGPU.position[0] = worldtransform_.GetWorldPosition();
+		lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
+		drawLine->Map(lineForGPU);
+	}
 
 }
 
@@ -773,6 +775,16 @@ void Player::Reset()
 		// 更新
 		ponytail_->Update();
 	}
+}
+
+void Player::Respawn(const Vector3& position)
+{
+
+	Reset();
+	// 座標
+	worldtransform_.transform_.translate = position;
+	// 更新
+	worldtransform_.UpdateMatrix();
 }
 
 void Player::SetFallTimer()
@@ -838,7 +850,8 @@ void Player::SystemInitialize()
 	// スローエフェクト
 	slowEffect_ = std::make_unique<SlowEffect>();
 	slowEffect_->Initalize(this);
-
+	// 着地アシスト
+	landingAdjuster_.Initialize(this, weapon_.get());
 }
 
 void Player::SystemUpdate()
@@ -861,4 +874,6 @@ void Player::SystemUpdate()
 	assistDash_.Update();
 	// スローエフェクト
 	slowEffect_->Update();
+	// 着地アシスト
+	landingAdjuster_.Update();
 }

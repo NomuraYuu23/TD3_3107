@@ -1,4 +1,5 @@
 #include "CheckPointObject.h"
+#include "CheckPointManager.h"
 #include "../../ObjectList.h"
 #include "../../../Collider2D/CollisionConfig2D.h"
 
@@ -11,9 +12,9 @@ void CheckPointObject::Initialize(Model* model)
 	scale2D_ = { worldtransform_.transform_.scale.x, worldtransform_.transform_.scale.y };
 	scale2D_ = { 2.0f,2.0f };
 	// コライダーの初期化
-	//boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
-	//boxCollider_.SetCollisionAttribute(kCollisionAttributeGoalObject);
-	//boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
+	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
+	boxCollider_.SetCollisionAttribute(kCollisionAttributeGoalObject);
+	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 }
 
 void CheckPointObject::Update()
@@ -41,5 +42,17 @@ void CheckPointObject::ImGuiDraw()
 
 void CheckPointObject::OnCollision(ColliderParentObject2D target)
 {
-	target;
+	// 衝突時に書き換えの処理呼び出し（これより後の値だった場合書き換えない
+	checkPointManager_->CheckPointJudge(checkNum_);
+}
+
+void CheckPointObject::Setting(const CheckPointData& data)
+{
+	// 座標設定
+	worldtransform_.transform_.translate = data.position;
+	// 番号設定
+	checkNum_ = data.checkPointNumber;
+
+	// 更新
+	worldtransform_.UpdateMatrix();
 }
