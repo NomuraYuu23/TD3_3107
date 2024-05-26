@@ -18,11 +18,18 @@ void SelectScene::Initialize()
 	skydome_->Initialize(skydomeModel_.get());
 
 	// ビュープロジェクション
+	camera_.Initialize();
 	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
 		0.58f,0.0f,0.0f,
 		0.0f, 23.0f, -100.0f };
 	camera_.SetTransform(baseCameraTransform);
+	camera_.Update();
+
+	FogManager* fogManager = FogManager::GetInstance();
+	fogManager->SetColor({ 0.5f,0.5f,0.5f,0.5f });
+	fogManager->SetNear(0.01f);
+	fogManager->SetFar(0.0f);
 
 }
 

@@ -171,7 +171,7 @@ void GameScene::Initialize() {
 	FogManager* fm = FogManager::GetInstance();
 	fm->SetColor({ 0.0f, 0.25f, .65f, 1.0f });
 	fm->SetNear(50.0f);
-	fm->SetRadius(2500.0f);
+	fm->SetFar(2500.0f);
 
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG

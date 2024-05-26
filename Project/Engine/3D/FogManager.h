@@ -52,7 +52,7 @@ public: // アクセッサ
 	/// 終了位置設定
 	/// </summary>
 	/// <param name="fagFar">終了位置</param>
-	void SetRadius(float fagFar) { fogDataMap_->fagFar = fagFar; }
+	void SetFar(float fagFar) { fogDataMap_->fagFar = fagFar; }
 
 private: //変数
 
