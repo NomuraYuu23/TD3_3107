@@ -12,9 +12,12 @@ void GameSystemManager::Initialize(Model* goalModel, Player* player)
 	assert(goalModel);
 	// ゴールなどのオブジェクト
 	goalModel_ = goalModel;
-
 	// プレイヤー
 	player_ = player;
+
+	// クリアフラグ
+	isGameClear_ = false;
+	isGameOver_ = false;
 
 	checkPointManager_ = std::make_unique<CheckPointManager>();
 	checkPointManager_->Initialize(player_, goalModel_);
@@ -39,8 +42,8 @@ void GameSystemManager::Update()
 		player_->SetIsDead(true);
 	}
 
-	// 死亡処理
-	GameOverProcess();
+	// クリアかゲームオーバーの処理を判断
+	CheckGameStatus();
 
 }
 
@@ -54,18 +57,10 @@ void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)
 
 void GameSystemManager::GameOverProcess()
 {
-	// 死亡処理
-	if (player_->IsDead()) {
-		goal_->SetIsGoal(false);
-		player_->Respawn(checkPointManager_->GetRespawnPosition());
-		enemyManager_->LoadEnemyData();
-	}
-	// ゴール処理
-	else if (goal_->IsGoal()) {
-		goal_->SetIsGoal(false);
-		player_->Respawn(checkPointManager_->GetRespawnPosition());
-		enemyManager_->LoadEnemyData();
-	}
+	goal_->SetIsGoal(false);
+	player_->Respawn(checkPointManager_->GetRespawnPosition());
+	enemyManager_->LoadEnemyData();
+
 }
 
 void GameSystemManager::UpdateStageInfoOnCheckPoint()
@@ -73,6 +68,26 @@ void GameSystemManager::UpdateStageInfoOnCheckPoint()
 
 
 
+}
+
+void GameSystemManager::GameClearProcess()
+{
+	// ここにゲームクリア時の処理
+	isGameClear_ = true;
+
+
+}
+
+void GameSystemManager::CheckGameStatus()
+{
+	// 死亡処理
+	if (player_->IsDead()) {
+		GameOverProcess();
+	}
+	// ゴール処理
+	else if (goal_->IsGoal()) {
+		GameClearProcess();
+	}
 }
 
 void GameSystemManager::ImGuiDraw()

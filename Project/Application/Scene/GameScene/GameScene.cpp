@@ -229,6 +229,10 @@ void GameScene::Update() {
 		isDecreasingVolume = true;
 	}
 
+	if (gameSystemManager_->GetIsGameClear()) {
+		requestSceneNo_ = kSelect;
+	}
+
 	directionalLight_->Update(directionalLightData_);
 
 	pointLightManager_->Update(pointLightDatas_);
