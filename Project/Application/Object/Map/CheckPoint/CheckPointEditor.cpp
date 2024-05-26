@@ -13,7 +13,7 @@ void CheckPointEditor::ImGuiDraw()
 
 	const float imGuiSpeed = 0.1f;
 
-	ImGui::Begin("MapEditor");
+	ImGui::Begin("CheckPointEditor");
 
 	if (ImGui::Button("Save")) {
 		SaveFile("CheckPoint");

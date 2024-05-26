@@ -72,6 +72,9 @@ void GameSystemManager::ImGuiDraw()
 	checkPointManager_->ImGuiDraw();
 
 	ImGui::End();
+
+	checkPointManager_->GetCheckPointEditor()->ImGuiDraw();
+
 }
 
 void GameSystemManager::Draw(BaseCamera& camera)

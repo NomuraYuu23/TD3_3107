@@ -360,14 +360,6 @@ void MapManager::InitializeLongPatternMap()
 
 }
 
-void MapManager::LoadMapData(const std::string& filePath)
-{
-	// 読み込み
-	//std::ifstream file{ filePath };
-	filePath;
-
-}
-
 void MapManager::EditorMapLoad()
 {
 

@@ -133,21 +133,7 @@ void MapEditor::LoadFiles()
 	if (!std::filesystem::exists(saveDirectryPath)) {
 		return;
 	}
-	std::filesystem::directory_iterator dir_it(saveDirectryPath);
-	for (const std::filesystem::directory_entry& entry : dir_it) {
-		// ファイルパスを取得
-		const std::filesystem::path& filePath = entry.path();
-
-		// ファイル拡張子を取得
-		std::string extension = filePath.extension().string();
-		// .jsonファイル以外はスキップ
-		if (extension.compare(".json") != 0) {
-			continue;
-		}
-
-		LoadFile(filePath.stem().string());
-
-	}
+	LoadFile("Stage");
 
 }
 

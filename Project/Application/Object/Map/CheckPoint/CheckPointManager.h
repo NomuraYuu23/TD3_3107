@@ -7,6 +7,7 @@
 #include "CheckPointData.h"
 #include <vector>
 #include <memory>
+#include "CheckPointEditor.h"
 
 class Player;
 class CheckPointObject;
@@ -37,7 +38,7 @@ public:
 	/// </summary>
 	/// <param name="position">座標</param>
 	/// <param name="checkNumber">チェックポイントの番号</param>
-	void GenerateCheckPoint(const Vector3& position, uint32_t checkNumber);
+	void GenerateCheckPoint(const Vector3& position, int32_t checkNumber);
 	/// <summary>
 	/// チェックポイント更新処理
 	/// </summary>
@@ -49,6 +50,10 @@ public:
 	/// <param name="collisionManager"></param>
 	void CollisionRegister(Collision2DManager* collisionManager);
 
+private: // 
+
+	void EditorCheckPointLoad();
+
 public: // アクセッサ
 	/// <summary>
 	/// 今のチェックポイント番号
@@ -57,7 +62,8 @@ public: // アクセッサ
 	uint32_t GetCheckNumber() { return checkPointNum_; }
 
 	void SetCheckNumber(uint32_t num) { checkPointNum_ = num; }
-
+	
+	CheckPointEditor* GetCheckPointEditor() { return checkPointEditor_.get(); }
 
 private:
 	// プレイヤー
@@ -75,8 +81,7 @@ private:
 	// 前のチェックポイント番号
 	uint32_t prevCheckPointNum_ = 0u;
 
-private: // 
-
-	std::array<std::vector<CheckPointData>, StageNumberManager::kStageMax> checkPointDatas_;
+	// 
+	std::unique_ptr<CheckPointEditor> checkPointEditor_;
 
 };
