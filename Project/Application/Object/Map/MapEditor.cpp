@@ -3,6 +3,7 @@
 #include "../../../externals/nlohmann/json.hpp"
 #include <fstream>
 #include <cassert>
+#include "../../AllSceneObject/StageNumberManager.h"
 
 //名前空間
 using namespace nlohmann;
@@ -12,114 +13,109 @@ void MapEditor::ImGuiDraw()
 
 	const float imGuiSpeed = 0.1f;
 
-	ImGui::Begin("BlockEdit");
+	ImGui::Begin("MapEditor");
 
 	if (ImGui::Button("Save")) {
 		SaveFile("Stage");
 	}
 
-	// ステージの追加
-	ImGui::SeparatorText("StageAdd");
-
-	ImGui::DragInt("StageAddNum", &stageAddNum_, 0.1f, 0);
-
-	if(ImGui::Button("StageAdd")) {
-		std::string stageName = "Stage" + std::to_string(stageAddNum_);
-		datas_[stageName];
-		maxStages_++;
-		stageAddNum_++;
-	}
-
-	// ステージの削除
-	ImGui::SeparatorText("StageDelete");
-
-	ImGui::DragInt("StageDeleteNum", &stageDeleteNum_, 0.1f, 0);
-
-	if (ImGui::Button("StageDelete")) {
-		// キー
-		std::string key = "Stage" + std::to_string(stageDeleteNum_);
-
-		// 指定グループに指定キーが存在するか
-		if (datas_.find(key) != datas_.end()) {
-			// 指定グループから指定のキーの値を取得
-			datas_.erase(key);
-			maxStages_--;
-		}
-
-	}
-
-
 	// ステージの数だけ回す
 	uint32_t stageCount = 0;
 
-	for (std::map<std::string, Group>::iterator datasItr = datas_.begin();
-		datasItr != datas_.end(); ++datasItr) {
+	if (ImGui::BeginTabBar("StageNum")) {
+	
+		for (std::map<std::string, Group>::iterator datasItr = datas_.begin();
+			datasItr != datas_.end(); ++datasItr) {
 
-		std::string stageName = datasItr->first;
-		Group& group = datasItr->second;
-		ImGui::SeparatorText(stageName.c_str());
+			std::string stageName = "Stage" + std::to_string(stageCount);
 
-		// ブロックの追加
-		ImGui::SeparatorText("TerrainAdd");
-
-		ImGui::DragFloat2("AddPosition", &addMapBlockData_.position.x, imGuiSpeed);
-		ImGui::DragFloat2("AddSize", &addMapBlockData_.size.x, imGuiSpeed);
-		ImGui::DragInt("AddTerrainNum", &addMapBlockNum_, 0.1f, 0);
-
-		if (addMapBlockNum_ < 0) {
-			addMapBlockNum_ = 0;
-		}
-
-		std::string nameTerrainAdd = "TerrainAdd" + std::to_string(stageCount);
-
-		if (ImGui::Button(nameTerrainAdd.c_str())) {
-			// キー
-			std::string key = "Terrain" + std::to_string(addMapBlockNum_);
-			// 追加
-			SetValue(stageName, key, addMapBlockData_);
-			addMapBlockNum_++;
-		}
-
-
-		// ブロックの削除
-		ImGui::SeparatorText("TerrainDelete");
-
-		ImGui::DragInt("DeleteTerrainNum", &deleteMapBlockNum_, 0.1f, 0);
-
-		std::string nameTerrainDelete = "TerrainDelete" + std::to_string(stageCount);
-		
-		if (ImGui::Button(nameTerrainDelete.c_str())) {
-			// キー
-			std::string key = "Terrain" + std::to_string(deleteMapBlockNum_);
-
-			// 指定グループに指定キーが存在するか
-			if (datasItr->second.find(key) != datasItr->second.end()) {
-				// 指定グループから指定のキーの値を取得
-				datasItr->second.erase(key);
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
 			}
+			if (ImGui::BeginTabItem(stageName.c_str())) {
+
+				std::string stageName = datasItr->first;
+				Group& group = datasItr->second;
+
+				// ブロックの追加
+				ImGui::SeparatorText("TerrainAdd");
+
+				ImGui::DragFloat2("AddPosition", &addMapBlockData_.position.x, imGuiSpeed);
+				ImGui::DragFloat2("AddSize", &addMapBlockData_.size.x, imGuiSpeed);
+				ImGui::DragInt("AddTerrainNum", &addMapBlockNum_, 0.1f, 0);
+
+				if (addMapBlockNum_ < 0) {
+					addMapBlockNum_ = 0;
+				}
+
+				std::string nameTerrainAdd = "TerrainAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameTerrainAdd.c_str())) {
+					// キー
+					std::string key = "Terrain" + std::to_string(addMapBlockNum_);
+
+					if (addMapBlockNum_ < 10) {
+						key = "Terrain0" + std::to_string(addMapBlockNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addMapBlockData_);
+					addMapBlockNum_++;
+				}
+
+
+				// ブロックの削除
+				ImGui::SeparatorText("TerrainDelete");
+
+				ImGui::DragInt("DeleteTerrainNum", &deleteMapBlockNum_, 0.1f, 0);
+
+				std::string nameTerrainDelete = "TerrainDelete" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameTerrainDelete.c_str())) {
+					// キー
+					std::string key = "Terrain" + std::to_string(deleteMapBlockNum_);
+
+					if (deleteMapBlockNum_ < 10) {
+						key = "Terrain0" + std::to_string(deleteMapBlockNum_);
+					}
+
+					// 指定グループに指定キーが存在するか
+					if (datasItr->second.find(key) != datasItr->second.end()) {
+						// 指定グループから指定のキーの値を取得
+						datasItr->second.erase(key);
+					}
+
+				}
+
+				// ブロックの値の修正
+				ImGui::SeparatorText("TerrainEdit");
+
+				for (std::map<std::string, Item>::iterator groupItr = group.begin();
+					groupItr != group.end(); ++groupItr) {
+
+					Item& item = groupItr->second;
+
+					std::string name = groupItr->first;
+					ImGui::SeparatorText(name.c_str());
+
+					std::string namePosition = stageName + name + "Position";
+					std::string nameSize = stageName + name + "Size";
+
+					ImGui::DragFloat2(namePosition.c_str(), &item.position.x, imGuiSpeed);
+					ImGui::DragFloat2(nameSize.c_str(), &item.size.x, imGuiSpeed);
+
+				}
+
+				ImGui::EndTabItem();
+
+			}
+		
+			stageCount++;
 
 		}
 
-		// ブロックの値の修正
-		ImGui::SeparatorText("TerrainEdit");
-
-		for (std::map<std::string, Item>::iterator groupItr = group.begin();
-			groupItr != group.end(); ++groupItr) {
-
-			Item& item = groupItr->second;
-
-			std::string name = groupItr->first;
-			ImGui::SeparatorText(name.c_str());
-
-			std::string namePosition = stageName + name + "Position";
-			std::string nameSize = stageName + name + "Size";
-
-			ImGui::DragFloat2(namePosition.c_str(), &item.position.x, imGuiSpeed);
-			ImGui::DragFloat2(nameSize.c_str(), &item.size.x, imGuiSpeed);
-
-		}
-
-		stageCount++;
+		// タブバーを終了
+		ImGui::EndTabBar();
 
 	}
 
@@ -137,21 +133,7 @@ void MapEditor::LoadFiles()
 	if (!std::filesystem::exists(saveDirectryPath)) {
 		return;
 	}
-	std::filesystem::directory_iterator dir_it(saveDirectryPath);
-	for (const std::filesystem::directory_entry& entry : dir_it) {
-		// ファイルパスを取得
-		const std::filesystem::path& filePath = entry.path();
-
-		// ファイル拡張子を取得
-		std::string extension = filePath.extension().string();
-		// .jsonファイル以外はスキップ
-		if (extension.compare(".json") != 0) {
-			continue;
-		}
-
-		LoadFile(filePath.stem().string());
-
-	}
+	LoadFile("Stage");
 
 }
 
@@ -175,34 +157,44 @@ void MapEditor::LoadFile(const std::string& groupName)
 	// ファイルを閉じる
 	ifs.close();
 
-	// マップ数
-	maxStages_ = 0;
+	// ステージの数だけ回す
+	uint32_t stageCount = 0;
 
 	// ファイル読み込み
 	while (1) {
 
 		// グループを検索
-		std::string name = groupName + std::to_string(maxStages_);
+		std::string name = groupName + std::to_string(stageCount);
+
+		if (stageCount < 10) {
+			name = groupName + "0" + std::to_string(stageCount);
+		}
 
 		json::iterator itGroup = root.find(name);
 
 		// 未登録チェック
 		if (itGroup == root.end()) {
-			break;
+			datas_[name];
 		}
 		else {
-			maxStages_++;
+
+			// 各アイテムについて
+			for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+				// アイテム名を取得
+				const std::string& itemName = itItem.key();
+
+				MapBlockData value = *itItem;
+				SetValue(name, itemName, value);
+
+			}
+
 		}
 
-		// 各アイテムについて
-		for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
-			// アイテム名を取得
-			const std::string& itemName = itItem.key();
-
-			MapBlockData value = *itItem;
-			SetValue(name, itemName, value);
-
+		// ループを抜ける
+		if (++stageCount == StageNumberManager::kStageMax) {
+			break;
 		}
+
 	}
 
 }
@@ -237,11 +229,6 @@ MapBlockData MapEditor::GetValue(const std::string& groupName, const std::string
 
 }
 
-void MapEditor::SaveData(const std::string& groupName)
-{
-
-}
-
 void MapEditor::SaveFile(const std::string& groupName)
 {
 
@@ -267,7 +254,7 @@ void MapEditor::SaveFile(const std::string& groupName)
 
 			MapBlockData values = item;
 			root[name][itemName] = values;
-;
+
 		}
 
 	}

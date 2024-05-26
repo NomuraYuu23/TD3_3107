@@ -16,9 +16,6 @@ public: // サブクラス
 	/// </summary>
 	enum SpearAnim {
 		SpearIdle,		// 待機
-		SpearAim,		// エイム開始
-		SpearAiming,    // エイム中
-		SpearThrow,     // 槍投げ
 		SpearBounce,    // 槍のバウンド
 		SpearAnimCount, // アニメ数
 	};

@@ -1,6 +1,7 @@
 #include "MakeEmitter.h"
 #include <cassert>
 #include "EmitterName.h"
+#include "../../../Application/Particle/user/InfiniteEmitter/InfiniteEmiiter.h"
 
 MakeEmitter* MakeEmitter::GetInstance()
 {
@@ -16,6 +17,10 @@ IEmitter* MakeEmitter::Run(EmitterDesc* emitterDesc, uint32_t emitterName)
 	{
 	case kDefaultEmitter:
 		emitter = new IEmitter();
+		emitter->Initialize(emitterDesc);
+		break;
+	case kInfiniteEmitter:
+		emitter = new InfiniteEmiiter();
 		emitter->Initialize(emitterDesc);
 		break;
 	case kCountOfParticleName:

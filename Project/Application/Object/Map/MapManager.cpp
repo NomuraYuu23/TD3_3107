@@ -360,14 +360,6 @@ void MapManager::InitializeLongPatternMap()
 
 }
 
-void MapManager::LoadMapData(const std::string& filePath)
-{
-	// 読み込み
-	//std::ifstream file{ filePath };
-	filePath;
-
-}
-
 void MapManager::EditorMapLoad()
 {
 
@@ -376,6 +368,10 @@ void MapManager::EditorMapLoad()
 	
 	// ステージ
 	std::string stageName = "Stage" + std::to_string(StageNumberManager::stageNum_);
+
+	if (StageNumberManager::stageNum_ < 10) {
+		stageName = "Stage0" + std::to_string(StageNumberManager::stageNum_);
+	}
 
 	for (std::map<std::string, std::map<std::string, MapBlockData>>::iterator stageItr = mapDatas->begin();
 		stageItr != mapDatas->end(); ++stageItr) {

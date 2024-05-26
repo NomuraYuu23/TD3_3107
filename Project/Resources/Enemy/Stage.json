@@ -1,6 +1,6 @@
 {
-    "Stage0": {
-        "Enemy0": {
+    "Stage00": {
+        "Enemy00": {
             "easeEndPosition": [
                 -20.0,
                 0.0,
@@ -14,7 +14,7 @@
             ],
             "typeNum": 0
         },
-        "Enemy1": {
+        "Enemy01": {
             "easeEndPosition": [
                 -20.0,
                 0.0,
@@ -28,7 +28,7 @@
             ],
             "typeNum": 0
         },
-        "Enemy2": {
+        "Enemy02": {
             "easeEndPosition": [
                 -20.0,
                 0.0,
@@ -42,7 +42,7 @@
             ],
             "typeNum": 0
         },
-        "Enemy3": {
+        "Enemy03": {
             "easeEndPosition": [
                 20.0,
                 0.0,
@@ -56,7 +56,7 @@
             ],
             "typeNum": 0
         },
-        "Enemy4": {
+        "Enemy04": {
             "easeEndPosition": [
                 -20.0,
                 0.0,
@@ -70,7 +70,7 @@
             ],
             "typeNum": 0
         },
-        "Enemy5": {
+        "Enemy05": {
             "easeEndPosition": [
                 -20.0,
                 0.0,
@@ -84,7 +84,7 @@
             ],
             "typeNum": 0
         },
-        "EnemyEmitter:0": {
+        "EnemyEmitter:00": {
             "distance": 7.599999904632568,
             "enemyMaxCount": 5,
             "padding": 0,

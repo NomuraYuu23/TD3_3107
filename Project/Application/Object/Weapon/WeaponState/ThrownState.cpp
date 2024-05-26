@@ -34,11 +34,14 @@ void ThrownState::Initialize()
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// 槍投げアニメーション開始
-	weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearThrow);
-	weapon_->GetAnimManager()->PlayRingAnimation(SpearAnimManager::RingShot);
+	//weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearThrow);
+	//weapon_->GetAnimManager()->PlayRingAnimation(SpearAnimManager::RingShot);
 	
 	// リングの描画を行う
 	weapon_->isDrawRing_ = true;
+
+	// 演出時間リセット
+	weapon_->ringCurrentTime_ = 0.0f;
 
 	// 投げ効果音を再生
 	weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kThrowSpear);

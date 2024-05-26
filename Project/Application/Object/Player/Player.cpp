@@ -8,6 +8,7 @@
 #include "../ObjectList.h"
 #include "../GameUtility/MathUtility.h"
 #include "../../UI/GameUIManager.h"
+#include "../../Particle/EmitterName.h"
 
 void Player::Initialize(Model* model)
 {
@@ -49,6 +50,28 @@ void Player::Initialize(Model* model)
 	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
 	anim_->Init(this);							   // 初期化
 	#endif // !_DEBUG
+
+	// デバック以外の場合行う
+	#ifndef _DEBUG
+
+	// トランスフォーム生成
+	emitTransform_ = std::make_unique<EulerTransform>();
+	*emitTransform_ = worldtransform_.transform_;
+	emitTransform_->translate.z += 1.0f;
+
+	// ここで環境パーティクルの再生を行う
+	fallingLeafDesc_.transform = emitTransform_.get();
+	fallingLeafDesc_.instanceCount = 1;
+	fallingLeafDesc_.frequency = 0.25f;
+	fallingLeafDesc_.lifeTime = 5.0f;
+	fallingLeafDesc_.particleModelNum = kBambooLeaf;
+	fallingLeafDesc_.paeticleName = kFallingLeafParticle;
+	fallingLeafDesc_.velocity = { -1.0f, -1.0f, 0.0f };
+
+	// 無限生成エミッタで生成し続ける
+	ParticleManager::GetInstance()->MakeEmitter(&fallingLeafDesc_, EmitterName::kInfiniteEmitter);
+
+	#endif // !_DEBUG
 }
 
 void Player::Update()
@@ -83,6 +106,16 @@ void Player::Update()
 		// 更新
 		ponytail_->Update();
 	}
+
+	// デバック以外の場合行う
+	#ifndef _DEBUG
+	
+	// 生成座標のデータを書き込む
+	*emitTransform_ = worldtransform_.transform_;
+	emitTransform_->translate.z += 1.0f;
+
+	#endif // !_DEBUG
+
 
 	// 基底クラスの更新
 	IObject::Update();

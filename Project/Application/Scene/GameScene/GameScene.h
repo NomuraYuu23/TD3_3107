@@ -95,6 +95,8 @@ private:
 	ParticleManager* particleManager_ = nullptr;
 	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
 	std::unique_ptr<Model> particleCircleModel_ = nullptr;
+	std::unique_ptr<Model> particleLeafModel_ = nullptr;
+	std::unique_ptr<Model> particleSpearLeafModel_ = nullptr;
 
 	std::unique_ptr<CollisionManager> collisionManager_;
 
@@ -128,7 +130,8 @@ private:
 	std::unique_ptr<Model> playerModel_;
 	std::unique_ptr<Model> ponyTailModel_;
 	std::unique_ptr<Model> weaponModel_;
-	std::unique_ptr<Model> ringModel_;
+	std::unique_ptr<Model> ringUnderModel_;
+	std::unique_ptr<Model> ringTopModel_;
 
 	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;

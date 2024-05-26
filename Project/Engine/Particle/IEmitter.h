@@ -57,6 +57,9 @@ protected:
 	// エミットする
 	bool toEmit_;
 
+	// 生成する粒子の速度
+	Vector3 velocity_;
+
 	// 死んでいるか
 	bool isDead_;
 

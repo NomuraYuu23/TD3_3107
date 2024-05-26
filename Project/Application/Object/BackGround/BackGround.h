@@ -2,6 +2,9 @@
 #include <numbers>
 #include "../IObject.h"
 
+// クラスの前方宣言
+class Player;
+
 /// <summary>
 /// 背景クラス
 /// </summary>
@@ -43,5 +46,20 @@ public: // アクセッサ
 
 	Vector2 GetColliderPosition() override;
 	Vector2 GetColliderSize() override;
+
+	/// <summary>
+	/// 親のトランスフォームセッター
+	/// </summary>
+	/// <param name="parent">親トランスフォームまでのアドレス</param>
+	void SetParent(WorldTransform* parent) { parent_ = parent; }
+
+private: // メンバ変数
+
+	// 二個目の背景オブジェクトのトランスフォーム
+	WorldTransform transform2_;
+
+	// 座標のみ
+	WorldTransform* parent_;
+
 };
 

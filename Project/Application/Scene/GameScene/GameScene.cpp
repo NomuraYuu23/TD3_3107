@@ -44,8 +44,9 @@ void GameScene::Initialize() {
 	std::array<Model*, ParticleModelIndex::kCountofParticleModelIndex> particleModel;
 	particleModel[ParticleModelIndex::kUvChecker] = particleUvcheckerModel_.get();
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
+	particleModel[ParticleModelIndex::kBambooLeaf] = particleLeafModel_.get();
+	particleModel[ParticleModelIndex::kSpearLeaf] = particleSpearLeafModel_.get();
 	particleManager_->ModelCreate(particleModel);
-
 
 	isDebugCameraActive_ = false;
 
@@ -87,7 +88,7 @@ void GameScene::Initialize() {
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// リングモデルを渡す
-	weapon->SetRingModel(ringModel_.get());
+	weapon->SetRingModel(ringTopModel_.get(), ringUnderModel_.get());
 	#endif // !_DEBUG
 
 
@@ -137,6 +138,7 @@ void GameScene::Initialize() {
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
+	backGround_->SetParent(&player_->worldtransform_);
 
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
@@ -252,7 +254,6 @@ void GameScene::Update() {
 	enemyManager_->Update();
 
 
-
 	if (player_->isArrowUiDraw_) {
 		arrowSprite_->SetIsInvisible(false);
 	}
@@ -326,8 +327,6 @@ void GameScene::Draw() {
 	// 背景
 	backGround_->Draw(camera_);
 
-	//Obj
-	player_->Draw(camera_);
 	//bossEnemy_->Draw(camera_);
 
 	tmpTextures_.clear();
@@ -345,7 +344,13 @@ void GameScene::Draw() {
 	enemyManager_->Draw(camera_, &tmpTextures_);
 
 	// プレイヤーのリングは透過するため最後に描画
-	player_->weapon_->RingDraw(camera_);
+	player_->weapon_->UnderRingDraw(camera_);
+
+	//Obj
+	player_->Draw(camera_);
+
+	// プレイヤーのリングは透過するため最後に描画
+	player_->weapon_->TopRingDraw(camera_);
 
 	ModelDraw::PostDraw();
 
@@ -539,6 +544,8 @@ void GameScene::ModelCreate()
 	// パーティクル
 	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.gltf", dxCommon_, textureHandleManager_.get()));
 	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_, textureHandleManager_.get()));
+	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_, textureHandleManager_.get()));
+	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_, textureHandleManager_.get()));
 
 	// スカイドーム
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
@@ -555,7 +562,8 @@ void GameScene::ModelCreate()
 	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_, textureHandleManager_.get()));
 	#endif // _DEBUG
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
-	ringModel_.reset(Model::Create("Resources/Model/Spear/", "Ring.gltf", dxCommon_, textureHandleManager_.get()));
+	ringUnderModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingUnder.obj", dxCommon_, textureHandleManager_.get()));
+	ringTopModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingTop.obj", dxCommon_, textureHandleManager_.get()));
 	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
 
 	#endif // !_DEBUG

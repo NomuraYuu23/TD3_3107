@@ -72,9 +72,6 @@ private:
 	/// </summary>
 	void InitializeLongPatternMap();
 
-
-	void LoadMapData(const std::string& filePath);
-
 private: 
 
 	void EditorMapLoad();

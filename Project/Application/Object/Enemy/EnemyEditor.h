@@ -89,13 +89,6 @@ private: // 変数
 	// グローバル変数の保存先ファイルパス
 	const std::string kDirectoryPath = "Resources/Enemy/";
 
-	// ステージ数
-	uint32_t maxStages_;
-	// ステージ追加
-	int32_t stageAddNum_;
-	// ステージ削除
-	int32_t stageDeleteNum_;
-
 	// シングル追加データ
 	SingleEnemyData addSingleEnemyData_;
 	// シングル追加番号

@@ -48,10 +48,15 @@ public: // 継承
 	/// <param name="camera"></param>
 	void Draw(const BaseCamera& camera) override;
 	/// <summary>
-	/// 武器のリング描画
+	/// 武器の下リング描画
 	/// </summary>
 	/// <param name="camera">描画に使用するカメラ</param>
-	void RingDraw(const BaseCamera& camera);
+	void UnderRingDraw(const BaseCamera& camera);
+	/// <summary>
+	/// 武器の上リング描画
+	/// </summary>
+	/// <param name="camera">描画に使用するカメラ</param>
+	void TopRingDraw(const BaseCamera& camera);
 	/// <summary>
 	/// ImGui
 	/// </summary>
@@ -121,13 +126,14 @@ public: // アクセッサ
 	/// <summary>
 	/// 槍投擲時のリングモデルセッター
 	/// </summary>
-	/// <param name="model">リングモデル</param>
-	void SetRingModel(Model* model);
+	/// <param name="upperModel">上のリングモデル</param>
+	/// <param name="underModel">下のリングモデル</param>
+	void SetRingModel(Model* upperModel, Model* underModel);
 	/// <summary>
 	/// リングモデルゲッター
 	/// </summary>
 	/// <returns>リングモデル</returns>
-	Model* GetRingModel() { return ringModel_; }
+	Model* GetRingModel() { return ringUnderModel_; }
 
 	/// <summary>
 	/// リング用のローカル行列マネージャゲッター
@@ -195,6 +201,10 @@ public: // 外部で行う設定関数
 	// リング表示フラグ
 	bool isDrawRing_ = false;
 
+	// リング演出用現在時間
+	float ringCurrentTime_ = 0.0f;
+	float ringStagingTime_ = 0.35f;
+
 private:
 	/// <summary>
 	/// ステート変更
@@ -233,11 +243,14 @@ private:
 	Player* player_ = nullptr;
 
 	// リング用モデル
-	Model* ringModel_ = nullptr;
+	Model* ringUnderModel_ = nullptr;
+	Model* ringTopModel_   = nullptr;
 	// リング用マテリアル
 	std::unique_ptr<Material> ringMaterial_;
-	// リング用トランスフォーム
-	WorldTransform ringTransform_;
+	// 下リング用トランスフォーム
+	WorldTransform ringUnderTransform_;
+	// 上リング用トランスフォーム
+	WorldTransform ringTopTransform_;
 	// リング用UVトランスフォーム
 	WorldTransform ringUVTransform_;
 	// リング色

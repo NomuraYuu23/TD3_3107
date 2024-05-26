@@ -36,11 +36,6 @@ public: // メンバ関数(読み込みなど)
 	MapBlockData GetValue(const std::string& groupName, const std::string& key);
 
 	/// <summary>
-	/// データ保存
-	/// </summary>
-	void SaveData(const std::string& groupName);
-
-	/// <summary>
 	/// ファイルに書き出し
 	/// </summary>
 	/// <param name="groupName"></param>
@@ -58,17 +53,11 @@ private: // 変数
 	// グローバル変数の保存先ファイルパス
 	const std::string kDirectoryPath = "Resources/Map/";
 
-	// ステージ数
-	uint32_t maxStages_;
-
 	// 追加用
 	MapBlockData addMapBlockData_;
-	int32_t stageAddNum_;
-
 	int32_t addMapBlockNum_;
 
 	// 削除用
-	int32_t stageDeleteNum_;
 	int32_t deleteMapBlockNum_;
 
 
