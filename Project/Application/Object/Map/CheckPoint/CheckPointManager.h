@@ -33,6 +33,8 @@ public:
 
 	void ImGuiDraw();
 
+	void Setting();
+
 	/// <summary>
 	/// チェックポイント生成関数
 	/// </summary>
@@ -43,7 +45,7 @@ public:
 	/// チェックポイント更新処理
 	/// </summary>
 	/// <param name="num"></param>
-	void CheckPointJudge(uint32_t num);
+	void CheckPointJudge(const Vector3& position, uint32_t num);
 	/// <summary>
 	/// 当たり判定の設定
 	/// </summary>
@@ -61,8 +63,16 @@ public: // アクセッサ
 	/// <returns></returns>
 	uint32_t GetCheckNumber() { return checkPointNum_; }
 
-	void SetCheckNumber(uint32_t num) { checkPointNum_ = num; }
-	
+	// ゲット
+	Vector3 GetRespawnPosition() {
+		if (checkPointNum_ < 0) {
+			return defaulResPosition_;
+		}
+		return respawnPosition_;
+	}
+	// セット
+	void SetRespawnPosition(const Vector3& position) { respawnPosition_ = position; }
+
 	CheckPointEditor* GetCheckPointEditor() { return checkPointEditor_.get(); }
 
 private:
@@ -80,6 +90,11 @@ private:
 	uint32_t checkPointNum_ = 0u;
 	// 前のチェックポイント番号
 	uint32_t prevCheckPointNum_ = 0u;
+
+	// 更新されていくリス座標
+	Vector3 respawnPosition_ = {};
+	// デフォルトのリス座標
+	Vector3 defaulResPosition_ = {};
 
 	// 
 	std::unique_ptr<CheckPointEditor> checkPointEditor_;

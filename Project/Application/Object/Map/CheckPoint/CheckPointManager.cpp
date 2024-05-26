@@ -7,13 +7,8 @@ void CheckPointManager::Initialize(Player* player, Model* checkPointModel)
 	player_ = player;
 	checkPointModel_ = checkPointModel;
 
-	prevCheckPointNum_ = 0;
-
-	checkPointEditor_ = std::make_unique<CheckPointEditor>();
-	checkPointEditor_->LoadFiles();
-	
-	EditorCheckPointLoad();
-
+	// モデルの設定以外まとめてる場所
+	Setting();
 }
 
 void CheckPointManager::Update()
@@ -53,6 +48,24 @@ void CheckPointManager::ImGuiDraw()
 	int now = checkPointNum_;
 	ImGui::DragInt("PrevCheck", &prev);
 	ImGui::DragInt("NowCheck", &now);
+	ImGui::DragFloat3("ResPos", &respawnPosition_.x);
+}
+
+void CheckPointManager::Setting()
+{
+	// チェックポイントの番号初期
+	prevCheckPointNum_ = 0;
+	checkPointNum_ = prevCheckPointNum_;
+
+	// 初期座標
+	defaulResPosition_ = { 4.0f,3.0f,0 };
+	// 更新されていくリス座標
+	respawnPosition_ = defaulResPosition_;
+
+	checkPointEditor_ = std::make_unique<CheckPointEditor>();
+	checkPointEditor_->LoadFiles();
+
+	EditorCheckPointLoad();
 }
 
 void CheckPointManager::GenerateCheckPoint(const Vector3& position, int32_t checkNumber)
@@ -64,13 +77,15 @@ void CheckPointManager::GenerateCheckPoint(const Vector3& position, int32_t chec
 	checkPoints_.push_back(std::move(obj));
 }
 
-void CheckPointManager::CheckPointJudge(uint32_t num)
+void CheckPointManager::CheckPointJudge(const Vector3& position, uint32_t num)
 {
 	// 前のチェックポイント設定
 	prevCheckPointNum_ = checkPointNum_;
 	// 前のチェックポイントよりも先なら更新
-	if (prevCheckPointNum_ < num) {
-		checkPointNum_ = num;
+	uint32_t newNum = num + 1;
+	if (prevCheckPointNum_ < newNum) {
+		checkPointNum_ = newNum;
+		respawnPosition_ = position;
 	}
 
 }
