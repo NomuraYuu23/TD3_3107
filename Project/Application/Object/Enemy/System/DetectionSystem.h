@@ -21,6 +21,11 @@ public:
 	void Initialize(Enemy* enemy);
 
 	/// <summary>
+	/// レイの更新など
+	/// </summary>
+	void Update();
+
+	/// <summary>
 	/// 追尾判断
 	/// </summary>
 	/// <param name="target"></param>
@@ -39,5 +44,7 @@ private:
 
 	bool isChase_ = false;
 
+public:
+	DetectionRay sensorRay_;
 
 };

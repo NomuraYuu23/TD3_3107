@@ -11,7 +11,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="player"></param>
-	void Initialize(Player* player);
+	void Initialize(Enemy* enemy);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -21,6 +21,8 @@ public:
 	/// </summary>
 	/// <param name="target"></param>
 	void OnCollision(ColliderParentObject2D target);
+
+	void SetDirect(const Vector2& to, const Vector2& from) { direct_ = Vector2::Subtract(from, to); }
 
 public:
 	Segment2D GetSegment() { return directRay_; }

@@ -117,7 +117,8 @@ public:
 	/// <param name="player"></param>
 	void SetPlayer(Player* player) { player_ = player; }
 
-	
+	// プレイヤーのポインタ
+	Player* GetPlayer() { return player_; }
 
 private:
 

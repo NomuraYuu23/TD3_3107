@@ -10,4 +10,12 @@ void ChaseEnemyState::Initialize()
 
 void ChaseEnemyState::Update()
 {
+	// プレイヤー
+	Vector2 player = { enemy_->GetPlayer()->worldtransform_.GetWorldPosition().x,enemy_->GetPlayer()->worldtransform_.GetWorldPosition().y };
+	Vector2 enemy = { enemy_->GetWorldPosition().x,enemy_->GetWorldPosition().y };
+	// レイの取得
+	enemy_->detectionSystem_.sensorRay_.SetDirect(player, enemy);
+	// 更新
+	enemy_->detectionSystem_.Update();
+
 }

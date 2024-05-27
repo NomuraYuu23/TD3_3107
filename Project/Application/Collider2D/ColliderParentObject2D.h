@@ -15,6 +15,8 @@ class Terrain;
 
 // 敵
 class Enemy;
+class DetectionRay;
+
 // 仮の名前
 class PrevSmallBoss;
 // ゴールと中継地点オブジェ

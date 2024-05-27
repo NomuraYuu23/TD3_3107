@@ -6,6 +6,15 @@ void DetectionSystem::Initialize(Enemy* enemy)
 	// それぞれのポインタを渡す
 	enemy_ = enemy;
 
+	sensorRay_.Initialize(enemy);
+}
+
+void DetectionSystem::Update()
+{
+
+	// センサーの更新
+	sensorRay_.Update();
+
 }
 
 bool DetectionSystem::ShouldChase(const Vector3& target)
@@ -23,9 +32,4 @@ bool DetectionSystem::ShouldChase(const Vector3& target)
 	}
 
 	return false;
-}
-
-void DetectionSystem::OnCollision(ColliderParentObject2D target)
-{
-	target;
 }
