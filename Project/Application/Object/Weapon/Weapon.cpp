@@ -110,7 +110,7 @@ void Weapon::Update()
 	}
 	
 	// 槍が投げられている状態であれば
-	if (std::holds_alternative<ThrownState*>(nowState_) || std::holds_alternative<ImpaledState*>(nowState_)) {
+	if (!std::holds_alternative<HoldState*>(nowState_)) {
 		ringUnderTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (ringCurrentTime_ / ringStagingTime_));
 		ringTopTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (ringCurrentTime_ / ringStagingTime_));
 		ringColor_.w = 1.0f - (ringCurrentTime_ / ringStagingTime_);
