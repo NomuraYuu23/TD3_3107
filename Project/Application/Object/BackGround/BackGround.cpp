@@ -162,11 +162,11 @@ void BackGround::SetTutorialPlaneModel(ITextureHandleManager* texHandleManager, 
 
 	// ワールドトランスフォームの初期化
 	spearTutorialTransform_.Initialize(model_->GetRootNode());
-	spearTutorialTransform_.transform_.translate = {92.0f, 14.0f, 7.0f};
+	spearTutorialTransform_.transform_.translate = {92.0f, 14.0f, 10.0f };
 	spearTutorialTransform_.transform_.scale = {15.0f, 15.0f, 15.0f };
 	spearTutorialTransform_.UpdateMatrix();
 	enemyTutorialTransform_.Initialize(model_->GetRootNode());
-	enemyTutorialTransform_.transform_.translate = { 145.0f, 25.0f, 7.0f };
+	enemyTutorialTransform_.transform_.translate = { 145.0f, 25.0f, 10.0f };
 	enemyTutorialTransform_.transform_.scale = { 10.0f, 10.0f, 10.0f };
 	enemyTutorialTransform_.UpdateMatrix();
 
