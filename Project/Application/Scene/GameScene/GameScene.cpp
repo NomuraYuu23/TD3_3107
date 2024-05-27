@@ -138,8 +138,10 @@ void GameScene::Initialize() {
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
-	backGround_->SetParent(&player_->worldtransform_);
-
+	if (StageNumberManager::stageNum_ == 0) {
+		// 最初のステージならチュートリアルモデルを設定
+		backGround_->SetTutorialPlaneModel(textureHandleManager_.get(), spearJumpTutorialPlaneModel_.get(), enemyTutorialPlaneModel_.get());
+	}
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
@@ -580,6 +582,12 @@ void GameScene::ModelCreate()
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
 
 	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
+
+	// ステージ番号が 00 のときのみロード
+	if (StageNumberManager::stageNum_ == 0) {
+		spearJumpTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
+		enemyTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
+	}
 
 	// 敵モデル
 	// プレイヤーモデル
