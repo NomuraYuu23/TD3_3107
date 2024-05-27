@@ -72,6 +72,8 @@ void BackGround::Draw(const BaseCamera& camera)
 
 	// チュートリアルモデルが描画されていればチュートリアル平面の描画を行う
 	if (speartutorialPlaneModel_ != nullptr) {
+		spearTutorialTransform_.transform_.rotate.x = 0.3f;
+		enemyTutorialTransform_.transform_.rotate.x = 0.3f;
 		ModelDraw::NormalObjectDesc desc;
 		desc.camera = &const_cast<BaseCamera&>(camera);
 		desc.material = tutorialPlaneMaterial_.get();
