@@ -504,6 +504,7 @@
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointEditor.h" />
     <ClInclude Include="Application\Particle\user\SpearJump\SpearJumpParticle.h" />
     <ClInclude Include="Application\Particle\user\GoalParticle\GoalParticle.h" />
+    <ClInclude Include="Application\Object\Enemy\System\DetectionRay.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

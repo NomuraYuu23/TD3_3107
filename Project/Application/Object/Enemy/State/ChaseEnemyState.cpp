@@ -7,3 +7,7 @@ void ChaseEnemyState::Initialize()
 	enemy_->MatrixUpdate();
 
 }
+
+void ChaseEnemyState::Update()
+{
+}

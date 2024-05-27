@@ -24,3 +24,8 @@ bool DetectionSystem::ShouldChase(const Vector3& target)
 
 	return false;
 }
+
+void DetectionSystem::OnCollision(ColliderParentObject2D target)
+{
+	target;
+}

@@ -171,4 +171,7 @@ public:
 
 	TimerLib interval_;
 
+	// 追尾用システム
+	DetectionSystem detectionSystem_;
+
 };

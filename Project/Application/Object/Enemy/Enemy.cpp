@@ -27,6 +27,9 @@ void Enemy::Initialize()
 
 	isDead_ = false;
 	isGround_ = false;
+
+	detectionSystem_.Initialize(this);
+
 }
 
 void Enemy::Initialize(const std::string& name)

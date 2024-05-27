@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../Engine/Math/Vector3.h"
+#include "DetectionRay.h"
 
 /// <summary>
 /// 前方宣言
@@ -37,4 +38,6 @@ private:
 	Enemy* enemy_;
 
 	bool isChase_ = false;
+
+
 };
