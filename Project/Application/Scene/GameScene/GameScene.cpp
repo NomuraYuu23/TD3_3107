@@ -121,8 +121,8 @@ void GameScene::Initialize() {
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(enemyModel_.get());
 	enemyManager_->SetPlayer(player_.get());
+	enemyManager_->Initialize(enemyModel_.get());
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();

@@ -7,6 +7,7 @@
 #include "../../../Engine/Animation/Animation.h"
 #include "SingleEnemyData.h"
 #include "MultiEnemyData.h"
+#include "ChaseEnemyData.h"
 #include "EnemyEditor.h"
 
 class Player;
@@ -71,6 +72,9 @@ private:
 	/// </summary>
 	void RegisterEnemy(const SingleEnemyData& data);
 	void RegisterEnemy(const SingleEnemyData& data, const std::string& name);
+
+
+	void RegisterChaseEnemy(const ChaseEnemyData& data, const std::string& name);
 
 	/// <summary>
 	/// 単体の敵を生成している場所
