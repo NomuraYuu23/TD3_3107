@@ -23,7 +23,7 @@ void FollowCamera::Initialize()
 	transform_.rotate.x = 0.3f;
 
 	scalingRate_ = 0.0f;
-	scalingRateT_ = 0.2f;
+	scalingRateT_ = 0.02f;
 
 	// 入力取得
 	input_ = Input::GetInstance();
