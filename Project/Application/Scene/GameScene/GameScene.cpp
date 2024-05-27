@@ -117,7 +117,7 @@ void GameScene::Initialize() {
 
 	// ゲームシステム
 	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(goalModel_.get(), player_.get());
+	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get());
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -397,7 +397,7 @@ void GameScene::Draw() {
 
 	// UIマネージャー描画
 	gameUIManager_->Draw();
-	arrowSprite_->Draw();
+	//arrowSprite_->Draw();
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
@@ -581,6 +581,7 @@ void GameScene::ModelCreate()
 	// 背景モデル
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
 
+	checkPointModel_.reset(Model::Create("Resources/Model/Takenoko", "Takenoko.obj", dxCommon_, textureHandleManager_.get()));
 	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// ステージ番号が 00 のときのみロード

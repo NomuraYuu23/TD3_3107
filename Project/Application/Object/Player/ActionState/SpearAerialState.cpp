@@ -32,22 +32,6 @@ void SpearAerialState::Initialize()
 
 #ifndef _DEBUG
 
-	// プレイヤーの移動ベクトルの逆ベクトルを求める
-	Vector3 v = Vector3::Normalize(player_->velocity_);
-	v *= -1.0f;
-
-	// 槍ジャンプパーティクル再生
-	EmitterDesc desc;
-	desc.transform = &player_->worldtransform_.transform_;
-	desc.instanceCount = 5;
-	desc.frequency = 0.01f;
-	desc.lifeTime = 0.025f;
-	desc.particleModelNum = kCircle;
-	desc.velocity = v;
-	desc.paeticleName = kSpearJumpParticle;
-
-	ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
-
 	// 槍ジャンアニメーションの再生
 	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::SpearJump);
 
@@ -96,6 +80,28 @@ void SpearAerialState::Update()
 	// 移動処理
 	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
+
+	// デバック以外の場合のみ行う
+	#ifndef _DEBUG
+
+	// プレイヤーの移動ベクトルの逆ベクトルを求める
+	Vector3 v = Vector3::Normalize(player_->velocity_);
+	v *= -1.0f;
+
+	// 槍ジャンプパーティクル再生
+	EmitterDesc desc;
+	desc.transform = &player_->worldtransform_.transform_;
+	desc.instanceCount = 1;
+	desc.frequency = 0.01f;
+	desc.lifeTime = 0.01f;
+	desc.particleModelNum = kCircle;
+	desc.velocity = v;
+	desc.paeticleName = kSpearJumpParticle;
+
+	ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+	#endif // !_DEBUG
+
 }
 
 void SpearAerialState::InitializeDirection(const Vector2& direct)
