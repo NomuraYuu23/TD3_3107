@@ -53,7 +53,8 @@ void SelectSystem::Update()
 
 		// スティック入力
 		Vector2 leftStick = input_->GetLeftAnalogstick();
-
+		// 仮
+		leftStick = { 0.0f,0.0f };
 
 		// 右移動
 		if (leftStick.x > 0.0f) {
