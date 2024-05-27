@@ -396,7 +396,7 @@ void GameScene::Draw() {
 	//uiManager_->Draw();
 
 	// UIマネージャー描画
-	gameUIManager_->Draw();
+	//gameUIManager_->Draw();
 	arrowSprite_->Draw();
 
 	// 前景スプライト描画後処理

@@ -25,23 +25,59 @@ void FollowCamera::Initialize()
 	scalingRate_ = 0.0f;
 	scalingRateT_ = 0.2f;
 
+	// 入力取得
+	input_ = Input::GetInstance();
+
 }
 
 void FollowCamera::Update(float elapsedTime)
 {
-	// 追従処理
-	if (targetTransform_) {
+	if (!isLockCamera_) {
+		// 追従処理
+		if (targetTransform_) {
 
-		transform_.translate = targetTransform_->transform_.translate + defaultOffset_ + defaultOffsetAdd_;
+			transform_.translate = targetTransform_->transform_.translate + defaultOffset_ + defaultOffsetAdd_;
 
+		}
+
+		// 拡縮処理
+		if (player_) {
+
+			ScalingUpDown();
+			MoveCameraForward();
+		}
+
+		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
+			isLockCamera_ = true;
+		}*/
+	}
+	else {
+		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
+			isLockCamera_ = false;
+		}
+
+		if (input_->PushKey(DIK_W)) {
+			transform_.translate.z += 0.1f;
+		}
+		else if (input_->PushKey(DIK_S)) {
+			transform_.translate.z -= 0.1f;
+		}
+
+		if (input_->PushKey(DIK_LSHIFT)) {
+			transform_.translate.y += 0.1f;
+		}
+		else if (input_->PushKey(DIK_LCONTROL)) {
+			transform_.translate.y -= 0.1f;
+		}
+
+		if (input_->PushKey(DIK_D)) {
+			transform_.translate.x += 0.1f;
+		}
+		else if (input_->PushKey(DIK_A)) {
+			transform_.translate.x -= 0.1f;
+		}*/
 	}
 
-	// 拡縮処理
-	if (player_) {
-
-		ScalingUpDown();
-		MoveCameraForward();
-	}
 	// 基底クラス更新
 	BaseCamera::Update(elapsedTime);
 

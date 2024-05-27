@@ -30,7 +30,7 @@ void BackGround::Update()
 	if (speartutorialPlaneModel_ != nullptr) {
 		
 		int32_t spearTexIndex = static_cast<int32_t>(Math::Lerp(0, 11, spearCurrentTime_ / spearStagingTime_));
-		int32_t enemyTexIndex = static_cast<int32_t>(Math::Lerp(0, 9, enemyCurrentTime_ / enemyStagingTime_));
+		int32_t enemyTexIndex = static_cast<int32_t>(Math::Lerp(0, 10, enemyCurrentTime_ / enemyStagingTime_));
 
 		// テクスチャ変更
 		speartutorialPlaneModel_->SetTextureHandle(spearTutorialTexHandles_[spearTexIndex], 0);
@@ -151,6 +151,7 @@ void BackGround::SetTutorialPlaneModel(ITextureHandleManager* texHandleManager, 
 	enemyTutorialTexHandles_.insert({ 6, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_06.png", dxCommon_, texHandleManager_) });
 	enemyTutorialTexHandles_.insert({ 7, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_07.png", dxCommon_, texHandleManager_) });
 	enemyTutorialTexHandles_.insert({ 8, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_08.png", dxCommon_, texHandleManager_) });
+	enemyTutorialTexHandles_.insert({ 9, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_09.png", dxCommon_, texHandleManager_) });
 
 	// モデルのデフォルトテクスチャを変更
 	speartutorialPlaneModel_->SetTextureHandle(spearTutorialTexHandles_[0], 0);
@@ -158,16 +159,16 @@ void BackGround::SetTutorialPlaneModel(ITextureHandleManager* texHandleManager, 
 
 	// 演出時間を求める
 	spearStagingTime_ = 0.5f * 11;
-	enemyStagingTime_ = 0.5f * 9;
+	enemyStagingTime_ = 0.5f * 10;
 
 	// ワールドトランスフォームの初期化
 	spearTutorialTransform_.Initialize(model_->GetRootNode());
-	spearTutorialTransform_.transform_.translate = {92.0f, 14.0f, 10.0f };
-	spearTutorialTransform_.transform_.scale = {15.0f, 15.0f, 15.0f };
+	spearTutorialTransform_.transform_.translate = {90.0f, 14.5f, 15.0f };
+	spearTutorialTransform_.transform_.scale = {12.5f, 12.5f, 1.0f };
 	spearTutorialTransform_.UpdateMatrix();
 	enemyTutorialTransform_.Initialize(model_->GetRootNode());
-	enemyTutorialTransform_.transform_.translate = { 145.0f, 25.0f, 10.0f };
-	enemyTutorialTransform_.transform_.scale = { 10.0f, 10.0f, 10.0f };
+	enemyTutorialTransform_.transform_.translate = { 150.0f, 25.0f, 15.0f };
+	enemyTutorialTransform_.transform_.scale = { 12.5f, 12.5f, 1.0f };
 	enemyTutorialTransform_.UpdateMatrix();
 
 	tutorialPlaneMaterial_.reset(Material::Create());
