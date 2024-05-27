@@ -1,0 +1,99 @@
+{
+    "Stage00": {
+        "Enemy00": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                160.0,
+                15.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy01": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                170.0,
+                15.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy02": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                432.0,
+                83.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy03": {
+            "easeEndPosition": [
+                20.0,
+                0.0,
+                9.699999809265137
+            ],
+            "pad": 0,
+            "position": [
+                412.0,
+                83.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy04": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                308.0,
+                37.29999923706055,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy05": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                180.0,
+                15.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "EnemyEmitter:00": {
+            "distance": 7.599999904632568,
+            "enemyMaxCount": 5,
+            "padding": 0,
+            "position": [
+                429.79998779296875,
+                48.099998474121094,
+                0.0
+            ],
+            "rotateSpeed": 90.0
+        }
+    }
+}

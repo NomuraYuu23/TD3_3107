@@ -75,5 +75,8 @@ public:
 	// 地面か障害物か
 	BlockType typeNumber_ = BlockType::kTerrain;
 
+	// 名前
+	std::string name_;
+
 };
 

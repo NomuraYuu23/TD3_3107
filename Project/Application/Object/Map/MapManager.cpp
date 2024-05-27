@@ -5,6 +5,7 @@
 #include "../ObjectList.h"
 #include "../GameUtility/MathUtility.h"
 #include "../../../Engine/2D/ImguiManager.h"
+#include "../../AllSceneObject/StageNumberManager.h"
 
 void MapManager::Initialize(Model* model)
 {
@@ -13,7 +14,11 @@ void MapManager::Initialize(Model* model)
 
 	//InitializePlacement();
 	//InitializeBossMap();
-	InitializeLongPatternMap();
+	//InitializeLongPatternMap();
+
+	mapEditor_ = std::make_unique<MapEditor>();
+	mapEditor_->LoadFiles();
+
 }
 
 void MapManager::Update()
@@ -21,25 +26,31 @@ void MapManager::Update()
 
 	LargeNumberOfObjects::Update();
 
+	EditorMapLoad();
+
 }
 
 void MapManager::ImGuiDraw()
 {
 
-	ImGui::Begin("BlockManager");
-	// リストの最大値
-	int size = (int)objects_.size();
-	ImGui::InputInt("maxBlockSize", &size);
+	//ImGui::Begin("BlockManager");
+	//// リストの最大値
+	//int size = (int)objects_.size();
+	//ImGui::InputInt("maxBlockSize", &size);
 
-	ImGui::Separator();
+	//ImGui::Separator();
 
-	// ブロック達のImGui
-	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
-		it != objects_.end(); ++it) {
-		static_cast<Terrain*>(it->get())->ImGuiDraw();
-	}
+	//// ブロック達のImGui
+	//for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+	//	it != objects_.end(); ++it) {
+	//	static_cast<Terrain*>(it->get())->ImGuiDraw();
+	//}
 
-	ImGui::End();
+	//ImGui::End();
+
+	mapEditor_->ImGuiDraw();
+
+
 
 }
 
@@ -70,7 +81,7 @@ void MapManager::RegisterBlock(const Vector3& position)
 
 }
 
-void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
+void MapManager::RegisterBlock(const Vector3& position, const Vector2& scale , const std::string& name)
 {
 
 	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Terrain>();
@@ -83,6 +94,10 @@ void MapManager::RegisterBlock(const Vector3& position, const Vector2 scale)
 	static_cast<Terrain*>(obj.get())->typeNumber_ = Terrain::BlockType::kTerrain;
 	// マテリアル更新（サイズの変更後に合わせて）
 	static_cast<Terrain*>(obj.get())->MaterialUpdate();
+
+	// 名前
+	static_cast<Terrain*>(obj.get())->name_ = name;
+
 	// 追加
 	objects_.push_back(std::move(obj));
 }
@@ -219,9 +234,9 @@ void MapManager::InitializePlacement()
 //#pragma endregion
 
 #pragma region 空中の障害物
-	RegisterBlock({ 20.0f,4.0f,0 }, { 20.0f,1.0f });
+	RegisterBlock({ 20.0f,4.0f,0 }, { 20.0f,1.0f }, "Terrain12");
 
-	RegisterBlock({ 35.0f,8.0f,0 }, { 20.0f,1.0f });
+	RegisterBlock({ 35.0f,8.0f,0 }, { 20.0f,1.0f }, "Terrain13");
 
 	typeNum = static_cast<uint32_t>(Terrain::BlockType::kObstacle);
 	for (int i = 0; i < 4; ++i) {
@@ -309,43 +324,116 @@ void MapManager::InitializeLongPatternMap()
 	//RegisterBlock({ 120.0f - 1.0f,30.0f - 4.0f,0 }, { 1.0f,30.0f });
 
 	// 床
-	RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,2.0f });
+	RegisterBlock({ 20.0f,-4.0f,0 }, { 100.0f,2.0f }, "Terrain0");
 
 	// 真ん中の縦
 	// 右
-	RegisterBlock({ 50.0f,28.0f,0 }, { 2.0f,30.0f });
+	RegisterBlock({ 50.0f,28.0f,0 }, { 2.0f,30.0f }, "Terrain1");
 	// 左
-	RegisterBlock({ 40.0f,40.0f,0 }, { 2.0f,30.0f });
+	RegisterBlock({ 40.0f,40.0f,0 }, { 2.0f,30.0f }, "Terrain2");
 
 	// 上の床
-	RegisterBlock({ 87.0f,56.0f,0 }, { 35.0f,2.0f });
+	RegisterBlock({ 87.0f,56.0f,0 }, { 35.0f,2.0f }, "Terrain3");
 
 
 	// ブロック
-	RegisterBlock({ 17.5f,12.5f,0 }, { 6.0f,1.0f });
+	RegisterBlock({ 17.5f,12.5f,0 }, { 6.0f,1.0f }, "Terrain4");
 
 	// 右下の奴ら
-	RegisterBlock({ 90.0f,8.0f,0 }, { 6.0f,1.0f });
-	RegisterBlock({ 110.0f,16.0f,0 }, { 6.0f,1.0f });
+	RegisterBlock({ 90.0f,8.0f,0 }, { 6.0f,1.0f }, "Terrain5");
+	RegisterBlock({ 110.0f,16.0f,0 }, { 6.0f,1.0f }, "Terrain6");
 
-	RegisterBlock({ 90.0f,24.0f,0 }, { 6.0f,1.0f });
-	RegisterBlock({ 110.0f,32.0f,0 }, { 6.0f,1.0f });
+	RegisterBlock({ 90.0f,24.0f,0 }, { 6.0f,1.0f }, "Terrain7");
+	RegisterBlock({ 110.0f,32.0f,0 }, { 6.0f,1.0f }, "Terrain8");
 
 
 	// 左端縦
-	RegisterBlock({ -78.0f,50.0f - 2.0f,0 }, { 2.0f,50.0f });
+	RegisterBlock({ -78.0f,50.0f - 2.0f,0 }, { 2.0f,50.0f }, "Terrain9");
 	// 右端壁
-	RegisterBlock({ 120.0f - 1.0f,50.0f - 2.0f,0 }, { 1.0f,50.0f });
+	RegisterBlock({ 120.0f - 1.0f,50.0f - 2.0f,0 }, { 1.0f,50.0f }, "Terrain10");
 
 	// 天井
-	RegisterBlock({ 20.0f,98.0f,0 }, { 100.0f,2.0f });
+	RegisterBlock({ 20.0f,98.0f,0 }, { 100.0f,2.0f }, "Terrain11");
+
+
+
 
 }
 
-void MapManager::LoadMapData(const std::string& filePath)
+void MapManager::EditorMapLoad()
 {
-	// 読み込み
-	//std::ifstream file{ filePath };
-	filePath;
+
+	// マップデータ
+	std::map<std::string, std::map<std::string, MapBlockData>>* mapDatas = mapEditor_->GetDatas();
+	
+	// ステージ
+	std::string stageName = "Stage" + std::to_string(StageNumberManager::stageNum_);
+
+	if (StageNumberManager::stageNum_ < 10) {
+		stageName = "Stage0" + std::to_string(StageNumberManager::stageNum_);
+	}
+
+	for (std::map<std::string, std::map<std::string, MapBlockData>>::iterator stageItr = mapDatas->begin();
+		stageItr != mapDatas->end(); ++stageItr) {
+
+		// ステージ番号が違う
+		if (stageItr->first != stageName) {
+			continue;
+		}
+
+		std::vector<std::string> terrainNames;
+
+		for (std::map<std::string, MapBlockData>::iterator terrainItr = stageItr->second.begin();
+			terrainItr != stageItr->second.end(); ++terrainItr) {
+
+			std::string terrainName = terrainItr->first;
+			MapBlockData terrainData = terrainItr->second;
+			bool edited = false;
+
+			// 編集
+			for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+				it != objects_.end(); ++it) {
+
+				// ブロックの番号が違う
+				if (terrainName != static_cast<Terrain*>(it->get())->name_) {
+					continue;
+				}
+
+				it->get()->transform_.translate = { terrainData.position.x, terrainData.position.y, 0.0f };
+				it->get()->transform_.scale = { terrainData.size.x,terrainData.size.y,1.0f };
+				// サイズの設定
+				static_cast<Terrain*>(it->get())->scale2D_ = { terrainData.size.x * 2.0f, terrainData.size.y * 2.0f };
+				// マテリアル更新（サイズの変更後に合わせて）
+				static_cast<Terrain*>(it->get())->MaterialUpdate();
+
+				edited = true;
+
+				break;
+			
+			}
+
+			// 追加
+			if (!edited) {
+				RegisterBlock({ terrainData.position.x, terrainData.position.y, 0.0f }, terrainData.size, terrainName);
+			}
+
+			// 削除用に名前登録
+			terrainNames.push_back(terrainName);
+
+		}
+
+		// 削除
+		objects_.remove_if([=](std::unique_ptr<OneOfManyObjects>& terrain) {
+			
+			for (uint32_t i = 0; i < terrainNames.size(); ++i) {
+				if (terrainNames[i] == static_cast<Terrain*>(terrain.get())->name_) {
+					return false;
+				}
+			}
+			return true;
+
+			});
+
+	}
 
 }

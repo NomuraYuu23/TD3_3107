@@ -12,7 +12,6 @@ TitleScene::~TitleScene()
 			audioManager_->StopWave(i);
 		}
 	}
-
 }
 
 void TitleScene::Initialize()
@@ -38,6 +37,12 @@ void TitleScene::Initialize()
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
 
+	// スプライト生成
+	titleSprite_.reset(Sprite::Create(logoTexHandle_, { 640.0f,270.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	buttonSprite_.reset(Sprite::Create(buttonTexHandle_, { 640.0f,480.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+
+	titleSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	buttonSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 }
 
 void TitleScene::Update()
@@ -50,7 +55,7 @@ void TitleScene::Update()
 	if ((input_->TriggerJoystick(JoystickButton::kJoystickButtonA) || input_->TriggerKey(DIK_SPACE)) &&
 		requestSceneNo_ == kTitle) {
 		// 行きたいシーンへ
-		requestSceneNo_ = kGame;
+		requestSceneNo_ = kSelect;
 	}
 
 	// BGM音量下げる
@@ -106,6 +111,9 @@ void TitleScene::Draw()
 	//背景
 	//前景スプライト描画
 
+	titleSprite_->Draw();
+	buttonSprite_->Draw();
+
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -134,6 +142,9 @@ void TitleScene::ModelCreate()
 
 void TitleScene::TextureLoad()
 {
+
+	logoTexHandle_ = TextureManager::Load("Resources/UI/Title/TitleLogo.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	buttonTexHandle_ = TextureManager::Load("Resources/UI/Title/Button.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 }
 

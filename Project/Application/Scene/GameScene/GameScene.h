@@ -13,6 +13,7 @@
 #include "../../Object/ObjectList.h"	// オブジェクトフォルダ内のインクルード
 #include "../../Object/GameObjectData.h"
 #include "../../Object/GameCamera/GameBasicCamera.h"
+#include "../../Object/GameSystem/GameSystemManager.h"
 
 #include "../../Object/Enemy/EnemyManager.h"
 
@@ -22,6 +23,8 @@
 
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../Engine/Collision2D/Collision2DDebugDraw.h"
+
+#include "../../UI/GameUIManager.h"
 
 class GameScene : public IScene
 {
@@ -92,6 +95,8 @@ private:
 	ParticleManager* particleManager_ = nullptr;
 	std::unique_ptr<Model> particleUvcheckerModel_ = nullptr;
 	std::unique_ptr<Model> particleCircleModel_ = nullptr;
+	std::unique_ptr<Model> particleLeafModel_ = nullptr;
+	std::unique_ptr<Model> particleSpearLeafModel_ = nullptr;
 
 	std::unique_ptr<CollisionManager> collisionManager_;
 
@@ -117,11 +122,16 @@ private:
 	std::unique_ptr<Collision2DDebugDraw> collision2DDebugDraw_;
 	std::array<uint32_t, Collision2DDebugDraw::kTexutureNameOfCount> collision2DDebugDrawTextures_;
 	
+	// ゲーム管理
+	std::unique_ptr<GameSystemManager> gameSystemManager_;
+
 	// プレイヤー
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Model> playerModel_;
 	std::unique_ptr<Model> ponyTailModel_;
 	std::unique_ptr<Model> weaponModel_;
+	std::unique_ptr<Model> ringUnderModel_;
+	std::unique_ptr<Model> ringTopModel_;
 
 	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;
@@ -130,6 +140,7 @@ private:
 	// 背景
 	std::unique_ptr<BackGround> backGround_;
 	std::unique_ptr<Model> backGroundModel_;
+	std::unique_ptr<Model> goalModel_;
 
 	// 敵
 	std::unique_ptr<EnemyManager> enemyManager_;
@@ -139,6 +150,9 @@ private:
 	// カメラ
 	std::unique_ptr<GameBasicCamera> gameCamera_;
 	std::unique_ptr<FollowCamera> followCamera_;
+
+	// UIマネージャー
+	std::unique_ptr<GameUIManager> gameUIManager_;
 
 	std::unique_ptr<Sprite> arrowSprite_;
 	uint32_t arrowTexture_ = 0u;

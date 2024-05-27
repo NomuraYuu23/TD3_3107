@@ -4,6 +4,9 @@
 #include "../../../Engine/3D/OneOfManyObjects.h"
 #include "IEnemyEmitter.h"
 #include "../GameUtility/TimerLib.h"
+#include "System/EnemySytemList.h"
+
+class Player;
 
 class Enemy : public OneOfManyObjects
 {
@@ -18,6 +21,10 @@ public:
 	/// 初期化
 	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize(const std::string& name);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -102,9 +109,19 @@ public:
 	IEnemyState* GetNowState() { return state_.get(); }
 	EnemyState GetState() { return judState_; }
 
+	std::string GetName() { return name_; }
+
+	/// <summary>
+	/// プレイヤーのセッター
+	/// </summary>
+	/// <param name="player"></param>
+	void SetPlayer(Player* player) { player_ = player; }
+
+	
+
 private:
 
-	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::AttackPattern pattern);
+	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::ActionMode pattern);
 
 	void CheckParent();
 
@@ -126,6 +143,7 @@ private:
 	std::unique_ptr<IEnemyState> state_;
 
 	Weapon* weapon_ = nullptr;
+	Player* player_ = nullptr;
 
 public:
 

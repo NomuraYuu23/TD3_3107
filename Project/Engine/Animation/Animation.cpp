@@ -190,6 +190,12 @@ std::vector<bool> Animation::GetRunningAnimations()
 
 }
 
+float Animation::GetAnimationProgress(int count) const
+{
+	// 指定されたアニメーションの進行度を返す
+	return std::clamp(static_cast<float>(animationDatas_[count].timer / animationDatas_[count].animation.endTime_), 0.f, 1.f);
+}
+
 void Animation::NodeAnimationUpdate(uint32_t index, double timer)
 {
 

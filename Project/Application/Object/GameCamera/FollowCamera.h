@@ -29,7 +29,12 @@ public:
 		targetTransform_ = &player_->worldtransform_;
 	}
 
+	/// <summary>
+	/// カメラの引きを調整する関数
+	/// </summary>
 	void ScalingUpDown();
+
+	void MoveCameraForward();
 
 private:
 	// プレイヤー
@@ -40,12 +45,24 @@ private:
 	// カメラのオフセット
 	Vector3 defaultOffset_ = {};
 
-	float minY = 0;
-	float maxY = 0;
-
 	float defaultFovY_ = 0;
 	float nowFovY_ = 0;
 
 	TimerLib correctTimer_;
+
+private: // お試し
+
+	// オフセット位置ターゲット
+	Vector3 defaultOffsetTarget_;
+
+	// オフセット位置追加分
+	Vector3 defaultOffsetAdd_;
+
+	// 補間係数
+	float targetT_;
+
+	// 大きさレート
+	float scalingRate_ = 0.0f;
+	float scalingRateT_ = 0.2f;
 
 };

@@ -65,9 +65,18 @@ void IParticle::UpdateMatrix(const Matrix4x4& billBoardMatrix)
 {
 
 	if (useBillBoard_) {
+		// 回転行列格納用
+		Matrix4x4 rotateMatrix = Matrix4x4::MakeIdentity4x4();
+
+		// 全軸の回転行列を求める
+		rotateMatrix = Matrix4x4::MakeRotateXYZMatrix(transform_.rotate);
+
+		// ビルボード行列をかける
+		rotateMatrix = rotateMatrix * billBoardMatrix;
+
 		Matrix4x4 scaleMatrix = Matrix4x4::MakeScaleMatrix(transform_.scale);
 		Matrix4x4 translateMatrix = Matrix4x4::MakeTranslateMatrix(transform_.translate);
-		worldMatrix_ = Matrix4x4::Multiply(scaleMatrix, Matrix4x4::Multiply(billBoardMatrix, translateMatrix));
+		worldMatrix_ = Matrix4x4::Multiply(scaleMatrix, Matrix4x4::Multiply(rotateMatrix, translateMatrix));
 	}
 	else {
 		worldMatrix_ = Matrix4x4::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);

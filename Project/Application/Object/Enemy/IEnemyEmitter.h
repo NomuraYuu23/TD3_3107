@@ -3,6 +3,8 @@
 #include "../GameUtility/TimerLib.h"
 #include "../../../Engine/Animation/Animation.h"
 
+class Player;
+
 class IEnemyEmitter : public LargeNumberOfObjects
 {
 private:
@@ -18,6 +20,11 @@ public:
 	/// </summary>
 	/// <param name="model"></param>
 	void Initialize(Model* model) override;
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="model"></param>
+	void Initialize(Model* model, const std::string& name);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -54,6 +61,11 @@ public:
 
 	float GetNowAngle() { return nowAngle_; }
 
+	std::string GetName() { return name_; }
+
+private:
+	void GenerateEnemys(float positionAngle, float transformAngle, float addAngle);
+
 private:
 	// 
 	std::string name_;
@@ -69,6 +81,9 @@ private:
 	float nowAngle_ = 0.0f;
 	// フレーム単位の回転速度
 	float rotation_ = 0.0f;
+
+	float oneLapAngle_ = 0.0f;
+	bool isMinusRotation_ = false;
 
 	// 一周したか？
 	bool isRotateReturn_ = false;

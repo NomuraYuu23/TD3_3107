@@ -21,10 +21,8 @@ public: // サブクラス
 		JumpStart, // ジャンプ開始
 		Jumping, // 落下中
 		Landing, // 着地
-		ThrowStart, // 投げ開始
-		ThrowStaying, // 投げ待機
-		ThrowSpear, // 槍投げ
 		SpearJump, // 槍ジャンプ
+		PlayerAnimCount
 	};
 
 public: // メンバ関数
@@ -46,7 +44,7 @@ public: // メンバ関数
 	/// <param name="animNum">再生するアニメーション番号</param>
 	/// <param name="isLoop">アニメーションをループさせるか</param>
 	/// <param name="isFinish">アニメーションを終了させるか</param>
-	void PlayAnimation(int32_t animNum, bool isLoop = false, bool isFinish =true);
+	void PlaySpearAnimation(int32_t animNum, bool isLoop = false, bool isFinish =true);
 
 public: // アクセッサ等
 
@@ -61,7 +59,7 @@ private: // プライベートなメンバ関数
 	/// <summary>
 	/// 全アニメーション停止関数
 	/// </summary>
-	void StopAnimationAll();
+	void StopSpearAnimationAll();
 
 private: // メンバ変数
 
@@ -72,7 +70,7 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 
 	// アニメーション本体
-	Animation anim_;
+	Animation spearAnim_;
 
 	// プレイヤーが右を向いているか
 	bool isRight_ = true;

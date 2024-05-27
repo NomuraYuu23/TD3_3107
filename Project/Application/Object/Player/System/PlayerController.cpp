@@ -97,6 +97,7 @@ void PlayerController::ControllerProcess()
 
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
+		player_->isSlowNow_ = false;
 
 		// スローモーション
 		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
@@ -106,56 +107,54 @@ void PlayerController::ControllerProcess()
 			if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
 				!player_->IsRecoil()) {
 				if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
-					// スローの倍率
-					player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 					// UI表示
 					player_->isArrowUiDraw_ = true;
+					player_->isSlowNow_ = true;
 				}
-				else {
-					player_->sPlaySpeed = 1.0f;
-				}
-
-				// 槍のエイムアニメーション再生
-				if (!player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation(SpearAnimManager::SpearAim)) {
-					player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearAim);
-				}
-
-				// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
-				if (player_->weapon_->isHold_) {
-					player_->weapon_->throwDirect_ = player_->throwDirect_;
-				}
-
 			}
-			else {
 
-				// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
-				if (player_->weapon_->isHold_) {
-					player_->weapon_->throwDirect_ = { 0,1,0 };
-				}
+			// デバッグ以外の場合行う
+			#ifndef _DEBUG
+			// 槍のエイムアニメーション再生
+			/*if (!player_->weapon_->GetAnimManager()->GetSpearAnim().GetRunningAnimation(SpearAnimManager::SpearAim)) {
+				player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearAim);
+			}*/
+			#endif // !_DEBUG
 
-				// 何も再生されていなければ待機アニメーション再生
-				if (player_->weapon_->GetAnimManager()->GetAnim().GetRunningAnimation()) {
-					player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearIdle, true);
-				}
-
-				player_->sPlaySpeed = 1.0f;
+			// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
+			if (player_->weapon_->isHold_) {
+				player_->weapon_->throwDirect_ = player_->throwDirect_;
 			}
 		}
 		else {
-			player_->sPlaySpeed = 1.0f;
+			// 槍を持っているなら槍の向きを狙っている方向に合わせるように指示
+			if (player_->weapon_->isHold_) {
+				player_->weapon_->throwDirect_ = { 0,1,0 };
+			}
+
+			#ifndef _DEBUG
+			// 何も再生されていなければ待機アニメーション再生
+			if (player_->weapon_->GetAnimManager()->GetSpearAnim().GetRunningAnimation()) {
+				//player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
 		}
-		//Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+			#endif // !_DEBUG
+		}
 
-		//if (std::fabsf(normalize.x) >= 0.3f || std::fabsf(normalize.y) >= 0.3f) {
-		//	// 投げる方向ベクトル
-		//	player_->throwDirect_ = Vector3::Normalize({ stickDirect.x,stickDirect.y * -1.0f,0 });
-
-		//}
+		// スローの判定
+		if (player_->isSlowNow_) {
+			// スローの倍率
+			GameSystemManager::sGameSpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
+			//player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
+		}
+		else {
+			GameSystemManager::sGameSpeed = 1.0f;
+			//player_->sPlaySpeed = 1.0f;
+		}
 
 	}
 	// 座標更新
 	if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
-		player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
 
 }
@@ -174,13 +173,13 @@ void PlayerController::AerialMoveProcess()
 	if (CheckAction) {
 		// 左右移動
 		if (player_->velocity_.x > 0 && (leftStick.x / SHRT_MAX) < 0) {
-			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * (aerialSpeed_ * ratio) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * (aerialSpeed_ * ratio) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 		else if (player_->velocity_.x < 0 && (leftStick.x / SHRT_MAX) > 0) {
-			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * (aerialSpeed_ * ratio) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * (aerialSpeed_ * ratio) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 		else {
-			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.x += (float)leftStick.x / SHRT_MAX * aerialSpeed_ * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 
 	}
@@ -207,7 +206,7 @@ void PlayerController::GroundMoveProcess()
 			moveValue = -1.0f;
 		}
 		//float moveValue = (float)leftStick.x / SHRT_MAX;
-		player_->velocity_.x = moveValue * groundSpeed_ * (1.0f / IObject::sPlaySpeed);
+		player_->velocity_.x = moveValue * groundSpeed_ * (1.0f / GameSystemManager::sGameSpeed);
 
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない

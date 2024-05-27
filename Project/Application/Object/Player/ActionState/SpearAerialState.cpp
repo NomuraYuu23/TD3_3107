@@ -30,14 +30,38 @@ void SpearAerialState::Initialize()
 
 	player_->weapon_->GetEffectSystem()->StartShockWave(15.0f);
 
+#ifndef _DEBUG
+
+	// プレイヤーの移動ベクトルの逆ベクトルを求める
+	Vector3 v = Vector3::Normalize(player_->velocity_);
+	v *= -1.0f;
+
+	// 槍ジャンプパーティクル再生
+	EmitterDesc desc;
+	desc.transform = &player_->worldtransform_.transform_;
+	desc.instanceCount = 5;
+	desc.frequency = 0.01f;
+	desc.lifeTime = 0.025f;
+	desc.particleModelNum = kCircle;
+	desc.velocity = v;
+	desc.paeticleName = kSpearJumpParticle;
+
+	ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
 	// 槍ジャンアニメーションの再生
-	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::SpearJump);
+	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::SpearJump);
 
 	// 槍のバウンドアニメーション再生
-	player_->weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearBounce);
+	player_->weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearBounce);
 
 	// ジャンプ効果音を再生
 	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
+
+#endif // !_DEBUG
+
+	// 補正キャンセル
+	player_->GetLandingAdjuster().Cancel();
+
 }
 
 void SpearAerialState::Update()
@@ -59,28 +83,30 @@ void SpearAerialState::Update()
 	if (player_->IsNowAssistDash()) {
 		float ratio = GlobalVariables::GetInstance()->GetFloatValue("Dash", "SlowRatio");
 		if (player_->velocity_.y < 0) {
-			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 		else {
-			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 	}
 	else {
-		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
 
 	// 移動処理
-	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
+	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 }
 
 void SpearAerialState::InitializeDirection(const Vector2& direct)
 {
 	if (direct.x > 0) {
-		player_->velocity_.x = CreateNewSpeed(direct.x);
+		float moveDirect = 1.0f;
+		player_->velocity_.x = CreateNewSpeed(moveDirect);
 	}
 	else if (direct.x < 0) {
-		player_->velocity_.x = CreateNewSpeed(direct.x);
+		float moveDirect = -1.0f;
+		player_->velocity_.x = CreateNewSpeed(moveDirect);
 	}
 	else {
 		player_->velocity_.x = 0;

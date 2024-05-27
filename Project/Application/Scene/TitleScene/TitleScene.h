@@ -64,5 +64,15 @@ private: // メンバ変数
 	std::unique_ptr<Model> skydomeModel_;
 	bool isDrawSkydome_ = true;
 
+	// タイトルロゴスプライト
+	std::unique_ptr<Sprite> titleSprite_;
+	// ボタンスプライト
+	std::unique_ptr<Sprite> buttonSprite_;
+
+	// タイトルロゴテクスチャ
+	uint32_t logoTexHandle_ = 0u;
+	// ボタンテクスチャ
+	uint32_t buttonTexHandle_ = 0u;
+
 };
 

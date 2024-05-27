@@ -21,11 +21,16 @@ void AerialState::Initialize()
 	// 速度をこちらの変数に
 	velocity_ = player_->velocity_;
 
+	// デバッグ以外だったらアニメーション、効果音再生
+#ifndef _DEBUG
+
 	// ジャンプ効果音を再生
 	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);
 
 	// ジャンプ開始アニメーション
-	player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::JumpStart);
+	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::JumpStart);
+
+#endif // !_DEBUG
 }
 
 void AerialState::Update()
@@ -49,18 +54,18 @@ void AerialState::Update()
 	if (player_->IsNowAssistDash()) {
 		float ratio = GlobalVariables::GetInstance()->GetFloatValue("Dash", "SlowRatio");
 		if (player_->velocity_.y < 0) {
-			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * (gravity_ / ratio)) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 		else {
-			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+			player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 		}
 	}
 	else {
-		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
 
 	// 移動処理
-	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
-	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
+	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 
 }

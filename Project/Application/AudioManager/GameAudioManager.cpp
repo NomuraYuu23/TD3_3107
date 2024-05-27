@@ -1,4 +1,5 @@
 #include "GameAudioManager.h"
+#include "../../Engine/base/ITextureHandleManager.h"
 
 GameAudioManager::~GameAudioManager()
 {
@@ -19,6 +20,7 @@ void GameAudioManager::Initialize()
 	}
 
 	// 個別設定
+	audioDatas_[kGameSceneBGM].isLoop_ = true; // ゲームシーンのBGMはループ
 }
 
 void GameAudioManager::Update()

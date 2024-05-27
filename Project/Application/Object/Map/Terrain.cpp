@@ -30,10 +30,23 @@ void Terrain::Initialize()
 	material_->SetEnableLighting(enableLighting_);
 	material_->SetShininess(shininess_);
 	//this->transform_
+
+	name_ = "noName";
+
+	//	ライティング設定
+	materialData_.enableLighting = EnableLighting::HalfLambert;
 }
 
 void Terrain::Update()
 {
+
+	// デバッグの場合のみ行う
+#ifdef _DEBUG
+
+	// 地形マテリアルのuvトランスフォームを更新
+	MaterialUpdate();
+
+#endif // _DEBUG
 
 	// 基底クラスの更新
 	OneOfManyObjects::Update();
@@ -64,5 +77,6 @@ void Terrain::OnCollision(ColliderParentObject2D target)
 
 void Terrain::MaterialUpdate()
 {
-	material_->SetUvTransform(transform_);
+	// UVトランスフォームをスケールに合わせて調整
+	materialData_.uvTransform = Matrix4x4::MakeAffineMatrix({ transform_.scale.x / 2.0f, 1.0f, 1.0f }, Vector3{ 0.0f,0.0f,0.0f }, Vector3{ 0.0f,0.0f,0.0f });
 }

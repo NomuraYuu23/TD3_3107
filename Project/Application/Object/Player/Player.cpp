@@ -7,13 +7,15 @@
 #include "../../../Engine/Math/Math.h"
 #include "../ObjectList.h"
 #include "../GameUtility/MathUtility.h"
+#include "../../UI/GameUIManager.h"
+#include "../../Particle/EmitterName.h"
 
 void Player::Initialize(Model* model)
 {
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { -70.0f,10.0f,0 };
+	worldtransform_.transform_.translate = { 0.0f,10.0f,0 };
 
 	worldtransform_.UpdateMatrix();
 
@@ -42,10 +44,34 @@ void Player::Initialize(Model* model)
 
 	isGround_ = false;
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// アニメーション関連初期化
 	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
 	anim_->Init(this);							   // 初期化
+	#endif // !_DEBUG
 
+	// デバック以外の場合行う
+	#ifndef _DEBUG
+
+	// トランスフォーム生成
+	emitTransform_ = std::make_unique<EulerTransform>();
+	*emitTransform_ = worldtransform_.transform_;
+	emitTransform_->translate.z += 1.0f;
+
+	// ここで環境パーティクルの再生を行う
+	fallingLeafDesc_.transform = emitTransform_.get();
+	fallingLeafDesc_.instanceCount = 1;
+	fallingLeafDesc_.frequency = 0.25f;
+	fallingLeafDesc_.lifeTime = 5.0f;
+	fallingLeafDesc_.particleModelNum = kBambooLeaf;
+	fallingLeafDesc_.paeticleName = kFallingLeafParticle;
+	fallingLeafDesc_.velocity = { -1.0f, -1.0f, 0.0f };
+
+	// 無限生成エミッタで生成し続ける
+	ParticleManager::GetInstance()->MakeEmitter(&fallingLeafDesc_, EmitterName::kInfiniteEmitter);
+
+	#endif // !_DEBUG
 }
 
 void Player::Update()
@@ -70,7 +96,6 @@ void Player::Update()
 		// 行列を求める
 		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[10].matrix * worldtransform_.worldMatrix_;
 		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
-		//ponyAnchorPos_ = worldtransform_.GetWorldPosition();
 
 		// アンカー設定
 		ponytail_->SetAnchor(0, true);
@@ -82,11 +107,28 @@ void Player::Update()
 		ponytail_->Update();
 	}
 
+	// デバック以外の場合行う
+	#ifndef _DEBUG
+	
+	// 生成座標のデータを書き込む
+	*emitTransform_ = worldtransform_.transform_;
+	emitTransform_->translate.z += 1.0f;
+
+	#endif // !_DEBUG
+
+
 	// 基底クラスの更新
 	IObject::Update();
 
+	#ifndef _DEBUG
 	// アニメーション更新
 	anim_->Update();
+	#endif // !_DEBUG
+
+	// UIマネージャーに接地状態を渡す
+	if (uiManager_ != nullptr) {
+		uiManager_->SetIsGround(isGround_);
+	}
 
 	// コライダー
 	CircleColliderUpdate();
@@ -120,12 +162,19 @@ void Player::Draw(const BaseCamera& camera)
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	if (anim_->GetIsRight()) {
 		ModelDraw::AnimObjectDraw(desc);
-	}
+}
 	else {
 		ModelDraw::AnimInverseObjectDraw(desc);
 	}
+	#endif // !_DEBUG
+	// デバッグのみで行う
+	#ifdef _DEBUG
+	ModelDraw::AnimObjectDraw(desc);
+	#endif // _DEBUG
 
 	// 武器の描画
 	if (weapon_) {
@@ -145,13 +194,16 @@ void Player::Draw(const BaseCamera& camera)
 void Player::ImGuiDraw()
 {
 	ImGui::Begin("Player");
+	landingAdjuster_.ImGuiDraw();
 	controller_.ImGuiDraw();
 	hpManager_.ImGuiDraw();
 	correctSystem_.ImGuiDraw();
+	slowEffect_->ImGuiDraw();
+
 	// ゲームスピード
-	float ratio = IObject::sPlaySpeed;
-	ImGui::DragFloat("playTime", &ratio);
-	sPlaySpeed = ratio;
+	//float ratio = IObject::sPlaySpeed;
+	//ImGui::DragFloat("playTime", &ratio);
+	//sPlaySpeed = ratio;
 	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
 	int tex = IsCanReturn();
@@ -161,10 +213,7 @@ void Player::ImGuiDraw()
 	ImGui::Text(name.c_str());
 	// 座標リセット
 	if (ImGui::Button("PosReset")) {
-		worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
-		velocity_ = {};
-		worldtransform_.UpdateMatrix();
-		isGround_ = true;
+		Reset();
 	}
 
 	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
@@ -327,7 +376,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
-
 		// 前の座標から現座標へのベクトル
 		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;
 		moveDirect = Vector3::Normalize(moveDirect);
@@ -686,16 +734,57 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 		parabola_.DrawMap(drawLine);
 	}
 
-	LineForGPU lineForGPU;
+	if (!std::holds_alternative<ThrownState*>(weapon_->GetNowState())) {
+		LineForGPU lineForGPU;
 
-	// 色
-	lineForGPU.color[0] = connectingSpearLineColor_;
-	lineForGPU.color[1] = connectingSpearLineColor_;
+		// 色
+		lineForGPU.color[0] = connectingSpearLineColor_;
+		lineForGPU.color[1] = connectingSpearLineColor_;
 
-	lineForGPU.position[0] = worldtransform_.GetWorldPosition();
-	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
-	drawLine->Map(lineForGPU);
+		lineForGPU.position[0] = worldtransform_.GetWorldPosition();
+		lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
+		drawLine->Map(lineForGPU);
+	}
 
+}
+
+void Player::Reset()
+{
+	worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
+	velocity_ = {};
+	worldtransform_.UpdateMatrix();
+	isGround_ = true;
+	isDead_ = false;
+
+	weapon_->ChangeRequest(Weapon::StateName::kHold);
+
+	localMatrixManager_->Map();
+
+	// ポニーテールがセットされてる場合
+	if (ponytail_ != nullptr) {
+		// 行列を求める
+		Matrix4x4 result = localMatrixManager_->GetNodeDatas()[11].matrix * worldtransform_.worldMatrix_;
+		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
+
+		// 初期化の段階で全ばねの座標をセットする
+		for (int i = 0; i < ponytail_->GetSpring().size(); i++) {
+			// 追従先座標を渡す
+			ponytail_->SetPosition(i, ponyAnchorPos_);
+		}
+
+		// 更新
+		ponytail_->Update();
+	}
+}
+
+void Player::Respawn(const Vector3& position)
+{
+
+	Reset();
+	// 座標
+	worldtransform_.transform_.translate = position;
+	// 更新
+	worldtransform_.UpdateMatrix();
 }
 
 void Player::SetFallTimer()
@@ -758,6 +847,11 @@ void Player::SystemInitialize()
 	// レイ
 	rayLength_ = -100.0f;
 	cameraRay_.Initialize(this);
+	// スローエフェクト
+	slowEffect_ = std::make_unique<SlowEffect>();
+	slowEffect_->Initalize(this);
+	// 着地アシスト
+	landingAdjuster_.Initialize(this, weapon_.get());
 }
 
 void Player::SystemUpdate()
@@ -778,4 +872,8 @@ void Player::SystemUpdate()
 	spearJumpAccepter_.Update();
 	// 空中ダッシュ
 	assistDash_.Update();
+	// スローエフェクト
+	slowEffect_->Update();
+	// 着地アシスト
+	landingAdjuster_.Update();
 }

@@ -7,6 +7,9 @@
 #include "../ObjectList.h"
 #include "../Player/Player.h"
 
+#include "../../Particle/EmitterName.h"
+#include "../../Particle/ParticleName.h"
+
 void Weapon::Initialize(Model* model)
 {
 	// 基底クラスの初期化
@@ -35,12 +38,17 @@ void Weapon::Initialize(Model* model)
 	// 戻るレート
 	returnRate_ = 1.3f;
 	dotAngle_ = globalVariables->GetFloatValue("Weapon", "AngleDot");
-	// アニメーション関連初期化
-	anim_ = std::make_unique<SpearAnimManager>();  // 生成
-	anim_->Init(this);							   // 初期化
 
 	// システム初期化
-	this->SystemInitialize();
+	SystemInitialize();
+
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+	// アニメーション関連初期化
+	spearAnim_ = std::make_unique<SpearAnimManager>();  // 生成
+	spearAnim_->Init(this);							   // 初期化
+	#endif // !_DEBUG
+
 }
 
 void Weapon::Update()
@@ -66,16 +74,97 @@ void Weapon::Update()
 	// 基底クラスの更新
 	IObject::Update();
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+
+	// プレイヤーが槍を保持している場合
+	if (isHold_) {
+		// リングの角度を求める
+		float angle;
+
+		// ベクトルの大きさを計算
+		double magnitude = std::sqrt(throwDirect_.x * throwDirect_.x + throwDirect_.y * throwDirect_.y);
+
+		// x と y が両方とも 0 の場合は、角度が未定義なので、0を返す
+		if (magnitude == 0) {
+			angle = 0.0f;
+		};
+
+		// cosθ = x / magnitude を使って角度を計算
+		double cos_theta = throwDirect_.x / magnitude;
+		angle = static_cast<float>(std::acos(cos_theta));
+
+		// y が負の場合は、角度を反転させる
+		if (throwDirect_.y < 0.0f) {
+			angle = -angle;
+		}
+
+		// 武器にリングを追従
+		ringUnderTransform_.transform_.translate = worldtransform_.transform_.translate;
+		ringTopTransform_.transform_.translate = worldtransform_.transform_.translate;
+		ringUnderTransform_.transform_.rotate.z = angle;
+		ringTopTransform_.transform_.rotate.z = angle;
+		// ワールドトランスフォームの更新
+		ringUnderTransform_.UpdateMatrix();
+		ringTopTransform_.UpdateMatrix();
+	}
+	
+	// 槍が投げられている状態であれば
+	if (std::holds_alternative<ThrownState*>(nowState_) || std::holds_alternative<ImpaledState*>(nowState_)) {
+		ringUnderTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (ringCurrentTime_ / ringStagingTime_));
+		ringTopTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (ringCurrentTime_ / ringStagingTime_));
+		ringColor_.w = 1.0f - (ringCurrentTime_ / ringStagingTime_);
+		Vector3 ringColorRGB = Vector3::Lerp( { 1.0f, 1.0f, 0.0f }, { 0.0f, 1.0f, 0.1f }, (ringCurrentTime_ / ringStagingTime_));
+		ringColor_ = { ringColorRGB.x, ringColorRGB.y, ringColorRGB.z, ringColor_.w };
+
+		// ワールドトランスフォームの更新
+		ringUnderTransform_.UpdateMatrix();
+		ringTopTransform_.UpdateMatrix();
+
+		if (ringCurrentTime_ < ringStagingTime_) {
+			// 演出時間加算
+			ringCurrentTime_ += kDeltaTime_;
+		}
+		else { // 時間超過時
+			// 演出時間リセット
+			ringCurrentTime_ = ringStagingTime_;
+		}
+		
+		// マテリアル色を設定
+		ringMaterial_->SetColor(ringColor_);
+
+		// マテリアル更新
+		ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f);
+	}
+	else {
+		// サイズを0に
+		ringUnderTransform_.transform_.scale = { 0.0f, 0.0f, 0.0f };
+		ringTopTransform_.transform_.scale = { 0.0f, 0.0f, 0.0f };
+	}
+
+	// リングアニメーションが再生されていない場合
+	//if (!spearAnim_->GetRingAnim().GetRunningAnimation(SpearAnimManager::RingShot)) {
+	//	spearAnim_->PlayRingAnimation(SpearAnimManager::RingIdle, true);
+	//}
+	//else {
+	//	// 再生中であればそのアニメーションに合わせてマテリアルを透明にしていく
+	//	ringColor_ = { 1.0f, 1.0f, 1.0f, MathUtility::Lerp(1.0f, 0.0f, spearAnim_->GetRingAnim().GetAnimationProgress(SpearAnimManager::RingShot)) };
+	//	// マテリアル色を設定
+	//	ringMaterial_->SetColor(ringColor_);
+
+	//	// マテリアル更新
+	//	ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f);
+	//}
+
 	// アニメーション更新
-	anim_->Update();
+	spearAnim_->Update();
+	#endif // !_DEBUG
 
 	// コライダー
 	Vector3 direct = worldtransform_.direction_;
 	//float angle = MathUtility::CalcAngle({ direct.x,direct.y });
 	float angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
-
-
 }
 
 void Weapon::Draw(const BaseCamera& camera)
@@ -96,7 +185,36 @@ void Weapon::Draw(const BaseCamera& camera)
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
 	ModelDraw::AnimObjectDraw(desc);
+}
 
+void Weapon::UnderRingDraw(const BaseCamera& camera)
+{
+	// リング描画
+	if (isDrawRing_) {
+		// 武器リングの描画
+		ModelDraw::AnimObjectDesc ringDesc;
+		ringDesc.camera = &const_cast<BaseCamera&>(camera);
+		ringDesc.localMatrixManager = ringLocalMatrix_.get();
+		ringDesc.material = ringMaterial_.get();
+		ringDesc.model = ringUnderModel_;
+		ringDesc.worldTransform = &ringUnderTransform_;
+		ModelDraw::AnimObjectDraw(ringDesc);
+	}
+}
+
+void Weapon::TopRingDraw(const BaseCamera& camera)
+{
+	// リング描画
+	if (isDrawRing_) {
+		// 武器リングの描画
+		ModelDraw::AnimObjectDesc ringDesc;
+		ringDesc.camera = &const_cast<BaseCamera&>(camera);
+		ringDesc.localMatrixManager = ringLocalMatrix_.get();
+		ringDesc.material = ringMaterial_.get();
+		ringDesc.model = ringTopModel_;
+		ringDesc.worldTransform = &ringTopTransform_;
+		ModelDraw::AnimObjectDraw(ringDesc);
+	}
 }
 
 void Weapon::ImGuiDraw()
@@ -329,7 +447,31 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	{
 		// プレイヤーとの
 		if (std::holds_alternative<Player*>(target)) {
+			// 差分ベクトルを求める
+			Vector3 sub = player_->worldtransform_.transform_.translate - worldtransform_.transform_.translate;
+			// 求めた差分ベクトル
+			sub = Vector3::Normalize(sub);
+			sub *= 0.5f;
+
+			// デバッグ以外の場合行う
+			#ifndef _DEBUG
+
+			// キャッチ時パーティクル再生
+			EmitterDesc desc;
+			desc.transform = &player_->worldtransform_.transform_;
+			desc.instanceCount = 5;
+			desc.frequency = 0.01f;
+			desc.lifeTime = 0.01f;
+			desc.particleModelNum = kSpearLeaf;
+			desc.paeticleName = kSpearCatchParticle;
+			desc.velocity = { sub.x, sub.y, 0.0f };
+
+			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+			#endif // _DEBUG
+
 			ChangeRequest(Weapon::StateName::kHold);
+
 			return;
 		}
 	}
@@ -415,6 +557,37 @@ void Weapon::ChangeState(std::unique_ptr<IWeaponState> newState)
 	newState->Initialize();
 	// ステート渡し
 	state_ = std::move(newState);
+}
+
+void Weapon::SetRingModel(Model* upperModel, Model* underModel)
+{
+	// モデル取得
+	ringUnderModel_ = underModel;
+	ringTopModel_	= upperModel;
+
+	// マテリアル生成
+	ringMaterial_.reset(Material::Create());
+
+	// トランスフォーム初期化
+	ringUnderTransform_.Initialize(ringUnderModel_->GetRootNode());
+	ringTopTransform_.Initialize(ringTopModel_->GetRootNode());
+	// DirectiontoDirectionを使用
+	//ringTransform_.usedDirection_ = true;
+	// トランスフォーム更新
+	ringUnderTransform_.UpdateMatrix();
+	ringTopTransform_.UpdateMatrix();
+
+	// ローカル行列マネージャ初期化
+	ringLocalMatrix_ = std::make_unique<LocalMatrixManager>();
+	ringLocalMatrix_->Initialize(ringUnderModel_->GetRootNode());
+
+	// リングアニメーションのセットアップを開始する
+	//spearAnim_->SetUpRingAnim();
+
+	// uvトランスフォームの初期化
+	ringUVTransform_.Initialize();
+	// 更新
+	ringUVTransform_.UpdateMatrix();
 }
 
 void Weapon::ChangeRequest(Weapon::StateName request)

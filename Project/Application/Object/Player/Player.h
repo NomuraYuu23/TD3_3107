@@ -8,6 +8,7 @@
 
 #include "ActionState/ActionStateList.h"
 #include "System/PlayerSystemList.h"
+#include "../GameSystem/GameSystemManager.h"
 
 #include "PlayerFootCollider.h"
 
@@ -17,7 +18,10 @@
 
 #include "../../AudioManager/GameAudioManager.h"
 
+#include "System/SlowEffect/SlowEffect.h"
+
 class EnemyManager;
+class GameUIManager;
 
 class Player : public IObject
 {
@@ -62,6 +66,8 @@ public: // アクセッサ
 
 	PlayerHitManager::Effect GetEffectInfo() { return hpManager_.hitEffect_; }
 	PlayerHitManager GetHitManager() { return hpManager_; }
+
+	SlowEffect* GetSlowEffect() { return slowEffect_.get(); }
 
 public: // メンバ関数
 	/// <summary>
@@ -114,6 +120,16 @@ public: // メンバ関数
 	/// <param name="drawLine">線描画クラス</param>
 	void DrawLinesMap(DrawLine* drawLine);
 
+	/// <summary>
+	/// 死んだ時に呼び出すやつ
+	/// </summary>
+	void Reset();
+
+	/// <summary>
+	/// スポーン処理
+	/// </summary>
+	void Respawn(const Vector3& position);
+
 public: // アニメーション関連関数群
 
 	/// <summary>
@@ -121,6 +137,12 @@ public: // アニメーション関連関数群
 	/// </summary>
 	/// <returns>アニメーションマネージャー</returns>
 	PlayerAnimManager* GetAnimManager() { return anim_.get(); }
+
+	/// <summary>
+	/// 補正システム
+	/// </summary>
+	/// <returns></returns>
+	SpearLandingAdjuster GetLandingAdjuster() { return landingAdjuster_; }
 
 public:
 	// 矢印モデル
@@ -155,6 +177,11 @@ public:
 	/// <param name="model">モデル</param>
 	void SetPonyTail(Model* model);
 
+	/// <summary>
+	/// UIマネージャーセッター
+	/// </summary>
+	/// <param name="uiManager">UIマネージャー</param>
+	void SetUIManager(GameUIManager* uiManager) { uiManager_ = uiManager; }
 
 	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
 	void EndAssistDash() { assistDash_.SlowCancel(); }
@@ -200,6 +227,8 @@ private: // フラグ
 	bool isSlowGame_ = false;
 	// デバッグ用
 	bool isDebugDraw_ = false;
+public:
+	bool isSlowNow_ = false;
 
 private: // システム
 	// 現状のステート
@@ -214,6 +243,8 @@ private: // システム
 	ComboCounter jumpCombo_;
 	// 自由落下の武器を回収するためのシステム
 	FreeFallTimer fallTimer_;
+	// スローエフェクト
+	std::unique_ptr<SlowEffect> slowEffect_;
 
 	//--- オンヒットシステム ---//
 	// 反動管理クラス
@@ -229,6 +260,14 @@ private: // システム
 	// 補正用システム
 	CorrectSystem correctSystem_;
 
+	// 槍着地補正システム
+	SpearLandingAdjuster landingAdjuster_;
+
+private: // UI関連
+
+	// UIマネージャー
+	GameUIManager* uiManager_ = nullptr;
+
 private: // アニメーション関連
 
 	// ポニーテール用紐クラス
@@ -238,6 +277,13 @@ private: // アニメーション関連
 
 	// アニメーションマネージャー
 	std::unique_ptr<PlayerAnimManager> anim_;
+
+private: // パーティクル生成関連変数
+
+	// 環境パーティクル生成用座標
+	std::unique_ptr<EulerTransform> emitTransform_;
+	// 環境パーティクル用設定構造体
+	EmitterDesc fallingLeafDesc_;
 
 	// 空中ダッシュシステム
 	AssistDash assistDash_;

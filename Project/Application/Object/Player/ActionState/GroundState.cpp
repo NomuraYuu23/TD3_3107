@@ -16,16 +16,22 @@ void GroundState::Initialize()
 	// 槍を踏んだかのフラグ
 	player_->isOneStepOn_ = false;
 
+#ifndef _DEBUG
 
 	// 着地アニメーションの再生
 	if (player_->GetAnimManager() != nullptr) {
-		player_->GetAnimManager()->PlayAnimation(PlayerAnimManager::Landing);
+		player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::Landing);
+
 		// 着地効果音を再生
 		player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerLand);
 	}
 
+#endif // !_DEBUG
+	
 	player_->KnockBackOnGround();
 	player_->EndAssistDash();
+	// 補正キャンセル
+	player_->GetLandingAdjuster().Cancel();
 }
 
 void GroundState::Update()
@@ -33,7 +39,7 @@ void GroundState::Update()
 	// 接地していない場合
 	if (!player_->isGround_) {
 		player_->velocity_.y += fallPower_ + (kGravity) * kDeltaTime_;
-		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / IObject::sPlaySpeed);
+		player_->worldtransform_.transform_.translate.y += player_->velocity_.y * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
 
 	// 速度制限

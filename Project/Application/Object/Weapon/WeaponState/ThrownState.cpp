@@ -31,11 +31,21 @@ void ThrownState::Initialize()
 	weapon_->throwInvTimer_.Start(1.0f);
 	//weapon_->safeLaunchTimer_.Start(2.0f);
 
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
 	// 槍投げアニメーション開始
-	weapon_->GetAnimManager()->PlayAnimation(SpearAnimManager::SpearThrow);
+	//weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearThrow);
+	//weapon_->GetAnimManager()->PlayRingAnimation(SpearAnimManager::RingShot);
+	
+	// リングの描画を行う
+	weapon_->isDrawRing_ = true;
+
+	// 演出時間リセット
+	weapon_->ringCurrentTime_ = 0.0f;
 
 	// 投げ効果音を再生
 	weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kThrowSpear);
+	#endif // !_DEBUG
 }
 
 void ThrownState::Update()
@@ -59,7 +69,7 @@ void ThrownState::Update()
 	}
 
 	// 移動処理
-	weapon_->worldtransform_.transform_.translate += (velocity_ * kDeltaTime_) * (1.0f / IObject::sPlaySpeed);
+	weapon_->worldtransform_.transform_.translate += (velocity_ * kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed);
 	weapon_->worldtransform_.direction_ = Vector3::Normalize(velocity_);
 }
 
