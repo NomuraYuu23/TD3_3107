@@ -23,4 +23,4 @@ class PrevSmallBoss;
 class GoalObject;
 class CheckPointObject;
 
-using ColliderParentObject2D = std::variant<Terrain*, Player*, PlayerFootCollider*, CameraRay*, Weapon*, Enemy*, PrevSmallBoss*, GoalObject*, CheckPointObject*>;
+using ColliderParentObject2D = std::variant<Terrain*, Player*, PlayerFootCollider*, CameraRay*, Weapon*, Enemy*, PrevSmallBoss*, GoalObject*, CheckPointObject*, DetectionRay*>;

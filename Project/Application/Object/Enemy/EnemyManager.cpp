@@ -19,6 +19,7 @@ void EnemyManager::Initialize(Model* model)
 	enemyEditor_ = std::make_unique<EnemyEditor>();
 	enemyEditor_->LoadFiles();
 	LoadEnemyData();
+	RegisterChaseEnemy({ {10,10,0},30.0f }, "Chase1");
 
 }
 
@@ -89,7 +90,15 @@ void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const
 
 		for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*itParent)->GetObjects()->begin();
 			it != (*itParent)->GetObjects()->end(); ++it) {
-			collisionManager->ListRegister(&static_cast<Enemy*>((it->get()))->boxCollider_);
+			Enemy* obj = static_cast<Enemy*>((it->get()));
+			collisionManager->ListRegister(&obj->boxCollider_);
+			// チェイスなら
+			bool stateCheck = std::holds_alternative<ChaseEnemyState*>(obj->GetState());
+			if (stateCheck) {
+				ChaseEnemyState* state = static_cast<ChaseEnemyState*>(obj->GetNowState());
+				collisionManager->ListRegister(&(state->sensorRay_.directRay_));
+			}
+
 		}
 
 	}
@@ -268,6 +277,21 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data, const std::string&
 
 }
 
+void EnemyManager::RegisterChaseEnemy(const ChaseEnemyData& data, const std::string& name)
+{
+	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
+	static_cast<Enemy*>(obj.get())->Initialize(name);
+	obj->transform_.translate = data.position;
+	// 初期化
+	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<ChaseEnemyState>(), 0);
+	// プレイヤーセット
+	static_cast<Enemy*>(obj.get())->SetPlayer(player_);
+	// 索敵設定
+	static_cast<ChaseEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SetChaseSetting(data.searchLength);
+	// 追加
+	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
+}
+
 void EnemyManager::CreateSingleEnemy()
 {
 	// 単体管理用変数に
@@ -277,6 +301,8 @@ void EnemyManager::CreateSingleEnemy()
 
 	// Largeの奴でまとめるためにリストにプッシュ
 	enemyEmitters_.push_back(std::move(singleEnemys_));
+
+	//RegisterChaseEnemy({ {30,10,0},30.0f }, "Chase1");
 	//RegisterSingleEnemy({ {10,10,0},0 }, "na");
 	///---ここに敵単体ごとに登録する---//
 	//RegisterEnemy({ {10,10,0},0 });

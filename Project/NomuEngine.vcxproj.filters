@@ -506,6 +506,7 @@
     <ClInclude Include="Application\Particle\user\SpearJump\SpearJumpParticle.h" />
     <ClInclude Include="Application\Particle\user\GoalParticle\GoalParticle.h" />
     <ClInclude Include="Application\Object\Enemy\System\DetectionRay.h" />
+    <ClInclude Include="Application\Object\Enemy\ChaseEnemyData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

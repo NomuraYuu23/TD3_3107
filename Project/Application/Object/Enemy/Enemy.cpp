@@ -119,6 +119,26 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 				#endif // !_DEBUG
 			}
 		}
+		else if (std::holds_alternative<EnemyWaitState*>(judState_) && std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
+			// 死亡パーティクル再生
+			EmitterDesc desc;
+			desc.transform = &transform_;
+			desc.instanceCount = 25;
+			desc.frequency = 0.01f;
+			desc.lifeTime = 0.01f;
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kEnemyDeadParticle;
+
+			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+			// デバッグ以外の場合行う
+			#ifndef _DEBUG
+			// 敵を倒す効果音を再生
+			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
+			#endif // !_DEBUG
+
+			isDead_ = true;
+		}
 		//else if (std::holds_alternative<FreeFallState*>((*weapon)->GetNowState()) ||
 		//	std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
 		if((*weapon)->IsPlayerJump() || std::holds_alternative<FreeFallState*>((*weapon)->GetNowState())){

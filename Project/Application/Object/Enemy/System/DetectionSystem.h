@@ -21,16 +21,16 @@ public:
 	void Initialize(Enemy* enemy);
 
 	/// <summary>
-	/// レイの更新など
+	/// 追尾の更新など
 	/// </summary>
-	void Update();
+	void Update(bool isRayCollision);
 
 	/// <summary>
 	/// 追尾判断
 	/// </summary>
 	/// <param name="target"></param>
 	/// <returns></returns>
-	bool ShouldChase(const Vector3& target);
+	bool ShouldChase(const Vector3& target, float searchLength);
 
 	/// <summary>
 	/// 追尾するかフラグ
@@ -38,13 +38,20 @@ public:
 	/// <returns></returns>
 	bool IsChase() { return isChase_; }
 
+	/// <summary>
+	/// 長さ設定
+	/// </summary>
+	/// <param name="length"></param>
+	void SetSearchLength(float length) { searchLength_ = length; }
+
+	void ChaseUpdate();
+
 private:
 	// エネミー本体
 	Enemy* enemy_;
 
 	bool isChase_ = false;
 
-public:
-	DetectionRay sensorRay_;
+	float searchLength_ = 0.0f;
 
 };

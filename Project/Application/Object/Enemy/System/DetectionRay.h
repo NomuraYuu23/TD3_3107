@@ -30,6 +30,10 @@ public:
 	Vector2 GetColliderSize() { return { 0,0 }; }
 
 	Segment2D directRay_;
+
+	// 衝突フラグ
+	bool IsCollision() { return isCollision_; }
+
 private:
 	// 敵
 	Enemy* enemy_ = nullptr;
@@ -39,5 +43,7 @@ private:
 
 	float minPositionY_ = 0;
 
+	// 衝突フラグ
+	bool isCollision_ = false;
 
 };
