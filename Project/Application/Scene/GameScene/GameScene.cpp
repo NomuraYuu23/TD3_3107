@@ -609,7 +609,7 @@ void GameScene::TextureLoad()
 	};
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyRedTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 
