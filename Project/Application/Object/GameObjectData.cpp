@@ -44,7 +44,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "LocalPosition", weapon_.localPosition_);
 	globalVariables_->AddItem(groupName, "AngleDot", weapon_.collisionDot_);
 	globalVariables_->AddItem(groupName, "KickBackCooltime", weapon_.kickBackCooltime_);
-
+	globalVariables_->AddItem(groupName, "ReturnRate", weapon_.returnLerpRatio_);
 
 	groupName = "SpearJump";
 	// グループを追加
@@ -120,6 +120,7 @@ void GameObjectData::ApplyGlobalVariables()
 	weapon_.localPosition_ = globalVariables_->GetVector3Value(groupName, "LocalPosition");
 	weapon_.collisionDot_ = globalVariables_->GetFloatValue(groupName, "AngleDot");
 	weapon_.kickBackCooltime_ = globalVariables_->GetFloatValue(groupName, "KickBackCooltime");
+	weapon_.returnLerpRatio_ = globalVariables_->GetFloatValue(groupName, "ReturnRate");
 
 	groupName = "SpearJump";
 	spearJump_.horizontalPower_ = globalVariables_->GetFloatValue(groupName, "HorizontalPower");

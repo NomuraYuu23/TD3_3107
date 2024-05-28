@@ -259,19 +259,8 @@ void GameScene::Update() {
 	// 敵
 	enemyManager_->Update();
 
-
-	if (player_->isArrowUiDraw_) {
-		arrowSprite_->SetIsInvisible(false);
-	}
-	else {
-		arrowSprite_->SetIsInvisible(true);
-	}
-
 	// UIマネージャー更新
 	gameUIManager_->Update();
-
-	arrowSprite_->SetPosition(player_->screenPos_);
-	arrowSprite_->SetRotate(std::atan2f(-player_->throwDirect_.y, player_->throwDirect_.x));
 
 	//arrowSprite_->Update();
 
@@ -397,7 +386,7 @@ void GameScene::Draw() {
 
 	// UIマネージャー描画
 	//gameUIManager_->Draw();
-	arrowSprite_->Draw();
+	//arrowSprite_->Draw();
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
