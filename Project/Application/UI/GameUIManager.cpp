@@ -137,21 +137,21 @@ void GameUIManager::CreateSprite()
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 左スティック背景用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[JoyStickBackTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 80.0f, 525.0f };
-	setSize = { 96.0f, 96.0f };
+	setSize = { 84.0f, 84.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 左スティック用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[LeftStickNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 80.0f, 525.0f };
-	setSize = { 96.0f, 96.0f };
+	setSize = { 84.0f, 84.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ダッシュ画像用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[DashImageTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 200.0f, 525.0f };
-	setSize = { 128.0f, 128.0f };
+	setSize = { 96.0f, 96.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
@@ -165,42 +165,42 @@ void GameUIManager::CreateSprite()
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // LBボタン用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[LeftThumbNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 80.0f, 645.0f };
-	setSize = { 96.0f, 96.0f };
+	setSize = { 84.0f, 84.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ジャンプ画像用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[JumpImageTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 200.0f, 645.0f };
-	setSize = { 128.0f, 128.0f };
+	setSize = { 96.0f, 96.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 右スティック用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[JoyStickBackTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 1050.0f, 525.0f };
-	setSize = { 96.0f, 96.0f };
+	setSize = { 84.0f, 84.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 右スティック用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[RightStickNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 1050.0f, 525.0f };
-	setSize = { 96.0f, 96.0f };
+	setSize = { 84.0f, 84.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // エイム画像用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[AimImageTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 1200.0f, 525.0f };
-	setSize = { 128.0f, 128.0f };
+	setSize = { 96.0f, 96.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // RBボタン用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[RightThumbNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 975.0f, 650.0f };
-	setSize = { 96.0f, 96.0f };
+	setSize = { 84.0f, 84.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
@@ -220,11 +220,11 @@ void GameUIManager::LeftStickUIUpdate()
 
 	// スティック入力に応じてUIを動かす
 	if (stickVec.x < 0.0f || stickVec.x > 0.0f || stickVec.y < 0.0f || stickVec.y > 0.0f) {
-		uiSprites_[LeftStickSprite]->SetPosition(stickUIPos_L_ + stickVec); // 座標を動かす
+		uiSprites_[LeftStickSprite]->SetPosition(uiSprites_[LeftStickBackSprite]->GetPosition() + stickVec); // 座標を動かす
 		uiSprites_[LeftStickSprite]->SetTextureHandle(texHandles_[LeftStickPressTex]);  // テクスチャ変更
 	}
 	else {
-		uiSprites_[LeftStickSprite]->SetPosition(stickUIPos_L_);			  // 元に戻す
+		uiSprites_[LeftStickSprite]->SetPosition(uiSprites_[LeftStickBackSprite]->GetPosition());			  // 元に戻す
 		uiSprites_[LeftStickSprite]->SetTextureHandle(texHandles_[LeftStickNoneTex]);  // テクスチャ変更
 	}
 }
@@ -266,11 +266,11 @@ void GameUIManager::RightStickUIUpdate()
 
 	// スティック入力に応じてUIを動かす
 	if (stickVec.x < 0.0f || stickVec.x > 0.0f || stickVec.y < 0.0f || stickVec.y > 0.0f) {
-		uiSprites_[RightStickSprite]->SetPosition(stickUIPos_R_ + stickVec); // 座標を動かす
+		uiSprites_[RightStickSprite]->SetPosition(uiSprites_[RightStickBackSprite]->GetPosition() + stickVec); // 座標を動かす
 		uiSprites_[RightStickSprite]->SetTextureHandle(texHandles_[RightStickPressTex]);  // テクスチャ変更
 	}
 	else {
-		uiSprites_[RightStickSprite]->SetPosition(stickUIPos_R_);					    // 元に戻す
+		uiSprites_[RightStickSprite]->SetPosition(uiSprites_[RightStickBackSprite]->GetPosition());					    // 元に戻す
 		uiSprites_[RightStickSprite]->SetTextureHandle(texHandles_[RightStickNoneTex]);  // テクスチャ変更
 	}
 
