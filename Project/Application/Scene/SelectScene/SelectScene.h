@@ -50,5 +50,8 @@ private: // 変数
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<Model> skydomeModel_;
 
+	// スカイボックス
+	uint32_t skyboxTextureHandle_ = 0;
+
 };
 

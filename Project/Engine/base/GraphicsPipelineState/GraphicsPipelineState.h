@@ -21,8 +21,10 @@ public: // サブクラス
 	// パイプラインの名前
 	enum PipelineStateIndex {
 		kPipelineStateIndexModel, // モデル
-		kPipelineStateIndexInverseModel, // 反転モデル(右手座標系)
+		kPipelineStateIndexAnimModel, // アニメーションモデル
+		kPipelineStateIndexAnimInverseModel, // 反転モデル(右手座標系)
 		kPipelineStateIndexManyModels, // たくさんのモデル
+		kPipelineStateIndexAnimManyModels, // たくさんのアニメーションモデル
 
 		kPipelineStateIndexNormalOutline, // アニメーション無しモデルアウトライン
 
@@ -33,6 +35,7 @@ public: // サブクラス
 		kPipelineStateIndexParticle, // パーティクル
 
 		kPipelineStateIndexCollision2DDebugDraw, // コライダーデバッグ2D
+		kPipelineStateIndexSkyBox, // スカイボックス
 		kPipelineStateIndexOfCount // 使わない
 	};
 

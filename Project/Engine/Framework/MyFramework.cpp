@@ -32,14 +32,18 @@ void MyFramework::Initialize()
 	// モデル静的初期化
 	std::array<ID3D12RootSignature*, ModelDraw::PipelineStateIndex::kPipelineStateIndexOfCount> rootSignature = {
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexModel].Get(),
-		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexInverseModel].Get(),
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexAnimModel].Get(),
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexAnimInverseModel].Get(),
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexManyModels].Get(),
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexAnimManyModels].Get(),
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexNormalOutline].Get() };
 
 	std::array<ID3D12PipelineState*, ModelDraw::PipelineStateIndex::kPipelineStateIndexOfCount> pipelineState = {
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexModel].Get(),
-		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexInverseModel].Get(),
+		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexAnimModel].Get(),
+		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexAnimInverseModel].Get(),
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexManyModels].Get(),
+		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexAnimManyModels].Get(),
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexNormalOutline].Get() };
 	
 	Model::StaticInitialize(dxCommon->GetDevice());
@@ -68,7 +72,7 @@ void MyFramework::Initialize()
 	WindowSpriteStorage::GetInstance()->Initialize();
 
 	// クエリタイムスタンプ
-	QueryTimestamp::GetInstance()->Initialize(dxCommon->GetDevice());
+	//QueryTimestamp::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	//サウンド
 	audio = Audio::GetInstance();
@@ -126,7 +130,7 @@ void MyFramework::Update()
 	GlobalVariables::GetInstance()->Update();
 
 	// クエリタイムスタンプ
-	QueryTimestamp::GetInstance()->ImGuiDraw();
+	//QueryTimestamp::GetInstance()->ImGuiDraw();
 
 }
 
