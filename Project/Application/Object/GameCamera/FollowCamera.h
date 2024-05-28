@@ -50,6 +50,12 @@ private:
 
 	TimerLib correctTimer_;
 
+	// 入力クラス
+	Input* input_ = nullptr;
+
+	// カメラ固定
+	bool isLockCamera_ = false;
+
 private: // お試し
 
 	// オフセット位置ターゲット

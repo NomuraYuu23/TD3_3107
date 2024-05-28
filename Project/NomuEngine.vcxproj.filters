@@ -239,6 +239,7 @@
     <ClCompile Include="Application\Particle\user\InfiniteEmitter\InfiniteEmiiter.cpp" />
     <ClCompile Include="Application\Particle\user\SpearJump\SpearJumpParticle.cpp" />
     <ClCompile Include="Application\Particle\user\GoalParticle\GoalParticle.cpp" />
+    <ClCompile Include="Application\Object\Enemy\System\DetectionRay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -504,6 +505,8 @@
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointEditor.h" />
     <ClInclude Include="Application\Particle\user\SpearJump\SpearJumpParticle.h" />
     <ClInclude Include="Application\Particle\user\GoalParticle\GoalParticle.h" />
+    <ClInclude Include="Application\Object\Enemy\System\DetectionRay.h" />
+    <ClInclude Include="Application\Object\Enemy\ChaseEnemyData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -117,12 +117,12 @@ void GameScene::Initialize() {
 
 	// ゲームシステム
 	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(goalModel_.get(), player_.get());
+	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get());
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
-	enemyManager_->Initialize(enemyModel_.get());
 	enemyManager_->SetPlayer(player_.get());
+	enemyManager_->Initialize(enemyModel_.get());
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -138,8 +138,10 @@ void GameScene::Initialize() {
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
-	backGround_->SetParent(&player_->worldtransform_);
-
+	if (StageNumberManager::stageNum_ == 0) {
+		// 最初のステージならチュートリアルモデルを設定
+		backGround_->SetTutorialPlaneModel(textureHandleManager_.get(), spearJumpTutorialPlaneModel_.get(), enemyTutorialPlaneModel_.get());
+	}
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
 	gameCamera_->Initialize();
@@ -395,7 +397,7 @@ void GameScene::Draw() {
 
 	// UIマネージャー描画
 	gameUIManager_->Draw();
-	arrowSprite_->Draw();
+	//arrowSprite_->Draw();
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
@@ -579,7 +581,14 @@ void GameScene::ModelCreate()
 	// 背景モデル
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
 
+	checkPointModel_.reset(Model::Create("Resources/Model/Takenoko", "Takenoko.obj", dxCommon_, textureHandleManager_.get()));
 	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
+
+	// ステージ番号が 00 のときのみロード
+	if (StageNumberManager::stageNum_ == 0) {
+		spearJumpTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
+		enemyTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
+	}
 
 	// 敵モデル
 	// プレイヤーモデル
@@ -601,7 +610,7 @@ void GameScene::TextureLoad()
 	};
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyRedTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 

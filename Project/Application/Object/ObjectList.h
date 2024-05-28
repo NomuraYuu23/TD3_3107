@@ -12,6 +12,7 @@
 // 敵
 #include "Enemy/Enemy.h"
 #include "BossEnemy/BossList.h"
+#include "Enemy/System/DetectionRay.h"
 
 // マップ
 #include "Map/MapManager.h"

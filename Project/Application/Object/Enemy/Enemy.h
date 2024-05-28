@@ -117,7 +117,8 @@ public:
 	/// <param name="player"></param>
 	void SetPlayer(Player* player) { player_ = player; }
 
-	
+	// プレイヤーのポインタ
+	Player* GetPlayer() { return player_; }
 
 private:
 
@@ -170,5 +171,8 @@ public:
 	float goalAngle_ = 0.0f;
 
 	TimerLib interval_;
+
+	// 追尾用システム
+	DetectionSystem detectionSystem_;
 
 };

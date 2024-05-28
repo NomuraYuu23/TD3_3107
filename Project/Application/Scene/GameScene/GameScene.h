@@ -140,6 +140,8 @@ private:
 	// 背景
 	std::unique_ptr<BackGround> backGround_;
 	std::unique_ptr<Model> backGroundModel_;
+
+	std::unique_ptr<Model> checkPointModel_;
 	std::unique_ptr<Model> goalModel_;
 
 	// 敵
@@ -153,6 +155,10 @@ private:
 
 	// UIマネージャー
 	std::unique_ptr<GameUIManager> gameUIManager_;
+
+	// チュートリアル用平面モデル
+	std::unique_ptr<Model> spearJumpTutorialPlaneModel_;
+	std::unique_ptr<Model> enemyTutorialPlaneModel_;
 
 	std::unique_ptr<Sprite> arrowSprite_;
 	uint32_t arrowTexture_ = 0u;
