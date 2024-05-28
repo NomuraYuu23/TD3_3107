@@ -173,10 +173,18 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			targetRad = a->GetColliderSize();
 			}, target);
 
+		// X修正
 		if (std::fabsf(velocity_.x) > 0) {
-			velocity_.x *= -1.0f;
+
+			if (targetPos.x > prevPosition_.x) {
+				transform_.translate.x = targetPos.x - targetRad.x;
+			}
+			else if (targetPos.x < prevPosition_.x) {
+				transform_.translate.x = targetPos.x + targetRad.x;
+			}
 		}
 		
+		// Y修正
 		if (std::fabsf(velocity_.y) > 0) {
 			//velocity_.y *= -1.0f;
 			isGround_ = true;
