@@ -26,6 +26,22 @@ void ReturnState::Update()
 		return;
 	}
 
+	// デバック以外の場合のみ行う
+	#ifndef _DEBUG
+
+	// 槍ジャンプパーティクル再生
+	EmitterDesc desc;
+	desc.transform = &weapon_->worldtransform_.transform_;
+	desc.instanceCount = 1;
+	desc.frequency = 0.01f;
+	desc.lifeTime = 0.01f;
+	desc.particleModelNum = kBambooLeaf;
+	desc.paeticleName = kSpearJumpParticle;
+
+	ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+	#endif // !_DEBUG
+
 	// イージング更新
 	EaseUpdate();
 

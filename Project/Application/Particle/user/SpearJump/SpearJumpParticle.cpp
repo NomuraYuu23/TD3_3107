@@ -1,5 +1,6 @@
 #include "SpearJumpParticle.h"
 #include "../../../../Engine/Math/RandomEngine.h"
+#include <numbers>
 
 void SpearJumpParticle::Initialize(ParticleDesc* particleDesc)
 {
@@ -7,49 +8,40 @@ void SpearJumpParticle::Initialize(ParticleDesc* particleDesc)
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
-	// サイズのランダム変数を生成
-	float minSize = 0.75f;
-	float maxSize = 1.25f;
-	std::uniform_real_distribution<float> distScale(minSize, maxSize);
-	float scale = distScale(randomEngine);
+	// 生成範囲をランダムに取得
+	std::uniform_real_distribution<float> randomRangeX(-particleDesc->size.x, particleDesc->size.x);
+	std::uniform_real_distribution<float> randomRangeY(-particleDesc->size.y, particleDesc->size.y);
 
-	// 位置のランダム変数を生成
-	Vector3 positionMax = { particleDesc->position.x + 1.5f,
-							particleDesc->position.y,
-							particleDesc->position.z };
-	Vector3 positionMin = { particleDesc->position.x - 1.5f,
-							particleDesc->position.y - 0.25f,
-							particleDesc->position.z  };
-	std::uniform_real_distribution<float> randomPostionX(positionMin.x, positionMax.x);
-	std::uniform_real_distribution<float> randomPostionY(positionMin.y, positionMax.y);
+	// 生成座標をランダムに取得
+	transform_.translate.x = particleDesc->position.x + randomRangeX(randomEngine); // X軸
+	transform_.translate.y = particleDesc->position.y + randomRangeY(randomEngine); // Y軸
+	transform_.translate.z = particleDesc->position.z;								// Z軸
 
-	// 速度のランダム変数を取得
-	float minVelocity = 0.35f;
-	float maxVelocity = 0.45f;
-	std::uniform_real_distribution<float> randomVelocity(minVelocity, maxVelocity);
+	// 生成サイズをランダムに取得
+	std::uniform_real_distribution<float> randomSize(0.75f, 1.5f);
+	float size = randomSize(randomEngine);
+	// 取得したサイズを設定
+	transform_.scale.x = size;
+	transform_.scale.y = size;
 
-	// X方向の速度のランダム変数を取得
-	float minXVelocity = -0.15f;
-	float maxXVelocity = 0.15f;
-	std::uniform_real_distribution<float> randomXVelocity(minXVelocity, minXVelocity);
+	// 生成時の角度をランダムに取得
+	std::uniform_real_distribution<float> randomDirection(-static_cast<float>(std::numbers::pi * 2.0f), static_cast<float>(std::numbers::pi * 2.0f));
+	float rotate = randomDirection(randomEngine);
+	transform_.rotate.z = rotate;
 
+	// 回転方向を取得
+	std::uniform_real_distribution<float> randomRotateDirection(0.0f, 1.0f);
+	int32_t isRight = static_cast<int32_t>(randomRotateDirection(randomEngine));
+	isRight_ = isRight;
 
 	// 生存時間のランダム変数を取得
-	std::uniform_real_distribution<float> distTime(0.25f, 0.5f);
-
-	// 引数情報取得
-	transform_.translate.x = randomPostionX(randomEngine);				// 位置
-	transform_.translate.y = randomPostionY(randomEngine);				// 位置
-	transform_.translate.z = particleDesc->position.z;					// 位置											 // 回転を保持
-	transform_.scale	   = { scale, scale, 1.0f };					// 大きさ
-	velocity_ = particleDesc->velocity * randomVelocity(randomEngine);  // 速度
-	velocity_.x = randomXVelocity(randomEngine);
+	std::uniform_real_distribution<float> distTime(0.5f, 1.0f);
 
 	// ワールド行列生成
 	worldMatrix_ = Matrix4x4::MakeIdentity4x4();
 
 	// 色設定
-	color_ = { 0.0f,1.0f,0.1f, .5f };
+	color_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	// 生存時間設定
 	lifeTime_ = distTime(randomEngine);
@@ -72,8 +64,13 @@ void SpearJumpParticle::Initialize(ParticleDesc* particleDesc)
 
 void SpearJumpParticle::Update(const Matrix4x4& billBoardMatrix)
 {
-	// 速度で移動させる
-	transform_.translate += velocity_;
+	// 回転方向フラグで回転方向を決める
+	if (isRight_) {
+		transform_.rotate.z += 0.1f;
+	}
+	else {
+		transform_.rotate.z -= 0.1f;
+	}
 
 	// 基底クラスの更新
 	IParticle::Update(billBoardMatrix);

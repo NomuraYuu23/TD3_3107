@@ -23,5 +23,8 @@ public: // メンバ関数
 
 private: // メンバ変数
 
+	// 葉が右回転するか
+	bool isRight_ = false;
+
 };
 
