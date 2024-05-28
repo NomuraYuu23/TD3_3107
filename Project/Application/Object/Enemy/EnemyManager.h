@@ -97,6 +97,9 @@ private:
 	// 単体管理のエネミーたちをまとめる
 	std::unique_ptr<LargeNumberOfObjects> singleEnemys_;
 
+	// 追尾管理
+	std::unique_ptr<LargeNumberOfObjects> chaseEnemys_;
+
 	// 全体のモデル
 	Model* model_;
 

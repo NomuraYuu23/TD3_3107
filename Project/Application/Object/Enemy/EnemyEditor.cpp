@@ -19,13 +19,16 @@ void EnemyEditor::ImGuiDraw()
 		SaveFile("Stage");
 	}
 
-	ImGui::RadioButton("SingleEnemy", &mode_, 0); ImGui::SameLine(); ImGui::RadioButton("MultiEnemy", &mode_, 1);
+	ImGui::RadioButton("SingleEnemy", &mode_, 0); ImGui::SameLine(); ImGui::RadioButton("MultiEnemy", &mode_, 1); ImGui::RadioButton("ChaseEnemy", &mode_, 2);
 
 	if (mode_ == 0) {
 		ImGuiSingleEnemy();
 	}
-	else {
+	else if(mode_ == 1){
 		ImGuiMultiEnemy();
+	}
+	else {
+		ImGuiChaseEnemy();
 	}
 
 	ImGui::End();
@@ -112,9 +115,15 @@ void EnemyEditor::LoadFile(const std::string& groupName)
 					SetValue(name, itemName, value);
 				}
 				// MultiEnemyData型の値を保持していれば
-				else {
+				else if(itItem->is_object() && itItem->size() == 5) {
 					// MultiEnemyData型の値を登録
 					MultiEnemyData value = itItem->get<MultiEnemyData>();
+					SetValue(name, itemName, value);
+				}
+				// ChaseEnemyData型の値を保持していれば
+				else if (itItem->is_object() && itItem->size() == 2) {
+					// ChaseEnemyData型の値を登録
+					ChaseEnemyData value = itItem->get<ChaseEnemyData>();
 					SetValue(name, itemName, value);
 				}
 
@@ -163,6 +172,20 @@ void EnemyEditor::SetValue(const std::string& groupName, const std::string& key,
 
 }
 
+void EnemyEditor::SetValue(const std::string& groupName, const std::string& key, ChaseEnemyData value)
+{
+	// グループの参照を取得
+	EnemyEditorGroup& group = datas_[groupName];
+	//if (group.find(key) != group.end()) {
+	//	return;
+	//}
+	// 新しい項目のデータを設定
+	EnemyEditorItem newItem{};
+	newItem = value;
+	// 設定した項目をstd::mapに追加
+	group[key] = newItem;
+}
+
 SingleEnemyData EnemyEditor::GetSingleEnemyDataValue(const std::string& groupName, const std::string& key)
 {
 
@@ -189,6 +212,18 @@ MultiEnemyData EnemyEditor::GetMultiEnemyDataValue(const std::string& groupName,
 	// 指定グループから指定のキーの値を取得
 	return std::get<MultiEnemyData>(group[key]);
 
+}
+
+ChaseEnemyData EnemyEditor::GetChaseEnemyDataValue(const std::string& groupName, const std::string& key)
+{
+	// 指定グループが存在するか
+	assert(datas_.find(groupName) != datas_.end());
+	//  グループの参照を取得
+	EnemyEditorGroup& group = datas_[groupName];
+	// 指定グループに指定キーが存在するか
+	assert(group.find(key) != group.end());
+	// 指定グループから指定のキーの値を取得
+	return std::get<ChaseEnemyData>(group[key]);
 }
 
 void EnemyEditor::SaveData(const std::string& groupName)
@@ -226,7 +261,10 @@ void EnemyEditor::SaveFile(const std::string& groupName)
 				MultiEnemyData values = std::get<MultiEnemyData>(item);
 				root[name][itemName] = values;
 			}
-
+			else if (std::holds_alternative<ChaseEnemyData>(item)) {
+				ChaseEnemyData values = std::get<ChaseEnemyData>(item);
+				root[name][itemName] = values;
+			}
 		}
 
 	}
@@ -520,4 +558,117 @@ void EnemyEditor::ImGuiMultiEnemy()
 
 	}
 
+}
+
+void EnemyEditor::ImGuiChaseEnemy()
+{
+	const float imGuiSpeed = 0.1f;
+
+	// ステージの数だけ回す
+	uint32_t stageCount = 0;
+
+	if (ImGui::BeginTabBar("StageNum")) {
+
+		for (std::map<std::string, EnemyEditorGroup>::iterator datasItr = datas_.begin();
+			datasItr != datas_.end(); ++datasItr) {
+
+			std::string stageName = "Stage" + std::to_string(stageCount);
+
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
+			}
+
+			if (ImGui::BeginTabItem(stageName.c_str())) {
+
+				std::string stageName = datasItr->first;
+				EnemyEditorGroup& group = datasItr->second;
+
+				// シングルエネミーの追加
+				ImGui::SeparatorText("ChaseEnemyAdd");
+
+				ImGui::DragFloat3("AddPosition", &addChaseEnemyData_.position.x, imGuiSpeed);
+				ImGui::DragFloat("AddSearchLength", &addChaseEnemyData_.searchLength, imGuiSpeed, 0);
+
+				if (addChaseEnemyNum_ < 0) {
+					addChaseEnemyNum_ = 0;
+				}
+
+				std::string nameChaseAdd = "ChaseEnemyAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameChaseAdd.c_str())) {
+					// キー
+					std::string key = "ChaseEnemy" + std::to_string(addChaseEnemyNum_);
+
+					if (addChaseEnemyNum_ < 10) {
+						key = "ChaseEnemy0" + std::to_string(addChaseEnemyNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addChaseEnemyData_);
+					addChaseEnemyNum_++;
+				}
+
+				// シングルエネミーの削除
+				ImGui::SeparatorText("ChaseEnemyDelete");
+
+				ImGui::DragInt("DeleteChaseEnemyNum", &deleteChaseEnemyNum_, 0.1f, 0);
+
+				if (deleteChaseEnemyNum_ < 0) {
+					deleteChaseEnemyNum_ = 0;
+				}
+
+				std::string nameSingleDelete = "ChaseEnemyDelete" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameSingleDelete.c_str())) {
+					// キー
+					std::string key = "ChaseEnemy" + std::to_string(deleteChaseEnemyNum_);
+
+					if (deleteChaseEnemyNum_ < 10) {
+						key = "ChaseEnemy0" + std::to_string(deleteChaseEnemyNum_);
+					}
+
+
+					// 指定グループに指定キーが存在するか
+					if (datasItr->second.find(key) != datasItr->second.end()) {
+						// 指定グループから指定のキーの値を取得
+						datasItr->second.erase(key);
+					}
+
+				}
+
+				// シングルエネミーの値の修正
+				ImGui::SeparatorText("ChaseEnemyEdit");
+
+				for (std::map<std::string, EnemyEditorItem>::iterator groupItr = group.begin();
+					groupItr != group.end(); ++groupItr) {
+
+					if (std::holds_alternative<ChaseEnemyData>(groupItr->second)) {
+
+						ChaseEnemyData& item = std::get<ChaseEnemyData>(groupItr->second);
+
+						std::string name = groupItr->first;
+						ImGui::SeparatorText(name.c_str());
+
+						std::string namePosition = stageName + name + "Position";
+						std::string nameSearchLength = stageName + name + "SearchLength";
+
+						ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
+						ImGui::DragFloat(nameSearchLength.c_str(), &item.searchLength, imGuiSpeed);
+
+					}
+
+				}
+
+				ImGui::EndTabItem();
+
+			}
+
+			stageCount++;
+
+		}
+
+		// タブバーを終了
+		ImGui::EndTabBar();
+
+	}
 }
