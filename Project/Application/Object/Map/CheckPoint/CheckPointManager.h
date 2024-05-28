@@ -20,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="player"></param>
 	/// <param name="checkPointModel"></param>
-	void Initialize(Player* player, Model* checkPointModel);
+	void Initialize(Player* player, Model* checkPointModel, Model* passedModel);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -75,11 +75,14 @@ public: // アクセッサ
 
 	CheckPointEditor* GetCheckPointEditor() { return checkPointEditor_.get(); }
 
+
 private:
 	// プレイヤー
 	Player* player_ = nullptr;
 	// モデル
 	Model* checkPointModel_ = nullptr;
+	// 通過後モデル
+	Model* passedModel_ = nullptr;
 
 	/// <summary>
 	/// オブジェクトリスト

@@ -21,7 +21,7 @@ void GameSystemManager::Initialize(Model* goalModel, Model* checkPointModel, Pla
 	isGameOver_ = false;
 
 	checkPointManager_ = std::make_unique<CheckPointManager>();
-	checkPointManager_->Initialize(player_, checkPointModel_);
+	checkPointManager_->Initialize(player_, checkPointModel_, goalModel_);
 
 	//checkPointManager_->GenerateCheckPoint({ 10,0,0 }, 1);
 	//checkPointManager_->GenerateCheckPoint({ 30,0,0 }, 2);

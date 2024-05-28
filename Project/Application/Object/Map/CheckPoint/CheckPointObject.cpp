@@ -2,6 +2,7 @@
 #include "CheckPointManager.h"
 #include "../../ObjectList.h"
 #include "../../../Collider2D/CollisionConfig2D.h"
+#include "../../../Engine/Math/DeltaTime.h"
 
 void CheckPointObject::Initialize(Model* model)
 {
@@ -15,10 +16,41 @@ void CheckPointObject::Initialize(Model* model)
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeGoalObject);
 	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
+
+	// ライティング有効
+	enableLighting_ = EnableLighting::HalfLambert;
+	material_->SetEnableLighting(enableLighting_);
 }
 
 void CheckPointObject::Update()
 {
+	// 通過している場合
+	if (isPassed_) {
+		
+		passedModelTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (currentTime_ / stagingTime_));
+		
+		if (currentTime_ < stagingTime_) {
+			currentTime_ += kDeltaTime_;
+		}
+		else {
+			// 演出時間固定
+			currentTime_ = stagingTime_;
+		}
+	}
+	else { // 通過していない場合
+		// チェックポイント番号が一致している場合通過下判定とする
+		if (checkPointManager_->GetCheckNumber() == checkNum_ + 1) {
+			// 通過
+			isPassed_ = true;
+
+			worldtransform_.transform_.scale = { 0.0f, 0.0f, 0.0f };
+		}
+	}
+
+	// 座標は合わせ続ける
+	passedModelTransform_.transform_.translate = worldtransform_.transform_.translate;
+	passedModelTransform_.UpdateMatrix();
+
 	// 基底クラスの更新
 	IObject::Update();
 	// コライダー
@@ -27,13 +59,27 @@ void CheckPointObject::Update()
 
 void CheckPointObject::Draw(const BaseCamera& camera)
 {
-	ModelDraw::AnimObjectDesc desc;
-	desc.camera = &const_cast<BaseCamera&>(camera);
-	desc.localMatrixManager = localMatrixManager_.get();
-	desc.material = material_.get();
-	desc.model = model_;
-	desc.worldTransform = &worldtransform_;
-	ModelDraw::AnimObjectDraw(desc);
+	// 現在の演出時間が全体演出時間を超過していなければ
+	if (currentTime_ < stagingTime_) {
+		ModelDraw::AnimObjectDesc desc;
+		desc.camera = &const_cast<BaseCamera&>(camera);
+		desc.localMatrixManager = localMatrixManager_.get();
+		desc.material = material_.get();
+		desc.model = model_;
+		desc.worldTransform = &worldtransform_;
+		ModelDraw::AnimObjectDraw(desc);
+	}
+	
+	// 通過していた場合
+	if (isPassed_) {
+		ModelDraw::AnimObjectDesc desc;
+		desc.camera = &const_cast<BaseCamera&>(camera);
+		desc.localMatrixManager = passedLocalMatrixManager_.get();
+		desc.material = passedMaterial_.get();
+		desc.model = passedModel_;
+		desc.worldTransform = &passedModelTransform_;
+		ModelDraw::AnimObjectDraw(desc);
+	}
 }
 
 void CheckPointObject::ImGuiDraw()
@@ -55,4 +101,24 @@ void CheckPointObject::Setting(const CheckPointData& data)
 
 	// 更新
 	worldtransform_.UpdateMatrix();
+}
+
+void CheckPointObject::SetPassedModel(Model* model)
+{
+	// 通過後モデルを設定
+	passedModel_ = model;
+
+	// 通過マテリアル設定
+	passedMaterial_.reset(Material::Create());
+	passedMaterial_->SetEnableLighting(enableLighting_);
+	passedMaterial_->SetShininess(shininess_);
+
+	// トランスフォーム初期化
+	passedModelTransform_.Initialize(model_->GetRootNode());
+	// 拡大率初期化
+	passedModelTransform_.transform_.scale = { 0.0f, 0.0f, 0.0f };
+
+	// ローカル行列マネージャー
+	passedLocalMatrixManager_ = std::make_unique<LocalMatrixManager>();
+	passedLocalMatrixManager_->Initialize(model_->GetRootNode());
 }

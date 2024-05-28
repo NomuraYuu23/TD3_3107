@@ -48,6 +48,33 @@ public: // アクセッサ
 
 	void Setting(const CheckPointData& data);
 
+	/// <summary>
+	/// 通過後モデルセッター
+	/// </summary>
+	/// <param name="model">通過後表示するモデル</param>
+	void SetPassedModel(Model* model);
+
+private: // 演出系
+
+	// 通過後モデル
+	Model* passedModel_ = nullptr;
+
+	// 通過後モデル用マテリアル
+	std::unique_ptr<Material> passedMaterial_;
+
+	// 通過後モデル用トランスフォーム
+	WorldTransform passedModelTransform_;
+
+	// 
+	std::unique_ptr<LocalMatrixManager> passedLocalMatrixManager_;
+
+	// チェックポイント通過演出用時間
+	float currentTime_ = 0.0f; // 現在時間
+	float stagingTime_ = 2.5f; // 演出時間
+
+	// 通過したか
+	bool isPassed_ = false;
+
 private: // チェックポイント用変数
 	uint32_t checkNum_ = 0u;
 	CheckPointManager* checkPointManager_ = nullptr;

@@ -1,11 +1,12 @@
 #include "CheckPointManager.h"
 #include "../../ObjectList.h"
 
-void CheckPointManager::Initialize(Player* player, Model* checkPointModel)
+void CheckPointManager::Initialize(Player* player, Model* checkPointModel, Model* passedModel)
 {
 	// プレイヤー
 	player_ = player;
 	checkPointModel_ = checkPointModel;
+	passedModel_ = passedModel;
 
 	// モデルの設定以外まとめてる場所
 	Setting();
@@ -74,6 +75,7 @@ void CheckPointManager::GenerateCheckPoint(const Vector3& position, int32_t chec
 	obj->Initialize(checkPointModel_);
 	obj->SetManager(this);
 	obj->Setting({ position, checkNumber });
+	obj->SetPassedModel(passedModel_);
 	checkPoints_.push_back(std::move(obj));
 }
 
