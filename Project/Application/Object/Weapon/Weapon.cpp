@@ -134,7 +134,7 @@ void Weapon::Update()
 		ringMaterial_->SetColor(ringColor_);
 
 		// マテリアル更新
-		ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f);
+		ringMaterial_->Update(ringUVTransform_.transform_, ringColor_, EnableLighting::None, 100.0f,0.0f);
 	}
 	else {
 		// サイズを0に
