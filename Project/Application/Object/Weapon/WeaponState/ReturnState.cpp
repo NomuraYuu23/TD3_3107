@@ -14,7 +14,7 @@ void ReturnState::Initialize()
 
 	//StartEasing(30);
 	startPosition_ = weapon_->worldtransform_.GetWorldPosition();
-	lerp_t = 0.3f;
+	lerp_t = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "ReturnRate");
 	CreateRelayPoint();
 }
 

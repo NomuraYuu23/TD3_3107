@@ -8,7 +8,8 @@
             0.0,
             0.0
         ],
+        "ReturnRate": 0.30000001192092896,
         "ScaleRate": 2.5,
-        "SpeedRatio": 60.0
+        "SpeedRatio": 40.0
     }
 }

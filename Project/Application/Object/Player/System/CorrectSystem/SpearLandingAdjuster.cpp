@@ -76,6 +76,7 @@ void SpearLandingAdjuster::Update()
 
 		// 武器の座標取得
 		Vector3 weaponPosition = weapon_->worldtransform_.GetWorldPosition();
+		// ここ外部
 		float offset = 1.0f;
 		// オフセット分上に動かしてる
 		weaponPosition.y += offset;
@@ -88,11 +89,14 @@ void SpearLandingAdjuster::Update()
 			player_->worldtransform_.GetWorldPosition().y + player_->circleCollider_.radius_ };
 
 		// MaxRadiusは武器の長い方のサイズを取得
+		// ここ外部
+		float xRatio = 1.0f;
+		float yRatio = 0.5f;
 		// X軸の半径サイズ
-		maxSize_.x = maxRadius * 0.75f + scaling_;
+		maxSize_.x = maxRadius * xRatio;
 
 		// Y軸の半径サイス　
-		maxSize_.y = maxRadius * 0.5f;
+		maxSize_.y = maxRadius * yRatio;
 
 		// 武器の最大最小
 		Vector2 weaponMin = { weaponPosition.x - maxSize_.x,
@@ -124,8 +128,12 @@ void SpearLandingAdjuster::ImGuiDraw()
 
 void SpearLandingAdjuster::SetUp()
 {
-	compTimer_.Start(5.0f);
+	// ここ外部
+	float lerpFrame = 5.0f;
+	compTimer_.Start(lerpFrame);
+	// 
 	isRunOnce_ = true;
+	// 開始座標
 	startPosition_ = player_->worldtransform_.GetWorldPosition();
 
 }

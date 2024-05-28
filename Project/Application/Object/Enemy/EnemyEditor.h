@@ -3,6 +3,7 @@
 #include <variant>
 #include "SingleEnemyData.h"
 #include "MultiEnemyData.h"
+#include "ChaseEnemyData.h"
 
 class EnemyEditor
 {
@@ -10,7 +11,7 @@ class EnemyEditor
 public:
 
 	//項目
-	using EnemyEditorItem = std::variant<SingleEnemyData, MultiEnemyData>;
+	using EnemyEditorItem = std::variant<SingleEnemyData, MultiEnemyData, ChaseEnemyData>;
 	using EnemyEditorGroup = std::map<std::string, EnemyEditorItem>; // ブロック番号, アイテム
 
 public: // メンバ変数(編集)
@@ -46,6 +47,14 @@ public: // メンバ関数(読み込みなど)
 	void SetValue(const std::string& groupName, const std::string& key, MultiEnemyData value);
 
 	/// <summary>
+	/// 値のセットChaseEnemyData
+	/// </summary>
+	/// <param name="groupName"></param>
+	/// <param name="key"></param>
+	/// <param name="value"></param>
+	void SetValue(const std::string& groupName, const std::string& key, ChaseEnemyData value);
+
+	/// <summary>
 	/// 値の取得
 	/// </summary>
 	/// <returns></returns>
@@ -56,6 +65,14 @@ public: // メンバ関数(読み込みなど)
 	/// </summary>
 	/// <returns></returns>
 	MultiEnemyData GetMultiEnemyDataValue(const std::string& groupName, const std::string& key);
+
+	/// <summary>
+	/// 値の取得
+	/// </summary>
+	/// <param name="groupName"></param>
+	/// <param name="key"></param>
+	/// <returns></returns>
+	ChaseEnemyData GetChaseEnemyDataValue(const std::string& groupName, const std::string& key);
 
 	/// <summary>
 	/// データ保存
@@ -82,6 +99,11 @@ private: // 関数
 	/// </summary>
 	void ImGuiMultiEnemy();
 
+	/// <summary>
+	/// チェイス用
+	/// </summary>
+	void ImGuiChaseEnemy();
+
 private: // 変数
 
 	std::map<std::string, EnemyEditorGroup> datas_; // ステージ番号、Group
@@ -102,6 +124,11 @@ private: // 変数
 	int32_t addMultiEnemyNum_;
 	// マルチ削除番号
 	int32_t deleteMultiEnemyNum_;
+
+	// チェイス追加データ
+	ChaseEnemyData addChaseEnemyData_;
+	int32_t addChaseEnemyNum_;
+	int32_t deleteChaseEnemyNum_;
 
 	// モード
 	int32_t mode_;

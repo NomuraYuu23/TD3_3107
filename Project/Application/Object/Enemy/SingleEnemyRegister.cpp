@@ -66,9 +66,11 @@ void SingleEnemyRegister::Draw(BaseCamera& camera, std::vector<UINT>* textureHna
 	desc.materialsHandle = &materialsHandleGPU_;
 	desc.model = model_;
 	desc.numInstance = numInstance_;
-	if (textureHnadles) {
-		desc.textureHandles = *textureHnadles;
-	}
+	//if (textureHnadles) {
+	//	desc.textureHandles = *textureHnadles;
+	//}
+	textureHnadles;
+	desc.textureHandles = *texture_;
 	desc.transformationMatrixesHandle = &transformationMatrixesHandleGPU_;
 	desc.localMatrixManager = localMatrixManager_.get();
 	ModelDraw::ManyAnimObjectsDraw(desc);

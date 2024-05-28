@@ -166,9 +166,19 @@ private:
 	float countTime_ = 0.0f;
 
 	uint32_t blockTexture_ = 0u;
+	// 集団
 	uint32_t enemyTexture_ = 0u;
+	// 単体用
+	uint32_t singleEnemyTexture_ = 0u;
+	// 追尾用
+	uint32_t chaseTexture_ = 0u;
 
 	std::vector<UINT> tmpTextures_;
+	std::vector<UINT> singleTextures_;
+	std::vector<UINT> chaseTextures_;
+
+	static const uint32_t maxSize = 3;
+	std::array<std::vector<UINT>, maxSize> enemyTextures_;
 
 	Vector2 rShift_ = {};
 	Vector2 gShift_ = {};
