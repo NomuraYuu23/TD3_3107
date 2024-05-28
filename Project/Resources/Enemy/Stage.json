@@ -70,20 +70,6 @@
             ],
             "typeNum": 0
         },
-        "Enemy05": {
-            "easeEndPosition": [
-                -20.0,
-                0.0,
-                0.0
-            ],
-            "pad": 0,
-            "position": [
-                180.0,
-                15.0,
-                0.0
-            ],
-            "typeNum": 0
-        },
         "EnemyEmitter:00": {
             "distance": 7.599999904632568,
             "enemyMaxCount": 5,
