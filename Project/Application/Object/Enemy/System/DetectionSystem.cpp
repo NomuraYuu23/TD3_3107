@@ -44,6 +44,9 @@ void DetectionSystem::ChaseUpdate()
 {
 
 	Vector3 velocity = enemy_->GetPlayer()->worldtransform_.GetWorldPosition() - enemy_->GetWorldPosition();
+	// 方向
+	enemy_->direction_ = { velocity.x,velocity.y , 0};
+
 	velocity = Vector3::Normalize(velocity);
 
 	float moveRate = 5.0f;
@@ -52,8 +55,6 @@ void DetectionSystem::ChaseUpdate()
 	enemy_->transform_.translate.x += velocity.x * (1.0f / 60.0f) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
 	enemy_->transform_.translate.y += velocity.y * (1.0f / 60.0f) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
 
-	// 方向
-	enemy_->direction_ = { velocity.x,velocity.y };
 
 	enemy_->MatrixUpdate();
 }

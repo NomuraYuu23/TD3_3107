@@ -26,7 +26,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="model"></param>
-	void Initialize(Model* model);
+	void Initialize(Model* model, std::vector<UINT>* texture);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -79,7 +79,7 @@ private:
 	/// <summary>
 	/// 単体の敵を生成している場所
 	/// </summary>
-	void CreateSingleEnemy();
+	void CreateSingleEnemy(std::vector<UINT>* texture);
 	/// <summary>
 	/// エミッター生成関数
 	/// </summary>

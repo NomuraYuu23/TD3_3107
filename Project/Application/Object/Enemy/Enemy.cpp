@@ -119,7 +119,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 				#endif // !_DEBUG
 			}
 		}
-		else if (std::holds_alternative<EnemyWaitState*>(judState_) && std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
+		else if (/*std::holds_alternative<EnemyWaitState*>(judState_) && */std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
 			// 死亡パーティクル再生
 			EmitterDesc desc;
 			desc.transform = &transform_;

@@ -37,10 +37,18 @@ public:
 	void ImGuiDraw() override;
 	//std::list<std::unique_ptr<OneOfManyObjects>>* GetList() { return &objects_; }
 
+	void SetTexture(std::vector<UINT>* texture) { 
+		texture_ = texture;
+	}
+
 private:
 	// 
 	std::string name_;
 
 	// アニメーション本体
 	Animation anim_;
+
+	// テクスチャ
+	std::vector<UINT>* texture_;
+	UINT singleTexture_ = 0;
 };

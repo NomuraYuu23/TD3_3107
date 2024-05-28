@@ -5,13 +5,13 @@
 #include "SingleEnemyRegister.h"
 #include "../../AllSceneObject/StageNumberManager.h"
 
-void EnemyManager::Initialize(Model* model)
+void EnemyManager::Initialize(Model* model, std::vector<UINT>* texture)
 {
 	model_ = model;
 
 	SingleEnemyRegister::ResetSerialNumber();
 
-	CreateSingleEnemy();
+	CreateSingleEnemy(texture);
 	////CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
 	//CreateEmitter({ {0.0f,10.0f},7.0f,5 });
 	//CreateEmitter({ {-20.0f,10.0f},7.0f,3 });
@@ -292,11 +292,13 @@ void EnemyManager::RegisterChaseEnemy(const ChaseEnemyData& data, const std::str
 	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
 }
 
-void EnemyManager::CreateSingleEnemy()
+void EnemyManager::CreateSingleEnemy(std::vector<UINT>* texture)
 {
 	// 単体管理用変数に
 	singleEnemys_ = std::make_unique<SingleEnemyRegister>();
 	singleEnemys_->Initialize(model_);
+	// テクスチャの設定
+	static_cast<SingleEnemyRegister*>(singleEnemys_.get())->SetTexture(texture);
 
 
 	// Largeの奴でまとめるためにリストにプッシュ
