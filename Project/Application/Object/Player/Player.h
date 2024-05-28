@@ -186,6 +186,8 @@ public:
 	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
 	void EndAssistDash() { assistDash_.SlowCancel(); }
 
+	Velocity2DManager* GetVelocity2DManager() { return velocity2DManager_.get(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -287,6 +289,10 @@ private: // パーティクル生成関連変数
 
 	// 空中ダッシュシステム
 	AssistDash assistDash_;
+
+private: // モーションブラー
+
+	std::unique_ptr<Velocity2DManager> velocity2DManager_;
 
 private:
 	void SystemInitialize();

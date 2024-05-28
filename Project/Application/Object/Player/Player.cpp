@@ -44,6 +44,9 @@ void Player::Initialize(Model* model)
 
 	isGround_ = false;
 
+	velocity2DManager_ = std::make_unique<Velocity2DManager>();
+	velocity2DManager_->Initialize();
+
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
 	// アニメーション関連初期化
@@ -146,6 +149,9 @@ void Player::Update()
 	//else {
 	//	parabola_.Reset();
 	//}
+
+	velocity2DManager_->SetVelocity(Vector2{ velocity_.x / 5.0f , -velocity_.y / 5.0f });
+
 }
 
 void Player::Draw(const BaseCamera& camera)
@@ -166,14 +172,17 @@ void Player::Draw(const BaseCamera& camera)
 	#ifndef _DEBUG
 	if (anim_->GetIsRight()) {
 		ModelDraw::AnimObjectDraw(desc);
+		ModelDraw::AnimObjectDraw(desc, 2);
 }
 	else {
 		ModelDraw::AnimInverseObjectDraw(desc);
+		ModelDraw::AnimInverseObjectDraw(desc, 2);
 	}
 	#endif // !_DEBUG
 	// デバッグのみで行う
 	#ifdef _DEBUG
 	ModelDraw::AnimObjectDraw(desc);
+	ModelDraw::AnimObjectDraw(desc, 2);
 	#endif // _DEBUG
 
 	// 武器の描画

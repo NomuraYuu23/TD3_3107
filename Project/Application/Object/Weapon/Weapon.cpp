@@ -49,6 +49,9 @@ void Weapon::Initialize(Model* model)
 	spearAnim_->Init(this);							   // 初期化
 	#endif // !_DEBUG
 
+	//velocity2DManager_ = std::make_unique<Velocity2DManager>();
+	//velocity2DManager_->Initialize();
+
 }
 
 void Weapon::Update()
@@ -165,6 +168,9 @@ void Weapon::Update()
 	//float angle = MathUtility::CalcAngle({ direct.x,direct.y });
 	float angle = std::atan2f(direct.y, direct.x) * (180.0f / 3.14f);
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, angle);
+
+	//velocity2DManager_->SetVelocity(Vector2{ /*returnDirect_.x **/ 10.0f, returnDirect_.y * 10.0f });
+
 }
 
 void Weapon::Draw(const BaseCamera& camera)
@@ -185,6 +191,9 @@ void Weapon::Draw(const BaseCamera& camera)
 	desc.model = model_;
 	desc.worldTransform = &worldtransform_;
 	ModelDraw::AnimObjectDraw(desc);
+
+	//ModelDraw::AnimObjectDraw(desc, 2);
+
 }
 
 void Weapon::UnderRingDraw(const BaseCamera& camera)

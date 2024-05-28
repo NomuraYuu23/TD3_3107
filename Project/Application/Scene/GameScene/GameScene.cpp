@@ -408,6 +408,7 @@ void GameScene::Draw() {
 	uint32_t postEffectBit = 0;
 	PostEffect::ExecutionAdditionalDesc desc = {};
 	desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
+	desc.velocity2DManagers[0] = player_->GetVelocity2DManager();
 
 	if (player_->GetHitManager().IsHitEffectActive()) {
 		PlayerHitManager::Effect instance = player_->GetEffectInfo();
@@ -427,6 +428,11 @@ void GameScene::Draw() {
 		postEffectBit += 8;
 	}
 
+	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState())) {
+		postEffectBit += 16;
+		PostEffect::GetInstance()->SetKernelSize(33);
+		PostEffect::GetInstance()->SetSigma(33.0f);
+	}
 	PostEffect::GetInstance()->SetExecutionFlag(postEffectBit);
 	PostEffect::GetInstance()->Execution(
 		dxCommon_->GetCommadList(),

@@ -1104,6 +1104,8 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 			// outputに加算
 			if (!(blurInput.r == 0.0f && blurInput.g == 1.0f && blurInput.b == 0.0f)) {
 				blurOutput += blurInput * blurWeight;
+				// 色の濃さを10倍
+				blurOutput.a += blurInput.a * blurWeight * 9.0f;
 			}
 			// 重みの合計に加算
 			blurWeightSum += blurWeight;

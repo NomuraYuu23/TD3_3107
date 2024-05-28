@@ -13,6 +13,7 @@
 
 #include "Anim/SpearAnimManager.h"
 #include "../../../Engine/PostEffect/ShockWaveManager.h"
+#include "../../../Engine/PostEffect/Velocity2DManager.h"
 
 class Player;
 
@@ -141,6 +142,8 @@ public: // アクセッサ
 	/// <returns>リング用のローカル行列マネージャ</returns>
 	LocalMatrixManager* GetRingLocalMatrix() { return ringLocalMatrix_.get(); }
 
+	//Velocity2DManager* GetVelocity2DManager() { return velocity2DManager_.get(); }
+
 public: // 外部で行う設定関数
 	/// <summary>
 	/// 変更のリクエスト
@@ -268,5 +271,10 @@ private: // アニメーション関連
 	bool isPlayerJumpAccept_ = false;
 private:
 	ShockEffectSystem shockEffect_;
+
+private: // モーションブラー
+
+	//std::unique_ptr<Velocity2DManager> velocity2DManager_;
+
 };
 
