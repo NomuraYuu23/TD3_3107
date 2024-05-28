@@ -4,7 +4,7 @@
         "AerialInActiveDecelerateRatio": 0.05000000074505806,
         "Gravity": 10.0,
         "HitInvisibleFrame": 75.0,
-        "HitPoint": 10,
+        "HitPoint": 3,
         "MoveSpeed": 20.0,
         "NormalJumpPower": 40.0,
         "RecoilFrame": 20.0,

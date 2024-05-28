@@ -70,20 +70,6 @@
             ],
             "typeNum": 0
         },
-        "Enemy05": {
-            "easeEndPosition": [
-                -20.0,
-                0.0,
-                0.0
-            ],
-            "pad": 0,
-            "position": [
-                180.0,
-                15.0,
-                0.0
-            ],
-            "typeNum": 0
-        },
         "EnemyEmitter:00": {
             "distance": 7.599999904632568,
             "enemyMaxCount": 5,
@@ -95,5 +81,33 @@
             ],
             "rotateSpeed": 90.0
         }
-    }
+    },
+    "Stage01": {
+        "EnemyEmitter:00": {
+            "distance": 4.800000190734863,
+            "enemyMaxCount": 3,
+            "padding": 0,
+            "position": [
+                41.79999923706055,
+                7.199999809265137,
+                0.0
+            ],
+            "rotateSpeed": 90.0
+        }
+    },
+    "Stage02": {
+        "EnemyEmitter:00": {
+            "distance": 8.0,
+            "enemyMaxCount": 1,
+            "padding": 0,
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotateSpeed": 90.0
+        }
+    },
+    "Stage03": {},
+    "Stage04": {}
 }

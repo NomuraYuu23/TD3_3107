@@ -5,7 +5,7 @@ void ChaseEnemyState::Initialize()
 {
 	enemy_->SetState(this);
 	enemy_->MatrixUpdate();
-
+	enemy_->usedDirection_ = true;
 	sensorRay_.Initialize(enemy_);
 
 }
@@ -19,7 +19,7 @@ void ChaseEnemyState::Update()
 	enemy_->detectionSystem_.Update(sensorRay_.IsCollision());
 
 	// レイの取得
-	sensorRay_.SetDirect(player, enemy);
+	sensorRay_.SetDirect(enemy, player);
 	sensorRay_.Update();
 }
 

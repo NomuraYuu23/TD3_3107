@@ -4,14 +4,15 @@
 #include "State/EnemyStateList.h"
 #include "SingleEnemyRegister.h"
 #include "../../AllSceneObject/StageNumberManager.h"
+#include <iterator>
 
-void EnemyManager::Initialize(Model* model)
+void EnemyManager::Initialize(Model* model, std::vector<UINT>* texture)
 {
 	model_ = model;
 
 	SingleEnemyRegister::ResetSerialNumber();
 
-	CreateSingleEnemy();
+	CreateSingleEnemy(texture);
 	////CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
 	//CreateEmitter({ {0.0f,10.0f},7.0f,5 });
 	//CreateEmitter({ {-20.0f,10.0f},7.0f,3 });
@@ -19,7 +20,7 @@ void EnemyManager::Initialize(Model* model)
 	enemyEditor_ = std::make_unique<EnemyEditor>();
 	enemyEditor_->LoadFiles();
 	LoadEnemyData();
-	RegisterChaseEnemy({ {10,10,0},30.0f }, "Chase1");
+	//RegisterChaseEnemy({ {10,10,0},30.0f }, "Chase1");
 
 }
 
@@ -149,6 +150,10 @@ void EnemyManager::LoadEnemyData()
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemySingle0 = enemyEmitters_.begin();
 	enemySingle0->get()->GetObjects()->clear();
 
+	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemyChase0 = std::next(enemyEmitters_.begin(),1);
+	//enemyChase0++;
+	enemyChase0->get()->GetObjects()->clear();
+
 	for (std::map<std::string, EnemyEditor::EnemyEditorGroup>::iterator stageItr = mapDatas->begin();
 		stageItr != mapDatas->end(); ++stageItr) {
 
@@ -159,6 +164,7 @@ void EnemyManager::LoadEnemyData()
 
 		std::vector<std::string> enemyNames;
 		std::vector<std::string> enemySingleNames;
+		std::vector<std::string> enemyChaseNames;
 
 		for (EnemyEditor::EnemyEditorGroup::iterator enemyEmitterItr = stageItr->second.begin();
 			enemyEmitterItr != stageItr->second.end(); ++enemyEmitterItr) {
@@ -207,9 +213,15 @@ void EnemyManager::LoadEnemyData()
 				enemySingleNames.push_back(enemyName);
 			}
 
+			// チェイス
+			else if (std::holds_alternative<ChaseEnemyData>(enemyData)) {
+				RegisterChaseEnemy(std::get<ChaseEnemyData>(enemyData), enemyName);
+
+				enemyChaseNames.push_back(enemyName);
+			}
 		}
 
-		// 削除
+
 		enemySingle0->get()->GetObjects()->remove_if([=](std::unique_ptr<OneOfManyObjects>& enemy) {
 
 			for (uint32_t i = 0; i < enemySingleNames.size(); ++i) {
@@ -223,9 +235,26 @@ void EnemyManager::LoadEnemyData()
 
 			});
 
+		// 削除
+		enemyChase0->get()->GetObjects()->remove_if([=](std::unique_ptr<OneOfManyObjects>& enemy) {
+
+			for (uint32_t i = 0; i < enemyChaseNames.size(); ++i) {
+				std::string name = static_cast<Enemy*>(enemy.get())->GetName();
+				if (enemyChaseNames[i] == name) {
+					return false;
+				}
+			}
+			return true;
+
+
+			});
+
 		enemyEmitters_.remove_if([=](std::unique_ptr<LargeNumberOfObjects>& enemyEmitter) {
 
 			if ("EnemySingle:0" == static_cast<IEnemyEmitter*>(enemyEmitter.get())->GetName()) {
+				return false;
+			}
+			if ("EnemySingle:1" == static_cast<IEnemyEmitter*>(enemyEmitter.get())->GetName()) {
 				return false;
 			}
 
@@ -289,18 +318,30 @@ void EnemyManager::RegisterChaseEnemy(const ChaseEnemyData& data, const std::str
 	// 索敵設定
 	static_cast<ChaseEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SetChaseSetting(data.searchLength);
 	// 追加
-	enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
+	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemySingle0 = std::next(enemyEmitters_.begin(), 1);
+	//enemySingle0++;
+	(*enemySingle0).get()->GetObjects()->push_back(std::move(obj));
+	//enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
 }
 
-void EnemyManager::CreateSingleEnemy()
+void EnemyManager::CreateSingleEnemy(std::vector<UINT>* texture)
 {
-	// 単体管理用変数に
+	// 単体管理用の初期化
 	singleEnemys_ = std::make_unique<SingleEnemyRegister>();
 	singleEnemys_->Initialize(model_);
-
-
-	// Largeの奴でまとめるためにリストにプッシュ
+	// テクスチャの設定
+	static_cast<SingleEnemyRegister*>(singleEnemys_.get())->SetTexture(texture);
+	// リストにプッシュ
 	enemyEmitters_.push_back(std::move(singleEnemys_));
+
+
+	// 追尾管理用の初期化
+	chaseEnemys_ = std::make_unique<SingleEnemyRegister>();
+	chaseEnemys_->Initialize(model_);
+	// テクスチャの設定
+	static_cast<SingleEnemyRegister*>(chaseEnemys_.get())->SetTexture(texture);
+	// リストにプッシュ
+	enemyEmitters_.push_back(std::move(chaseEnemys_));
 
 	//RegisterChaseEnemy({ {30,10,0},30.0f }, "Chase1");
 	//RegisterSingleEnemy({ {10,10,0},0 }, "na");

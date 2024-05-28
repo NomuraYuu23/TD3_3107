@@ -7,6 +7,8 @@ void PlayerHitManager::Initialize(Player* player)
 {
 	player_ = player;
 
+	player_->SetIsDead(false);
+
 	hp_.max = (uint32_t)GlobalVariables::GetInstance()->GetIntValue("Player", "HitPoint");
 	hp_.current = hp_.max;
 	hp_.decreValue_ = 1;

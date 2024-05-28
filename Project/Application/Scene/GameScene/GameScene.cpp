@@ -120,9 +120,13 @@ void GameScene::Initialize() {
 	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get());
 
 	// 敵管理クラス
+	singleTextures_.clear();
+	singleTextures_.push_back(singleEnemyTexture_);
+	enemyTextures_[0].clear();
+	enemyTextures_[0].push_back(singleEnemyTexture_);
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
-	enemyManager_->Initialize(enemyModel_.get());
+	enemyManager_->Initialize(enemyModel_.get(), &enemyTextures_[0]);
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -259,19 +263,8 @@ void GameScene::Update() {
 	// 敵
 	enemyManager_->Update();
 
-
-	if (player_->isArrowUiDraw_) {
-		arrowSprite_->SetIsInvisible(false);
-	}
-	else {
-		arrowSprite_->SetIsInvisible(true);
-	}
-
 	// UIマネージャー更新
 	gameUIManager_->Update();
-
-	arrowSprite_->SetPosition(player_->screenPos_);
-	arrowSprite_->SetRotate(std::atan2f(-player_->throwDirect_.y, player_->throwDirect_.x));
 
 	//arrowSprite_->Update();
 
@@ -335,19 +328,16 @@ void GameScene::Draw() {
 
 	//bossEnemy_->Draw(camera_);
 
-	tmpTextures_.clear();
-	tmpTextures_.push_back(blockTexture_);
-
 	// ブロック用
 	mapManager_->Draw(camera_);
 	// ゴール系
 	gameSystemManager_->Draw(camera_);
 
-	tmpTextures_.clear();
-	tmpTextures_.push_back(enemyTexture_);
+	enemyTextures_[1].clear();
+	enemyTextures_[1].push_back(enemyTexture_);
 
 	// 敵
-	enemyManager_->Draw(camera_, &tmpTextures_);
+	enemyManager_->Draw(camera_, &enemyTextures_[1]);
 
 	// プレイヤーのリングは透過するため最後に描画
 	player_->weapon_->UnderRingDraw(camera_);
@@ -611,7 +601,7 @@ void GameScene::TextureLoad()
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyRedTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-
+	singleEnemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyBlueTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	//uiTextureHandles_ = {
 
 	//};
