@@ -21,6 +21,9 @@ PointLightManager* ModelDraw::sPointLightManager_ = nullptr;
 SpotLightManager* ModelDraw::sSpotLightManager_ = nullptr;
 // 霧マネージャー
 FogManager* ModelDraw::sFogManager_ = nullptr;
+// 環境マップ(映り込み用テクスチャ)ハンドル
+uint32_t ModelDraw::sEnvironmentTextureHandle_ = 1024;
+
 // 現在のパイプライン番号
 ModelDraw::PipelineStateIndex ModelDraw::currentPipelineStateIndex_ = kPipelineStateIndexOfCount;
 
@@ -136,7 +139,7 @@ void ModelDraw::Initialize(
 
 	// シェーダコンパイル
 	IDxcBlob* shader = CompileShader::Compile(
-		L"Resources/shaders/AnimModel.CS.hlsl",
+		L"Resources/shaders/Model/AnimModel.CS.hlsl",
 		L"cs_6_0",
 		L"main");
 
@@ -161,6 +164,7 @@ void ModelDraw::PreDraw(const PreDrawDesc& desc)
 	assert(desc.pointLightManager);
 	assert(desc.spotLightManager);
 	assert(desc.fogManager);
+	assert(desc.environmentTextureHandle != 1024);
 
 	sCommandList = desc.commandList;
 
@@ -175,6 +179,7 @@ void ModelDraw::PreDraw(const PreDrawDesc& desc)
 	sPointLightManager_ = desc.pointLightManager;
 	sSpotLightManager_ = desc.spotLightManager;
 	sFogManager_ = desc.fogManager;
+	sEnvironmentTextureHandle_ = desc.environmentTextureHandle;
 
 }
 
@@ -193,7 +198,7 @@ void ModelDraw::PostDraw()
 
 }
 
-void ModelDraw::AnimObjectDraw(AnimObjectDesc& desc)
+void ModelDraw::AnimObjectDraw(AnimObjectDesc& desc, uint32_t renderTargetIndex)
 {
 
 	// nullptrチェック
@@ -206,11 +211,19 @@ void ModelDraw::AnimObjectDraw(AnimObjectDesc& desc)
 	UpdateVertexUAV(desc.model, desc.localMatrixManager);
 
 	// パイプライン設定
-	sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexModel]);//PS0を設定
-	sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexModel]);
-	currentPipelineStateIndex_ = kPipelineStateIndexModel;
-
-	sCommandList->IASetVertexBuffers(0, 1, desc.model->GetMesh()->GetVbViewUAV());
+	if (renderTargetIndex == 2) {
+		sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexAnimModelRT2]);//PS0を設定
+		sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexAnimModelRT2]);
+		currentPipelineStateIndex_ = kPipelineStateIndexAnimModelRT2;
+	}
+	else if (renderTargetIndex == 3) {
+		assert(0);
+	}
+	else {
+		sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexAnimModel]);//PS0を設定
+		sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexAnimModel]);
+		currentPipelineStateIndex_ = kPipelineStateIndexAnimModel;
+	}
 
 	//マテリアルCBufferの場所を設定
 	if (desc.material) {
@@ -262,6 +275,12 @@ void ModelDraw::AnimObjectDraw(AnimObjectDesc& desc)
 
 	// 霧
 	sCommandList->SetGraphicsRootConstantBufferView(14, sFogManager_->GetFogDataBuff()->GetGPUVirtualAddress());
+
+	// 環境マップ(映り込み用テクスチャ)ハンドル
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 15, sEnvironmentTextureHandle_);
+
+	// 頂点
+	desc.model->GetMesh()->SetGraphicsRootDescriptorTableVertUAVHandleGPU(sCommandList, 16);
 
 	//描画
 	sCommandList->DrawInstanced(UINT(desc.model->GetModelData().vertices.size()), 1, 0, 0);
@@ -337,12 +356,15 @@ void ModelDraw::NormalObjectDraw(NormalObjectDesc& desc)
 	// 霧
 	sCommandList->SetGraphicsRootConstantBufferView(14, sFogManager_->GetFogDataBuff()->GetGPUVirtualAddress());
 
+	// 環境マップ(映り込み用テクスチャ)ハンドル
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 15, sEnvironmentTextureHandle_);
+
 	//描画
 	sCommandList->DrawInstanced(UINT(desc.model->GetModelData().vertices.size()), 1, 0, 0);
 
 }
 
-void ModelDraw::AnimInverseObjectDraw(AnimObjectDesc& desc)
+void ModelDraw::AnimInverseObjectDraw(AnimObjectDesc& desc, uint32_t renderTargetIndex)
 {
 
 	// nullptrチェック
@@ -355,11 +377,19 @@ void ModelDraw::AnimInverseObjectDraw(AnimObjectDesc& desc)
 	UpdateVertexUAV(desc.model, desc.localMatrixManager);
 
 	// パイプライン設定
-	sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexInverseModel]);//PS0を設定
-	sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexInverseModel]);
-	currentPipelineStateIndex_ = kPipelineStateIndexInverseModel;
-
-	sCommandList->IASetVertexBuffers(0, 1, desc.model->GetMesh()->GetVbViewUAV());
+	if (renderTargetIndex == 2) {
+		sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexAnimInverseModelRT2]);//PS0を設定
+		sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexAnimInverseModelRT2]);
+		currentPipelineStateIndex_ = kPipelineStateIndexAnimInverseModelRT2;
+	}
+	else if (renderTargetIndex == 3) {
+		assert(0);
+	}
+	else {
+		sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexAnimInverseModel]);//PS0を設定
+		sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexAnimInverseModel]);
+		currentPipelineStateIndex_ = kPipelineStateIndexAnimInverseModel;
+	}
 
 	//マテリアルCBufferの場所を設定
 	if (desc.material) {
@@ -412,6 +442,12 @@ void ModelDraw::AnimInverseObjectDraw(AnimObjectDesc& desc)
 	// 霧
 	sCommandList->SetGraphicsRootConstantBufferView(14, sFogManager_->GetFogDataBuff()->GetGPUVirtualAddress());
 
+	// 環境マップ(映り込み用テクスチャ)ハンドル
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 15, sEnvironmentTextureHandle_);
+
+	// 頂点
+	desc.model->GetMesh()->SetGraphicsRootDescriptorTableVertUAVHandleGPU(sCommandList, 16);
+
 	//描画
 	sCommandList->DrawInstanced(UINT(desc.model->GetModelData().vertices.size()), 1, 0, 0);
 
@@ -427,11 +463,9 @@ void ModelDraw::ManyAnimObjectsDraw(ManyAnimObjectsDesc& desc)
 	UpdateVertexUAV(desc.model, desc.localMatrixManager);
 
 	// パイプライン設定
-	sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexManyObjects]);//PS0を設定
-	sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexManyObjects]);
-	currentPipelineStateIndex_ = kPipelineStateIndexManyObjects;
-
-	sCommandList->IASetVertexBuffers(0, 1, desc.model->GetMesh()->GetVbViewUAV());
+	sCommandList->SetPipelineState(sPipelineState[kPipelineStateIndexAnimManyObjects]);//PS0を設定
+	sCommandList->SetGraphicsRootSignature(sRootSignature[kPipelineStateIndexAnimManyObjects]);
+	currentPipelineStateIndex_ = kPipelineStateIndexAnimManyObjects;
 
 	// マテリアル
 	sCommandList->SetGraphicsRootDescriptorTable(0, *desc.materialsHandle);
@@ -475,6 +509,12 @@ void ModelDraw::ManyAnimObjectsDraw(ManyAnimObjectsDesc& desc)
 	sCommandList->SetGraphicsRootDescriptorTable(13, *desc.transformationMatrixesHandle);
 	// 霧
 	sCommandList->SetGraphicsRootConstantBufferView(14, sFogManager_->GetFogDataBuff()->GetGPUVirtualAddress());
+
+	// 環境マップ(映り込み用テクスチャ)ハンドル
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 15, sEnvironmentTextureHandle_);
+
+	// 頂点
+	desc.model->GetMesh()->SetGraphicsRootDescriptorTableVertUAVHandleGPU(sCommandList, 16);
 
 	//描画
 	sCommandList->DrawInstanced(UINT(desc.model->GetModelData().vertices.size()), desc.numInstance, 0, 0);
@@ -539,6 +579,9 @@ void ModelDraw::ManyNormalObjectsDraw(ManyNormalObjectsDesc& desc) {
 	sCommandList->SetGraphicsRootDescriptorTable(13, *desc.transformationMatrixesHandle);
 	// 霧
 	sCommandList->SetGraphicsRootConstantBufferView(14, sFogManager_->GetFogDataBuff()->GetGPUVirtualAddress());
+
+	// 環境マップ(映り込み用テクスチャ)ハンドル
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(sCommandList, 15, sEnvironmentTextureHandle_);
 
 	//描画
 	sCommandList->DrawInstanced(UINT(desc.model->GetModelData().vertices.size()), desc.numInstance, 0, 0);

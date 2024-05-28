@@ -74,5 +74,8 @@ private: // メンバ変数
 	// ボタンテクスチャ
 	uint32_t buttonTexHandle_ = 0u;
 
+	// スカイボックス
+	uint32_t skyboxTextureHandle_ = 0;
+
 };
 

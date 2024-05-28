@@ -15,9 +15,13 @@ public: // サブクラス
 	// パイプライン番号
 	enum PipelineStateIndex {
 		kPipelineStateIndexModel, // モデル
-		kPipelineStateIndexInverseModel, // 反転モデル(右手座標系)
+		kPipelineStateIndexAnimModel, // アニメーションモデル
+		kPipelineStateIndexAnimInverseModel, // 反転モデル(右手座標系)
 		kPipelineStateIndexManyObjects, // 複数のアニメーション無しオブジェクト
+		kPipelineStateIndexAnimManyObjects, // 複数のアニメーションありオブジェクト
 
+		kPipelineStateIndexAnimModelRT2, // アニメーションモデル
+		kPipelineStateIndexAnimInverseModelRT2, // 反転モデル(右手座標系)
 
 		kPipelineStateIndexNormalOutline, // アニメーション無しアウトライン
 
@@ -32,6 +36,7 @@ public: // サブクラス
 		PointLightManager* pointLightManager = nullptr; // ポイントライト
 		SpotLightManager* spotLightManager = nullptr; // スポットライト
 		FogManager* fogManager = nullptr; // 霧マネージャー
+		uint32_t environmentTextureHandle = 1024; // 環境マップ(映り込み用テクスチャ)ハンドル
 	};
 
 	// アニメーションオブジェクト引数
@@ -101,6 +106,8 @@ public:
 	static SpotLightManager* sSpotLightManager_;
 	// 霧マネージャー
 	static FogManager* sFogManager_;
+	// 環境マップ(映り込み用テクスチャ)ハンドル
+	static uint32_t sEnvironmentTextureHandle_;
 
 	// 現在のパイプライン番号
 	static PipelineStateIndex currentPipelineStateIndex_;
@@ -138,7 +145,7 @@ public: // 描画
 	/// アニメーションオブジェクト
 	/// </summary>
 	/// <param name="desc">アニメーションオブジェクト引数</param>
-	static void AnimObjectDraw(AnimObjectDesc& desc);
+	static void AnimObjectDraw(AnimObjectDesc& desc, uint32_t renderTargetIndex = 0);
 
 	/// <summary>
 	/// アニメーション無しオブジェクト
@@ -150,7 +157,7 @@ public: // 描画
 	/// アニメーション反転オブジェクト
 	/// </summary>
 	/// <param name="desc">アニメーションオブジェクト引数</param>
-	static void AnimInverseObjectDraw(AnimObjectDesc& desc);
+	static void AnimInverseObjectDraw(AnimObjectDesc& desc, uint32_t renderTargetIndex = 0);
 
 	/// <summary>
 	/// 複数のアニメーションオブジェクト
