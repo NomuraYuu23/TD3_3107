@@ -26,7 +26,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="goalModel"></param>
-	void Initialize(Model* goalModel, Player* player);
+	void Initialize(Model* goalModel, Model* checkPointModel, Player* player);
 	/// <summary>
 	/// 更新
 	/// </summary>

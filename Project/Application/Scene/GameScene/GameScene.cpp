@@ -117,7 +117,7 @@ void GameScene::Initialize() {
 
 	// ゲームシステム
 	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(goalModel_.get(), player_.get());
+	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get());
 
 	// 敵管理クラス
 	enemyManager_ = std::make_unique<EnemyManager>();
@@ -385,7 +385,7 @@ void GameScene::Draw() {
 	//uiManager_->Draw();
 
 	// UIマネージャー描画
-	//gameUIManager_->Draw();
+	gameUIManager_->Draw();
 	//arrowSprite_->Draw();
 
 	// 前景スプライト描画後処理
@@ -570,6 +570,7 @@ void GameScene::ModelCreate()
 	// 背景モデル
 	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
 
+	checkPointModel_.reset(Model::Create("Resources/Model/Takenoko", "Takenoko.obj", dxCommon_, textureHandleManager_.get()));
 	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// ステージ番号が 00 のときのみロード
@@ -598,7 +599,7 @@ void GameScene::TextureLoad()
 	};
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyRedTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	//uiTextureHandles_ = {
 
