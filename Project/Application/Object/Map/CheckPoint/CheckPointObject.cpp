@@ -27,8 +27,11 @@ void CheckPointObject::Update()
 	// 通過している場合
 	if (isPassed_) {
 		
-		passedModelTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, (currentTime_ / stagingTime_));
-		
+		passedModelTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutBack, { 1.0f, 0.0f, 1.0f }, { 1.0f, 0.75f, 1.0f }, (currentTime_ / stagingTime_));
+		worldtransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, (currentTime_ / stagingTime_));
+		float a = Ease::Easing(Ease::EaseName::EaseOutQuad, 1.0f, 0.0f, (currentTime_ / stagingTime_));
+		material_->SetColor({ 1.0f, 1.0f, 1.0f, a });
+
 		if (currentTime_ < stagingTime_) {
 			currentTime_ += kDeltaTime_;
 		}
@@ -43,7 +46,19 @@ void CheckPointObject::Update()
 			// 通過
 			isPassed_ = true;
 
-			worldtransform_.transform_.scale = { 0.0f, 0.0f, 0.0f };
+			EulerTransform t = worldtransform_.transform_;
+			t.translate.z -= 1.0f;
+
+			// 走りパーティクル
+			EmitterDesc desc;
+			desc.transform = &t;
+			desc.instanceCount = 5;
+			desc.frequency = 0.1f;
+			desc.lifeTime = stagingTime_;
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kGoalParticle;
+
+			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 		}
 	}
 

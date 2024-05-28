@@ -70,7 +70,7 @@ private: // 演出系
 
 	// チェックポイント通過演出用時間
 	float currentTime_ = 0.0f; // 現在時間
-	float stagingTime_ = 2.5f; // 演出時間
+	float stagingTime_ = 1.0f; // 演出時間
 
 	// 通過したか
 	bool isPassed_ = false;
