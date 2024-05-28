@@ -83,7 +83,7 @@ void GoalObject::Update()
 
 	// 生成座標更新
 	*emitTransform_ = worldtransform_.transform_;
-	emitTransform_->translate.y += 1.5f;
+	emitTransform_->translate.y += 7.5f;
 
 	#endif // !_DEBUG
 

@@ -85,20 +85,20 @@ void SpearAerialState::Update()
 	#ifndef _DEBUG
 
 	// プレイヤーの移動ベクトルの逆ベクトルを求める
-	Vector3 v = Vector3::Normalize(player_->velocity_);
-	v *= -1.0f;
+	//Vector3 v = Vector3::Normalize(player_->velocity_);
+	//v *= -1.0f;
 
-	// 槍ジャンプパーティクル再生
-	EmitterDesc desc;
-	desc.transform = &player_->worldtransform_.transform_;
-	desc.instanceCount = 1;
-	desc.frequency = 0.01f;
-	desc.lifeTime = 0.01f;
-	desc.particleModelNum = kCircle;
-	desc.velocity = v;
-	desc.paeticleName = kSpearJumpParticle;
+	//// 槍ジャンプパーティクル再生
+	//EmitterDesc desc;
+	//desc.transform = &player_->worldtransform_.transform_;
+	//desc.instanceCount = 1;
+	//desc.frequency = 0.01f;
+	//desc.lifeTime = 0.01f;
+	//desc.particleModelNum = kCircle;
+	//desc.velocity = v;
+	//desc.paeticleName = kSpearJumpParticle;
 
-	ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+	//ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 
 	#endif // !_DEBUG
 
