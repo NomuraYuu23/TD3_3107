@@ -240,6 +240,7 @@
     <ClCompile Include="Application\Particle\user\SpearJump\SpearJumpParticle.cpp" />
     <ClCompile Include="Application\Particle\user\GoalParticle\GoalParticle.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\DetectionRay.cpp" />
+    <ClCompile Include="Application\Particle\user\SmokeParticle\SmokeParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -508,6 +509,7 @@
     <ClInclude Include="Application\Object\Enemy\System\DetectionRay.h" />
     <ClInclude Include="Application\Object\Enemy\ChaseEnemyData.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\DropState.h" />
+    <ClInclude Include="Application\Particle\user\SmokeParticle\SmokeParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

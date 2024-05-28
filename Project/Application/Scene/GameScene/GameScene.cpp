@@ -46,6 +46,7 @@ void GameScene::Initialize() {
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
 	particleModel[ParticleModelIndex::kBambooLeaf] = particleLeafModel_.get();
 	particleModel[ParticleModelIndex::kSpearLeaf] = particleSpearLeafModel_.get();
+	particleModel[ParticleModelIndex::kSmoke] = particleSmokeModel_.get();
 	particleManager_->ModelCreate(particleModel);
 
 	isDebugCameraActive_ = false;
@@ -542,6 +543,7 @@ void GameScene::ModelCreate()
 	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_, textureHandleManager_.get()));
 	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_, textureHandleManager_.get()));
 	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_, textureHandleManager_.get()));
+	particleSmokeModel_.reset(Model::Create("Resources/Particle/Smoke", "Smoke.obj", dxCommon_, textureHandleManager_.get()));
 
 	// スカイドーム
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
