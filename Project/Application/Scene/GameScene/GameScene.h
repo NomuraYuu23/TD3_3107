@@ -191,4 +191,7 @@ private:
 
 	bool isImpact_ = false;
 
+	// スカイボックス
+	uint32_t skyboxTextureHandle_ = 0;
+
 };

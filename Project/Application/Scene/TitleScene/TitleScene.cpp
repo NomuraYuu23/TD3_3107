@@ -92,6 +92,7 @@ void TitleScene::Draw()
 	preDrawDesc.fogManager = FogManager::GetInstance();
 	preDrawDesc.pointLightManager = pointLightManager_.get();
 	preDrawDesc.spotLightManager = spotLightManager_.get();
+	preDrawDesc.environmentTextureHandle = skyboxTextureHandle_;
 
 	ModelDraw::PreDraw(preDrawDesc);
 
@@ -145,6 +146,9 @@ void TitleScene::TextureLoad()
 
 	logoTexHandle_ = TextureManager::Load("Resources/UI/Title/TitleLogo.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	buttonTexHandle_ = TextureManager::Load("Resources/UI/Title/Button.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+
+	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
+
 
 }
 

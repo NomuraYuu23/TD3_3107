@@ -70,6 +70,7 @@ void SelectScene::Draw()
 	preDrawDesc.fogManager = FogManager::GetInstance();
 	preDrawDesc.pointLightManager = pointLightManager_.get();
 	preDrawDesc.spotLightManager = spotLightManager_.get();
+	preDrawDesc.environmentTextureHandle = skyboxTextureHandle_;
 
 	ModelDraw::PreDraw(preDrawDesc);
 
@@ -114,5 +115,7 @@ void SelectScene::TextureLoad()
 		TextureManager::Load("Resources/SelectObject/UI/StageNumber.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
 		TextureManager::Load("Resources/SelectObject/UI/Operation.png", DirectXCommon::GetInstance(), textureHandleManager_.get())
 	};
+
+	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 }

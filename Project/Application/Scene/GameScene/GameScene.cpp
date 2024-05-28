@@ -316,6 +316,7 @@ void GameScene::Draw() {
 	preDrawDesc.fogManager = FogManager::GetInstance();
 	preDrawDesc.pointLightManager = pointLightManager_.get();
 	preDrawDesc.spotLightManager = spotLightManager_.get();
+	preDrawDesc.environmentTextureHandle = skyboxTextureHandle_;
 
 	ModelDraw::PreDraw(preDrawDesc);
 
@@ -394,47 +395,44 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+
+	uint32_t postEffectBit = 0;
+	PostEffect::ExecutionAdditionalDesc desc = {};
+	desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
+	desc.velocity2DManagers[0] = player_->GetVelocity2DManager();
+
 	if (player_->GetHitManager().IsHitEffectActive()) {
 		PlayerHitManager::Effect instance = player_->GetEffectInfo();
 		PostEffect::GetInstance()->SetRShift(instance.rShift);
 		PostEffect::GetInstance()->SetGShift(instance.gShift);
 		PostEffect::GetInstance()->SetBShift(instance.rShift);
 		PostEffect::GetInstance()->SetTime(instance.time);
-		PostEffect::GetInstance()->Execution(
-			dxCommon_->GetCommadList(),
-			renderTargetTexture_,
-			PostEffect::kCommandIndexGlitchRGBShift);
-		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+		postEffectBit += 6;
 	}
 	if (player_->GetWeapon()->GetEffectSystem()->IsActive()) {
-		//PostEffect::GetInstance()-
-		PostEffect::ExecutionAdditionalDesc desc = {};
-		desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
-		PostEffect::GetInstance()->SetTime(3.0f);
-		PostEffect::GetInstance()->Execution(
-			dxCommon_->GetCommadList(),
-			renderTargetTexture_,
-			PostEffect::kCommandIndexShockWave,
-			&desc);
-		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+		postEffectBit += 1;
 	}
 	if (player_->GetSlowEffect()->GetRunning()) {
 		PostEffect::GetInstance()->SetColorPosition(player_->GetSlowEffect()->GetCenter());
 		PostEffect::GetInstance()->SetColorSize(player_->GetSlowEffect()->GetSize());
 		PostEffect::GetInstance()->SetColorLerpT(player_->GetSlowEffect()->GetColorT());
-		PostEffect::GetInstance()->SetTime(3.0f);
-		PostEffect::GetInstance()->Execution(
-			dxCommon_->GetCommadList(),
-			renderTargetTexture_,
-			PostEffect::kCommandIndexGrayScale);
-		WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+		postEffectBit += 8;
 	}
 
-	/*PostEffect::GetInstance()->Execution(
+	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState())) {
+		//postEffectBit += 16;
+		//PostEffect::GetInstance()->SetKernelSize(33);
+		//PostEffect::GetInstance()->SetSigma(33.0f);
+	}
+	PostEffect::GetInstance()->SetExecutionFlag(postEffectBit);
+	PostEffect::GetInstance()->Execution(
 		dxCommon_->GetCommadList(),
 		renderTargetTexture_,
-		PostEffect::kCommandIndexBloom);
-	WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());*/
+		PostEffect::kCommandIndexTAKEYARIMONOGATARI_First,
+		&desc);
+
+	WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+
 }
 
 void GameScene::ImguiDraw() {
@@ -603,6 +601,9 @@ void GameScene::TextureLoad()
 
 	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyRedTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+
+	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
+
 	singleEnemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyBlueTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	//uiTextureHandles_ = {
 
