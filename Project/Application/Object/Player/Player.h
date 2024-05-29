@@ -133,14 +133,10 @@ public: // メンバ関数
 	void DrawLinesMap(DrawLine* drawLine);
 
 	/// <summary>
-	/// 死んだ時に呼び出すやつ
+	/// 死んだ時に呼び出すやつ（リスポーン）
 	/// </summary>
-	void Reset();
-
-	/// <summary>
-	/// スポーン処理
-	/// </summary>
-	void Respawn(const Vector3& position);
+	/// <param name="position">位置</param>
+	void Reset(const Vector3& position);
 
 public: // アニメーション関連関数群
 

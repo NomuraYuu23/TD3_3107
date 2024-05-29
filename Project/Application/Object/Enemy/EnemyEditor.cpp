@@ -588,6 +588,7 @@ void EnemyEditor::ImGuiChaseEnemy()
 
 				ImGui::DragFloat3("AddPosition", &addChaseEnemyData_.position.x, imGuiSpeed);
 				ImGui::DragFloat("AddSearchLength", &addChaseEnemyData_.searchLength, imGuiSpeed, 0);
+				ImGui::DragInt("AddChaseEnemyNum", &addChaseEnemyNum_, 0.1f, 0);
 
 				if (addChaseEnemyNum_ < 0) {
 					addChaseEnemyNum_ = 0;

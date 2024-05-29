@@ -119,7 +119,6 @@ void Player::Update()
 
 	#endif // !_DEBUG
 
-
 	// 基底クラスの更新
 	IObject::Update();
 
@@ -150,7 +149,7 @@ void Player::Update()
 	//	parabola_.Reset();
 	//}
 
-	velocity2DManager_->SetVelocity(Vector2{ velocity_.x / 5.0f , -velocity_.y / 5.0f });
+	velocity2DManager_->SetVelocity(Vector2{ velocity_.x / 16.0f , -velocity_.y / 16.0f });
 
 }
 
@@ -222,7 +221,7 @@ void Player::ImGuiDraw()
 	ImGui::Text(name.c_str());
 	// 座標リセット
 	if (ImGui::Button("PosReset")) {
-		Reset();
+		Reset(Vector3{4.0f,3.0f,0.0f});
 	}
 
 	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
@@ -757,13 +756,15 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 
 }
 
-void Player::Reset()
+void Player::Reset(const Vector3& position)
 {
-	worldtransform_.transform_.translate = { 4.0f,3.0f,0 };
+	worldtransform_.transform_.translate = position;
 	velocity_ = {};
 	worldtransform_.UpdateMatrix();
 	isGround_ = true;
-	isDead_ = false;
+
+	// 復活の処理
+	hpManager_.Respawn();
 
 	weapon_->ChangeRequest(Weapon::StateName::kHold);
 
@@ -776,7 +777,7 @@ void Player::Reset()
 		ponyAnchorPos_ = { result.m[3][0], result.m[3][1], result.m[3][2] };
 
 		// 初期化の段階で全ばねの座標をセットする
-		for (int i = 0; i < ponytail_->GetSpring().size(); i++) {
+		for (int i = 0; i < ponytail_->GetSpring().size() + 1; i++) {
 			// 追従先座標を渡す
 			ponytail_->SetPosition(i, ponyAnchorPos_);
 		}
@@ -784,16 +785,6 @@ void Player::Reset()
 		// 更新
 		ponytail_->Update();
 	}
-}
-
-void Player::Respawn(const Vector3& position)
-{
-
-	Reset();
-	// 座標
-	worldtransform_.transform_.translate = position;
-	// 更新
-	worldtransform_.UpdateMatrix();
 }
 
 void Player::SetFallTimer()

@@ -41,6 +41,7 @@ void GameScene::Initialize() {
 
 	//パーティクル
 	particleManager_ = ParticleManager::GetInstance();
+	particleManager_->Finalize();
 	std::array<Model*, ParticleModelIndex::kCountofParticleModelIndex> particleModel;
 	particleModel[ParticleModelIndex::kUvChecker] = particleUvcheckerModel_.get();
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
@@ -420,9 +421,9 @@ void GameScene::Draw() {
 	}
 
 	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState())) {
-		//postEffectBit += 16;
-		//PostEffect::GetInstance()->SetKernelSize(33);
-		//PostEffect::GetInstance()->SetSigma(33.0f);
+		postEffectBit += 16;
+		PostEffect::GetInstance()->SetKernelSize(33);
+		PostEffect::GetInstance()->SetSigma(33.0f);
 	}
 	PostEffect::GetInstance()->SetExecutionFlag(postEffectBit);
 	PostEffect::GetInstance()->Execution(

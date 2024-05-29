@@ -1,5 +1,6 @@
 {
     "Enemy": {
+        "ChaseSpeed": 7.5,
         "EaseEndFrame": 150.0
     }
 }

@@ -39,6 +39,8 @@ public:
 	/// <param name="decrement"></param>
 	void OnHit(uint32_t decrement);
 
+	void Respawn();
+
 	/// <summary>
 	/// ImGUi
 	/// </summary>
