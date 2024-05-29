@@ -97,6 +97,7 @@ private:
 	std::unique_ptr<Model> particleCircleModel_ = nullptr;
 	std::unique_ptr<Model> particleLeafModel_ = nullptr;
 	std::unique_ptr<Model> particleSpearLeafModel_ = nullptr;
+	std::unique_ptr<Model> particleSmokeModel_ = nullptr;
 
 	std::unique_ptr<CollisionManager> collisionManager_;
 
