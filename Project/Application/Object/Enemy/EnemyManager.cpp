@@ -191,6 +191,8 @@ void EnemyManager::LoadEnemyData()
 					static_cast<IEnemyEmitter*>(it->get())->InitializeEmitter(data.rotateSpeed);
 					static_cast<IEnemyEmitter*>(it->get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
 					
+					//static_cast<IEnemyEmitter*>(it->get())->Edit(data);
+
 					edited = true;
 
 					break;
