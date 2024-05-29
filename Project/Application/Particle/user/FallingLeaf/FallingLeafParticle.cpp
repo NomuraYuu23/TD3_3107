@@ -33,10 +33,10 @@ void FallingLeafParticle::Initialize(ParticleDesc* particleDesc)
 
 	// 位置のランダム変数を生成
 	Vector3 positionMax = { particleDesc->position.x + 50.0f,
-							particleDesc->position.y + 25.0f,
+							particleDesc->position.y + 27.5f,
 							particleDesc->position.z + 5.0f };
 	Vector3 positionMin = { particleDesc->position.x - 10.0f,
-							particleDesc->position.y + 27.5f,
+							particleDesc->position.y + 25.0f,
 							particleDesc->position.z - 5.0f };
 	std::uniform_real_distribution<float> randomPostionX(positionMin.x, positionMax.x);
 	std::uniform_real_distribution<float> randomPostionY(positionMin.y, positionMax.y);
