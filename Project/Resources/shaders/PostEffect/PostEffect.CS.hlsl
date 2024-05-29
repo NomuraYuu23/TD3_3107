@@ -1059,11 +1059,6 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 		output.rgba = sourceImage0[indexTmp].rgba;
 	}
 
-	// グレイスケール
-	if (gComputeConstants.executionFlag & 8) {
-		output = GrayScale(output, indexTmp);
-	}
-
 	// モーションブラー竹槍 最後
 	if (( gComputeConstants.executionFlag & 16 ) && 
 		!(gVelocityConstants0.values.x == 0 &&
@@ -1126,6 +1121,11 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 			output = float32_t4(col, min(blurAlphaSum, 1.0f));
 		}
 
+	}
+
+	// グレイスケール
+	if (gComputeConstants.executionFlag & 8) {
+		output = GrayScale(output, indexTmp);
 	}
 
 	return output;
