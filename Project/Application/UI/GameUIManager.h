@@ -38,6 +38,8 @@ private: // プライベートなサブクラス
 		AimImageTex,
 		ThrowTextTex,
 		ReturnTextTex,
+		HPGageTex,
+		HPGageFrameTex,
 		indexCount,	// インデックス数管理用
 	};
 
@@ -49,7 +51,6 @@ private: // プライベートなサブクラス
 		LeftStickBackSprite, // 左スティック背景用
 		LeftStickSprite, // 左スティック用
 		DashSprite,		// ダッシュ画像
-		//AButtonSprite,	 // Aボタン用
 		LBButtonSprite,  // LBボタン用
 		JumpSprite,		// ジャンプ画像
 		RightStickBackSprite, // 右スティック背景用
@@ -57,6 +58,8 @@ private: // プライベートなサブクラス
 		AimSprite,		// エイム画像
 		RBButtonSprite, // RBボタン用
 		TextSprite,		// テキスト用
+		HPGageSprite,	 // ゲージ本体
+		HPGageFrameSprite, // ゲージ背景
 		spriteCount, // スプライト数用
 	};
 
@@ -97,6 +100,12 @@ public: // アクセッサ等
 	/// <param name="isGround">接地状態</param>
 	void SetIsGround(bool& isGround) { isGrounded_ = isGround; }
 
+	/// <summary>
+	/// HP減少関数
+	/// </summary>
+	/// <param name="currentHP">現在HP</param>
+	void DefHP(const int currentHP);
+
 private: // プライベートなメンバ関数
 
 	/// <summary>
@@ -128,6 +137,11 @@ private: // プライベートなメンバ関数
 	/// 槍投げに使用するボタンの更新関数
 	/// </summary>
 	void ThrowButtonUIUpdate();
+
+	/// <summary>
+	/// HPに関するUIの更新関数
+	/// </summary>
+	void HPUIUpdate();
 
 private: // メンバ変数
 
@@ -176,5 +190,8 @@ private: // 右スティック用変数群
 	// 槍投げUI色
 	Vector4 rStickUIColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	Vector4 throwUIColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+private: // hp用変数群
+
 };
 

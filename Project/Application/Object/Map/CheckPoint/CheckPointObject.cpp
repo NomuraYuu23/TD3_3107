@@ -43,30 +43,6 @@ void CheckPointObject::Update()
 			currentTime_ = stagingTime_;
 		}
 	}
-	else { // 通過していない場合
-		// チェックポイント番号が一致している場合通過下判定とする
-		if (checkPointManager_->GetCheckNumber() == checkNum_ + 1) {
-			// 通過
-			isPassed_ = true;
-
-			// 生成座標、および発生レンジ設定
-			EulerTransform t = worldtransform_.transform_;
-			t.translate.z -= 0.5f;
-			t.scale = { 1.5f, 3.0f };
-
-			// 煙パーティクル
-			EmitterDesc desc;
-			desc.transform = &t;
-			desc.instanceCount = 3;
-			desc.frequency = 0.15f;
-			desc.lifeTime = stagingTime_;
-			desc.velocity = { 0.1f, 0.1f, 0.0f };
-			desc.particleModelNum = kSmoke;
-			desc.paeticleName = kSmokePaticle;
-
-			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
-		}
-	}
 
 #endif // !_DEBUG
 
@@ -113,6 +89,33 @@ void CheckPointObject::OnCollision(ColliderParentObject2D target)
 {
 	// 衝突時に書き換えの処理呼び出し（これより後の値だった場合書き換えない
 	checkPointManager_->CheckPointJudge(worldtransform_.GetWorldPosition(), checkNum_);
+
+#ifndef _DEBUG
+
+	// 通過した場合再生とする
+	if (!isPassed_) {
+		// 通過
+		isPassed_ = true;
+
+		// 生成座標、および発生レンジ設定
+		EulerTransform t = worldtransform_.transform_;
+		t.translate.z -= 0.5f;
+		t.scale = { 1.5f, 3.0f };
+
+		// 煙パーティクル
+		EmitterDesc desc;
+		desc.transform = &t;
+		desc.instanceCount = 3;
+		desc.frequency = 0.15f;
+		desc.lifeTime = stagingTime_;
+		desc.velocity = { 0.1f, 0.1f, 0.0f };
+		desc.particleModelNum = kSmoke;
+		desc.paeticleName = kSmokePaticle;
+
+		ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+	}
+
+#endif // !_DEBUG
 }
 
 void CheckPointObject::Setting(const CheckPointData& data)

@@ -2,6 +2,7 @@
 #include "../../Player.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/Math/Ease.h"
+#include "../../../../UI/GameUIManager.h"
 
 void PlayerHitManager::Initialize(Player* player)
 {
@@ -95,6 +96,10 @@ void PlayerHitManager::OnHit(uint32_t decrement)
 
 		// HP削る
 		hp_.current -= decrement;
+
+		// UIマネージャーにHPを減らすように設定
+		player_->GetUIManager()->DefHP(hp_.current);
+
 		// 死亡処理
 		if (hp_.current <= 0) {
 			player_->SetIsDead(true);

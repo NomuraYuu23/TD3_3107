@@ -34,6 +34,9 @@ void GameUIManager::Update()
 
 	// 槍投げUIの更新
 	ThrowButtonUIUpdate();
+
+	// HPUIの更新
+	HPUIUpdate();
 }
 
 void GameUIManager::Draw()
@@ -99,6 +102,7 @@ void GameUIManager::DisplayImGui()
 			ImGui::TreePop();
 		}
 	}
+
 	ImGui::End();
 }
 
@@ -124,6 +128,8 @@ void GameUIManager::LoadTexture()
 	texHandles_.insert({ AimImageTex, TextureManager::Load("Resources/UI/Game/Aim.png", dxCommon_, texHandleManager_) });	 // エイム画像
 	texHandles_.insert({ ThrowTextTex, TextureManager::Load("Resources/UI/Game/ThrowSpearText.png", dxCommon_, texHandleManager_) });	 // 投げるテキスト画像
 	texHandles_.insert({ ReturnTextTex, TextureManager::Load("Resources/UI/Game/ReturnSpearText.png", dxCommon_, texHandleManager_) });	 // 戻るテキスト画像
+	texHandles_.insert({ HPGageTex, TextureManager::Load("Resources/UI/Game/HealthGage.png", dxCommon_, texHandleManager_) });	 // HP画像
+	texHandles_.insert({ HPGageFrameTex, TextureManager::Load("Resources/UI/Game/HealthGageFrame.png", dxCommon_, texHandleManager_) });	 // HPフレーム画像
 }
 
 void GameUIManager::CreateSprite()
@@ -154,13 +160,6 @@ void GameUIManager::CreateSprite()
 	setSize = { 96.0f, 96.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
-
-	//uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // Aボタン用
-	//uiSprites_.back().reset(Sprite::Create(texHandles_[AButtonNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
-	//setPosition = { 60.0f, 635.0f };
-	//setSize = { 64.0f, 64.0f };
-	//uiSprites_.back()->SetPosition(setPosition);
-	//uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // LBボタン用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[LeftThumbNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
@@ -210,6 +209,21 @@ void GameUIManager::CreateSprite()
 	setSize = { 256.0f, 64.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
+	
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ゲージ用
+	uiSprites_.back().reset(Sprite::Create(texHandles_[HPGageTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 1050.0f, 60.0f };
+	setSize = { 384.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ゲージフレーム用
+	uiSprites_.back().reset(Sprite::Create(texHandles_[HPGageFrameTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 1050.0f, 60.0f };
+	setSize = { 384.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	
 
 }
 
@@ -314,4 +328,19 @@ void GameUIManager::ThrowButtonUIUpdate()
 	}
 	uiSprites_[RBButtonSprite]->SetColor(throwUIColor_);
 	uiSprites_[TextSprite]->SetColor(throwUIColor_);
+}
+
+void GameUIManager::HPUIUpdate()
+{
+	// ImGuiで動かす場合以外は必要ないのでデバッグのみ
+	#ifdef _DEBUG
+
+	
+
+	#endif // _DEBUG
+}
+
+void GameUIManager::DefHP(const int currentHP)
+{
+	
 }

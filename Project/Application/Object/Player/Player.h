@@ -69,6 +69,18 @@ public: // アクセッサ
 
 	SlowEffect* GetSlowEffect() { return slowEffect_.get(); }
 
+	/// <summary>
+	/// 現在体力ゲッター
+	/// </summary>
+	/// <returns>プレイヤーの現在体力</returns>
+	int32_t GetCurrentHealth() { return hpManager_.GetCurrentHealth(); }
+
+	/// <summary>
+	/// 現在体力ゲッター
+	/// </summary>
+	/// <returns>プレイヤーの現在体力</returns>
+	int32_t GetMaxHealth() { return hpManager_.GetMaxHealth(); }
+
 public: // メンバ関数
 	/// <summary>
 	/// ステートの変更
@@ -182,6 +194,11 @@ public:
 	/// </summary>
 	/// <param name="uiManager">UIマネージャー</param>
 	void SetUIManager(GameUIManager* uiManager) { uiManager_ = uiManager; }
+	/// <summary>
+	/// UIマネージャーゲッター
+	/// </summary>
+	/// <returns>UIマネージャー</returns>
+	GameUIManager* GetUIManager() { return uiManager_; }
 
 	bool IsNowAssistDash() { return assistDash_.IsFallslowActive(); }
 	void EndAssistDash() { assistDash_.SlowCancel(); }
