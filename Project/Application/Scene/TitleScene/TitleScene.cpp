@@ -4,6 +4,9 @@
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/Math/Ease.h"
 #include "../../../Engine/3D/ModelDraw.h"
+#include "../../../Engine/Particle/ParticleManager.h"
+#include "../../Particle/EmitterName.h"
+#include "../../../Engine//Math/DeltaTime.h"
 
 TitleScene::~TitleScene()
 {
@@ -33,19 +36,57 @@ void TitleScene::Initialize()
 		0.0f, 0.0f, -35.0f };
 	camera_.SetTransform(baseCameraTransform);
 
+	//パーティクル
+	particleManager_ = ParticleManager::GetInstance();
+	particleManager_->Finalize();
+	std::array<Model*, ParticleModelIndex::kCountofParticleModelIndex> particleModel;
+	particleModel[ParticleModelIndex::kUvChecker] = particleUvcheckerModel_.get();
+	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
+	particleModel[ParticleModelIndex::kBambooLeaf] = particleLeafModel_.get();
+	particleModel[ParticleModelIndex::kSpearLeaf] = particleSpearLeafModel_.get();
+	particleModel[ParticleModelIndex::kSmoke] = particleSmokeModel_.get();
+	particleManager_->ModelCreate(particleModel);
+
 	// スカイドーム
+	skydomeModel_->SetTextureHandle(skyDomeTexHandle_, 0);
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
 
 	// スプライト生成
 	titleSprite_.reset(Sprite::Create(logoTexHandle_, { 640.0f,270.0f }, { 1.0f,1.0f,1.0f,1.0f }));
-	buttonSprite_.reset(Sprite::Create(buttonTexHandle_, { 640.0f,480.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	buttonSprite_.reset(Sprite::Create(buttonTexHandle_, { 640.0f,550.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 
-	titleSprite_->SetAnchorPoint({ 0.5f, 0.5f });
-	buttonSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+	// 演出用座標を初期化
+	prevPos_ = buttonSprite_->GetPosition();
+	postPos_ = { prevPos_.x, prevPos_.y + 10.0f };
 
 	// タイトルシーン用BGMの再生
 	audioManager_->PlayWave(kTitleSceneBGM);
+
+	// デバック以外の場合行う
+#ifndef _DEBUG
+
+	// トランスフォーム生成
+	emitTransform_ = std::make_unique<EulerTransform>();
+	emitTransform_->translate = {0.0f, 0.0f, 0.0f};
+	emitTransform_->scale = {1.0f, 1.0f, 1.0f };
+	emitTransform_->rotate = { 0.0f, 0.0f, 0.0f };
+	emitTransform_->translate.y -= 15.0f;
+	emitTransform_->translate.z += 5.0f;
+
+	// ここで環境パーティクルの再生を行う
+	fallingLeafDesc_.transform = emitTransform_.get();
+	fallingLeafDesc_.instanceCount = 3;
+	fallingLeafDesc_.frequency = 0.25f;
+	fallingLeafDesc_.lifeTime = 5.0f;
+	fallingLeafDesc_.particleModelNum = kBambooLeaf;
+	fallingLeafDesc_.paeticleName = kFallingLeafParticle;
+	fallingLeafDesc_.velocity = { -1.0f, -1.0f, 0.0f };
+
+	// 無限生成エミッタで生成し続ける
+	ParticleManager::GetInstance()->MakeEmitter(&fallingLeafDesc_, EmitterName::kInfiniteEmitter);
+
+#endif // !_DEBUG
 
 }
 
@@ -79,6 +120,41 @@ void TitleScene::Update()
 	
 	// スカイドーム
 	skydome_->Update();
+
+	/// ボタンスプライト用演出
+	// 戻すか
+	if (isReturn_) {
+		if (currentButtonStagingTime_ < ButtonStagingTime_) {
+			Vector2 pos = Ease::Easing(Ease::EaseName::EaseInOutQuad, prevPos_, postPos_, (currentButtonStagingTime_ / ButtonStagingTime_));
+
+			buttonSprite_->SetPosition(pos);
+
+			// 経過秒数分加算
+			currentButtonStagingTime_ += kDeltaTime_;
+		}
+		else {
+			currentButtonStagingTime_ = 0.0f;
+			isReturn_ = false;
+		}
+
+	}else{
+		if (currentButtonStagingTime_ < ButtonStagingTime_) {
+			Vector2 pos = Ease::Easing(Ease::EaseName::EaseInOutQuad, postPos_, prevPos_, (currentButtonStagingTime_ / ButtonStagingTime_));
+
+			buttonSprite_->SetPosition(pos);
+
+			// 経過秒数分加算
+			currentButtonStagingTime_ += kDeltaTime_;
+		}
+		else {
+			currentButtonStagingTime_ = 0.0f;
+			isReturn_ = true;
+		}
+	}
+
+
+	//パーティクル
+	particleManager_->Update(camera_);
 
 }
 
@@ -116,6 +192,9 @@ void TitleScene::Draw()
 
 	ModelDraw::PostDraw();
 
+	// パーティクルはここ
+	particleManager_->Draw(camera_.GetViewProjectionMatrix(), dxCommon_->GetCommadList());
+
 #pragma region 前景スプライト描画
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon_->GetCommadList());
@@ -146,6 +225,12 @@ void TitleScene::ImguiDraw()
 
 void TitleScene::ModelCreate()
 {
+	// パーティクル
+	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.gltf", dxCommon_, textureHandleManager_.get()));
+	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_, textureHandleManager_.get()));
+	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_, textureHandleManager_.get()));
+	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_, textureHandleManager_.get()));
+	particleSmokeModel_.reset(Model::Create("Resources/Particle/Smoke", "Smoke.obj", dxCommon_, textureHandleManager_.get()));
 
 	// スカイドーム
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
@@ -154,6 +239,8 @@ void TitleScene::ModelCreate()
 
 void TitleScene::TextureLoad()
 {
+
+	skyDomeTexHandle_ = TextureManager::Load("Resources/Model/SkyDome/SkyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	logoTexHandle_ = TextureManager::Load("Resources/UI/Title/TitleLogo.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	buttonTexHandle_ = TextureManager::Load("Resources/UI/Title/Button.png", DirectXCommon::GetInstance(), textureHandleManager_.get());

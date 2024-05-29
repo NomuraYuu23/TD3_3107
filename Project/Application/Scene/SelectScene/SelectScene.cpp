@@ -46,7 +46,7 @@ void SelectScene::Update()
 	// スカイドーム
 	skydome_->Update();
 
-	if (requestSceneNo_ == kGame || isBeingReset_) {
+	if (requestSceneNo_ == kGame || requestSceneNo_ == kTitle || isBeingReset_) {
 		resetScene_ = false;
 		// BGM音量下げる
 		if (isDecreasingVolume) {
