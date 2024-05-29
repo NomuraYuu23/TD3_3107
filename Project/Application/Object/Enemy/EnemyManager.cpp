@@ -6,13 +6,13 @@
 #include "../../AllSceneObject/StageNumberManager.h"
 #include <iterator>
 
-void EnemyManager::Initialize(Model* model, std::vector<UINT>* texture)
+void EnemyManager::Initialize(Model* model, std::vector<UINT>* texture, std::vector<UINT>* chaseTexture)
 {
 	model_ = model;
 
 	SingleEnemyRegister::ResetSerialNumber();
 
-	CreateSingleEnemy(texture);
+	CreateSingleEnemy(texture, chaseTexture);
 	////CreateEmitter({ {-5.0f,10.0f},7.0f,5 });
 	//CreateEmitter({ {0.0f,10.0f},7.0f,5 });
 	//CreateEmitter({ {-20.0f,10.0f},7.0f,3 });
@@ -325,7 +325,7 @@ void EnemyManager::RegisterChaseEnemy(const ChaseEnemyData& data, const std::str
 	//enemyEmitters_.begin()->get()->GetObjects()->push_back(std::move(obj));
 }
 
-void EnemyManager::CreateSingleEnemy(std::vector<UINT>* texture)
+void EnemyManager::CreateSingleEnemy(std::vector<UINT>* texture, std::vector<UINT>* chaseTexture)
 {
 	// 単体管理用の初期化
 	singleEnemys_ = std::make_unique<SingleEnemyRegister>();
@@ -340,7 +340,7 @@ void EnemyManager::CreateSingleEnemy(std::vector<UINT>* texture)
 	chaseEnemys_ = std::make_unique<SingleEnemyRegister>();
 	chaseEnemys_->Initialize(model_);
 	// テクスチャの設定
-	static_cast<SingleEnemyRegister*>(chaseEnemys_.get())->SetTexture(texture);
+	static_cast<SingleEnemyRegister*>(chaseEnemys_.get())->SetTexture(chaseTexture);
 	// リストにプッシュ
 	enemyEmitters_.push_back(std::move(chaseEnemys_));
 

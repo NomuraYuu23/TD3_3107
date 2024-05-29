@@ -122,13 +122,13 @@ void GameScene::Initialize() {
 	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get());
 
 	// 敵管理クラス
-	singleTextures_.clear();
-	singleTextures_.push_back(singleEnemyTexture_);
 	enemyTextures_[0].clear();
 	enemyTextures_[0].push_back(singleEnemyTexture_);
+	enemyTextures_[2].clear();
+	enemyTextures_[2].push_back(chaseTexture_);
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
-	enemyManager_->Initialize(enemyModel_.get(), &enemyTextures_[0]);
+	enemyManager_->Initialize(enemyModel_.get(), &enemyTextures_[0], &enemyTextures_[2]);
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -606,6 +606,8 @@ void GameScene::TextureLoad()
 	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	singleEnemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyBlueTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+
+	chaseTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	//uiTextureHandles_ = {
 
 	//};
