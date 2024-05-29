@@ -44,13 +44,9 @@ void TitleScene::Initialize()
 	titleSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	buttonSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 
-	// デバッグ以外の場合行う
-	#ifndef _DEBUG
-
 	// タイトルシーン用BGMの再生
 	audioManager_->PlayWave(kTitleSceneBGM);
 
-	#endif // !_DEBUG
 }
 
 void TitleScene::Update()

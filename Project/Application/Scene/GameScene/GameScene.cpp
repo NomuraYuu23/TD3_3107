@@ -175,13 +175,8 @@ void GameScene::Initialize() {
 	fm->SetNear(50.0f);
 	fm->SetFar(2500.0f);
 
-	// デバッグ以外の場合行う
-	#ifndef _DEBUG
-
 	// ゲームシーン用BGMの再生
 	audioManager_->PlayWave(kGameSceneBGM);
-
-	#endif // !_DEBUG
 
 	// Jsonデータのクラス
 #ifdef _DEBUG
@@ -614,18 +609,24 @@ void GameScene::TextureLoad()
 void GameScene::LowerVolumeBGM()
 {
 
-	const uint32_t startHandleIndex = 3;
+	const uint32_t startHandleIndex = 2;
 
-	float decreasingVolume = 1.0f / 60.0f;
-	float volume = audioManager_->GetPlayingSoundDatas()[kGameSceneBGM].volume_ - decreasingVolume;
-	if (volume < 0.0f) {
-		volume = 0.0f;
-		audioManager_->StopWave(kGameSceneBGM);
-		isDecreasingVolume = false;
-	}
-	else {
-		audioManager_->SetPlayingSoundDataVolume(kGameSceneBGM, volume);
-		audioManager_->SetVolume(kGameSceneBGM, audioManager_->GetPlayingSoundDatas()[kGameSceneBGM].volume_);
+	uint32_t index = kGameSceneBGM + startHandleIndex;
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		if (audioManager_->GetPlayingSoundDatas()[i].handle_ == index) {
+			float decreasingVolume = 1.0f / 60.0f;
+			float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
+			if (volume < 0.0f) {
+				volume = 0.0f;
+				audioManager_->StopWave(i);
+				isDecreasingVolume = false;
+			}
+			else {
+				audioManager_->SetPlayingSoundDataVolume(i, volume);
+				audioManager_->SetVolume(i, audioManager_->GetPlayingSoundDatas()[i].volume_);
+			}
+		}
 	}
 
 }

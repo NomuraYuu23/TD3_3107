@@ -35,13 +35,8 @@ void SelectScene::Initialize()
 	fogManager->SetNear(0.01f);
 	fogManager->SetFar(0.0f);
 
-	// デバッグ以外の場合行う
-#ifndef _DEBUG
-
 	// ステージセレクトシーン用BGMの再生
 	audioManager_->PlayWave(kStageSelectSceneBGM);
-
-#endif // !_DEBUG
 
 }
 
@@ -138,17 +133,24 @@ void SelectScene::TextureLoad()
 
 void SelectScene::LowerVolumeBGM()
 {
-	const uint32_t startHandleIndex = 3;
+	const uint32_t startHandleIndex = 1;
 
-	float decreasingVolume = 1.0f / 60.0f;
-	float volume = audioManager_->GetPlayingSoundDatas()[kStageSelectSceneBGM].volume_ - decreasingVolume;
-	if (volume < 0.0f) {
-		volume = 0.0f;
-		audioManager_->StopWave(kStageSelectSceneBGM);
-		isDecreasingVolume = false;
+	uint32_t index = kStageSelectSceneBGM + startHandleIndex;
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		if (audioManager_->GetPlayingSoundDatas()[i].handle_ == index) {
+			float decreasingVolume = 1.0f / 60.0f;
+			float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
+			if (volume < 0.0f) {
+				volume = 0.0f;
+				audioManager_->StopWave(i);
+				isDecreasingVolume = false;
+			}
+			else {
+				audioManager_->SetPlayingSoundDataVolume(i, volume);
+				audioManager_->SetVolume(i, audioManager_->GetPlayingSoundDatas()[i].volume_);
+			}
+		}
 	}
-	else {
-		audioManager_->SetPlayingSoundDataVolume(kStageSelectSceneBGM, volume);
-		audioManager_->SetVolume(kStageSelectSceneBGM, audioManager_->GetPlayingSoundDatas()[kStageSelectSceneBGM].volume_);
-	}
+
 }
