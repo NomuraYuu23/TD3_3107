@@ -24,9 +24,12 @@ void CheckPointObject::Initialize(Model* model)
 
 void CheckPointObject::Update()
 {
+	// 演出はデバッグ以外でのみ行う
+#ifndef _DEBUG
+
 	// 通過している場合
 	if (isPassed_) {
-		
+
 		passedModelTransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutBack, { 1.0f, 0.0f, 1.0f }, { 1.0f, 0.75f, 1.0f }, (currentTime_ / stagingTime_));
 		worldtransform_.transform_.scale = Ease::Easing(Ease::EaseName::EaseOutQuad, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, (currentTime_ / stagingTime_));
 		float a = Ease::Easing(Ease::EaseName::EaseOutQuad, 1.0f, 0.0f, (currentTime_ / stagingTime_));
@@ -46,21 +49,26 @@ void CheckPointObject::Update()
 			// 通過
 			isPassed_ = true;
 
+			// 生成座標、および発生レンジ設定
 			EulerTransform t = worldtransform_.transform_;
-			t.translate.z -= 1.0f;
+			t.translate.z -= 0.5f;
+			t.scale = { 1.5f, 3.0f };
 
-			// 走りパーティクル
+			// 煙パーティクル
 			EmitterDesc desc;
 			desc.transform = &t;
-			desc.instanceCount = 5;
-			desc.frequency = 0.1f;
+			desc.instanceCount = 3;
+			desc.frequency = 0.15f;
 			desc.lifeTime = stagingTime_;
-			desc.particleModelNum = kCircle;
-			desc.paeticleName = kGoalParticle;
+			desc.velocity = { 0.1f, 0.1f, 0.0f };
+			desc.particleModelNum = kSmoke;
+			desc.paeticleName = kSmokePaticle;
 
 			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 		}
 	}
+
+#endif // !_DEBUG
 
 	// 座標は合わせ続ける
 	passedModelTransform_.transform_.translate = worldtransform_.transform_.translate;

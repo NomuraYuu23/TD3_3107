@@ -5,6 +5,7 @@
 #include "user/FallingLeaf/FallingLeafParticle.h"
 #include "user/SpearJump/SpearJumpParticle.h"
 #include "user/GoalParticle/GoalParticle.h"
+#include "user/SmokeParticle/SmokeParticle.h"
 #include <cassert>
 
 MakeParticle* MakeParticle::GetInstance()
@@ -45,6 +46,10 @@ IParticle* MakeParticle::Run(ParticleDesc* particleDesc, uint32_t paeticleName)
 		break;
 	case kGoalParticle:
 		particle = new GoalParticle();
+		particle->Initialize(particleDesc);
+		break;
+	case kSmokePaticle:
+		particle = new SmokeParticle();
 		particle->Initialize(particleDesc);
 		break;
 	case kCountOfParticleName:

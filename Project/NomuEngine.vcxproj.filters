@@ -217,6 +217,7 @@
     <ClCompile Include="Application\Object\Enemy\System\DetectionRay.cpp" />
     <ClCompile Include="Engine\3D\DrawLine.cpp" />
     <ClCompile Include="Engine\SkyBox\SkyBox.cpp" />
+    <ClCompile Include="Application\Particle\user\SmokeParticle\SmokeParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -487,6 +488,7 @@
     <ClInclude Include="Engine\3D\LineForGPU.h" />
     <ClInclude Include="Engine\SkyBox\SkyBox.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\DropState.h" />
+    <ClInclude Include="Application\Particle\user\SmokeParticle\SmokeParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
