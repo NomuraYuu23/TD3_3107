@@ -7,11 +7,8 @@ void PlayerHitManager::Initialize(Player* player)
 {
 	player_ = player;
 
-	player_->SetIsDead(false);
-
-	hp_.max = (uint32_t)GlobalVariables::GetInstance()->GetIntValue("Player", "HitPoint");
-	hp_.current = hp_.max;
-	hp_.decreValue_ = 1;
+	// HP関係の初期化
+	Respawn();
 
 	invMaxFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "HitInvisibleFrame");
 	defaultData_ = { 3.0f,{4.0f,0},{-3.0f,0},{1.5f,-1.5f},false,0 };
@@ -100,6 +97,14 @@ void PlayerHitManager::OnHit(uint32_t decrement)
 			player_->SetIsDead(true);
 		}
 	}
+}
+
+void PlayerHitManager::Respawn()
+{
+	player_->SetIsDead(false);
+	hp_.max = (uint32_t)GlobalVariables::GetInstance()->GetIntValue("Player", "HitPoint");
+	hp_.current = hp_.max;
+	hp_.decreValue_ = 1;
 }
 
 void PlayerHitManager::ImGuiDraw()

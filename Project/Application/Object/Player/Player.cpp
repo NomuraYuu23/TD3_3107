@@ -762,7 +762,9 @@ void Player::Reset(const Vector3& position)
 	velocity_ = {};
 	worldtransform_.UpdateMatrix();
 	isGround_ = true;
-	isDead_ = false;
+
+	// 復活の処理
+	hpManager_.Respawn();
 
 	weapon_->ChangeRequest(Weapon::StateName::kHold);
 
