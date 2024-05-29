@@ -316,6 +316,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Particle\user\SpearCatch\SpearCatchParticle.cpp" />
     <ClCompile Include="Application\Particle\user\SpearJump\SpearJumpParticle.cpp" />
     <ClCompile Include="Application\Particle\user\SmokeParticle\SmokeParticle.cpp" />
+    <ClCompile Include="Application\AudioManager\StageSelectAudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -586,6 +587,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Particle\user\GoalParticle\GoalParticle.h" />
     <ClInclude Include="Application\Particle\user\SmokeParticle\SmokeParticle.h" />
     <ClInclude Include="Application\Particle\user\ImapledParticle\ImpaledParticle.h" />
+    <ClInclude Include="Application\AudioManager\StageSelectAudioManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

@@ -43,6 +43,14 @@ void TitleScene::Initialize()
 
 	titleSprite_->SetAnchorPoint({ 0.5f, 0.5f });
 	buttonSprite_->SetAnchorPoint({ 0.5f, 0.5f });
+
+	// デバッグ以外の場合行う
+	#ifndef _DEBUG
+
+	// タイトルシーン用BGMの再生
+	audioManager_->PlayWave(kTitleSceneBGM);
+
+	#endif // !_DEBUG
 }
 
 void TitleScene::Update()
@@ -58,9 +66,13 @@ void TitleScene::Update()
 		requestSceneNo_ = kSelect;
 	}
 
-	// BGM音量下げる
-	if (requestSceneNo_ == kTutorial && isDecreasingVolume) {
-		LowerVolumeBGM();
+	if (requestSceneNo_ == kSelect || isBeingReset_) {
+		resetScene_ = false;
+		// BGM音量下げる
+		if (isDecreasingVolume) {
+			LowerVolumeBGM();
+		}
+		return;
 	}
 	
 	// カメラ
@@ -155,20 +167,18 @@ void TitleScene::TextureLoad()
 void TitleScene::LowerVolumeBGM()
 {
 
-	//for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
-	//	if (audioManager_->GetPlayingSoundDatas()[i].handle_ == kTitleAudioNameIndexBGM) {
-	//		float decreasingVolume = 1.0f / 60.0f;
-	//		float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
-	//		if (volume < 0.0f) {
-	//			volume = 0.0f;
-	//			audioManager_->StopWave(i);
-	//			isDecreasingVolume = false;
-	//		}
-	//		else {
-	//			audioManager_->SetPlayingSoundDataVolume(i, volume);
-	//			audioManager_->SetVolume(i, audioManager_->GetPlayingSoundDatas()[i].volume_);
-	//		}
-	//	}
-	//}
+	const uint32_t startHandleIndex = 3;
+
+	float decreasingVolume = 1.0f / 60.0f;
+	float volume = audioManager_->GetPlayingSoundDatas()[kTitleSceneBGM].volume_ - decreasingVolume;
+	if (volume < 0.0f) {
+		volume = 0.0f;
+		audioManager_->StopWave(kTitleSceneBGM);
+		isDecreasingVolume = false;
+	}
+	else {
+		audioManager_->SetPlayingSoundDataVolume(kTitleSceneBGM, volume);
+		audioManager_->SetVolume(kTitleSceneBGM, audioManager_->GetPlayingSoundDatas()[kTitleSceneBGM].volume_);
+	}
 
 }

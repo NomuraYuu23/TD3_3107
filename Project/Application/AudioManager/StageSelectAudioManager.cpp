@@ -1,15 +1,15 @@
-#include "TitleAudioManager.h"
+#include "StageSelectAudioManager.h"
 
-TitleAudioManager::~TitleAudioManager()
+StageSelectAudioManager::~StageSelectAudioManager()
 {
 }
 
-void TitleAudioManager::Initialize()
+void StageSelectAudioManager::Initialize()
 {
 	AudioManager::Initialize();
 
 	// 全体の初期設定
-	for (uint32_t i = 0; i < TitleAudioNameIndex::kTitleAudioNameIndexOfCount; ++i) {
+	for (uint32_t i = 0; i < StageSelectAudioNameIndex::kStageSelectAudioNameIndexOfCount; ++i) {
 		audioDatas_[i].handle_ = audio_->LoadAudio(audioNames_[i]);
 		audioDatas_[i].isLoop_ = false;
 		audioDatas_[i].volume_ = 1.0f;
@@ -17,16 +17,15 @@ void TitleAudioManager::Initialize()
 	}
 
 	// 個別設定
-	audioDatas_[kTitleSceneBGM].isLoop_ = true; // ゲームシーンのBGMはループ
+	audioDatas_[kStageSelectSceneBGM].isLoop_ = true; // ゲームシーンのBGMはループ
 }
 
-void TitleAudioManager::Update()
+void StageSelectAudioManager::Update()
 {
 }
 
-void TitleAudioManager::PlayWave(uint32_t audioIndex)
+void StageSelectAudioManager::PlayWave(uint32_t audioIndex)
 {
-
 	float volume = 0.0f;
 	if (audioDatas_[audioIndex].isBGM_) {
 		volume = audioDatas_[audioIndex].volume_ * masterVolume_ * BGMVolume_;
@@ -53,5 +52,4 @@ void TitleAudioManager::PlayWave(uint32_t audioIndex)
 			return;
 		}
 	}
-
 }

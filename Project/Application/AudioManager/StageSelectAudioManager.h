@@ -1,19 +1,17 @@
 #pragma once
 #include "../../Engine/Audio/AudioManager.h"
 
-enum TitleAudioNameIndex {
-	kTitleAudioNameIndexSample, // サンプル
-	kTitleSceneBGM,
-	kTitleAudioNameIndexOfCount // 数
+enum StageSelectAudioNameIndex {
+	kStageSelectAudioNameIndexSample, // サンプル
+	kStageSelectSceneBGM,
+	kStageSelectAudioNameIndexOfCount // 数
 };
 
-class TitleAudioManager : public AudioManager
+class StageSelectAudioManager : public AudioManager
 {
-
-
 public: // メンバ関数
 
-	~TitleAudioManager();
+	~StageSelectAudioManager();
 
 	/// <summary>
 	/// 初期化
@@ -35,13 +33,13 @@ public: // メンバ関数
 private: // メンバ変数
 
 	// データ
-	std::array<AudioData, TitleAudioNameIndex::kTitleAudioNameIndexOfCount> audioDatas_;
+	std::array<AudioData, StageSelectAudioNameIndex::kStageSelectAudioNameIndexOfCount> audioDatas_;
 
 	// ファイル名
-	std::array<const std::string, TitleAudioNameIndex::kTitleAudioNameIndexOfCount> audioNames_ =
+	std::array<const std::string, StageSelectAudioNameIndex::kStageSelectAudioNameIndexOfCount> audioNames_ =
 	{
 		"default/Alarm01.mp3",
-		"Audio/BGM/GameSceneBGM.mp3",
+		"Audio/BGM/StageSelectSceneBGM.mp3",
 	};
 
 };
