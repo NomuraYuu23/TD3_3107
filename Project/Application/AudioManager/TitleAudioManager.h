@@ -41,7 +41,7 @@ private: // メンバ変数
 	std::array<const std::string, TitleAudioNameIndex::kTitleAudioNameIndexOfCount> audioNames_ =
 	{
 		"default/Alarm01.mp3",
-		"Audio/BGM/GameSceneBGM.mp3",
+		"Audio/BGM/TitleSceneBGM.mp3",
 	};
 
 };
