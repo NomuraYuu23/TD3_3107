@@ -100,12 +100,6 @@ public: // アクセッサ等
 	/// <param name="isGround">接地状態</param>
 	void SetIsGround(bool& isGround) { isGrounded_ = isGround; }
 
-	/// <summary>
-	/// HP減少関数
-	/// </summary>
-	/// <param name="currentHP">現在HP</param>
-	void DefHP(const int currentHP);
-
 private: // プライベートなメンバ関数
 
 	/// <summary>

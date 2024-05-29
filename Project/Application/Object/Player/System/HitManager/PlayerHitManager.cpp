@@ -94,9 +94,6 @@ void PlayerHitManager::OnHit(uint32_t decrement)
 		// HP削る
 		hp_.current -= decrement;
 
-		// UIマネージャーにHPを減らすように設定
-		player_->GetUIManager()->DefHP(hp_.current);
-
 		// 死亡処理
 		if (hp_.current <= 0) {
 			player_->SetIsDead(true);

@@ -2,6 +2,7 @@
 #include "../../../externals/imgui/imgui.h"
 #include "../Object/Player/Player.h"
 #include "../Object/Weapon/Weapon.h"
+#include "../../../Engine/Math/Ease.h"
 
 void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 {
@@ -212,14 +213,15 @@ void GameUIManager::CreateSprite()
 	
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ゲージ用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[HPGageTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
-	setPosition = { 1050.0f, 60.0f };
+	setPosition = { 192.0f - (384.0f / 2.0f), 60.0f };
 	setSize = { 384.0f, 64.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetAnchorPoint({0.0f, 0.5f});
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ゲージフレーム用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[HPGageFrameTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
-	setPosition = { 1050.0f, 60.0f };
+	setPosition = { 192.0f, 60.0f };
 	setSize = { 384.0f, 64.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
@@ -332,15 +334,32 @@ void GameUIManager::ThrowButtonUIUpdate()
 
 void GameUIManager::HPUIUpdate()
 {
-	// ImGuiで動かす場合以外は必要ないのでデバッグのみ
-	#ifdef _DEBUG
+	// 一時変数
+	float size = 0.0f;
+	float texSize = 0.0f;
 
-	
+	if (player_->GetCurrentHealth() >= 0) {
+		switch (player_->GetCurrentHealth())
+		{
+		case 0:
+			texSize = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetTextureSize().x, 0.0f, 0.25f);
+			size = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetSize().x, 0.0f, 0.25f);
+			break;
+		case 1:
+			texSize = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetTextureSize().x, 394.0f, 0.25f);
+			size = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetSize().x, 138.0f, 0.25f);
+			break;
+		case 2:
+			texSize = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetTextureSize().x, 768.0f, 0.25f);
+			size = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetSize().x, 256.0f, 0.25f);
+			break;
+		case 3:
+			texSize = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetTextureSize().x, 1152.0f, 0.25f);
+			size = Ease::Easing(Ease::EaseName::Lerp, uiSprites_[HPGageSprite]->GetSize().x, 384.0f, 0.25f);
+			break;
+		}
+	}
 
-	#endif // _DEBUG
-}
-
-void GameUIManager::DefHP(const int currentHP)
-{
-	
+	uiSprites_[HPGageSprite]->SetTextureSize({ texSize, 192.0f });
+	uiSprites_[HPGageSprite]->SetSize({ size, 64.0f });
 }
