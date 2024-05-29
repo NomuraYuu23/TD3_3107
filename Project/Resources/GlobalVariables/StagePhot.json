@@ -1,7 +1,7 @@
 {
     "StagePhot": {
-        "amplitude": 0.30000001192092896,
-        "fre": 5.0,
+        "amplitude": 10.0,
+        "fre": 2.0,
         "offScreenLeftPos": [
             -960.0,
             432.0
