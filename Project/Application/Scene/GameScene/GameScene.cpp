@@ -41,6 +41,7 @@ void GameScene::Initialize() {
 
 	//パーティクル
 	particleManager_ = ParticleManager::GetInstance();
+	particleManager_->Finalize();
 	std::array<Model*, ParticleModelIndex::kCountofParticleModelIndex> particleModel;
 	particleModel[ParticleModelIndex::kUvChecker] = particleUvcheckerModel_.get();
 	particleModel[ParticleModelIndex::kCircle] = particleCircleModel_.get();
