@@ -113,6 +113,9 @@ void CheckPointObject::OnCollision(ColliderParentObject2D target)
 		desc.paeticleName = kSmokePaticle;
 
 		ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+		// チェックポイント通過音を鳴らす
+		checkPointManager_->GetGameAudioManager()->PlayWave(kPassCheckPoint);
 	}
 
 #endif // !_DEBUG

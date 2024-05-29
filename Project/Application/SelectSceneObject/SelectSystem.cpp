@@ -1,12 +1,12 @@
 #include "SelectSystem.h"
 
-void SelectSystem::Initialize(
-	const std::array<uint32_t, StageNumberManager::kStageMax>& stagePhotTextureHandles,
-	const std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount>& stageUITextureHandles)
+void SelectSystem::Initialize(const std::array<uint32_t, StageNumberManager::kStageMax>& stagePhotTextureHandles, const std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount>& stageUITextureHandles, StageSelectAudioManager* sam)
 {
-
 	// 入力
 	input_ = Input::GetInstance();
+
+	// オーディオマネージャー
+	audioManager_ = sam;
 
 	// 動いているか
 	isMoveRight_ = false;
@@ -34,7 +34,6 @@ void SelectSystem::Initialize(
 	// セッティング
 	stageSelectUI_->SetStageNum();
 	stagePhot_->Setting();
-
 }
 
 void SelectSystem::Update()
@@ -66,6 +65,9 @@ void SelectSystem::Update()
 				StageNumberManager::stageNum_ = 0;
 			}
 			stageSelectUI_->SetStageNum();
+
+			// ステージ選択SE
+			audioManager_->PlayWave(kStageSelectSE);
 		}
 		// 左移動
 		else if (leftStick.x < 0.0f) {
@@ -77,13 +79,20 @@ void SelectSystem::Update()
 				StageNumberManager::stageNum_ = StageNumberManager::kStageMax - 1;
 			}
 			stageSelectUI_->SetStageNum();
+
+			// ステージ選択SE
+			audioManager_->PlayWave(kStageSelectSE);
 		}
 		// ゲームシーンへ
 		else if (input_->PushJoystick(JoystickButton::kJoystickButtonA)) {
+			// ステージ開始SE
+			audioManager_->PlayWave(kStageStartSE);
 			gotoGameScene_ = true;
 		}
 		// タイトルへ
 		if (input_->PushJoystick(JoystickButton::kJoystickButtonBACK)) {
+			// タイトルへ戻るSE
+			audioManager_->PlayWave(kBackTitleSE);
 			gotoTitleScene_ = true;
 		}
 	}

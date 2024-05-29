@@ -3,7 +3,10 @@
 
 enum StageSelectAudioNameIndex {
 	kStageSelectAudioNameIndexSample, // サンプル
-	kStageSelectSceneBGM,
+	kStageSelectSceneBGM, // BGM
+	kStageSelectSE, // 選択SE
+	kStageStartSE, // ステージ開始SE
+	kBackTitleSE, // タイトルへ戻るSE
 	kStageSelectAudioNameIndexOfCount // 数
 };
 
@@ -40,6 +43,9 @@ private: // メンバ変数
 	{
 		"default/Alarm01.mp3",
 		"Audio/BGM/StageSelectSceneBGM.mp3",
+		"Audio/SE/StageSelect.mp3",
+		"Audio/SE/StageStart.mp3",
+		"Audio/SE/BackTitle.mp3",
 	};
 
 };

@@ -58,6 +58,9 @@ void TitleScene::Update()
 
 	if ((input_->TriggerJoystick(JoystickButton::kJoystickButtonA) || input_->TriggerKey(DIK_SPACE)) &&
 		requestSceneNo_ == kTitle) {
+		// ゲーム開始SEの再生
+		audioManager_->PlayWave(kStartSE);
+		
 		// 行きたいシーンへ
 		requestSceneNo_ = kSelect;
 	}

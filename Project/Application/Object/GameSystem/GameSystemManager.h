@@ -2,6 +2,7 @@
 #include "../IObject.h"
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../Map/CheckPoint/CheckPointManager.h"
+#include "../../../Application/AudioManager/GameAudioManager.h"
 
 class GoalObject;
 class Player;
@@ -26,7 +27,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="goalModel"></param>
-	void Initialize(Model* goalModel, Model* checkPointModel, Player* player);
+	void Initialize(Model* goalModel, Model* checkPointModel, Player* player, GameAudioManager* gam);
 	/// <summary>
 	/// 更新
 	/// </summary>

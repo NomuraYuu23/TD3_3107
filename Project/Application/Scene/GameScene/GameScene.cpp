@@ -119,7 +119,7 @@ void GameScene::Initialize() {
 
 	// ゲームシステム
 	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get());
+	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get(), audioManager_.get());
 
 	// 敵管理クラス
 	singleTextures_.clear();

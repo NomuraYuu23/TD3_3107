@@ -4,6 +4,7 @@
 #include "StagePhot.h"
 #include "StageSelectUI.h"
 #include "../AllSceneObject/StageNumberManager.h"
+#include "../../Application/AudioManager/StageSelectAudioManager.h"
 
 class SelectSystem
 {
@@ -15,9 +16,11 @@ public: // 関数
 	/// </summary>
 	/// <param name="stagePhotTextureHandles">ステージの写真ハンドル</param>
 	/// <param name="stageUITextureHandles">UIハンドル</param>
+	/// <param name="sam">オーディオマネージャー</param>
 	void Initialize(
 		const std::array<uint32_t, StageNumberManager::kStageMax>& stagePhotTextureHandles,
-		const std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount>& stageUITextureHandles);
+		const std::array<uint32_t, StageSelectUI::SpriteIndex::kSpriteIndexOfCount>& stageUITextureHandles,
+		StageSelectAudioManager* sam);
 
 	/// <summary>
 	/// 更新処理
@@ -51,6 +54,9 @@ private: // 変数
 	
 	// 入力
 	Input* input_ = nullptr;
+
+	// オーディオマネージャー
+	StageSelectAudioManager* audioManager_ = nullptr;
 
 	// 右に動いているか
 	bool isMoveRight_;
