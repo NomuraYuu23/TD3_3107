@@ -59,7 +59,7 @@ void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)
 void GameSystemManager::GameOverProcess()
 {
 	goal_->SetIsGoal(false);
-	player_->Respawn(checkPointManager_->GetRespawnPosition());
+	player_->Reset(checkPointManager_->GetRespawnPosition());
 	enemyManager_->LoadEnemyData();
 
 }
