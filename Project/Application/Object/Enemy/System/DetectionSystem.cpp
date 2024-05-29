@@ -11,15 +11,18 @@ void DetectionSystem::Initialize(Enemy* enemy)
 void DetectionSystem::Update(bool isRayCollision)
 {
 	if (std::holds_alternative<ChaseEnemyState*>(enemy_->GetState())) {
+		// 壁が間にない場合
 		if (!isRayCollision) {
 			// 追尾フラグ設定
 			isChase_ = ShouldChase(enemy_->GetPlayer()->worldtransform_.GetWorldPosition(), searchLength_);
 		}
 		else {
+			// 追尾キャンセル
 			isChase_ = false;
 		}
 	}
 
+	// 追尾可能状態の処理
 	if (isChase_) {
 		ChaseUpdate();
 	}
@@ -33,6 +36,7 @@ bool DetectionSystem::ShouldChase(const Vector3& target, float searchLength)
 	// 距離の長さ
 	float length = Vector3::Length(playerPosition - enemyPosition);
 
+	// 範囲内かチェック
 	if (length < searchLength) {
 		return true;
 	}
@@ -42,18 +46,19 @@ bool DetectionSystem::ShouldChase(const Vector3& target, float searchLength)
 
 void DetectionSystem::ChaseUpdate()
 {
-
-	Vector3 velocity = enemy_->GetPlayer()->worldtransform_.GetWorldPosition() - enemy_->GetWorldPosition();
+	// 移動方向ベクトル
+	Vector3 moveDirect = enemy_->GetPlayer()->worldtransform_.GetWorldPosition() - enemy_->GetWorldPosition();
 	// 方向
-	enemy_->direction_ = { velocity.x,velocity.y , 0};
+	enemy_->direction_ = { moveDirect.x,moveDirect.y , 0};
+	// 正規化
+	moveDirect = Vector3::Normalize(moveDirect);
 
-	velocity = Vector3::Normalize(velocity);
-
-	float moveRate = 8.0f;
+	// 移動速度
+	float moveRate = GlobalVariables::GetInstance()->GetFloatValue("Enemy", "ChaseSpeed");
 
 	// 追尾計算（今後変更予定
-	enemy_->transform_.translate.x += velocity.x * (1.0f / 60.0f) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
-	enemy_->transform_.translate.y += velocity.y * (1.0f / 60.0f) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
+	enemy_->transform_.translate.x += moveDirect.x * (1.0f / kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
+	enemy_->transform_.translate.y += moveDirect.y * (1.0f / kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
 
 
 	enemy_->MatrixUpdate();

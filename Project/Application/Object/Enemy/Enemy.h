@@ -139,6 +139,9 @@ private:
 	// 武器の解除用フラグ
 	bool isRealeseActive_ = false;
 
+	// 移動を停止
+	bool isMoveStop_ = false;
+
 private:
 	// 状態
 	std::unique_ptr<IEnemyState> state_;

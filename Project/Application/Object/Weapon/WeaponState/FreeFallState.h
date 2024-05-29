@@ -21,10 +21,8 @@ public:
 	void ImGuiUpdate() override {};
 
 private:
-	// 
-	Vector3 directPosition_ = {};
-
-	// 方向ベクトルの回転
-	Vector3 rotateVector(const Vector3& direct, float theta);
-
+	// 回転速度
+	float rotateSpinSpeed_ = 0.0f;
+	// 特有の重力レシオ
+	float gravityRate_ = 0.0f;
 };

@@ -1,6 +1,7 @@
 #include "InfiniteEmiiter.h"
 #include "../../../Engine/Math/DeltaTime.h"
 #include "../../MakeParticle.h"
+#include "../../../../Engine/base/OutputLog.h"
 
 void InfiniteEmiiter::Initialize(EmitterDesc* emitterDesc)
 {
@@ -10,6 +11,7 @@ void InfiniteEmiiter::Initialize(EmitterDesc* emitterDesc)
 
 	// トランスフォームのポインタを保存
 	emitTransform_ = emitterDesc->transform;
+
 }
 
 void InfiniteEmiiter::Update()
