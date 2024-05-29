@@ -57,8 +57,8 @@ void DetectionSystem::ChaseUpdate()
 	float moveRate = GlobalVariables::GetInstance()->GetFloatValue("Enemy", "ChaseSpeed");
 
 	// 追尾計算（今後変更予定
-	enemy_->transform_.translate.x += moveDirect.x * (1.0f / kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
-	enemy_->transform_.translate.y += moveDirect.y * (1.0f / kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
+	enemy_->transform_.translate.x += moveDirect.x * (kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
+	enemy_->transform_.translate.y += moveDirect.y * (kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
 
 
 	enemy_->MatrixUpdate();
