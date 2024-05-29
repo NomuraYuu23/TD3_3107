@@ -133,7 +133,7 @@ void SelectScene::TextureLoad()
 
 void SelectScene::LowerVolumeBGM()
 {
-	const uint32_t startHandleIndex = 1;
+	const uint32_t startHandleIndex = 2;
 
 	uint32_t index = kStageSelectSceneBGM + startHandleIndex;
 

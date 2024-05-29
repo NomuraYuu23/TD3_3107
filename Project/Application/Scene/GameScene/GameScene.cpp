@@ -609,7 +609,7 @@ void GameScene::TextureLoad()
 void GameScene::LowerVolumeBGM()
 {
 
-	const uint32_t startHandleIndex = 2;
+	const uint32_t startHandleIndex = 6;
 
 	uint32_t index = kGameSceneBGM + startHandleIndex;
 
