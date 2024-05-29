@@ -107,6 +107,14 @@
             ],
             "searchLength": 20.0
         },
+        "ChaseEnemy03": {
+            "position": [
+                335.0,
+                61.20000076293945,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
         "ChaseEnemy04": {
             "position": [
                 321.8999938964844,
@@ -267,5 +275,7 @@
             ],
             "rotateSpeed": 90.0
         }
-    }
+    },
+    "Stage03": {},
+    "Stage04": {}
 }
