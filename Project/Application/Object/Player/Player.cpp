@@ -149,7 +149,7 @@ void Player::Update()
 	//	parabola_.Reset();
 	//}
 
-	velocity2DManager_->SetVelocity(Vector2{ velocity_.x / 5.0f , -velocity_.y / 5.0f });
+	velocity2DManager_->SetVelocity(Vector2{ velocity_.x / 16.0f , -velocity_.y / 16.0f });
 
 }
 
