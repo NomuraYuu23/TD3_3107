@@ -18,7 +18,7 @@ void ImpaledParticle::Initialize(ParticleDesc* particleDesc)
 	prevPos_ = transform_.translate;
 
 	// 生成サイズをランダムに取得
-	std::uniform_real_distribution<float> randomSize(-particleDesc->size.x * 2.5f, particleDesc->size.x * 2.5f);
+	std::uniform_real_distribution<float> randomSize(particleDesc->size.x, particleDesc->size.y);
 	float size = randomSize(randomEngine);
 	// 取得したサイズを設定
 	transform_.scale.x = size;
@@ -44,7 +44,7 @@ void ImpaledParticle::Initialize(ParticleDesc* particleDesc)
 	velocity_.z = particleDesc->velocity.z;
 
 	// どの程度移動するかをランダムに求める
-	std::uniform_real_distribution<float> randomVelocityMagnification(5.0f, 7.5f);
+	std::uniform_real_distribution<float> randomVelocityMagnification(7.5f, 10.0f);
 	velocity_ *= randomVelocityMagnification(randomEngine); // スカラー倍
 
 	// 処理後の座標を求める
