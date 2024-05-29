@@ -93,6 +93,9 @@ private: // データ用構造体クラス
 	struct EnemyData {
 		// 横移動の終了フレーム
 		float easeEndFrame;
+
+		// 追尾速度
+		float chaseSpeed_;
 	};
 
 	// 武器の情報
@@ -112,6 +115,12 @@ private: // データ用構造体クラス
 		// 戻ってくるLerpのレート
 		float returnLerpRatio_;
 
+		// 回転落下の時の初速度
+		Vector2 freeFallKickPower_;
+		// 落下の重力レート
+		float freeFallGravityRate_;
+		// 落下中の回転速度
+		float freeFallSpinSpeed_;
 	};
 
 	/// <summary>
