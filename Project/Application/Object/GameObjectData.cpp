@@ -77,6 +77,7 @@ void GameObjectData::Initialize()
 	groupName = "Enemy";
 	globalVariables_->CreateGroup(groupName);
 	globalVariables_->AddItem(groupName, "EaseEndFrame", enemy_.easeEndFrame);
+	globalVariables_->AddItem(groupName, "ChaseSpeed", enemy_.chaseSpeed_);
 
 	ApplyGlobalVariables();
 
@@ -148,5 +149,5 @@ void GameObjectData::ApplyGlobalVariables()
 
 	groupName = "Enemy";
 	enemy_.easeEndFrame = globalVariables_->GetFloatValue(groupName, "EaseEndFrame");
-
+	enemy_.chaseSpeed_ = globalVariables_->GetFloatValue(groupName, "ChaseSpeed");
 }

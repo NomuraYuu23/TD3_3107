@@ -93,6 +93,9 @@ private: // データ用構造体クラス
 	struct EnemyData {
 		// 横移動の終了フレーム
 		float easeEndFrame;
+
+		// 追尾速度
+		float chaseSpeed_;
 	};
 
 	// 武器の情報
