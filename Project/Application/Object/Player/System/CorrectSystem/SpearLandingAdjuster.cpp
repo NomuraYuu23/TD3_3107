@@ -13,42 +13,41 @@ void SpearLandingAdjuster::Initialize(Player* player, Weapon* weapon)
 
 void SpearLandingAdjuster::Update()
 {
-
+	// 補正タイマー
 	compTimer_.Update(GameSystemManager::sGameSpeed);
 
 	// 補正中なら早期
 	if (compTimer_.IsActive()) {
+		// 接地したらキャンセル
 		if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
 			Cancel();
 			return;
 		}
-
+		// プレイヤーが下になったらキャンセル
+		else if (player_->worldtransform_.GetWorldPosition().y < weapon_->worldtransform_.GetWorldPosition().y) {
+			Cancel();
+			return;
+		}
+		// 補正処理
 		player_->worldtransform_.transform_.translate.x = Ease::Easing(Ease::EaseName::Lerp, startPosition_.x, weapon_->worldtransform_.GetWorldPosition().x, compTimer_.GetNowFrame());
 		//player_->worldtransform_.transform_.translate.y = Ease::Easing(Ease::EaseName::Lerp, startPosition_.y, weapon_->worldtransform_.GetWorldPosition().y + 0.5f, compTimer_.GetNowFrame());
-
 		return;
 	}
-	//// 飛んでなければ早期
-	//if (!std::holds_alternative<SpearAerialState*>(player_->GetNowState()) ||
-	//	!std::holds_alternative<AerialState*>(player_->GetNowState())) {
-	//	return;
-	//}
+
 	// 刺さってなければ早期
 	if (!std::holds_alternative<ImpaledState*>(weapon_->GetNowState())) {
 		return;
 	}
 
-	//if (isRunOnce_) {
-	//	return;
-	//}
-
+	// 上向きに進んでいる場合キャンセル
 	if (player_->velocity_.y > 0) {
 		return;
 	}
+	// 下向きかつ空中のステートの場合
 	else if(std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState())){
-
+		// 方向
 		Vector3 direct = weapon_->worldtransform_.GetWorldPosition() - player_->worldtransform_.GetWorldPosition();
-
+		// 方向と逆向きに進んでいる場合
 		if (direct.x > 0 && player_->velocity_.x < 0) {
 			return;
 		}
