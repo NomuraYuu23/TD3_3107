@@ -8,8 +8,12 @@ void SelectScene::Initialize()
 	ModelCreate();
 	TextureLoad();
 
+	audioManager_ = std::make_unique<StageSelectAudioManager>();
+	audioManager_->StaticInitialize();
+	audioManager_->Initialize();
+
 	selectSystem_ = std::make_unique<SelectSystem>();
-	selectSystem_->Initialize(stagePhotTextureHandles_, stageUITextureHandles_);
+	selectSystem_->Initialize(stagePhotTextureHandles_, stageUITextureHandles_, audioManager_.get());
 
 	hasTheSceneTransitionStarted_ = false;
 
@@ -31,6 +35,9 @@ void SelectScene::Initialize()
 	fogManager->SetNear(0.01f);
 	fogManager->SetFar(0.0f);
 
+	// ステージセレクトシーン用BGMの再生
+	audioManager_->PlayWave(kStageSelectSceneBGM);
+
 }
 
 void SelectScene::Update()
@@ -39,8 +46,12 @@ void SelectScene::Update()
 	// スカイドーム
 	skydome_->Update();
 
-	// シーン遷移が始まってたらリターン
-	if (hasTheSceneTransitionStarted_) {
+	if (requestSceneNo_ == kGame || isBeingReset_) {
+		resetScene_ = false;
+		// BGM音量下げる
+		if (isDecreasingVolume) {
+			LowerVolumeBGM();
+		}
 		return;
 	}
 
@@ -117,5 +128,29 @@ void SelectScene::TextureLoad()
 	};
 
 	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
+
+}
+
+void SelectScene::LowerVolumeBGM()
+{
+	const uint32_t startHandleIndex = 2;
+
+	uint32_t index = kStageSelectSceneBGM + startHandleIndex;
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		if (audioManager_->GetPlayingSoundDatas()[i].handle_ == index) {
+			float decreasingVolume = 1.0f / 60.0f;
+			float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
+			if (volume < 0.0f) {
+				volume = 0.0f;
+				audioManager_->StopWave(i);
+				isDecreasingVolume = false;
+			}
+			else {
+				audioManager_->SetPlayingSoundDataVolume(i, volume);
+				audioManager_->SetVolume(i, audioManager_->GetPlayingSoundDatas()[i].volume_);
+			}
+		}
+	}
 
 }

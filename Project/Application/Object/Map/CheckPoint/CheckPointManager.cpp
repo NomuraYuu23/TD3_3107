@@ -1,12 +1,13 @@
 #include "CheckPointManager.h"
 #include "../../ObjectList.h"
 
-void CheckPointManager::Initialize(Player* player, Model* checkPointModel, Model* passedModel)
+void CheckPointManager::Initialize(Player* player, Model* checkPointModel, Model* passedModel, GameAudioManager* gam)
 {
 	// プレイヤー
 	player_ = player;
 	checkPointModel_ = checkPointModel;
 	passedModel_ = passedModel;
+	audioManager_ = gam;
 
 	// モデルの設定以外まとめてる場所
 	Setting();

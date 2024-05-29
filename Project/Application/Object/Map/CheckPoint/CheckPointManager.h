@@ -8,6 +8,7 @@
 #include <vector>
 #include <memory>
 #include "CheckPointEditor.h"
+#include "../../../Application/AudioManager/GameAudioManager.h"
 
 class Player;
 class CheckPointObject;
@@ -20,7 +21,7 @@ public:
 	/// </summary>
 	/// <param name="player"></param>
 	/// <param name="checkPointModel"></param>
-	void Initialize(Player* player, Model* checkPointModel, Model* passedModel);
+	void Initialize(Player* player, Model* checkPointModel, Model* passedModel, GameAudioManager* gam);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -75,6 +76,11 @@ public: // アクセッサ
 
 	CheckPointEditor* GetCheckPointEditor() { return checkPointEditor_.get(); }
 
+	/// <summary>
+	/// オーディオマネージャーゲッター
+	/// </summary>
+	/// <returns>オーディオマネージャー</returns>
+	GameAudioManager* GetGameAudioManager() { return audioManager_; }
 
 private:
 	// プレイヤー
@@ -83,6 +89,9 @@ private:
 	Model* checkPointModel_ = nullptr;
 	// 通過後モデル
 	Model* passedModel_ = nullptr;
+
+	// 音マネージャー
+	GameAudioManager* audioManager_ = nullptr;
 
 	/// <summary>
 	/// オブジェクトリスト
