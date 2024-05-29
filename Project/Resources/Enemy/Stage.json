@@ -131,6 +131,134 @@
             ],
             "searchLength": 25.0
         },
+        "ChaseEnemy07": {
+            "position": [
+                600.0,
+                30.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy08": {
+            "position": [
+                620.0,
+                35.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy09": {
+            "position": [
+                640.0,
+                40.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy10": {
+            "position": [
+                382.8999938964844,
+                87.0999984741211,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy11": {
+            "position": [
+                400.0,
+                87.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy12": {
+            "position": [
+                434.5,
+                89.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy13": {
+            "position": [
+                446.0,
+                89.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy14": {
+            "position": [
+                458.6000061035156,
+                89.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy15": {
+            "position": [
+                608.7000122070313,
+                31.799999237060547,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy16": {
+            "position": [
+                605.5,
+                28.700000762939453,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy17": {
+            "position": [
+                613.7999877929688,
+                33.29999923706055,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy18": {
+            "position": [
+                617.2999877929688,
+                29.5,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy19": {
+            "position": [
+                630.7000122070313,
+                34.099998474121094,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy20": {
+            "position": [
+                626.7999877929688,
+                30.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy21": {
+            "position": [
+                637.2999877929688,
+                33.400001525878906,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy22": {
+            "position": [
+                643.4000244140625,
+                30.0,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
         "Enemy00": {
             "easeEndPosition": [
                 -12.0,
@@ -290,7 +418,7 @@
             "padding": 0,
             "position": [
                 275.1000061035156,
-                53.20000076293945,
+                50.0,
                 0.0
             ],
             "rotateSpeed": 120.0
@@ -374,7 +502,5 @@
             ],
             "rotateSpeed": 90.0
         }
-    },
-    "Stage03": {},
-    "Stage04": {}
+    }
 }
