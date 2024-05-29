@@ -112,6 +112,10 @@ public:
 		return CollisionType::kNone;
 	}
 
+	//inline static CollisionType CollisionPointNum(const Vector3& position,float radius, FourTop Block) {
+
+	//}
+
 	/// <summary>
 	/// 四点の生成関数
 	/// </summary>

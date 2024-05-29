@@ -87,6 +87,15 @@ void Player::Update()
 		actionState_->Update();
 	}
 
+#ifdef _DEBUG
+
+	if (Input::GetInstance()->TriggerKey(DIK_O)) {
+		worldtransform_.transform_.translate = { 300.0f,36.0f };
+		worldtransform_.UpdateMatrix();
+	}
+#endif // _DEBUG
+
+
 	SystemUpdate();
 
 	// 武器の更新
@@ -594,6 +603,23 @@ void Player::OnCollision(ColliderParentObject2D target)
 		case IObject::kNone:
 
 			break;
+		}
+
+		IObject::FourTop block4Top = IObject::GenerateFourTop({ minPos.x,minPos.y }, { maxPos.x,maxPos.y });
+		if (IObject::IsInsideCheck(worldtransform_.GetWorldPosition(), block4Top)) {
+			Vector3 wPosP = worldtransform_.GetWorldPosition();
+			if (wPosP.x > targetPos.x) {
+				// プレイヤーの修正されたX座標を計算
+				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
+				worldtransform_.transform_.translate.x = correctPosition.x;
+				velocity_.x = 0;
+			}
+			else {
+				// プレイヤーの修正されたX座標を計算
+				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
+				worldtransform_.transform_.translate.x = correctPosition.x;
+				velocity_.x = 0;
+			}
 		}
 
 		// 更新
