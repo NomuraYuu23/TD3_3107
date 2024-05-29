@@ -13,7 +13,7 @@ void SelectScene::Initialize()
 	audioManager_->Initialize();
 
 	selectSystem_ = std::make_unique<SelectSystem>();
-	selectSystem_->Initialize(stagePhotTextureHandles_, stageUITextureHandles_);
+	selectSystem_->Initialize(stagePhotTextureHandles_, stageUITextureHandles_, audioManager_.get());
 
 	hasTheSceneTransitionStarted_ = false;
 
