@@ -119,7 +119,6 @@ void Player::Update()
 
 	#endif // !_DEBUG
 
-
 	// 基底クラスの更新
 	IObject::Update();
 
