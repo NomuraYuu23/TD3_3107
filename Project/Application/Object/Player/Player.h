@@ -144,6 +144,12 @@ public: // アニメーション関連関数群
 	/// <returns></returns>
 	SpearLandingAdjuster GetLandingAdjuster() { return landingAdjuster_; }
 
+	/// <summary>
+	/// エイムアシストシステム
+	/// </summary>
+	/// <returns></returns>
+	CorrectSystem GetCorrectSystem() { return correctSystem_; }
+
 public:
 	// 矢印モデル
 	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }

@@ -131,6 +131,22 @@ public:
 		return result;
 	}
 
+	/// <summary>
+	/// 四点の内側か判断
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="targetBox"></param>
+	/// <returns></returns>
+	inline static bool IsInsideCheck(const Vector3& position, FourTop targetBox) {
+		// 内側か
+		if (position.x >= targetBox.leftBottom.x && position.x <= targetBox.rightBottom.x) {
+			if (position.y >= targetBox.leftBottom.y && position.y <= targetBox.leftTop.y) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 public:
 	/// <summary>
 	/// 初期化

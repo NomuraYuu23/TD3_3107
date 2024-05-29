@@ -22,6 +22,8 @@ public:
 
 	void ImGuiDraw();
 
+	bool IsLockOn() { return isLockOn_; }
+
 private:
 
 	void NearLockOn(EnemyManager* enemyManager);
@@ -38,6 +40,7 @@ private:
 	Vector2 prevLeftStick_ = {};
 
 	bool isInNearArea_ = false;
+	bool isLockOn_ = false;
 
 	Vector3 targetDirect_ = {};
 

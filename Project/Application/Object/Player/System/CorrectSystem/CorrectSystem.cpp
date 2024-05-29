@@ -20,6 +20,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 	//targetDirect_ = NearEnemyLockOn(enemyManager);
 
 	if (targetPointer_) {
+		isLockOn_ = true;
 		// 現在の最小の長さ
 		float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
 		// 長さを作成
@@ -34,6 +35,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		}
 	}
 	else {
+		isLockOn_ = false;
 		NearLockOn(enemyManager);
 	}
 	// スティックを倒した時にロックオンを解除する際の傾きのデッドゾーンの値
@@ -73,6 +75,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 void CorrectSystem::ImGuiDraw()
 {
 	ImGui::Text("isInNearArea : %d", isInNearArea_);
+	ImGui::Text("isLock : %d", isLockOn_);
 	ImGui::DragFloat3("TVect", &targetDirect_.x);
 }
 

@@ -401,8 +401,8 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 				Vector2 weaponMax = { weaponPosition.x + maxSize,weaponPosition.y + maxSize };
 
 				// 四頂点
-				IObject::FourTop player4Point = IObject::GenerateFourTop(weaponMin, weaponMax);
- 				IObject::CollisionType type = IObject::GetCollisionType(player4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
+				IObject::FourTop weapon4Point = IObject::GenerateFourTop(weaponMin, weaponMax);
+ 				IObject::CollisionType type = IObject::GetCollisionType(weapon4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
 
 				if ((worldtransform_.direction_.y > 0) && type == IObject::CollisionType::kBottomSide) {
 					return;
@@ -441,7 +441,35 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			// タイプ
 			hitBlockType_ = (*terrainPtr)->typeNumber_;
 
+			// 逆ベクトル
 			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
+
+			Vector2 targetPos = {};
+			Vector2 targetRad = {};
+			// 対象の情報取得
+			std::visit([&](const auto& a) {
+				targetPos = a->GetColliderPosition();
+				targetRad = a->GetColliderSize();
+				}, target);
+			targetRad *= 0.5f;
+			// 右上
+			Vector2 maxPos = {
+				targetPos.x + targetRad.x,	// 右
+				targetPos.y + targetRad.y,	// 上
+			};
+			// 左下
+			Vector2 minPos = {
+				targetPos.x - targetRad.x,	// 左
+				targetPos.y - targetRad.y,	// 下
+			};
+
+			IObject::FourTop blockFourTop = IObject::GenerateFourTop(minPos, maxPos);
+			// めり込み回避用処理
+			if (IObject::IsInsideCheck(worldtransform_.GetWorldPosition(), blockFourTop)) {
+				worldtransform_.transform_.translate.x += invDirect_.x * 1.5f;
+				worldtransform_.transform_.translate.y += invDirect_.y * 1.5f;
+				worldtransform_.UpdateMatrix();
+			}
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;
 		}

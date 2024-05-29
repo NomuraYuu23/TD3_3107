@@ -18,15 +18,20 @@ void ThrownState::Initialize()
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	// 速さ
 	speedValue_ = globalVariables->GetFloatValue("Weapon", "SpeedRatio");
+	
+	float rate = 2.0f;
+
 	// 投げる際の速度
-	if (weapon_->IsGravity()) {
-		velocity_.x = weapon_->throwDirect_.x * (speedValue_);
-		velocity_.y = weapon_->throwDirect_.y * (speedValue_);
+
+	if (weapon_->GetPlayer()->GetCorrectSystem().IsLockOn()) {
+		rate = 4.0f;
 	}
 	else {
-		velocity_.x = weapon_->throwDirect_.x * (speedValue_ * 2.0f);
-		velocity_.y = weapon_->throwDirect_.y * (speedValue_ * 2.0f);
+		rate = 2.0f;
 	}
+	velocity_.x = weapon_->throwDirect_.x * (speedValue_ * rate);
+	velocity_.y = weapon_->throwDirect_.y * (speedValue_ * rate);
+
 	weapon_->worldtransform_.direction_ = weapon_->throwDirect_;
 	weapon_->throwInvTimer_.Start(1.0f);
 	//weapon_->safeLaunchTimer_.Start(2.0f);
