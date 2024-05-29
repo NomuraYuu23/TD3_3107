@@ -101,24 +101,16 @@
         },
         "ChaseEnemy02": {
             "position": [
-                87.5999984741211,
-                13.800000190734863,
-                0.0
-            ],
-            "searchLength": 20.0
-        },
-        "ChaseEnemy03": {
-            "position": [
-                87.5999984741211,
-                13.800000190734863,
+                280.1000061035156,
+                33.900001525878906,
                 0.0
             ],
             "searchLength": 20.0
         },
         "ChaseEnemy04": {
             "position": [
-                87.5999984741211,
-                13.800000190734863,
+                321.8999938964844,
+                28.200000762939453,
                 0.0
             ],
             "searchLength": 20.0
@@ -179,6 +171,34 @@
             ],
             "typeNum": 0
         },
+        "Enemy04": {
+            "easeEndPosition": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                284.79998779296875,
+                18.600000381469727,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy05": {
+            "easeEndPosition": [
+                8.0,
+                0.0,
+                0.0
+            ],
+            "pad": 0,
+            "position": [
+                296.0,
+                38.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
         "EnemyEmitter:00": {
             "distance": 4.800000190734863,
             "enemyMaxCount": 3,
@@ -222,6 +242,17 @@
                 0.0
             ],
             "rotateSpeed": -90.0
+        },
+        "EnemyEmitter:04": {
+            "distance": 10.0,
+            "enemyMaxCount": 9,
+            "padding": 0,
+            "position": [
+                316.79998779296875,
+                27.899999618530273,
+                0.0
+            ],
+            "rotateSpeed": -90.0
         }
     },
     "Stage02": {
@@ -236,7 +267,5 @@
             ],
             "rotateSpeed": 90.0
         }
-    },
-    "Stage03": {},
-    "Stage04": {}
+    }
 }

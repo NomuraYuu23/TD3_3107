@@ -49,7 +49,7 @@ void DetectionSystem::ChaseUpdate()
 
 	velocity = Vector3::Normalize(velocity);
 
-	float moveRate = 5.0f;
+	float moveRate = 8.0f;
 
 	// 追尾計算（今後変更予定
 	enemy_->transform_.translate.x += velocity.x * (1.0f / 60.0f) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
