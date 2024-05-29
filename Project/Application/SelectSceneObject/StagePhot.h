@@ -81,7 +81,7 @@ private:
 	std::array<Vector2, kSpriteNum> sizes_;
 
 	// 動きの変数
-	float waveAnimation_t_;
+	float waveAnimation_t_ = 0.0f;
 	Vector2 waveVelocity_ = {};
 
 	// 振幅

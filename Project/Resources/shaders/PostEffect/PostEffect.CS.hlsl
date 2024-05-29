@@ -1059,11 +1059,6 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 		output.rgba = sourceImage0[indexTmp].rgba;
 	}
 
-	// グレイスケール
-	if (gComputeConstants.executionFlag & 8) {
-		output = GrayScale(output, indexTmp);
-	}
-
 	// モーションブラー竹槍 最後
 	if (( gComputeConstants.executionFlag & 16 ) && 
 		!(gVelocityConstants0.values.x == 0 &&
@@ -1104,8 +1099,8 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 			// outputに加算
 			if (!(blurInput.r == 0.0f && blurInput.g == 1.0f && blurInput.b == 0.0f)) {
 				blurOutput += blurInput * blurWeight;
-				// 色の濃さを10倍
-				blurOutput.a += blurInput.a * blurWeight * 9.0f;
+				// 色の濃さを5倍
+				blurOutput.a += blurInput.a * blurWeight * 4.0f;
 			}
 			// 重みの合計に加算
 			blurWeightSum += blurWeight;
@@ -1126,6 +1121,11 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 			output = float32_t4(col, min(blurAlphaSum, 1.0f));
 		}
 
+	}
+
+	// グレイスケール
+	if (gComputeConstants.executionFlag & 8) {
+		output = GrayScale(output, indexTmp);
 	}
 
 	return output;
