@@ -4,7 +4,7 @@
             "checkPointNumber": 0,
             "position": [
                 318.29998779296875,
-                60.0,
+                57.79999923706055,
                 0.0
             ]
         }
@@ -13,8 +13,24 @@
         "CheckPoint00": {
             "checkPointNumber": 0,
             "position": [
-                4.699999809265137,
-                2.0999999046325684,
+                350.0,
+                16.0,
+                0.0
+            ]
+        },
+        "CheckPoint01": {
+            "checkPointNumber": 1,
+            "position": [
+                341.70001220703125,
+                62.900001525878906,
+                0.0
+            ]
+        },
+        "CheckPoint02": {
+            "checkPointNumber": 2,
+            "position": [
+                500.0,
+                27.0,
                 0.0
             ]
         }
