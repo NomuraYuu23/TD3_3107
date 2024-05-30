@@ -60,6 +60,7 @@ void IEnemyEmitter::Update()
 	interval_.Update();
 
 	// フラグによる死亡処理
+
 	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
 		if (enemy->IsDead()) {
 			enemy.reset();
@@ -123,7 +124,10 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	distance_ = distance;
 	maxCount_ = enemyCount;
 	// 敵の角度生成
-	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
+	float angleIncrement = 0.0f;
+	if (maxCount_ != 0) {
+		angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
+	}
 
 	float tAngle = 0;
 	float add = 0;
@@ -198,7 +202,10 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 	rotation_ = multiEnemyData.rotateSpeed;
 
 	// 敵の角度生成
-	float angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
+	float angleIncrement = 0.0f;
+	if (maxCount_ != 0) {
+		angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
+	}
 
 	// オブジェクト分回す
 	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
@@ -225,18 +232,8 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 
 	// オブジェクトの数が最大より大きいなら削除
 	if (preMaxCount > count) {
-		
-		uint32_t num = preMaxCount - count;
 
-		while (true)
-		{
-			objects_.erase(std::next(objects_.begin(), count));
-			count++;
-			num--;
-			if (num == 0) {
-				break;
-			}
-		}
+		objects_.erase(std::next(objects_.begin(), count), objects_.end());
 
 	}
 	// オブジェクトの数が足りてないなら生成
