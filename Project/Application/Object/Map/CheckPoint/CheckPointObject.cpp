@@ -4,6 +4,14 @@
 #include "../../../Collider2D/CollisionConfig2D.h"
 #include "../../../Engine/Math/DeltaTime.h"
 
+CheckPointObject::~CheckPointObject()
+{
+
+	passedMaterial_.reset(nullptr);
+	passedLocalMatrixManager_.reset(nullptr);
+
+}
+
 void CheckPointObject::Initialize(Model* model)
 {
 	// 基底クラスの初期化

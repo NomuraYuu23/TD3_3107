@@ -179,7 +179,7 @@ void GameScene::Initialize() {
 	audioManager_->PlayWave(kGameSceneBGM);
 
 	// Jsonデータのクラス
-#ifdef _DEBUG
+#ifdef _DEMO
 
 	gameData_ = GameObjectData::GetInstance();
 	gameData_->Initialize();
@@ -202,7 +202,7 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update() {
 
-#ifdef _DEBUG
+#ifdef _DEMO
 	ImguiDraw();
 
 	if (input_->TriggerKey(DIK_L)) {
@@ -432,7 +432,8 @@ void GameScene::Draw() {
 }
 
 void GameScene::ImguiDraw() {
-#ifdef _DEBUG
+
+#ifdef _DEMO
 
 	ImGui::Begin("GameScene");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);

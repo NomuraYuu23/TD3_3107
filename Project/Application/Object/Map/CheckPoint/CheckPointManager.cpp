@@ -16,8 +16,8 @@ void CheckPointManager::Initialize(Player* player, Model* checkPointModel, Model
 void CheckPointManager::Update()
 {
 
-#ifdef _DEBUG
-	EditorCheckPointLoad();
+#ifdef _DEMO
+	//EditorCheckPointLoad();
 #endif // _DEBUG
 
 
@@ -78,6 +78,7 @@ void CheckPointManager::GenerateCheckPoint(const Vector3& position, int32_t chec
 	obj->Setting({ position, checkNumber });
 	obj->SetPassedModel(passedModel_);
 	checkPoints_.push_back(std::move(obj));
+	obj.reset(nullptr);
 }
 
 void CheckPointManager::CheckPointJudge(const Vector3& position, uint32_t num)
@@ -104,6 +105,10 @@ void CheckPointManager::CollisionRegister(Collision2DManager* collisionManager)
 
 void CheckPointManager::EditorCheckPointLoad()
 {
+	
+	for (uint32_t i = 0; i < checkPoints_.size(); ++i) {
+		checkPoints_[i].reset(nullptr);
+	}
 
 	checkPoints_.clear();
 
@@ -128,7 +133,7 @@ void CheckPointManager::EditorCheckPointLoad()
 		for (std::map<std::string, CheckPointData>::iterator terrainItr = stageItr->second.begin();
 			terrainItr != stageItr->second.end(); ++terrainItr) {
 
-			GenerateCheckPoint(terrainItr->second.position, terrainItr->second.checkPointNumber);
+			//GenerateCheckPoint(terrainItr->second.position, terrainItr->second.checkPointNumber);
 
 		}
 
