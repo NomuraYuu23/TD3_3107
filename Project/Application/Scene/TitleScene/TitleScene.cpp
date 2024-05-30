@@ -60,6 +60,11 @@ void TitleScene::Initialize()
 	prevPos_ = buttonSprite_->GetPosition();
 	postPos_ = { prevPos_.x, prevPos_.y + 10.0f };
 
+	FogManager* fogManager = FogManager::GetInstance();
+	fogManager->SetColor({ 0.5f,0.5f,0.5f,0.5f });
+	fogManager->SetNear(0.01f);
+	fogManager->SetFar(0.0f);
+
 	// タイトルシーン用BGMの再生
 	audioManager_->PlayWave(kTitleSceneBGM);
 
