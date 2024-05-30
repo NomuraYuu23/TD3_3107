@@ -17,7 +17,7 @@ void CheckPointManager::Update()
 {
 
 #ifdef _DEMO
-	//EditorCheckPointLoad();
+	EditorCheckPointLoad();
 #endif // _DEBUG
 
 
@@ -133,7 +133,7 @@ void CheckPointManager::EditorCheckPointLoad()
 		for (std::map<std::string, CheckPointData>::iterator terrainItr = stageItr->second.begin();
 			terrainItr != stageItr->second.end(); ++terrainItr) {
 
-			//GenerateCheckPoint(terrainItr->second.position, terrainItr->second.checkPointNumber);
+			GenerateCheckPoint(terrainItr->second.position, terrainItr->second.checkPointNumber);
 
 		}
 
