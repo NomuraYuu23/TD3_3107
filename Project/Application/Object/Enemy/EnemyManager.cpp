@@ -28,7 +28,7 @@ void EnemyManager::Update()
 {
 
 #ifdef _DEBUG
-	//LoadEnemyData();
+	LoadEnemyData();
 #endif // _DEBUG
 
 	// 更新をLargeのやつごとに
@@ -92,6 +92,15 @@ void EnemyManager::CollisionRegister(Collision2DManager* collisionManager, const
 		for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = (*itParent)->GetObjects()->begin();
 			it != (*itParent)->GetObjects()->end(); ++it) {
 			Enemy* obj = static_cast<Enemy*>((it->get()));
+
+			if (obj->GetPlayer()) {
+				float length = Vector3::Length(obj->GetWorldPosition() - obj->GetPlayer()->worldtransform_.GetWorldPosition());
+
+				if (length > 500) {
+					continue;
+				}
+			}
+
 			collisionManager->ListRegister(&obj->boxCollider_);
 			// チェイスなら
 			bool stateCheck = std::holds_alternative<ChaseEnemyState*>(obj->GetState());

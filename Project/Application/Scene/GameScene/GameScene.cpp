@@ -240,6 +240,8 @@ void GameScene::Update() {
 
 	pointLightManager_->Update(pointLightDatas_);
 	spotLightManager_->Update(spotLightDatas_);
+	// UIマネージャー更新
+	gameUIManager_->Update();
 
 	// ゲームシステム
 	gameSystemManager_->Update();
@@ -260,8 +262,6 @@ void GameScene::Update() {
 	// 敵
 	enemyManager_->Update();
 
-	// UIマネージャー更新
-	gameUIManager_->Update();
 
 	//arrowSprite_->Update();
 
@@ -677,6 +677,8 @@ void GameScene::CollisionUpdate()
 	gameSystemManager_->CollisionRegister(collision2DManager_.get());
 
 	collision2DManager_->CheakAllCollision();
+
+	collision2DManager_->ListClear();
 
 	collision2DDebugDraw_->Clear();
 

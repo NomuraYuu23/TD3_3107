@@ -108,16 +108,17 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			if ((*weapon)->IsEnemyImpaled()) {
 				return;
 			}
+#ifndef _DEBUG
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::ActionMode::kMaxSize);
 				weapon_ = (*weapon);
 
 				// デバッグ以外の場合行う
-				#ifndef _DEBUG
 				// 槍が刺さった効果音を再生
 				weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearSting);
-				#endif // !_DEBUG
 			}
+#endif // !_DEBUG
+
 		}
 		else if (/*std::holds_alternative<EnemyWaitState*>(judState_) && */std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
 			// 死亡パーティクル再生
