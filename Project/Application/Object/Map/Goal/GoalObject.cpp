@@ -55,13 +55,15 @@ void GoalObject::Initialize(Model* model)
 	// トランスフォーム生成
 	emitTransform_ = std::make_unique<EulerTransform>();
 	*emitTransform_ = worldtransform_.transform_;
+	emitTransform_->translate.z += 1.0f;
+	emitTransform_->scale = { 2.5f, 3.5f, 1.0f };
 
 	// ここでゴールパーティクルの再生を行う
 	goalParticleDesc_.transform = emitTransform_.get();
-	goalParticleDesc_.instanceCount = 3;
-	goalParticleDesc_.frequency = 0.25f;
+	goalParticleDesc_.instanceCount = 1;
+	goalParticleDesc_.frequency = 0.35f;
 	goalParticleDesc_.lifeTime = 5.0f;
-	goalParticleDesc_.particleModelNum = kCircle;
+	goalParticleDesc_.particleModelNum = kKiraKira;
 	goalParticleDesc_.paeticleName = kGoalParticle;
 	goalParticleDesc_.velocity = { 0.0f, 1.0f, 0.0f };
 
@@ -82,8 +84,9 @@ void GoalObject::Update()
 	#ifndef _DEBUG
 
 	// 生成座標更新
-	*emitTransform_ = worldtransform_.transform_;
-	emitTransform_->translate.y += 7.5f;
+	emitTransform_->translate = worldtransform_.transform_.translate;
+	emitTransform_->translate.y += 4.5f;
+	emitTransform_->translate.z -= 1.5f;
 
 	#endif // !_DEBUG
 

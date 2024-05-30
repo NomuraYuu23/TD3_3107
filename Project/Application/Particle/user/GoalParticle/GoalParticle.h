@@ -22,5 +22,8 @@ public: // メンバ関数
 	void Update(const Matrix4x4& billBoardMatrix) override;
 
 private: // メンバ変数
+
+	// 処理後サイズ
+	Vector3 postSize_;
 };
 

@@ -47,35 +47,35 @@ void FollowCamera::Update(float elapsedTime)
 			MoveCameraForward();
 		}
 
-		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
+		if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
 			isLockCamera_ = true;
-		}*/
+		}
 	}
 	else {
-		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
+		if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
 			isLockCamera_ = false;
 		}
 
 		if (input_->PushKey(DIK_W)) {
-			transform_.translate.z += 0.1f;
+			transform_.translate.z += 1.0f;
 		}
 		else if (input_->PushKey(DIK_S)) {
-			transform_.translate.z -= 0.1f;
+			transform_.translate.z -= 1.0f;
 		}
 
 		if (input_->PushKey(DIK_LSHIFT)) {
-			transform_.translate.y += 0.1f;
+			transform_.translate.y += 1.0f;
 		}
 		else if (input_->PushKey(DIK_LCONTROL)) {
-			transform_.translate.y -= 0.1f;
+			transform_.translate.y -= 1.0f;
 		}
 
 		if (input_->PushKey(DIK_D)) {
-			transform_.translate.x += 0.1f;
+			transform_.translate.x += 1.0f;
 		}
 		else if (input_->PushKey(DIK_A)) {
-			transform_.translate.x -= 0.1f;
-		}*/
+			transform_.translate.x -= 1.0f;
+		}
 	}
 
 	// 基底クラス更新

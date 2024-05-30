@@ -400,7 +400,7 @@ void MapManager::EditorMapLoad()
 				}
 
 				it->get()->transform_.translate = { terrainData.position.x, terrainData.position.y, 0.0f };
-				it->get()->transform_.scale = { terrainData.size.x,terrainData.size.y,1.0f };
+				it->get()->transform_.scale = { terrainData.size.x,terrainData.size.y, 2.0f };
 				// サイズの設定
 				static_cast<Terrain*>(it->get())->scale2D_ = { terrainData.size.x * 2.0f, terrainData.size.y * 2.0f };
 				// マテリアル更新（サイズの変更後に合わせて）
