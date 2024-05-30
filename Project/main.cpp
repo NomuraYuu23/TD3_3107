@@ -6,6 +6,8 @@
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
+#ifdef _DEBUG
+
 	__try {
 
 		MyFramework* game = new MyGame();
@@ -16,6 +18,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	}
 	__except (CrashHandler::GenerateDump(GetExceptionInformation())) {}
+
+#endif // _DEBUG
+
+#ifndef _DEBUG
+	
+	MyFramework* game = new MyGame();
+
+	game->Run();
+
+	delete game;
+
+#endif // !_DEBUG
 
 	return 0;
 
