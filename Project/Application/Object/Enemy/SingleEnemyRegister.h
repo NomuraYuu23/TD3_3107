@@ -1,6 +1,9 @@
 #pragma once
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
 #include "../../../Engine/Animation/Animation.h"
+#include "SingleEnemyData.h"
+
+class Player;
 
 class SingleEnemyRegister : public LargeNumberOfObjects
 {
@@ -36,6 +39,12 @@ public:
 	/// </summary>
 	void ImGuiDraw() override;
 	//std::list<std::unique_ptr<OneOfManyObjects>>* GetList() { return &objects_; }
+
+	/// <summary>
+	/// 編集
+	/// </summary>
+	/// <param name="name"></param>
+	void Edit(const std::string& name, const SingleEnemyData& singleEnemyData, Player* player);
 
 	void SetTexture(std::vector<UINT>* texture) { 
 		texture_ = texture;

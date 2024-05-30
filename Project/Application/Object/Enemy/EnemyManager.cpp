@@ -148,7 +148,7 @@ void EnemyManager::LoadEnemyData()
 
 	// シングル用
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemySingle0 = enemyEmitters_.begin();
-	enemySingle0->get()->GetObjects()->clear();
+	//enemySingle0->get()->GetObjects()->clear();
 
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemyChase0 = std::next(enemyEmitters_.begin(),1);
 	//enemyChase0++;
@@ -211,8 +211,7 @@ void EnemyManager::LoadEnemyData()
 			
 			// シングル
 			else if (std::holds_alternative<SingleEnemyData>(enemyData)) {
-				RegisterEnemy(std::get<SingleEnemyData>(enemyData), enemyName);
-
+				static_cast<SingleEnemyRegister*>(enemySingle0->get())->Edit(enemyName, std::get<SingleEnemyData>(enemyData), player_);
 				enemySingleNames.push_back(enemyName);
 			}
 
