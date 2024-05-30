@@ -97,9 +97,6 @@ void GameScene::Initialize() {
 
 	// 生成
 	player_ = std::make_unique<Player>();
-	// テクスチャの読み込み
-	player_->arrowTexture_ = TextureManager::Load("Resources/GameObject/Image/arrow.png", dxCommon_, textureHandleManager_.get());
-	player_->SetArrowModel(particleCircleModel_.get());
 	// 武器の設定
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
@@ -111,6 +108,8 @@ void GameScene::Initialize() {
 	// オーディオマネージャーを渡す
 	player_->gameAudioManager_ = audioManager_.get();
 	#endif // !_DEBUG
+	// 矢印モデルをセット
+	player_->SetArrowModel(arrowModel_.get());
 
 	player_->GetSlowEffect()->SetCamera(&camera_);
 
@@ -157,12 +156,6 @@ void GameScene::Initialize() {
 	followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_.get());
-
-	// 矢印のUI
-	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
-	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
-	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
-	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y, player_->throwDirect_.x));
 
 	/// ポストエフェクトの値初期化
 	// ブルーム
@@ -558,6 +551,7 @@ void GameScene::ModelCreate()
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 	ringUnderModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingUnder.obj", dxCommon_, textureHandleManager_.get()));
 	ringTopModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingTop.obj", dxCommon_, textureHandleManager_.get()));
+	arrowModel_.reset(Model::Create("Resources/Model/Direction/", "Direction.obj", dxCommon_, textureHandleManager_.get()));
 	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
 
 	#endif // !_DEBUG

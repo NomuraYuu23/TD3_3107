@@ -73,10 +73,10 @@ void GameSystemManager::UpdateStageInfoOnCheckPoint()
 
 void GameSystemManager::GameClearProcess()
 {
+
+
 	// ここにゲームクリア時の処理
 	isGameClear_ = true;
-
-
 }
 
 void GameSystemManager::CheckGameStatus()

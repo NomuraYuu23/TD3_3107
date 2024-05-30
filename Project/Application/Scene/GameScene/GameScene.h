@@ -134,6 +134,7 @@ private:
 	std::unique_ptr<Model> weaponModel_;
 	std::unique_ptr<Model> ringUnderModel_;
 	std::unique_ptr<Model> ringTopModel_;
+	std::unique_ptr<Model> arrowModel_;
 
 	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;

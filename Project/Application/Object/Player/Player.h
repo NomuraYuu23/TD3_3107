@@ -26,12 +26,6 @@ class GameUIManager;
 class Player : public IObject
 {
 private: // サブクラス
-	// UI
-	struct ArrowUIData {
-		Model* plane_;
-		Vector3 v3Position;
-		float offsetLength;
-	};
 
 public: // 継承
 	/// <summary>
@@ -154,7 +148,7 @@ public: // アニメーション関連関数群
 
 public:
 	// 矢印モデル
-	void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
+	//void SetArrowModel(Model* arrow) { arrow_.plane_ = arrow; }
 	// スクリーン座標
 	Vector2 screenPos_ = {};
 
@@ -168,6 +162,11 @@ public:
 	bool FreeFallActive() { return fallTimer_.IsActive(); }
 
 	void SetFallTimer();
+
+	/// <summary>
+	/// 矢印UIの更新関数
+	/// </summary>
+	void ArrowUIUpdate();
 
 	/// <summary>
 	/// 死亡フラグの設定
@@ -201,6 +200,12 @@ public:
 
 	Velocity2DManager* GetVelocity2DManager() { return velocity2DManager_.get(); }
 
+	/// <summary>
+	/// 矢印モデルセッター
+	/// </summary>
+	/// <param name="model">矢印モデル</param>
+	void SetArrowModel(Model* model);
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -210,8 +215,6 @@ public:
 	Vector3 throwDirect_ = { 1,0,0 };
 	// 前座標
 	Vector3 prevPosition_ = {};
-	// 矢印テクスチャ
-	uint32_t arrowTexture_ = 0u;
 
 	bool isLeft_ = false;
 	// 接地フラグ
@@ -252,8 +255,6 @@ private: // システム
 	PlayerController controller_;
 	// 放物線
 	PlayerParabola parabola_;
-	// 矢印UI
-	ArrowUIData arrow_;
 	// ジャンプ回数カウント
 	ComboCounter jumpCombo_;
 	// 自由落下の武器を回収するためのシステム
@@ -282,6 +283,17 @@ private: // UI関連
 
 	// UIマネージャー
 	GameUIManager* uiManager_ = nullptr;
+
+	// 投げる方向の矢印UI
+	Model* arrowModel_;
+	// 投げる方向の矢印トランスフォーム
+	WorldTransform arrowTransform_;
+	// 投げる方向の矢印マテリアル
+	std::unique_ptr<Material> arrowMaterial_;
+	// 矢印用UVトランスフォーム
+	WorldTransform arrowUVTransform_;
+	// 線の方向ベクトル
+	Vector3 subArrowVector_;
 
 private: // アニメーション関連
 
