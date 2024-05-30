@@ -6,6 +6,7 @@
 #include "user/SpearJump/SpearJumpParticle.h"
 #include "user/GoalParticle/GoalParticle.h"
 #include "user/SmokeParticle/SmokeParticle.h"
+#include "user/ImapledParticle/ImpaledParticle.h"
 #include <cassert>
 
 MakeParticle* MakeParticle::GetInstance()
@@ -52,7 +53,12 @@ IParticle* MakeParticle::Run(ParticleDesc* particleDesc, uint32_t paeticleName)
 		particle = new SmokeParticle();
 		particle->Initialize(particleDesc);
 		break;
+	case kImpaledParticle:
+		particle = new ImpaledParticle();
+		particle->Initialize(particleDesc);
+		break;
 	case kCountOfParticleName:
+		break;
 	default:
 		assert(0);
 		break;

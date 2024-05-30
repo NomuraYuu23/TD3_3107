@@ -2,6 +2,7 @@
 #include "../../../Engine/Scene/IScene/IScene.h"
 #include "../../SelectSceneObject/SelectSystem.h"
 #include "../../Skydome/Skydome.h"
+#include "../../AudioManager/StageSelectAudioManager.h"
 
 class SelectScene : public IScene{
 
@@ -34,7 +35,18 @@ private: // メンバ関数
 	/// </summary>
 	void TextureLoad() override;
 
+private:
+
+	/// <summary>
+	/// 音量
+	/// </summary>
+	void LowerVolumeBGM();
+
 private: // 変数
+
+	// オーディオマネージャー
+	std::unique_ptr<StageSelectAudioManager> audioManager_;
+	bool isDecreasingVolume = true;
 
 	// テクスチャハンドル
 	std::array<uint32_t, StageNumberManager::kStageMax> stagePhotTextureHandles_;

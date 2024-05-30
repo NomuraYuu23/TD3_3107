@@ -119,16 +119,16 @@ void GameScene::Initialize() {
 
 	// ゲームシステム
 	gameSystemManager_ = std::make_unique<GameSystemManager>();
-	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get());
+	gameSystemManager_->Initialize(goalModel_.get(), checkPointModel_.get(), player_.get(), audioManager_.get());
 
 	// 敵管理クラス
-	singleTextures_.clear();
-	singleTextures_.push_back(singleEnemyTexture_);
 	enemyTextures_[0].clear();
 	enemyTextures_[0].push_back(singleEnemyTexture_);
+	enemyTextures_[2].clear();
+	enemyTextures_[2].push_back(chaseTexture_);
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
-	enemyManager_->Initialize(enemyModel_.get(), &enemyTextures_[0]);
+	enemyManager_->Initialize(enemyModel_.get(), &enemyTextures_[0], &enemyTextures_[2]);
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
@@ -157,12 +157,6 @@ void GameScene::Initialize() {
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_.get());
 
-	// UIマネージャーの生成
-	gameUIManager_ = std::make_unique<GameUIManager>();		// 生成
-	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
-	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
-	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
-
 	// 矢印のUI
 	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
 	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
@@ -181,13 +175,8 @@ void GameScene::Initialize() {
 	fm->SetNear(50.0f);
 	fm->SetFar(2500.0f);
 
-	// デバッグ以外の場合行う
-	#ifndef _DEBUG
-
 	// ゲームシーン用BGMの再生
 	audioManager_->PlayWave(kGameSceneBGM);
-
-	#endif // !_DEBUG
 
 	// Jsonデータのクラス
 #ifdef _DEBUG
@@ -200,6 +189,12 @@ void GameScene::Initialize() {
 
 	// ゲームシステムにポインタ登録
 	gameSystemManager_->SetEnemyManager(enemyManager_.get());
+
+	// UIマネージャーの生成
+	gameUIManager_ = std::make_unique<GameUIManager>();		// 生成
+	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
+	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
+	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
 }
 
 /// <summary>
@@ -606,6 +601,8 @@ void GameScene::TextureLoad()
 	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
 
 	singleEnemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyBlueTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+
+	chaseTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
 	//uiTextureHandles_ = {
 
 	//};
@@ -614,18 +611,24 @@ void GameScene::TextureLoad()
 void GameScene::LowerVolumeBGM()
 {
 
-	const uint32_t startHandleIndex = 3;
+	const uint32_t startHandleIndex = 6;
 
-	float decreasingVolume = 1.0f / 60.0f;
-	float volume = audioManager_->GetPlayingSoundDatas()[kGameSceneBGM].volume_ - decreasingVolume;
-	if (volume < 0.0f) {
-		volume = 0.0f;
-		audioManager_->StopWave(kGameSceneBGM);
-		isDecreasingVolume = false;
-	}
-	else {
-		audioManager_->SetPlayingSoundDataVolume(kGameSceneBGM, volume);
-		audioManager_->SetVolume(kGameSceneBGM, audioManager_->GetPlayingSoundDatas()[kGameSceneBGM].volume_);
+	uint32_t index = kGameSceneBGM + startHandleIndex;
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		if (audioManager_->GetPlayingSoundDatas()[i].handle_ == index) {
+			float decreasingVolume = 1.0f / 60.0f;
+			float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
+			if (volume < 0.0f) {
+				volume = 0.0f;
+				audioManager_->StopWave(i);
+				isDecreasingVolume = false;
+			}
+			else {
+				audioManager_->SetPlayingSoundDataVolume(i, volume);
+				audioManager_->SetVolume(i, audioManager_->GetPlayingSoundDatas()[i].volume_);
+			}
+		}
 	}
 
 }

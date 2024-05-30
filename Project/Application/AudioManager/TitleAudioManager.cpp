@@ -6,7 +6,6 @@ TitleAudioManager::~TitleAudioManager()
 
 void TitleAudioManager::Initialize()
 {
-
 	AudioManager::Initialize();
 
 	// 全体の初期設定
@@ -18,7 +17,7 @@ void TitleAudioManager::Initialize()
 	}
 
 	// 個別設定
-
+	audioDatas_[kTitleSceneBGM].isLoop_ = true; // ゲームシーンのBGMはループ
 }
 
 void TitleAudioManager::Update()

@@ -62,8 +62,10 @@ private: // メンバ変数
 	// テクスチャハンドルのマネージャー
 	ITextureHandleManager* texHandleManager_ = nullptr;
 
-	// 二個目の背景オブジェクトのトランスフォーム
+	// 2個目の背景オブジェクトのトランスフォーム
 	WorldTransform transform2_;
+	// 3個目の背景オブジェクトのトランスフォーム
+	WorldTransform transform3_;
 
 	// チュートリアル平面モデル
 	Model* speartutorialPlaneModel_ = nullptr;

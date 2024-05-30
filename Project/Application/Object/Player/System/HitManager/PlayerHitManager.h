@@ -54,6 +54,18 @@ public:
 
 	bool IsHitEffectActive() { return hitEffectTimer_.IsActive(); }
 
+	/// <summary>
+	/// 現在体力ゲッター
+	/// </summary>
+	/// <returns>現在体力</returns>
+	int32_t GetCurrentHealth() { return hp_.current; }
+
+	/// <summary>
+	/// 最大体力ゲッター
+	/// </summary>
+	/// <returns></returns>
+	int32_t GetMaxHealth() { return hp_.max; }
+
 private:
 	// 親
 	Player* player_ = nullptr;

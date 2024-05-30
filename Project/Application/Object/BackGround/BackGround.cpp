@@ -18,6 +18,11 @@ void BackGround::Initialize(Model* model)
 	transform2_.transform_.translate = { 450.0f, -0.0f, 300.0f };
 	transform2_.transform_.scale = { 3.0f, 3.0f, 3.0f };
 	transform2_.UpdateMatrix();
+	// トランスフォーム初期化
+	transform3_.Initialize(model_->GetRootNode());
+	transform3_.transform_.translate = { 750.0f, -0.0f, 300.0f };
+	transform3_.transform_.scale = { 3.0f, 3.0f, 3.0f };
+	transform3_.UpdateMatrix();
 
 	// ライティング有効
 	enableLighting_ = EnableLighting::HalfLambert;
@@ -68,6 +73,8 @@ void BackGround::Draw(const BaseCamera& camera)
 	ModelDraw::AnimObjectDraw(desc);
 
 	desc.worldTransform = &transform2_;
+	ModelDraw::AnimObjectDraw(desc);
+	desc.worldTransform = &transform3_;
 	ModelDraw::AnimObjectDraw(desc);
 
 	// チュートリアルモデルが描画されていればチュートリアル平面の描画を行う

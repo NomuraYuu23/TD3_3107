@@ -7,7 +7,7 @@
 uint32_t GameSystemManager::sNowStageNum = 0;
 float GameSystemManager::sGameSpeed = 1.0f;
 
-void GameSystemManager::Initialize(Model* goalModel, Model* checkPointModel, Player* player)
+void GameSystemManager::Initialize(Model* goalModel, Model* checkPointModel, Player* player, GameAudioManager* gam)
 {
 	assert(goalModel);
 	// ゴールなどのオブジェクト
@@ -21,7 +21,7 @@ void GameSystemManager::Initialize(Model* goalModel, Model* checkPointModel, Pla
 	isGameOver_ = false;
 
 	checkPointManager_ = std::make_unique<CheckPointManager>();
-	checkPointManager_->Initialize(player_, checkPointModel_, goalModel_);
+	checkPointManager_->Initialize(player_, checkPointModel_, goalModel_, gam);
 
 	//checkPointManager_->GenerateCheckPoint({ 10,0,0 }, 1);
 	//checkPointManager_->GenerateCheckPoint({ 30,0,0 }, 2);

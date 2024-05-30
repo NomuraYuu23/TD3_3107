@@ -70,8 +70,8 @@ void StageSelectUI::Draw(bool notMove)
 {
 
 	if (notMove) {
-		//spriteDatas_[kSpriteIndexLeftArrow].sprite_->Draw();
-		//spriteDatas_[kSpriteIndexRightArrow].sprite_->Draw();
+		spriteDatas_[kSpriteIndexLeftArrow].sprite_->Draw();
+		spriteDatas_[kSpriteIndexRightArrow].sprite_->Draw();
 		spriteDatas_[kSpriteIndexStage].sprite_->Draw();
 		spriteDatas_[kSpriteIndexStageNumber].sprite_->Draw();
 		spriteDatas_[kSpriteIndexOperation].sprite_->Draw();
@@ -82,7 +82,7 @@ void StageSelectUI::Draw(bool notMove)
 void StageSelectUI::SetStageNum()
 {
 
-	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ kStageNumSize.x * StageNumberManager::stageNum_, 0.0f });
+	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ kStageNumSize.x * (StageNumberManager::stageNum_ + 1), 0.0f});
 
 }
 

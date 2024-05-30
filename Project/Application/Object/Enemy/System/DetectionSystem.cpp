@@ -51,7 +51,7 @@ void DetectionSystem::ChaseUpdate()
 	// 方向
 	enemy_->direction_ = { moveDirect.x,moveDirect.y , 0};
 	// 正規化
-	moveDirect = Vector3::Normalize(moveDirect);
+	moveDirect = Vector3::Normalize(enemy_->direction_);
 
 	// 移動速度
 	float moveRate = GlobalVariables::GetInstance()->GetFloatValue("Enemy", "ChaseSpeed");
@@ -60,6 +60,27 @@ void DetectionSystem::ChaseUpdate()
 	enemy_->transform_.translate.x += moveDirect.x * (kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
 	enemy_->transform_.translate.y += moveDirect.y * (kDeltaTime_) * (1.0f / GameSystemManager::sGameSpeed) * moveRate;
 
+	// 回転
+	 if (moveDirect.x <= 0.0f) {
+		//マイナス
+		if (moveDirect.y <= 0.0f) {
+			enemy_->transform_.rotate.z = Ease::Easing(Ease::EaseName::Lerp, -1.57f, -3.14f, std::fabsf(moveDirect.x));
+		}
+		else {
+			enemy_->transform_.rotate.z = Ease::Easing(Ease::EaseName::Lerp, 1.57f, 3.14f, std::fabsf(moveDirect.x));
+		}
+	}
+	else {
+		// プラス
+		if (moveDirect.y <= 0.0f) {
+			enemy_->transform_.rotate.z = Ease::Easing(Ease::EaseName::Lerp, -1.57f, 0.0f, std::fabsf(moveDirect.x));
+		}
+		else {
+			enemy_->transform_.rotate.z = Ease::Easing(Ease::EaseName::Lerp, 1.57f, 0.0f, std::fabsf(moveDirect.x));
+		}
+	}
+
+	enemy_->usedDirection_ = false;
 
 	enemy_->MatrixUpdate();
 }

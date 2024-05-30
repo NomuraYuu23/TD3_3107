@@ -114,9 +114,49 @@ void MapEditor::ImGuiDraw()
 
 		}
 
+		// データが入ってない分
+		for (; stageCount < StageNumberManager::kStageMax; ++stageCount) {
+
+			std::string stageName = "Stage" + std::to_string(stageCount);
+
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
+			}
+			if (ImGui::BeginTabItem(stageName.c_str())) {
+
+				// ブロックの追加
+				ImGui::SeparatorText("TerrainAdd");
+
+				ImGui::DragFloat2("AddPosition", &addMapBlockData_.position.x, imGuiSpeed);
+				ImGui::DragFloat2("AddSize", &addMapBlockData_.size.x, imGuiSpeed);
+				ImGui::DragInt("AddTerrainNum", &addMapBlockNum_, 0.1f, 0);
+
+				if (addMapBlockNum_ < 0) {
+					addMapBlockNum_ = 0;
+				}
+
+				std::string nameTerrainAdd = "TerrainAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameTerrainAdd.c_str())) {
+					// キー
+					std::string key = "Terrain" + std::to_string(addMapBlockNum_);
+
+					if (addMapBlockNum_ < 10) {
+						key = "Terrain0" + std::to_string(addMapBlockNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addMapBlockData_);
+					addMapBlockNum_++;
+				}
+
+				ImGui::EndTabItem();
+			}
+
+		}
+
 		// タブバーを終了
 		ImGui::EndTabBar();
-
 	}
 
 	ImGui::End();

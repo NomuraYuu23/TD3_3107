@@ -10,9 +10,41 @@ void ImpaledState::Initialize()
 	weapon_->worldtransform_.transform_.translate = weapon_->worldtransform_.GetWorldPosition();
 	weapon_->worldtransform_.parent_ = nullptr;
 	weapon_->worldtransform_.UpdateMatrix();
-	
+
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
+
+	// 逆ベクトルを求める
+	Vector3 v = {
+		 -weapon_->worldtransform_.direction_.x,
+		 -weapon_->worldtransform_.direction_.y,
+		 -weapon_->worldtransform_.direction_.z };
+
+	// 槍が刺さっている方向ベクトルの正規化
+	Vector3 d = Vector3::Normalize(weapon_->worldtransform_.direction_);
+
+	// 生成時トランスフォームの生成
+	EulerTransform emitT =
+	{
+		{1.25f, 2.5f, 1.0f},
+		{0.0f, 0.0f, 0.0f},
+		{ weapon_->worldtransform_.transform_.translate.x + d.x,
+		  weapon_->worldtransform_.transform_.translate.y + d.y,
+		  weapon_->worldtransform_.transform_.translate.z + d.z }
+	};
+
+	// 槍刺さったときのパーティクル再生
+	EmitterDesc desc;
+	desc.transform = &emitT;
+	desc.instanceCount = 5;
+	desc.frequency = 0.01f;
+	desc.lifeTime = 0.01f;
+	desc.velocity = v;
+	desc.particleModelNum = kCircle;
+	desc.paeticleName = kImpaledParticle;
+
+	ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
 	// 待機アニメーション開始
 	weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearIdle, true);
 	#endif // !_DEBUG

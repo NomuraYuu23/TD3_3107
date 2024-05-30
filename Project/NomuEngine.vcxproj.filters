@@ -218,6 +218,8 @@
     <ClCompile Include="Engine\3D\DrawLine.cpp" />
     <ClCompile Include="Engine\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Application\Particle\user\SmokeParticle\SmokeParticle.cpp" />
+    <ClCompile Include="Application\Particle\user\ImapledParticle\ImpaledParticle.cpp" />
+    <ClCompile Include="Application\AudioManager\StageSelectAudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -489,12 +491,49 @@
     <ClInclude Include="Engine\SkyBox\SkyBox.h" />
     <ClInclude Include="Application\Object\Weapon\WeaponState\DropState.h" />
     <ClInclude Include="Application\Particle\user\SmokeParticle\SmokeParticle.h" />
+    <ClInclude Include="Application\Particle\user\ImapledParticle\ImpaledParticle.h" />
+    <ClInclude Include="Application\AudioManager\StageSelectAudioManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="NomuEngine.vcxproj.user" />
+    <None Include="Resources\shaders\WindowSpriteStorage.hlsli" />
+    <None Include="Resources\shaders\Outline.hlsli" />
+    <None Include="Resources\shaders\PostEffect.hlsli" />
+    <None Include="Resources\shaders\Sprite\Sprite.hlsli" />
+    <None Include="Resources\shaders\Skybox\Skybox.hlsli" />
+    <None Include="Resources\shaders\PostEffect\PostEffect.hlsli" />
+    <None Include="Resources\shaders\Particle\Particle.hlsli" />
+    <None Include="Resources\shaders\Model\ManyModels.hlsli" />
+    <None Include="Resources\shaders\Model\Model.hlsli" />
+    <None Include="Resources\shaders\Line\Line.hlsli" />
+    <None Include="Resources\shaders\Collider2DDebug\Collider2DDebug.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\shaders\Outline.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Outline.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Sprite\Sprite.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Sprite\Sprite.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Skybox\Skybox.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Skybox\Skybox.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffect\PostEffectCalc.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffect\PostEffect.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\Particle\Particle.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Particle\Particle.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\NormalModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\AnimModel.CS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\AnimModel.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\ManyAnimModels.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\ManyModels.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\ManyNormalModels.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\Model.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Model\ModelRT2.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Line\Line.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Line\Line.PS.hlsl" />
+    <FxCompile Include="Resources\shaders\Collider2DDebug\Collider2DDebug.VS.hlsl" />
+    <FxCompile Include="Resources\shaders\Collider2DDebug\Collider2DDebug.PS.hlsl" />
   </ItemGroup>
 </Project>

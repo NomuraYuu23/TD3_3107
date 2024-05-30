@@ -424,6 +424,58 @@ void EnemyEditor::ImGuiSingleEnemy()
 
 		}
 
+		// データが入ってない分
+		for (; stageCount < StageNumberManager::kStageMax; ++stageCount) {
+		
+			std::string stageName = "Stage" + std::to_string(stageCount);
+
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
+			}
+
+			if (ImGui::BeginTabItem(stageName.c_str())) {
+
+				// シングルエネミーの追加
+				ImGui::SeparatorText("SingleEnemyAdd");
+
+				ImGui::DragFloat3("AddPosition", &addSingleEnemyData_.position.x, imGuiSpeed);
+				ImGui::DragInt("AddTypeNum", &addSingleEnemyData_.typeNum, imGuiSpeed, 0);
+				ImGui::DragInt("AddSingleEnemyNum", &addSingleEnemyNum_, 0.1f, 0);
+				ImGui::DragFloat3("AddEaseEndPosition", &addSingleEnemyData_.endPosition.x, imGuiSpeed);
+				ImGui::DragInt("AddPadding", &addSingleEnemyData_.pad, 0.1f, 0);
+
+				if (addSingleEnemyNum_ < 0) {
+					addSingleEnemyNum_ = 0;
+				}
+
+				if (addSingleEnemyData_.typeNum < 0) {
+					addSingleEnemyData_.typeNum = 0;
+				}
+				else if (addSingleEnemyData_.typeNum > 1) {
+					addSingleEnemyData_.typeNum = 1;
+				}
+
+				std::string nameSingleAdd = "SingleEnemyAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameSingleAdd.c_str())) {
+					// キー
+					std::string key = "Enemy" + std::to_string(addSingleEnemyNum_);
+
+					if (addSingleEnemyNum_ < 10) {
+						key = "Enemy0" + std::to_string(addSingleEnemyNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addSingleEnemyData_);
+					addSingleEnemyNum_++;
+				}
+
+				ImGui::EndTabItem();
+
+			}
+		
+		}
+
 		// タブバーを終了
 		ImGui::EndTabBar();
 
@@ -553,6 +605,55 @@ void EnemyEditor::ImGuiMultiEnemy()
 
 		}
 
+		// データが入ってない分
+		for (; stageCount < StageNumberManager::kStageMax; ++stageCount) {
+
+			std::string stageName = "Stage" + std::to_string(stageCount);
+
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
+			}
+
+			if (ImGui::BeginTabItem(stageName.c_str())) {
+
+				// マルチエネミーの追加
+				ImGui::SeparatorText("MultiEnemyAdd");
+
+				ImGui::DragFloat3("AddPosition", &addMultieEnemyData_.position.x, imGuiSpeed);
+				ImGui::DragFloat("AddDistance", &addMultieEnemyData_.distance, imGuiSpeed, 0);
+				ImGui::DragInt("AddEnemyMaxCount", &addMultieEnemyData_.enemyMaxCount, imGuiSpeed, 0);
+				ImGui::DragInt("AddMultiEnemyNum", &addMultiEnemyNum_, 0.1f, 0);
+				ImGui::DragFloat("AddRotateSpeed", &addMultieEnemyData_.rotateSpeed, imGuiSpeed, 0);
+				ImGui::DragInt("AddPadding", &addMultieEnemyData_.padding, 0.1f, 0);
+
+				if (addMultieEnemyData_.enemyMaxCount < 0) {
+					addMultieEnemyData_.enemyMaxCount = 0;
+				}
+				if (addMultiEnemyNum_ < 0) {
+					addMultiEnemyNum_ = 0;
+				}
+
+				std::string nameTerrainAdd = "MultiEnemyAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameTerrainAdd.c_str())) {
+					// キー
+					std::string key = "EnemyEmitter:" + std::to_string(addMultiEnemyNum_);
+
+					if (addMultiEnemyNum_ < 10) {
+						key = "EnemyEmitter:0" + std::to_string(addMultiEnemyNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addMultieEnemyData_);
+					addMultiEnemyNum_++;
+				}
+
+				ImGui::EndTabItem();
+
+			}
+
+		}
+
 		// タブバーを終了
 		ImGui::EndTabBar();
 
@@ -666,6 +767,49 @@ void EnemyEditor::ImGuiChaseEnemy()
 
 			stageCount++;
 
+		}
+
+		// データが入ってない分
+		for (; stageCount < StageNumberManager::kStageMax; ++stageCount) {
+
+			std::string stageName = "Stage" + std::to_string(stageCount);
+
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
+			}
+
+			if (ImGui::BeginTabItem(stageName.c_str())) {
+
+				// シングルエネミーの追加
+				ImGui::SeparatorText("ChaseEnemyAdd");
+
+				ImGui::DragFloat3("AddPosition", &addChaseEnemyData_.position.x, imGuiSpeed);
+				ImGui::DragFloat("AddSearchLength", &addChaseEnemyData_.searchLength, imGuiSpeed, 0);
+				ImGui::DragInt("AddChaseEnemyNum", &addChaseEnemyNum_, 0.1f, 0);
+
+				if (addChaseEnemyNum_ < 0) {
+					addChaseEnemyNum_ = 0;
+				}
+
+				std::string nameChaseAdd = "ChaseEnemyAdd" + std::to_string(stageCount);
+
+				if (ImGui::Button(nameChaseAdd.c_str())) {
+					// キー
+					std::string key = "ChaseEnemy" + std::to_string(addChaseEnemyNum_);
+
+					if (addChaseEnemyNum_ < 10) {
+						key = "ChaseEnemy0" + std::to_string(addChaseEnemyNum_);
+					}
+
+					// 追加
+					SetValue(stageName, key, addChaseEnemyData_);
+					addChaseEnemyNum_++;
+				}
+
+				ImGui::EndTabItem();
+
+			}
+		
 		}
 
 		// タブバーを終了
