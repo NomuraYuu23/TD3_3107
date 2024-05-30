@@ -653,9 +653,6 @@ void GameScene::ShadowUpdate()
 void GameScene::CollisionUpdate()
 {
 
-	// あたり判定
-	collisionManager_->ListClear();
-	collisionManager_->CheakAllCollision();
 
 	collision2DManager_->ListClear();
 	// プレイヤー
@@ -679,7 +676,5 @@ void GameScene::CollisionUpdate()
 	collision2DManager_->CheakAllCollision();
 
 	collision2DManager_->ListClear();
-
-	collision2DDebugDraw_->Clear();
 
 }

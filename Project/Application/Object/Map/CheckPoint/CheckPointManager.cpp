@@ -17,7 +17,7 @@ void CheckPointManager::Update()
 {
 
 #ifdef _DEBUG
-	EditorCheckPointLoad();
+	//EditorCheckPointLoad();
 #endif // _DEBUG
 
 
