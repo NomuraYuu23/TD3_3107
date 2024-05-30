@@ -184,14 +184,14 @@ void EnemyManager::LoadEnemyData()
 						continue;
 					}
 
-					it->get()->GetObjects()->clear();
+					//it->get()->GetObjects()->clear();
 					
 					MultiEnemyData data = std::get<MultiEnemyData>(enemyData);
 					// エミッターの設定
-					static_cast<IEnemyEmitter*>(it->get())->InitializeEmitter(data.rotateSpeed);
-					static_cast<IEnemyEmitter*>(it->get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
+					//static_cast<IEnemyEmitter*>(it->get())->InitializeEmitter(data.rotateSpeed);
+					//static_cast<IEnemyEmitter*>(it->get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
 					
-					//static_cast<IEnemyEmitter*>(it->get())->Edit(data);
+					static_cast<IEnemyEmitter*>(it->get())->Edit(data);
 
 					edited = true;
 
