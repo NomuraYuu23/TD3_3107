@@ -295,6 +295,11 @@ private: // UI関連
 	// 線の方向ベクトル
 	Vector3 subArrowVector_;
 
+	// 矢印の現在演出時間
+	float currentArrowStagingTime_ = 0.0f;
+	// 矢印の演出時間
+	float arrowStagingTime_ = 0.25f;
+
 private: // アニメーション関連
 
 	// ポニーテール用紐クラス

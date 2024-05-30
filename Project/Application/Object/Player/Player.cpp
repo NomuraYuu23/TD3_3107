@@ -202,7 +202,7 @@ void Player::Draw(const BaseCamera& camera)
 	}
 
 	// 矢印描画
-	if (arrowModel_ != nullptr) {
+	if (arrowModel_ != nullptr && std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
 		arrowMaterial_->SetUvTransform(arrowUVTransform_.transform_);
 		ModelDraw::NormalObjectDesc desc;
 		desc.camera = &const_cast<BaseCamera&>(camera);
@@ -835,8 +835,17 @@ void Player::ArrowUIUpdate()
 		angle = -angle;
 	}
 
+	// 演出時間でUV座標をイージング
+	if (currentArrowStagingTime_ < arrowStagingTime_) {
+		arrowUVTransform_.transform_.translate = Ease::Easing(Ease::EaseName::Lerp, { 0.0f, 0.0f, 0.0f }, { -1.0f ,0.0f, 0.0f }, currentArrowStagingTime_ / arrowStagingTime_);
+		currentArrowStagingTime_ += kDeltaTime_;
+	}
+	else {
+		arrowUVTransform_.transform_.translate = { -1.0f, 0.0f, 0.0f };
+		currentArrowStagingTime_ = 0.0f;
+	}
+
 	// 座標初期化
-	arrowTransform_.Initialize(arrowModel_->GetRootNode());
 	arrowTransform_.transform_.translate = worldtransform_.transform_.translate;
 	arrowTransform_.transform_.scale.x = s;
 	arrowUVTransform_.transform_.scale.x = s;
