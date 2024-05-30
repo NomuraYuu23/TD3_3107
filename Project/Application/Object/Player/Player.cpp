@@ -758,24 +758,24 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 {
 
 	if (std::holds_alternative<HoldState*>(weapon_->GetNowState())){
-		parabola_.DrawMap(drawLine);
+		//parabola_.DrawMap(drawLine);
 
 		Vector3 s = parabola_.GetStartPos();
 		Vector3 e = parabola_.GetEndPos();
 		subArrowVector_ = e - s;
 	}
 
-	if (!std::holds_alternative<ThrownState*>(weapon_->GetNowState())) {
-		LineForGPU lineForGPU;
+	//if (!std::holds_alternative<ThrownState*>(weapon_->GetNowState())) {
+	//	LineForGPU lineForGPU;
 
-		// 色
-		lineForGPU.color[0] = connectingSpearLineColor_;
-		lineForGPU.color[1] = connectingSpearLineColor_;
+	//	// 色
+	//	lineForGPU.color[0] = connectingSpearLineColor_;
+	//	lineForGPU.color[1] = connectingSpearLineColor_;
 
-		lineForGPU.position[0] = worldtransform_.GetWorldPosition();
-		lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
-		drawLine->Map(lineForGPU);
-	}
+	//	lineForGPU.position[0] = worldtransform_.GetWorldPosition();
+	//	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
+	//	drawLine->Map(lineForGPU);
+	//}
 
 }
 
