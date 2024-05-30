@@ -133,8 +133,8 @@ void GameScene::Initialize() {
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
 
-	bossEnemy_ = std::make_unique<PrevSmallBoss>();
-	bossEnemy_->Initialize(enemyModel_.get());
+	//bossEnemy_ = std::make_unique<PrevSmallBoss>();
+	//bossEnemy_->Initialize(enemyModel_.get());
 
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();

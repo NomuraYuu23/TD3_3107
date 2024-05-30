@@ -71,7 +71,7 @@ void IEnemyEmitter::Update()
 	#endif // !_DEBUG
 
 	// 回転処理
-	//nowAngle_ += 1.0f / (rotation_ * GameSystemManager::sGameSpeed);
+	nowAngle_ += 1.0f / (rotation_ * GameSystemManager::sGameSpeed);
 
 	// 雑な一周リセット処理
 	//float oneLap = 6.28f;
@@ -226,7 +226,7 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 		newPosition.y = (std::sinf(angle) * distance_);
 		static_cast<Enemy*>(it->get())->SetDefaultOffset(newPosition);
 		it->get()->transform_.translate = newPosition;
-
+		it->get()->Update();
 		// カウントアップ
 		count++;
 	}
@@ -261,6 +261,7 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 			static_cast<Enemy*>(obj.get())->SetEmitter(this);
 			static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
 			obj->transform_.translate = newPosition;
+			obj->Update();
 			// 初期化
 			static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
 			// リストに追加
@@ -293,6 +294,7 @@ void IEnemyEmitter::GenerateEnemys(float positionAngle, float transformAngle, fl
 		obj->transform_.translate = newPosition;
 		obj->transform_.rotate.z = transformAngle;
 		transformAngle += addAngle;
+		obj->Update();
 		// 初期化
 		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
 		// リストに追加

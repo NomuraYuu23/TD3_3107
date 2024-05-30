@@ -281,6 +281,7 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data)
 	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
 	obj->Initialize();
 	obj->transform_.translate = data.position;
+	obj->Update();
 	// 初期化
 	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), data.typeNum);
 	// 単体のやつ専用
@@ -298,6 +299,7 @@ void EnemyManager::RegisterEnemy(const SingleEnemyData& data, const std::string&
 	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
 	static_cast<Enemy*>(obj.get())->Initialize(name);
 	obj->transform_.translate = data.position;
+	obj->Update();
 	// 初期化
 	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), data.typeNum);
 	// 単体のやつ専用
@@ -314,6 +316,7 @@ void EnemyManager::RegisterChaseEnemy(const ChaseEnemyData& data, const std::str
 	std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
 	static_cast<Enemy*>(obj.get())->Initialize(name);
 	obj->transform_.translate = data.position;
+	obj->Update();
 	// 初期化
 	static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<ChaseEnemyState>(), 0);
 	// プレイヤーセット
