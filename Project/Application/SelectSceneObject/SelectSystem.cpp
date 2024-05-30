@@ -58,30 +58,37 @@ void SelectSystem::Update()
 		// 右移動
 		if (leftStick.x > 0.0f) {
 
-			isMoveRight_ = true;
-			easeTimer_ = 0.0f;
-			StageNumberManager::stageNum_++;
-			if (StageNumberManager::stageNum_ == StageNumberManager::kStageMax) {
-				StageNumberManager::stageNum_ = 0;
-			}
-			stageSelectUI_->SetStageNum();
+			if (StageNumberManager::stageNum_ == 0) {
+				isMoveRight_ = true;
+				easeTimer_ = 0.0f;
+				StageNumberManager::stageNum_++;
+				if (StageNumberManager::stageNum_ == StageNumberManager::kStageMax) {
+					StageNumberManager::stageNum_ = 0;
+				}
+				stageSelectUI_->SetStageNum();
 
-			// ステージ選択SE
-			audioManager_->PlayWave(kStageSelectSE);
+				// ステージ選択SE
+				audioManager_->PlayWave(kStageSelectSE);
+			}
+
 		}
 		// 左移動
 		else if (leftStick.x < 0.0f) {
 
-			isMoveLeft_ = true;
-			easeTimer_ = 0.0f;
-			StageNumberManager::stageNum_--;
-			if (StageNumberManager::stageNum_ == -1) {
-				StageNumberManager::stageNum_ = StageNumberManager::kStageMax - 1;
-			}
-			stageSelectUI_->SetStageNum();
+			if (StageNumberManager::stageNum_ == 1) {
 
-			// ステージ選択SE
-			audioManager_->PlayWave(kStageSelectSE);
+				isMoveLeft_ = true;
+				easeTimer_ = 0.0f;
+				StageNumberManager::stageNum_--;
+				if (StageNumberManager::stageNum_ == -1) {
+					StageNumberManager::stageNum_ = StageNumberManager::kStageMax - 1;
+				}
+				stageSelectUI_->SetStageNum();
+
+				// ステージ選択SE
+				audioManager_->PlayWave(kStageSelectSE);
+
+			}
 		}
 		// ゲームシーンへ
 		else if (input_->PushJoystick(JoystickButton::kJoystickButtonA)) {
