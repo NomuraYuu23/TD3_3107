@@ -28,7 +28,7 @@ void EnemyManager::Update()
 {
 
 #ifdef _DEBUG
-	LoadEnemyData();
+	//LoadEnemyData();
 #endif // _DEBUG
 
 	// 更新をLargeのやつごとに

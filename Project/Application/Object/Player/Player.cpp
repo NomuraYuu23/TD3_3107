@@ -87,13 +87,18 @@ void Player::Update()
 		actionState_->Update();
 	}
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 
 	if (Input::GetInstance()->TriggerKey(DIK_O)) {
 		worldtransform_.transform_.translate = { 300.0f,36.0f };
 		worldtransform_.UpdateMatrix();
 	}
-#endif // _DEBUG
+	if (Input::GetInstance()->TriggerKey(DIK_I)) {
+		worldtransform_.transform_.translate = { 400.0f,50.0f };
+		worldtransform_.UpdateMatrix();
+	}
+
+//#endif // _DEBUG
 
 
 	SystemUpdate();
@@ -693,6 +698,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 		//if (invisibleTimer_.IsActive()) {
 		//	return;
 		//}
+#ifdef _DEBUG
+		return;
+#endif // !_DEBUG
+
+
 		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
 			return;
 		}

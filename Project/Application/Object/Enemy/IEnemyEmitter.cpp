@@ -60,16 +60,18 @@ void IEnemyEmitter::Update()
 	interval_.Update();
 
 	// フラグによる死亡処理
+	#ifndef _DEBUG
 	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
 		if (enemy->IsDead()) {
 			enemy.reset();
 			return true;
 		}
 		return false;
-		});
+	});
+	#endif // !_DEBUG
 
 	// 回転処理
-	nowAngle_ += 1.0f / (rotation_ * GameSystemManager::sGameSpeed);
+	//nowAngle_ += 1.0f / (rotation_ * GameSystemManager::sGameSpeed);
 
 	// 雑な一周リセット処理
 	//float oneLap = 6.28f;
@@ -130,8 +132,8 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 
 	if (maxCount_ == 5) {
 		if (rotation_ > 0) {
-			tAngle = 1.5f;
-			add = 1.25f;
+			tAngle = 0;
+			add = 0.25f;
 		}
 		else if (rotation_ < 0) {
 			tAngle = 0;

@@ -37,6 +37,7 @@ void SingleEnemyRegister::Update()
 
 	LargeNumberOfObjects::Update();
 
+	#ifndef _DEBUG
 	// フラグによる死亡処理
 	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
 		if (enemy->IsDead()) {
@@ -45,6 +46,7 @@ void SingleEnemyRegister::Update()
 		}
 		return false;
 		});
+	#endif // !_DEBUG
 
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
