@@ -835,6 +835,14 @@ void Player::ArrowUIUpdate()
 		angle = -angle;
 	}
 
+	/*Vector2 stickDirect = controller_.GetInput()->GetRightAnalogstick();
+
+	Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+	float deadZoneValue = 0.25f;
+	if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue)){
+		currentArrowStagingTime_ += kDeltaTime_;
+	}*/
+
 	// 演出時間でUV座標をイージング
 	if (currentArrowStagingTime_ < arrowStagingTime_) {
 		arrowUVTransform_.transform_.translate = Ease::Easing(Ease::EaseName::Lerp, { 0.0f, 0.0f, 0.0f }, { -1.0f ,0.0f, 0.0f }, currentArrowStagingTime_ / arrowStagingTime_);
