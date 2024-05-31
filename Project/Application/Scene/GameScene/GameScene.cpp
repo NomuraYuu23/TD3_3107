@@ -189,6 +189,9 @@ void GameScene::Initialize() {
 	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
 	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
 	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
+
+	// ゲームシステムにUIマネージャーをセット
+	gameSystemManager_->SetGameUIManager(gameUIManager_.get());
 }
 
 /// <summary>

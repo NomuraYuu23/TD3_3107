@@ -224,6 +224,9 @@ public:
 	// 一度踏んだかのフラグ
 	bool isOneStepOn_ = false;
 
+	// ゲームクリアフラグ
+	bool isGameClear_ = false;
+
 	// 足元コライダー
 	PlayerFootCollider footCollider_;
 

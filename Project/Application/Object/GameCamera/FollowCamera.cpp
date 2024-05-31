@@ -32,6 +32,11 @@ void FollowCamera::Initialize()
 
 void FollowCamera::Update(float elapsedTime)
 {
+	// カメラをロックするか
+	if (player_->isGameClear_) {
+		isLockCamera_ = true;
+	}
+
 	if (!isLockCamera_) {
 		// 追従処理
 		if (targetTransform_) {
@@ -47,12 +52,12 @@ void FollowCamera::Update(float elapsedTime)
 			MoveCameraForward();
 		}
 
-		if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
+		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
 			isLockCamera_ = true;
-		}
+		}*/
 	}
 	else {
-		if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
+		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
 			isLockCamera_ = false;
 		}
 
@@ -75,7 +80,7 @@ void FollowCamera::Update(float elapsedTime)
 		}
 		else if (input_->PushKey(DIK_A)) {
 			transform_.translate.x -= 1.0f;
-		}
+		}*/
 	}
 
 	// 基底クラス更新

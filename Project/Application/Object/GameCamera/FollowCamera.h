@@ -36,6 +36,12 @@ public:
 
 	void MoveCameraForward();
 
+	/// <summary>
+	/// カメラのロック状態ゲッター
+	/// </summary>
+	/// <param name="isLock">カメラをロックするか</param>
+	void SetLockCamera(const bool isLock) { isLockCamera_ = isLock; }
+
 private:
 	// プレイヤー
 	Player* player_ = nullptr;

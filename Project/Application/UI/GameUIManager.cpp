@@ -24,20 +24,26 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 
 void GameUIManager::Update()
 {
-	// 左スティックUI更新
-	LeftStickUIUpdate();
+	// クリア時、クリアUIの更新
+	if (isClear_) {
+		ClearUIUpdate();
+	}
+	else { // それ以外ではUIの更新
+		// 左スティックUI更新
+		LeftStickUIUpdate();
 
-	// ジャンプボタンUI更新
-	JumpButtonUIUpdate();
+		// ジャンプボタンUI更新
+		JumpButtonUIUpdate();
 
-	// 右スティックUI更新
-	RightStickUIUpdate();
+		// 右スティックUI更新
+		RightStickUIUpdate();
 
-	// 槍投げUIの更新
-	ThrowButtonUIUpdate();
+		// 槍投げUIの更新
+		ThrowButtonUIUpdate();
 
-	// HPUIの更新
-	HPUIUpdate();
+		// HPUIの更新
+		HPUIUpdate();
+	}
 }
 
 void GameUIManager::Draw()
@@ -110,6 +116,8 @@ void GameUIManager::DisplayImGui()
 void GameUIManager::LoadTexture()
 {
 	/// テクスチャロードを行う
+	// 白テクスチャ
+	texHandles_.insert({ White2x2Tex, TextureManager::Load("Resources/default/white2x2.png", dxCommon_, texHandleManager_) }); // 白
 	// ボタン関係
 	texHandles_.insert({ LeftStickNoneTex, TextureManager::Load("Resources/UI/Button/joystick_left_N.png", dxCommon_, texHandleManager_) }); // 左スティック入力無し
 	texHandles_.insert({ LeftStickPressTex, TextureManager::Load("Resources/UI/Button/joystick_left_P.png", dxCommon_, texHandleManager_) }); // 左スティック入力あり
@@ -225,7 +233,14 @@ void GameUIManager::CreateSprite()
 	setSize = { 384.0f, 64.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
-	
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // クリア時背景
+	uiSprites_.back().reset(Sprite::Create(texHandles_[White2x2Tex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 640.0f, 360.0f };
+	setSize = { 1280.0f, 720.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
 
 }
 
@@ -362,4 +377,33 @@ void GameUIManager::HPUIUpdate()
 
 	uiSprites_[HPGageSprite]->SetTextureSize({ texSize, 192.0f });
 	uiSprites_[HPGageSprite]->SetSize({ size, 64.0f });
+}
+
+void GameUIManager::ClearUIUpdate()
+{
+	// クリア文字が出現しきってなかった場合
+	if (!isClearAppear_) {
+		if (currentClearAppearTime_ < clearAppearTime_) {
+			// 線形補間で演出を行う
+			float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 0.0f, 0.75f, currentClearAppearTime_ / clearAppearTime_);
+			float uiAlpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 1.0f, 0.0f, currentClearAppearTime_ / clearAppearTime_);
+
+			// 全スプライト分ループ
+			for (int i = 0; i < spriteCount; i++) {
+				// UIを透明に
+				Vector4 prevColor = uiSprites_[i]->GetColor();
+				uiSprites_[i]->SetColor({ prevColor.x, prevColor.y, prevColor.z, uiAlpha });
+			}
+			uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, alpha });
+			// 現在時間を加算
+			currentClearAppearTime_ += kDeltaTime_;
+		}
+		else {
+			// 終了時一定値で固定
+			uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, 0.75f });
+
+			// クリア演出終了
+			isClearAppear_ = true;
+		}
+	}
 }

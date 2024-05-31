@@ -167,6 +167,10 @@ void PlayerController::AerialMoveProcess()
 	}
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
+	if (player_->isGameClear_) { // クリア時は入力を取得しない
+		leftStick = { 0.0f, 0.0f };
+	}
+
 	bool CheckAction = (std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()));
 	float ratio = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "inverceRatio");
 	// 空中にいる場合
@@ -193,6 +197,9 @@ void PlayerController::GroundMoveProcess()
 	}
 
 	Vector2 leftStick = input_->GetLeftAnalogstick();
+	if (player_->isGameClear_) { // クリア時は入力を取得しない
+		leftStick = { 0.0f, 0.0f };
+	}
 	bool CheckAction = std::holds_alternative<GroundState*>(player_->GetNowState());
 
 	// 地上にいる場合
@@ -238,7 +245,7 @@ void PlayerController::WaitKeyProcess()
 
 void PlayerController::ThrownProcess()
 {
-	if (input_->TriggerJoystick(kJoystickButtonRB)) {
+	if (input_->TriggerJoystick(kJoystickButtonRB) && !player_->isGameClear_) {
 		// 投げ入力
 		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
 			// 右スティックの入力がなければキャンセル

@@ -133,7 +133,9 @@ void Player::Update()
 	}
 
 	// 矢印UI更新関数
-	ArrowUIUpdate();
+	if (!isGameClear_) {
+		ArrowUIUpdate();
+	}
 
 	// コライダー
 	CircleColliderUpdate();

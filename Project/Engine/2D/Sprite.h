@@ -221,6 +221,7 @@ public: // アクセッサ(マテリアル)
 	void SetUvTransform(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 	void SetColor(const Vector4& color);
+	Vector4 GetColor() { return color_; }
 
 	void SetEnableLighting(int enableLighting);
 
@@ -234,4 +235,3 @@ private: // メンバ変数(マテリアル)
 	int enableLighting_;
 
 };
-
