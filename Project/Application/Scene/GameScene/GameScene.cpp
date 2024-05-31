@@ -255,7 +255,9 @@ void GameScene::Update() {
 	player_->Update();
 	player_->DrawLinesMap(drawLine_);
 	// 敵
-	enemyManager_->Update();
+	if (!player_->isGameClear_) {
+		enemyManager_->Update();
+	}
 
 	// UIマネージャー更新
 	gameUIManager_->Update();
