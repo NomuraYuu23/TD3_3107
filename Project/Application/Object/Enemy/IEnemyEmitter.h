@@ -2,6 +2,7 @@
 #include "../../../Engine/3D/LargeNumberOfObjects.h"
 #include "../GameUtility/TimerLib.h"
 #include "../../../Engine/Animation/Animation.h"
+#include "MultiEnemyData.h"
 
 class Player;
 
@@ -62,6 +63,8 @@ public:
 	float GetNowAngle() { return nowAngle_; }
 
 	std::string GetName() { return name_; }
+
+	void Edit(const MultiEnemyData& multiEnemyData);
 
 private:
 	void GenerateEnemys(float positionAngle, float transformAngle, float addAngle);

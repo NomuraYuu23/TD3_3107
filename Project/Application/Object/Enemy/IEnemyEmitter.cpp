@@ -59,6 +59,7 @@ void IEnemyEmitter::Update()
 
 	interval_.Update();
 
+#ifdef _RELEASE
 	// フラグによる死亡処理
 	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
 		if (enemy->IsDead()) {
@@ -67,6 +68,7 @@ void IEnemyEmitter::Update()
 		}
 		return false;
 		});
+#endif // _RELEASE
 
 	// 回転処理
 	nowAngle_ += 1.0f / (rotation_ * GameSystemManager::sGameSpeed);
@@ -210,4 +212,91 @@ void IEnemyEmitter::GenerateEnemys(float positionAngle, float transformAngle, fl
 		// リストに追加
 		objects_.push_back(std::move(obj));
 	}
+}
+
+void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
+{
+
+	uint32_t count = 0;
+	uint32_t preMaxCount = maxCount_;
+
+	worldTransform_.transform_.translate = multiEnemyData.position;
+	distance_ = multiEnemyData.distance;
+	maxCount_ = multiEnemyData.enemyMaxCount;
+	rotation_ = multiEnemyData.rotateSpeed;
+
+	// 敵の角度生成
+	float angleIncrement = 0.0f;
+	if (maxCount_ != 0) {
+		angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
+	}
+
+	// オブジェクト分回す
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+
+		// オブジェクトの数が最大より大きいなら削除
+		if (maxCount_ <= count) {
+			break;
+		}
+
+		// 距離、回転とか修正
+
+		// 角度からオフセットの計算
+		float angle = count * angleIncrement + (float)std::numbers::pi / 2.0f;
+		Vector3 newPosition = {};
+		newPosition.x = (std::cosf(angle) * distance_);
+		newPosition.y = (std::sinf(angle) * distance_);
+		if (!static_cast<Enemy*>(it->get())->parent_) {
+			static_cast<Enemy*>(it->get())->SetParent(&worldTransform_);
+		}
+		static_cast<Enemy*>(it->get())->SetDefaultOffset(newPosition);
+		it->get()->transform_.translate = newPosition;
+		it->get()->Update();
+		// カウントアップ
+		count++;
+	}
+
+	// オブジェクトの数が最大より大きいなら削除
+	if (preMaxCount > count) {
+
+		objects_.erase(std::next(objects_.begin(), count), objects_.end());
+
+	}
+	// オブジェクトの数が足りてないなら生成
+	else if (maxCount_ > count) {
+
+		while (true)
+		{
+
+			// オブジェクトの数が最大より大きいなら削除
+			if (maxCount_ <= count) {
+				break;
+			}
+
+			// 角度からオフセットの計算
+			float angle = count * angleIncrement + (float)std::numbers::pi / 2.0f;
+			Vector3 newPosition = {};
+			newPosition.x = (std::cosf(angle) * distance_);
+			newPosition.y = (std::sinf(angle) * distance_);
+
+			// 生成
+			std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
+			obj->Initialize();
+			static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
+			static_cast<Enemy*>(obj.get())->SetEmitter(this);
+			static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
+			obj->transform_.translate = newPosition;
+			obj->Update();
+			// 初期化
+			static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
+			// リストに追加
+			objects_.push_back(std::move(obj));
+
+			count++;
+
+		}
+
+	}
+
 }
