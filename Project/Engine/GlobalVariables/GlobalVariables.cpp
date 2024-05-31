@@ -196,7 +196,7 @@ void GlobalVariables::SetValue(
 /// </summary>
 void GlobalVariables::Update() {
 
-#ifdef _DEBUG
+#ifdef _DEMO
 
 	if (!ImGui::Begin("Global Variables", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();

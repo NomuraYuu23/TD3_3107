@@ -12,6 +12,9 @@ public:
 	static uint32_t sSerialNumber;
 
 public: // 継承
+
+	~CheckPointObject();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
