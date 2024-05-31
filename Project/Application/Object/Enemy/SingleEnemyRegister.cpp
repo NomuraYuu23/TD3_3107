@@ -82,3 +82,82 @@ void SingleEnemyRegister::ImGuiDraw()
 	ImGui::Text(name_.c_str());
 	//ImGui::End();
 }
+
+void SingleEnemyRegister::Edit(const std::string& name, const SingleEnemyData& singleEnemyData, Player* player)
+{
+
+	bool isEdit = false;
+
+	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = objects_.begin();
+	for (; itr != objects_.end(); ++itr) {
+		OneOfManyObjects* obj = itr->get();
+
+		// 名前が一緒だったら
+		if (static_cast<Enemy*>(obj)->GetName() == name) {
+
+			obj->transform_.translate = singleEnemyData.position;
+			Vector3 end = Vector3::Add(singleEnemyData.position, singleEnemyData.endPosition);
+			static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj)->GetNowState())->SettingMoveInfo(end);
+
+			isEdit = true;
+			break;
+		}
+
+	}
+
+	// 編集してないので追加
+	if (!isEdit) {
+		std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
+		static_cast<Enemy*>(obj.get())->Initialize(name);
+		obj->transform_.translate = singleEnemyData.position;
+		// 初期化
+		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), singleEnemyData.typeNum);
+		// 単体のやつ専用
+		Vector3 end = obj->GetWorldPosition() + singleEnemyData.endPosition;
+		static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SettingMoveInfo(end);
+		static_cast<Enemy*>(obj.get())->SetPlayer(player);
+		// 追加
+		objects_.push_back(std::move(obj));
+	}
+
+}
+
+void SingleEnemyRegister::Edit(const std::string& name, const ChaseEnemyData& chaseEnemyData, Player* player)
+{
+
+	bool isEdit = false;
+
+	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = objects_.begin();
+	for (; itr != objects_.end(); ++itr) {
+		OneOfManyObjects* obj = itr->get();
+
+		// 名前が一緒だったら
+		if (static_cast<Enemy*>(obj)->GetName() == name) {
+			obj->transform_.translate = chaseEnemyData.position;
+			obj->Update();
+			// 索敵設定
+			static_cast<ChaseEnemyState*>(static_cast<Enemy*>(obj)->GetNowState())->SetChaseSetting(chaseEnemyData.searchLength);
+
+			isEdit = true;
+			break;
+		}
+
+	}
+
+	// 編集してないので追加
+	if (!isEdit) {
+		std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
+		static_cast<Enemy*>(obj.get())->Initialize(name);
+		obj->transform_.translate = chaseEnemyData.position;
+		obj->Update();
+		// 初期化
+		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<ChaseEnemyState>(), 0);
+		// プレイヤーセット
+		static_cast<Enemy*>(obj.get())->SetPlayer(player);
+		// 索敵設定
+		static_cast<ChaseEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SetChaseSetting(chaseEnemyData.searchLength);
+		// 追加
+		objects_.push_back(std::move(obj));
+	}
+
+}

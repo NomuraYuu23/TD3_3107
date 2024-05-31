@@ -35,6 +35,15 @@ public:
 	/// ImGuiの描画
 	/// </summary>
 	void ImGuiDraw() override;
+
+	/// <summary>
+	/// 編集
+	/// </summary>
+	/// <param name="name"></param>
+	/// <param name="singleEnemyData"></param>
+	/// <param name="player"></param>
+	void Edit(const std::string& name, const SingleEnemyData& singleEnemyData, Player* player);
+	void Edit(const std::string& name, const ChaseEnemyData& chaseEnemyData, Player* player);
 	//std::list<std::unique_ptr<OneOfManyObjects>>* GetList() { return &objects_; }
 
 	void SetTexture(std::vector<UINT>* texture) { 
