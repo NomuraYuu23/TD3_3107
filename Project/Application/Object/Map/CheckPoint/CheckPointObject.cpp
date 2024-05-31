@@ -4,6 +4,14 @@
 #include "../../../Collider2D/CollisionConfig2D.h"
 #include "../../../Engine/Math/DeltaTime.h"
 
+CheckPointObject::~CheckPointObject()
+{
+
+	passedMaterial_.reset(nullptr);
+	passedLocalMatrixManager_.reset(nullptr);
+
+}
+
 void CheckPointObject::Initialize(Model* model)
 {
 	// 基底クラスの初期化
@@ -25,7 +33,7 @@ void CheckPointObject::Initialize(Model* model)
 void CheckPointObject::Update()
 {
 	// 演出はデバッグ以外でのみ行う
-#ifndef _DEBUG
+#ifdef _RELEASE
 
 	// 通過している場合
 	if (isPassed_) {
@@ -90,7 +98,7 @@ void CheckPointObject::OnCollision(ColliderParentObject2D target)
 	// 衝突時に書き換えの処理呼び出し（これより後の値だった場合書き換えない
 	checkPointManager_->CheckPointJudge(worldtransform_.GetWorldPosition(), checkNum_);
 
-#ifndef _DEBUG
+#ifdef _RELEASE
 
 	// 通過した場合再生とする
 	if (!isPassed_) {

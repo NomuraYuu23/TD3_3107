@@ -27,7 +27,7 @@ void EnemyManager::Initialize(Model* model, std::vector<UINT>* texture, std::vec
 void EnemyManager::Update()
 {
 
-#ifdef _DEBUG
+#ifdef _DEMO
 	LoadEnemyData();
 #endif // _DEBUG
 
