@@ -216,6 +216,20 @@ void GameUIManager::CreateSprite()
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 戻す状態であるとき、右スティック背景用
+	uiSprites_.back().reset(Sprite::Create(texHandles_[JoyStickBackTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 995.0f, 675.0f };
+	setSize = { 64.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 戻す状態であるとき、右スティック表示用
+	uiSprites_.back().reset(Sprite::Create(texHandles_[RightStickNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 995.0f, 675.0f };
+	setSize = { 64.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // テキスト画像用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[ThrowTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 1150.0f, 650.0f };
@@ -347,12 +361,35 @@ void GameUIManager::ThrowButtonUIUpdate()
 
 	if (player_->weapon_->isHold_) {
 		uiSprites_[TextSprite]->SetTextureHandle(texHandles_[ThrowTextTex]);  // テクスチャ変更
+
+		uiSprites_[RBButtonSprite]->SetPosition({ 975.0f, 650.0f });
+		uiSprites_[RBButtonSprite]->SetSize({ 84.0f, 84.0f });
+		uiSprites_[ThrowRStickBackSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+		uiSprites_[ThrowRightStickSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
 	}
 	else {
 		uiSprites_[TextSprite]->SetTextureHandle(texHandles_[ReturnTextTex]);  // テクスチャ変更
+
+		uiSprites_[RBButtonSprite]->SetPosition({ 935.0f, 625.0f });
+		uiSprites_[RBButtonSprite]->SetSize({ 64.0f, 64.0f });
+		uiSprites_[ThrowRStickBackSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		uiSprites_[ThrowRightStickSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
+		// スティック入力取得
+		Vector2 stickVec = Vector2::Normalize(input_->GetRightAnalogstick()) * stickUIOffset_;
+
+		// スティック入力に応じてUIを動かす
+		if (stickVec.x < 0.0f || stickVec.x > 0.0f || stickVec.y < 0.0f || stickVec.y > 0.0f) {
+			uiSprites_[ThrowRightStickSprite]->SetPosition(uiSprites_[ThrowRStickBackSprite]->GetPosition() + stickVec); // 座標を動かす
+			uiSprites_[ThrowRightStickSprite]->SetTextureHandle(texHandles_[RightStickPressTex]);  // テクスチャ変更
+		}
+		else {
+			uiSprites_[ThrowRightStickSprite]->SetPosition(uiSprites_[ThrowRStickBackSprite]->GetPosition());					    // 元に戻す
+			uiSprites_[ThrowRightStickSprite]->SetTextureHandle(texHandles_[RightStickNoneTex]);  // テクスチャ変更
+		}
 	}
 
-	// 槍を所持していない時に灰色に
+	// 槍が刺さっていない時に灰色に
 	if (std::holds_alternative<ThrownState*>(player_->weapon_->GetNowState())) {
 		throwUIColor_ = { 0.5f, 0.5f, 0.5f, 1.0f };
 	}
@@ -361,6 +398,11 @@ void GameUIManager::ThrowButtonUIUpdate()
 	}
 	uiSprites_[RBButtonSprite]->SetColor(throwUIColor_);
 	uiSprites_[TextSprite]->SetColor(throwUIColor_);
+
+	if (!player_->weapon_->isHold_) {
+		uiSprites_[ThrowRStickBackSprite]->SetColor(throwUIColor_);
+		uiSprites_[ThrowRightStickSprite]->SetColor(throwUIColor_);
+	}
 }
 
 void GameUIManager::HPUIUpdate()

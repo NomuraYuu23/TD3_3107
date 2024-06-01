@@ -60,6 +60,8 @@ private: // プライベートなサブクラス
 		RightStickSprite, // 右スティック用
 		AimSprite,		// エイム画像
 		RBButtonSprite, // RBボタン用
+		ThrowRStickBackSprite, // 戻す際の右スティック背景用
+		ThrowRightStickSprite, // 戻す際の右スティック
 		TextSprite,		// テキスト用
 		HPGageSprite,	 // ゲージ本体
 		HPGageFrameSprite, // ゲージ背景
