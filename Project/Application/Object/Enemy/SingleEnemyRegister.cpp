@@ -99,7 +99,7 @@ void SingleEnemyRegister::Edit(const std::string& name, const SingleEnemyData& s
 		// 名前が一緒だったら
 		if (static_cast<Enemy*>(obj)->GetName() == name) {
 
-			obj->transform_.translate = singleEnemyData.position;
+			//obj->transform_.translate = singleEnemyData.position;
 			Vector3 end = Vector3::Add(singleEnemyData.position, singleEnemyData.endPosition);
 			static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj)->GetNowState())->SettingMoveInfo(end);
 
