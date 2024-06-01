@@ -22,6 +22,7 @@ void HoldState::Initialize()
 
 	// 槍の保持フラグをtrueに
 	weapon_->isHold_ = true;
+	weapon_->GetPlayer()->GetController()->isShortening_ = false;
 
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG

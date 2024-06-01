@@ -32,6 +32,9 @@ void GroundState::Initialize()
 	player_->EndAssistDash();
 	// 補正キャンセル
 	player_->GetLandingAdjuster().Cancel();
+
+	// 
+	player_->GetController()->isShortening_ = false;
 }
 
 void GroundState::Update()

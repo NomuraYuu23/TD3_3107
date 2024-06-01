@@ -912,4 +912,7 @@ void Player::SystemUpdate()
 	slowEffect_->Update();
 	// 着地アシスト
 	landingAdjuster_.Update();
+
+	// 
+	throwStopTimer_.Update();
 }

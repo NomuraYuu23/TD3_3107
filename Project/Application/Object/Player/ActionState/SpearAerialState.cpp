@@ -30,6 +30,9 @@ void SpearAerialState::Initialize()
 
 	player_->weapon_->GetEffectSystem()->StartShockWave(15.0f);
 
+	player_->GetController()->isShortening_ = true;
+	acceptCooltime_.Start(15.0f);
+
 #ifndef _DEBUG
 
 	// 槍ジャンアニメーションの再生
@@ -55,6 +58,14 @@ void SpearAerialState::Update()
 	float activeRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialActiveDecelerateRatio");
 	float inActiveRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialInActiveDecelerateRatio");
 	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+
+	StickInput();
+
+	// 移動処理
+	if (player_->throwStopTimer_.IsActive() && player_->velocity_.y < 0) {
+		return;
+	}
+
 	// X速度
 	if (leftStick.x != 0) {
 		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, activeRatio);
@@ -62,7 +73,6 @@ void SpearAerialState::Update()
 	else {
 		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, inActiveRatio);
 	}
-
 	// Y速度
 	if (player_->IsNowAssistDash()) {
 		float ratio = GlobalVariables::GetInstance()->GetFloatValue("Dash", "SlowRatio");
@@ -76,10 +86,22 @@ void SpearAerialState::Update()
 	else {
 		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
-
-	// 移動処理
 	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
+
+}
+
+void SpearAerialState::StickInput()
+{
+	acceptCooltime_.Update();
+
+	if (player_->GetController()->isShortening_ && !acceptCooltime_.IsActive()) {
+		Vector2 rightStick = Input::GetInstance()->GetRightAnalogstick();
+		if ((rightStick.x != 0 || rightStick.y != 0) && !std::holds_alternative<HoldState*>(player_->GetWeapon()->GetNowState())) {
+			player_->GetWeapon()->ChangeRequest(Weapon::StateName::kReturn);
+			player_->GetController()->isShortening_ = false;
+		}
+	}
 
 }
 

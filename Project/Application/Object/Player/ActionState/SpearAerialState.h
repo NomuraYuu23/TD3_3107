@@ -2,6 +2,7 @@
 #include "IActionState.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
 #include "../../../Engine/Math/Vector2.h"
+#include "../../GameUtility/TimerLib.h"
 
 class SpearAerialState : public IActionState
 {
@@ -15,6 +16,10 @@ public:
 	/// </summary>
 	void Update() override;
 
+	/// <summary>
+	/// スティックの入力
+	/// </summary>
+	void StickInput();
 
 private:
 	float decreeSpeed_ = 2.0f;
@@ -22,6 +27,8 @@ private:
 	float gravity_ = 0;
 
 	Vector2 moveDirection_ = {};
+
+	TimerLib acceptCooltime_;
 
 private:
 	float CreateNewSpeed(float direct) {

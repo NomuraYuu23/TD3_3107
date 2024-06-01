@@ -10,9 +10,9 @@ void AerialState::Initialize()
 	const char* groupName = "Player";
 	player_->velocity_.y = GlobalVariables::GetInstance()->GetFloatValue(groupName, "NormalJumpPower");
 	//player_->velocity_.x *= 0.5f;
-	
+
 	//groupName = "Common";
-	
+
 	gravity_ = GlobalVariables::GetInstance()->GetFloatValue(groupName, "Gravity");
 
 	player_->SetNowState(this);
@@ -42,6 +42,10 @@ void AerialState::Update()
 	float activeRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialActiveDecelerateRatio");
 	float inActiveRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialInActiveDecelerateRatio");
 	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
+	// 移動処理
+	if (player_->throwStopTimer_.IsActive() && player_->velocity_.y < 0) {
+		return;
+	}
 	// X速度
 	if (leftStick.x != 0) {
 		player_->velocity_.x = MathUtility::Lerp(player_->velocity_.x, 0, activeRatio);
@@ -63,8 +67,6 @@ void AerialState::Update()
 	else {
 		player_->velocity_.y += mass * (kGravity * gravity_) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	}
-
-	// 移動処理
 	player_->worldtransform_.transform_.translate.x += (player_->velocity_.x) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 	player_->worldtransform_.transform_.translate.y += (player_->velocity_.y) * kDeltaTime_ * (1.0f / GameSystemManager::sGameSpeed);
 

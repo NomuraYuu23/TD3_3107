@@ -65,5 +65,11 @@ private:
 	float groundSpeed_ = 0;
 	// 空中の速度
 	float aerialSpeed_ = 0;
+
+public:
+
+	// 短縮処理
+	bool isShortening_ = false;
+
 };
 

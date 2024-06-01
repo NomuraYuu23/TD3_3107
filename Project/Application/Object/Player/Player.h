@@ -206,6 +206,11 @@ public:
 	void EndAssistDash() { assistDash_.SlowCancel(); }
 
 	Velocity2DManager* GetVelocity2DManager() { return velocity2DManager_.get(); }
+	/// <summary>
+	/// コントロール系
+	/// </summary>
+	/// <returns></returns>
+	PlayerController* GetController() { return &controller_; }
 
 public:
 	// ステート
@@ -308,6 +313,9 @@ private: // パーティクル生成関連変数
 
 	// 空中ダッシュシステム
 	AssistDash assistDash_;
+public:
+	// 投げた瞬間の止めるタイマー
+	TimerLib throwStopTimer_;
 
 private: // モーションブラー
 
