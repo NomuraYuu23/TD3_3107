@@ -3,6 +3,7 @@
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../Map/CheckPoint/CheckPointManager.h"
 #include "../../../Application/AudioManager/GameAudioManager.h"
+#include "../../UI/GameUIManager.h"
 
 class GoalObject;
 class Player;
@@ -72,6 +73,12 @@ public: // アクセッサ
 
 	bool GetIsGameClear() { return isGameClear_; }
 
+	/// <summary>
+	/// ゲーム画面UIマネージャーセッター
+	/// </summary>
+	/// <param name="uiManager">ゲーム画面UIマネージャー</param>
+	void SetGameUIManager(GameUIManager* uiManager) { gum_ = uiManager; }
+
 private:
 	/// <summary>
 	/// ゴール生成関数
@@ -101,5 +108,8 @@ private:
 
 	Model* goalModel_ = nullptr;
 	Model* checkPointModel_ = nullptr;
+
+	// ゲーム画面UIマネージャー
+	GameUIManager* gum_ = nullptr;
 
 };

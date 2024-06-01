@@ -23,6 +23,14 @@ public:
 
 	void ImGuiDraw();
 
+public: // アクセッサ等
+
+	/// <summary>
+	/// 入力取得
+	/// </summary>
+	/// <returns>入力</returns>
+	Input* GetInput() { return input_; }
+
 private: // 外付け機器の処理（大枠
 	/// <summary>
 	/// コントローラー操作処理

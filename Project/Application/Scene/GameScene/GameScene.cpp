@@ -48,6 +48,7 @@ void GameScene::Initialize() {
 	particleModel[ParticleModelIndex::kBambooLeaf] = particleLeafModel_.get();
 	particleModel[ParticleModelIndex::kSpearLeaf] = particleSpearLeafModel_.get();
 	particleModel[ParticleModelIndex::kSmoke] = particleSmokeModel_.get();
+	particleModel[ParticleModelIndex::kKiraKira] = particleKiraKiraModel_.get();
 	particleManager_->ModelCreate(particleModel);
 
 	isDebugCameraActive_ = false;
@@ -96,9 +97,6 @@ void GameScene::Initialize() {
 
 	// 生成
 	player_ = std::make_unique<Player>();
-	// テクスチャの読み込み
-	player_->arrowTexture_ = TextureManager::Load("Resources/GameObject/Image/arrow.png", dxCommon_, textureHandleManager_.get());
-	player_->SetArrowModel(particleCircleModel_.get());
 	// 武器の設定
 	player_->SetWeapon(std::move(weapon));
 	// 初期化
@@ -110,6 +108,8 @@ void GameScene::Initialize() {
 	// オーディオマネージャーを渡す
 	player_->gameAudioManager_ = audioManager_.get();
 	#endif // !_DEBUG
+	// 矢印モデルをセット
+	player_->SetArrowModel(arrowModel_.get());
 
 	player_->GetSlowEffect()->SetCamera(&camera_);
 
@@ -157,12 +157,6 @@ void GameScene::Initialize() {
 	followCamera_->Initialize();
 	followCamera_->SetPlayer(player_.get());
 
-	// 矢印のUI
-	arrowSprite_.reset(Sprite::Create(player_->arrowTexture_, { 100,100 }, { 1,1,1,1 }));
-	arrowSprite_->SetAnchorPoint({ 0.5f,0.5f });
-	arrowSprite_->SetSize({ arrowSprite_->GetSize().x / 6,arrowSprite_->GetSize().y / 6 });
-	arrowSprite_->SetRotate(std::atan2f(player_->throwDirect_.y, player_->throwDirect_.x));
-
 	/// ポストエフェクトの値初期化
 	// ブルーム
 	PostEffect* pe = PostEffect::GetInstance();
@@ -179,7 +173,7 @@ void GameScene::Initialize() {
 	audioManager_->PlayWave(kGameSceneBGM);
 
 	// Jsonデータのクラス
-#ifdef _DEBUG
+#ifdef _DEMO
 
 	gameData_ = GameObjectData::GetInstance();
 	gameData_->Initialize();
@@ -195,6 +189,9 @@ void GameScene::Initialize() {
 	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
 	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
 	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
+
+	// ゲームシステムにUIマネージャーをセット
+	gameSystemManager_->SetGameUIManager(gameUIManager_.get());
 }
 
 /// <summary>
@@ -202,7 +199,7 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update() {
 
-#ifdef _DEBUG
+#ifdef _DEMO
 	ImguiDraw();
 
 	if (input_->TriggerKey(DIK_L)) {
@@ -260,7 +257,9 @@ void GameScene::Update() {
 	player_->Update();
 	player_->DrawLinesMap(drawLine_);
 	// 敵
-	enemyManager_->Update();
+	if (!player_->isGameClear_) {
+		enemyManager_->Update();
+	}
 
 
 	//arrowSprite_->Update();
@@ -432,7 +431,8 @@ void GameScene::Draw() {
 }
 
 void GameScene::ImguiDraw() {
-#ifdef _DEBUG
+
+#ifdef _DEMO
 
 	ImGui::Begin("GameScene");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
@@ -538,6 +538,7 @@ void GameScene::ModelCreate()
 	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_, textureHandleManager_.get()));
 	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_, textureHandleManager_.get()));
 	particleSmokeModel_.reset(Model::Create("Resources/Particle/Smoke", "Smoke.obj", dxCommon_, textureHandleManager_.get()));
+	particleKiraKiraModel_.reset(Model::Create("Resources/Particle/KiraKira", "KiraKira.obj", dxCommon_, textureHandleManager_.get()));
 
 	// スカイドーム
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
@@ -556,6 +557,7 @@ void GameScene::ModelCreate()
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 	ringUnderModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingUnder.obj", dxCommon_, textureHandleManager_.get()));
 	ringTopModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingTop.obj", dxCommon_, textureHandleManager_.get()));
+	arrowModel_.reset(Model::Create("Resources/Model/Direction/", "Direction.obj", dxCommon_, textureHandleManager_.get()));
 	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
 
 	#endif // !_DEBUG

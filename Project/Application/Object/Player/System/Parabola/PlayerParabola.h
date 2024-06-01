@@ -19,6 +19,11 @@ public:
 
 	void DrawMap(DrawLine* drawLine);
 
+public: // アクセッサ等
+
+	Vector3 GetStartPos() { return startPositions_.front(); }
+	Vector3 GetEndPos() { return endPositions_[numLine_ - 1]; }
+
 private:
 
 	// 線の最大数

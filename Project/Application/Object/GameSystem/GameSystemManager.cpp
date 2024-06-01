@@ -73,10 +73,16 @@ void GameSystemManager::UpdateStageInfoOnCheckPoint()
 
 void GameSystemManager::GameClearProcess()
 {
-	// ここにゲームクリア時の処理
-	isGameClear_ = true;
+	// クリア演出開始
+	gum_->SetISClear(true);
 
+	// プレイヤーを操作不能に
+	player_->isGameClear_ = true;
 
+	// クリア演出終了時
+	if (gum_->GetClearAppear()) {
+		isGameClear_ = true;
+	}
 }
 
 void GameSystemManager::CheckGameStatus()

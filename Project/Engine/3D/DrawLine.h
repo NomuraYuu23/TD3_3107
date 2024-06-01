@@ -51,6 +51,10 @@ public: // 関数
 	/// <param name="lineForGPU">線情報</param>
 	void Map(const LineForGPU& lineForGPU);
 
+public: // アクセッサ等
+
+	LineForGPU* GetLineInfo() { return lineForGPUMap_; }
+
 private:
 
 	//lineForGPU用のリソース

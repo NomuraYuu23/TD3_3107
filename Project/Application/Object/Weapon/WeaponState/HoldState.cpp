@@ -40,10 +40,12 @@ void HoldState::Initialize()
 void HoldState::Update()
 {
 	// 武器を狙ってる方向に向かせる
-	weapon_->worldtransform_.direction_ = Vector3::Normalize(weapon_->throwDirect_);
+	if (!weapon_->GetPlayer()->isGameClear_) { // ゲームクリア状態でないとき
+		weapon_->worldtransform_.direction_ = Vector3::Normalize(weapon_->throwDirect_);
 
-	//this->weapon_->throwDirect_
-	LerpUpdate();
+		//this->weapon_->throwDirect_
+		LerpUpdate();
+	}
 }
 
 void HoldState::LerpUpdate()

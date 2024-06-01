@@ -198,7 +198,7 @@ void SwapChain::Draw(ID3D12GraphicsCommandList* commandList,
 
 	renderTargetTexture->TextureDraw(0);
 
-#ifdef _DEBUG
+#ifdef _DEMO
 	//実際のcommandListのImGuiの描画コマンドを積む
 	ImGuiManager::GetInstance()->Draw();
 #endif // _DEBUG

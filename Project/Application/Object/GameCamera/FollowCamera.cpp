@@ -32,6 +32,11 @@ void FollowCamera::Initialize()
 
 void FollowCamera::Update(float elapsedTime)
 {
+	// カメラをロックするか
+	if (player_->isGameClear_) {
+		isLockCamera_ = true;
+	}
+
 	if (!isLockCamera_) {
 		// 追従処理
 		if (targetTransform_) {
@@ -57,24 +62,24 @@ void FollowCamera::Update(float elapsedTime)
 		}
 
 		if (input_->PushKey(DIK_W)) {
-			transform_.translate.z += 0.1f;
+			transform_.translate.z += 1.0f;
 		}
 		else if (input_->PushKey(DIK_S)) {
-			transform_.translate.z -= 0.1f;
+			transform_.translate.z -= 1.0f;
 		}
 
 		if (input_->PushKey(DIK_LSHIFT)) {
-			transform_.translate.y += 0.1f;
+			transform_.translate.y += 1.0f;
 		}
 		else if (input_->PushKey(DIK_LCONTROL)) {
-			transform_.translate.y -= 0.1f;
+			transform_.translate.y -= 1.0f;
 		}
 
 		if (input_->PushKey(DIK_D)) {
-			transform_.translate.x += 0.1f;
+			transform_.translate.x += 1.0f;
 		}
 		else if (input_->PushKey(DIK_A)) {
-			transform_.translate.x -= 0.1f;
+			transform_.translate.x -= 1.0f;
 		}*/
 	}
 

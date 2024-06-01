@@ -146,6 +146,11 @@ void Player::Update()
 		uiManager_->SetIsGround(isGround_);
 	}
 
+	// 矢印UI更新関数
+	if (!isGameClear_) {
+		ArrowUIUpdate();
+	}
+
 	// コライダー
 	CircleColliderUpdate();
 	// 足元のコライダー
@@ -210,6 +215,17 @@ void Player::Draw(const BaseCamera& camera)
 	// ポニーテール描画
 	if (ponytail_ != nullptr) {
 		ponytail_->Draw(const_cast<BaseCamera&>(camera));
+	}
+
+	// 矢印描画
+	if (arrowModel_ != nullptr && std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+		arrowMaterial_->SetUvTransform(arrowUVTransform_.transform_);
+		ModelDraw::NormalObjectDesc desc;
+		desc.camera = &const_cast<BaseCamera&>(camera);
+		desc.material = arrowMaterial_.get();
+		desc.model = arrowModel_;
+		desc.worldTransform = &arrowTransform_;
+		ModelDraw::NormalObjectDraw(desc);
 	}
 }
 
@@ -305,8 +321,13 @@ void Player::ImGuiDraw()
 		ImGui::EndTabBar();
 	}
 
-	ImGui::Text("\n PonyTailTransfporm");
-	ImGui::DragFloat3("AnchorPos", &ponyAnchorPos_.x);
+	ImGui::Text("\n arrowTransfporm");
+	ImGui::DragFloat3("rotate", &arrowTransform_.transform_.rotate.x, 0.01f);
+	ImGui::DragFloat3("scale", &arrowTransform_.transform_.scale.x, 0.01f);
+	ImGui::Text("\n arrowUVTransfporm");
+	ImGui::DragFloat3("UVscale", &arrowUVTransform_.transform_.scale.x, 0.01f);
+	ImGui::DragFloat3("UVrotate", &arrowUVTransform_.transform_.rotate.x, 0.01f);
+	ImGui::DragFloat3("UVTranslate", &arrowUVTransform_.transform_.translate.x, 0.1f);
 
 	ImGui::End();
 
@@ -775,20 +796,24 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 {
 
 	if (std::holds_alternative<HoldState*>(weapon_->GetNowState())){
-		parabola_.DrawMap(drawLine);
+		//parabola_.DrawMap(drawLine);
+
+		Vector3 s = parabola_.GetStartPos();
+		Vector3 e = parabola_.GetEndPos();
+		subArrowVector_ = e - s;
 	}
 
-	if (!std::holds_alternative<ThrownState*>(weapon_->GetNowState())) {
-		LineForGPU lineForGPU;
+	//if (!std::holds_alternative<ThrownState*>(weapon_->GetNowState())) {
+	//	LineForGPU lineForGPU;
 
-		// 色
-		lineForGPU.color[0] = connectingSpearLineColor_;
-		lineForGPU.color[1] = connectingSpearLineColor_;
+	//	// 色
+	//	lineForGPU.color[0] = connectingSpearLineColor_;
+	//	lineForGPU.color[1] = connectingSpearLineColor_;
 
-		lineForGPU.position[0] = worldtransform_.GetWorldPosition();
-		lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
-		drawLine->Map(lineForGPU);
-	}
+	//	lineForGPU.position[0] = worldtransform_.GetWorldPosition();
+	//	lineForGPU.position[1] = weapon_->worldtransform_.GetWorldPosition();
+	//	drawLine->Map(lineForGPU);
+	//}
 
 }
 
@@ -829,6 +854,53 @@ void Player::SetFallTimer()
 	this->fallTimer_.StartSetting(fallTimerFrame);
 }
 
+void Player::ArrowUIUpdate()
+{
+	// 線の長さを取得する
+	float s = Vector3::Length(subArrowVector_);
+	// 正規化ベクトルを求める
+	Vector3 v = Vector3::Normalize(subArrowVector_);
+	
+	// 矢印UIの回転処理
+	float l = std::sqrtf(v.x * v.x + v.y * v.y);
+	float cos = v.x / l;
+	float sin = v.y / l;
+
+	float angle = std::acos(cos);
+
+	// 負の角度だった場合の処理
+	if (sin < 0) {
+		angle = -angle;
+	}
+
+	/*Vector2 stickDirect = controller_.GetInput()->GetRightAnalogstick();
+
+	Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
+	float deadZoneValue = 0.25f;
+	if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue)){
+		currentArrowStagingTime_ += kDeltaTime_;
+	}*/
+
+	// 演出時間でUV座標をイージング
+	if (currentArrowStagingTime_ < arrowStagingTime_) {
+		arrowUVTransform_.transform_.translate = Ease::Easing(Ease::EaseName::Lerp, { 0.0f, 0.0f, 0.0f }, { -1.0f ,0.0f, 0.0f }, currentArrowStagingTime_ / arrowStagingTime_);
+		currentArrowStagingTime_ += kDeltaTime_;
+	}
+	else {
+		arrowUVTransform_.transform_.translate = { -1.0f, 0.0f, 0.0f };
+		currentArrowStagingTime_ = 0.0f;
+	}
+
+	// 座標初期化
+	arrowTransform_.transform_.translate = worldtransform_.transform_.translate;
+	arrowTransform_.transform_.scale.x = s;
+	arrowUVTransform_.transform_.scale.x = s;
+	arrowTransform_.transform_.rotate.z = angle;
+	// トランスフォーム更新
+	arrowTransform_.UpdateMatrix();
+	arrowUVTransform_.UpdateMatrix();
+}
+
 void Player::SetPonyTail(Model* model)
 {
 	// 行列を求める
@@ -857,6 +929,31 @@ void Player::SetPonyTail(Model* model)
 
 	// 更新
 	ponytail_->Update();
+}
+
+void Player::SetArrowModel(Model* model)
+{
+	// モデル取得
+	arrowModel_ = model;
+
+	float s = Vector3::Length(subArrowVector_);
+
+	// 座標初期化
+	arrowTransform_.Initialize(arrowModel_->GetRootNode());
+	arrowTransform_.transform_.translate = worldtransform_.transform_.translate;
+	arrowTransform_.transform_.scale.x = s;
+	arrowUVTransform_.transform_.scale.x = s;
+	// トランスフォーム更新
+	arrowTransform_.UpdateMatrix();
+	arrowUVTransform_.UpdateMatrix();
+
+	// 矢印マテリアル初期化
+	arrowMaterial_.reset(Material::Create());
+	arrowMaterial_->SetEnableLighting(EnableLighting::None);
+	arrowMaterial_->SetShininess(shininess_);
+	
+	// uvトランスフォーム初期化
+	arrowUVTransform_.Initialize();
 }
 
 void Player::SystemInitialize()

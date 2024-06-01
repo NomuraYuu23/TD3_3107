@@ -22,6 +22,7 @@ private: // プライベートなサブクラス
 	/// </summary>
 	enum TextureIndex
 	{
+		White2x2Tex,
 		LeftStickNoneTex,
 		LeftStickPressTex,
 		AButtonNoneTex,
@@ -60,6 +61,7 @@ private: // プライベートなサブクラス
 		TextSprite,		// テキスト用
 		HPGageSprite,	 // ゲージ本体
 		HPGageFrameSprite, // ゲージ背景
+		ClearBackFrameSprite, // クリア背景
 		spriteCount, // スプライト数用
 	};
 
@@ -100,6 +102,18 @@ public: // アクセッサ等
 	/// <param name="isGround">接地状態</param>
 	void SetIsGround(bool& isGround) { isGrounded_ = isGround; }
 
+	/// <summary>
+	/// クリア状態セッター
+	/// </summary>
+	/// <param name="isClear">クリア状態</param>
+	void SetISClear(const bool isClear) { isClear_ = isClear; }
+
+	/// <summary>
+	/// クリア演出終了状態ゲッター
+	/// </summary>
+	/// <returns>クリア演出終了状態</returns>
+	bool GetClearAppear() { return isClearAppear_; }
+
 private: // プライベートなメンバ関数
 
 	/// <summary>
@@ -136,6 +150,11 @@ private: // プライベートなメンバ関数
 	/// HPに関するUIの更新関数
 	/// </summary>
 	void HPUIUpdate();
+
+	/// <summary>
+	/// クリア時UIの更新関数
+	/// </summary>
+	void ClearUIUpdate();
 
 private: // メンバ変数
 
@@ -186,6 +205,23 @@ private: // 右スティック用変数群
 	Vector4 throwUIColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 private: // hp用変数群
+
+
+private: // クリア演出用変数群
+
+	// クリアフラグ
+	bool isClear_ = false;
+
+	// 文字が出現し終わったか
+	bool isClearAppear_ = false;
+
+	// クリア背景演出用
+	float currentBackAppearTime_ = 0.0f; // 現在時間
+	float backAppearTime_		 = 1.5f; // 演出時間
+
+	// クリア文字演出用
+	float currentClearAppearTime_ = 0.0f; // 現在時間
+	float clearAppearTime_		  = 1.0f; // 演出時間
 
 };
 
