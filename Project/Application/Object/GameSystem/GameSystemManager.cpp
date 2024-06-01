@@ -80,7 +80,7 @@ void GameSystemManager::GameClearProcess()
 	player_->isGameClear_ = true;
 
 	// クリア演出終了時
-	if (gum_->GetClearAppear()) {
+	if (gum_->GetIsEndClearStaging()) {
 		isGameClear_ = true;
 	}
 }
