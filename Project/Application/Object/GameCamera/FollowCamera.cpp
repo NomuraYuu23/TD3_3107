@@ -153,14 +153,14 @@ void FollowCamera::MoveCameraForward()
 	Input* input = Input::GetInstance();
 
 	// 左
-	if (input->GetLeftAnalogstick().x < 0.0f) {
+	if (input->GetRightAnalogstick().x < 0.0f) {
 		targetT_ -= 0.01f;
 		if (targetT_ < 0.0f) {
 			targetT_ = 0.0f;
 		}
 	}
 	// 右
-	else if (input->GetLeftAnalogstick().x > 0.0f) {
+	else if (input->GetRightAnalogstick().x > 0.0f) {
 		targetT_ += 0.01f;
 		if (targetT_ > 1.0f) {
 			targetT_ = 1.0f;
