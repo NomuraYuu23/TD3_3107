@@ -30,7 +30,7 @@ void SpearAerialState::Initialize()
 
 	player_->weapon_->GetEffectSystem()->StartShockWave(15.0f);
 
-#ifndef _DEBUG
+#ifdef _RELEASE
 
 	// 槍ジャンアニメーションの再生
 	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::SpearJump);

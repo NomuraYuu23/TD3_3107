@@ -22,7 +22,7 @@ void AerialState::Initialize()
 	velocity_ = player_->velocity_;
 
 	// デバッグ以外だったらアニメーション、効果音再生
-#ifndef _DEBUG
+#ifdef _RELEASE
 
 	// ジャンプ効果音を再生
 	player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerJump);

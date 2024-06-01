@@ -89,7 +89,7 @@ void GameScene::Initialize() {
 	weapon->Initialize(weaponModel_.get());
 	
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// リングモデルを渡す
 	weapon->SetRingModel(ringTopModel_.get(), ringUnderModel_.get());
 	#endif // !_DEBUG
@@ -102,7 +102,7 @@ void GameScene::Initialize() {
 	// 初期化
 	player_->Initialize(playerModel_.get());
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// ポニーテール
 	player_->SetPonyTail(ponyTailModel_.get());
 	// オーディオマネージャーを渡す
@@ -178,7 +178,7 @@ void GameScene::Initialize() {
 	gameData_ = GameObjectData::GetInstance();
 	gameData_->Initialize();
 
-#endif // _DEBUG
+#endif // _DEMO
 	skydome_->SetParent(&player_->worldtransform_);
 
 	// ゲームシステムにポインタ登録
@@ -547,20 +547,17 @@ void GameScene::ModelCreate()
 	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// プレイヤーモデル
-	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
+	#ifdef _RELEASE // デバッグ以外の場合高負荷モデルを読み込む
 	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
 	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
 	#endif // !_DEBUG
-	#ifdef _DEBUG // デバッグの場合低負荷モデルを読み込む
+	#ifndef _RELEASE // デバッグの場合低負荷モデルを読み込む
 	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_, textureHandleManager_.get()));
 	#endif // _DEBUG
 	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
 	ringUnderModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingUnder.obj", dxCommon_, textureHandleManager_.get()));
 	ringTopModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingTop.obj", dxCommon_, textureHandleManager_.get()));
 	arrowModel_.reset(Model::Create("Resources/Model/Direction/", "Direction.obj", dxCommon_, textureHandleManager_.get()));
-	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
-
-	#endif // !_DEBUG
 
 
 	// 地形ブロック
@@ -580,10 +577,10 @@ void GameScene::ModelCreate()
 
 	// 敵モデル
 	// プレイヤーモデル
-	#ifndef _DEBUG // デバッグ以外の場合高負荷モデルを読み込む
+	#ifdef _RELEASE // デバッグ以外の場合高負荷モデルを読み込む
 	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_, textureHandleManager_.get()));
 	#endif // !_DEBUG
-	#ifdef _DEBUG // デバッグの場合低負荷モデルを読み込む
+	#ifndef _RELEASE // デバッグの場合低負荷モデルを読み込む
 	enemyModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
 	#endif // _DEBUG
 

@@ -16,8 +16,8 @@ void SelectSystem::Initialize(const std::array<uint32_t, StageNumberManager::kSt
 	easeTimer_ = 0.0f;
 	easeSpeed_ = 0.05f;
 
-	// ステージ番号	
-	StageNumberManager::stageNum_ = 0;
+	//// ステージ番号	
+	//StageNumberManager::stageNum_ = 0;
 
 	// ゲームシーンフラグ
 	gotoGameScene_ = false;

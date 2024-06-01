@@ -12,7 +12,7 @@ void ImpaledState::Initialize()
 	weapon_->worldtransform_.UpdateMatrix();
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 
 	// 逆ベクトルを求める
 	Vector3 v = {
