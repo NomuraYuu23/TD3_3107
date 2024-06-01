@@ -148,11 +148,8 @@ void EnemyManager::LoadEnemyData()
 
 	// シングル用
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemySingle0 = enemyEmitters_.begin();
-	enemySingle0->get()->GetObjects()->clear();
 
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator enemyChase0 = std::next(enemyEmitters_.begin(),1);
-	//enemyChase0++;
-	enemyChase0->get()->GetObjects()->clear();
 
 	for (std::map<std::string, EnemyEditor::EnemyEditorGroup>::iterator stageItr = mapDatas->begin();
 		stageItr != mapDatas->end(); ++stageItr) {
@@ -183,13 +180,10 @@ void EnemyManager::LoadEnemyData()
 					if (enemyName != static_cast<IEnemyEmitter*>(it->get())->GetName()) {
 						continue;
 					}
-
-					it->get()->GetObjects()->clear();
 					
 					MultiEnemyData data = std::get<MultiEnemyData>(enemyData);
 					// エミッターの設定
-					static_cast<IEnemyEmitter*>(it->get())->InitializeEmitter(data.rotateSpeed);
-					static_cast<IEnemyEmitter*>(it->get())->CreateEnemy(data.position, data.distance, data.enemyMaxCount);
+					static_cast<IEnemyEmitter*>(it->get())->Edit(data);
 					
 					edited = true;
 
@@ -209,15 +203,13 @@ void EnemyManager::LoadEnemyData()
 			
 			// シングル
 			else if (std::holds_alternative<SingleEnemyData>(enemyData)) {
-				RegisterEnemy(std::get<SingleEnemyData>(enemyData), enemyName);
-
+				static_cast<SingleEnemyRegister*>(enemySingle0->get())->Edit(enemyName, std::get<SingleEnemyData>(enemyData), player_);
 				enemySingleNames.push_back(enemyName);
 			}
 
 			// チェイス
 			else if (std::holds_alternative<ChaseEnemyData>(enemyData)) {
-				RegisterChaseEnemy(std::get<ChaseEnemyData>(enemyData), enemyName);
-
+				static_cast<SingleEnemyRegister*>(enemyChase0->get())->Edit(enemyName, std::get<ChaseEnemyData>(enemyData), player_);
 				enemyChaseNames.push_back(enemyName);
 			}
 		}

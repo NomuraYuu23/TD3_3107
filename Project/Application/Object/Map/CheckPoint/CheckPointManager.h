@@ -5,7 +5,7 @@
 #include "../../../Engine/Collision2D/Collision2DManager.h"
 #include "../../../AllSceneObject/StageNumberManager.h"
 #include "CheckPointData.h"
-#include <vector>
+#include <list>
 #include <memory>
 #include "CheckPointEditor.h"
 #include "../../../Application/AudioManager/GameAudioManager.h"
@@ -96,7 +96,7 @@ private:
 	/// <summary>
 	/// オブジェクトリスト
 	/// </summary>
-	std::vector<std::unique_ptr<CheckPointObject>> checkPoints_;
+	std::list<std::unique_ptr<CheckPointObject>> checkPoints_;
 
 	// 現在のチェックポイント番号
 	uint32_t checkPointNum_ = 0u;

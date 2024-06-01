@@ -57,6 +57,8 @@ public: // アクセッサ
 	/// <param name="model">通過後表示するモデル</param>
 	void SetPassedModel(Model* model);
 
+	uint32_t GetCheckNum() { return checkNum_; }
+
 private: // 演出系
 
 	// 通過後モデル
