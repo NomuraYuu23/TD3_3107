@@ -301,7 +301,7 @@ private: // UI関連
 	// 矢印の現在演出時間
 	float currentArrowStagingTime_ = 0.0f;
 	// 矢印の演出時間
-	float arrowStagingTime_ = 0.25f;
+	float arrowStagingTime_ = 0.325f;
 
 private: // アニメーション関連
 
