@@ -109,7 +109,11 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 				return;
 			}
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
+				
+				#ifdef _RELEASE
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::ActionMode::kMaxSize);
+				#endif // DEBUG
+				
 				weapon_ = (*weapon);
 
 				// デバッグ以外の場合行う

@@ -264,7 +264,7 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 
 	}
 	// オブジェクトの数が足りてないなら生成
-	else if (maxCount_ > count) {
+	if (maxCount_ > count) {
 
 		while (true)
 		{

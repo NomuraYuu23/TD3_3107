@@ -2,6 +2,8 @@
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/base/SRVDescriptorHerpManager.h"
 #include "../../../Engine/3D/ModelDraw.h"
+#include "Enemy.h"
+#include "../Player/Player.h"
 
 uint32_t SingleEnemyRegister::sSerialNumber_ = 0;
 
@@ -37,6 +39,7 @@ void SingleEnemyRegister::Update()
 
 	LargeNumberOfObjects::Update();
 
+#ifdef _RELEASE
 	// フラグによる死亡処理
 	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
 		if (enemy->IsDead()) {
@@ -45,6 +48,7 @@ void SingleEnemyRegister::Update()
 		}
 		return false;
 		});
+#endif // _RELEASE
 
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG
