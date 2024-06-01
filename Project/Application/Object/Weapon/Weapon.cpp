@@ -43,7 +43,7 @@ void Weapon::Initialize(Model* model)
 	SystemInitialize();
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// アニメーション関連初期化
 	spearAnim_ = std::make_unique<SpearAnimManager>();  // 生成
 	spearAnim_->Init(this);							   // 初期化
@@ -78,7 +78,7 @@ void Weapon::Update()
 	IObject::Update();
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 
 	// プレイヤーが槍を保持している場合
 	if (isHold_) {
@@ -463,7 +463,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 			sub *= 0.5f;
 
 			// デバッグ以外の場合行う
-			#ifndef _DEBUG
+			#ifdef _RELEASE
 
 			// キャッチ時パーティクル再生
 			EmitterDesc desc;

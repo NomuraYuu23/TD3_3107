@@ -73,7 +73,7 @@ void PlayerHitManager::OnHit(uint32_t decrement)
 		invisibleTimer_.Start(invMaxFrame_);
 
 		// デバッグ以外の場合行う
-		#ifndef _DEBUG
+		#ifdef _RELEASE
 		// ジャンプ効果音を再生
 		player_->gameAudioManager_->PlayWave(GameAudioNameIndex::kPlayerDamage);
 		#endif // !_DEBUG

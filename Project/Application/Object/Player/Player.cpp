@@ -48,14 +48,14 @@ void Player::Initialize(Model* model)
 	velocity2DManager_->Initialize();
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// アニメーション関連初期化
 	anim_ = std::make_unique<PlayerAnimManager>(); // 生成
 	anim_->Init(this);							   // 初期化
 	#endif // !_DEBUG
 
 	// デバック以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 
 	// トランスフォーム生成
 	emitTransform_ = std::make_unique<EulerTransform>();
@@ -111,7 +111,7 @@ void Player::Update()
 	}
 
 	// デバック以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	
 	// 生成座標のデータを書き込む
 	*emitTransform_ = worldtransform_.transform_;
@@ -122,7 +122,7 @@ void Player::Update()
 	// 基底クラスの更新
 	IObject::Update();
 
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// アニメーション更新
 	anim_->Update();
 	#endif // !_DEBUG
@@ -171,7 +171,7 @@ void Player::Draw(const BaseCamera& camera)
 	desc.worldTransform = &worldtransform_;
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	if (anim_->GetIsRight()) {
 		ModelDraw::AnimObjectDraw(desc);
 		ModelDraw::AnimObjectDraw(desc, 2);
@@ -182,7 +182,7 @@ void Player::Draw(const BaseCamera& camera)
 	}
 	#endif // !_DEBUG
 	// デバッグのみで行う
-	#ifdef _DEBUG
+	#ifndef _RELEASE
 	ModelDraw::AnimObjectDraw(desc);
 	ModelDraw::AnimObjectDraw(desc, 2);
 	#endif // _DEBUG

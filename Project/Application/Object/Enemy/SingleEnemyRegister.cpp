@@ -18,7 +18,7 @@ void SingleEnemyRegister::Initialize(Model* model)
 	name_ = "EnemySingle:" + std::to_string(serialNum_);
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 // アニメーション取得と初期化
 	anim_.Initialize(
 		model_->GetNodeAnimationData(),
@@ -51,7 +51,7 @@ void SingleEnemyRegister::Update()
 #endif // _RELEASE
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 
 	// アニメーションの更新
 	localMatrixManager_->SetNodeLocalMatrix(anim_.AnimationUpdate());

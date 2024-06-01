@@ -25,7 +25,7 @@ void IEnemyEmitter::Initialize(Model* model)
 	isRotateReturn_ = false;
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// アニメーション取得と初期化
 	anim_.Initialize(
 		model_->GetNodeAnimationData(),
