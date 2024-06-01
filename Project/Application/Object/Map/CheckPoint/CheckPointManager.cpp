@@ -22,7 +22,7 @@ void CheckPointManager::Update()
 
 
 	// 更新
-	for (std::vector<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
+	for (std::list<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
 		it != checkPoints_.end(); ++it) {
 		(*it)->Update();
 	}
@@ -31,7 +31,7 @@ void CheckPointManager::Update()
 void CheckPointManager::Draw(BaseCamera& camera)
 {
 	//	描画
-	for (std::vector<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
+	for (std::list<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
 		it != checkPoints_.end(); ++it) {
 		(*it)->Draw(camera);
 	}
@@ -40,7 +40,7 @@ void CheckPointManager::Draw(BaseCamera& camera)
 void CheckPointManager::ImGuiDraw()
 {
 	uint32_t num = 1;
-	for (std::vector<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
+	for (std::list<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
 		it != checkPoints_.end(); ++it) {
 		std::string name = "CheckPoint:" + std::to_string(num);
 		ImGui::DragFloat3(name.c_str(), &(*it)->worldtransform_.transform_.translate.x);
@@ -97,7 +97,7 @@ void CheckPointManager::CheckPointJudge(const Vector3& position, uint32_t num)
 void CheckPointManager::CollisionRegister(Collision2DManager* collisionManager)
 {
 	// コライダーに設定
-	for (std::vector<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
+	for (std::list<std::unique_ptr<CheckPointObject>>::iterator it = checkPoints_.begin();
 		it != checkPoints_.end(); ++it) {
 		collisionManager->ListRegister(&(*it)->boxCollider_);
 	}
@@ -105,12 +105,6 @@ void CheckPointManager::CollisionRegister(Collision2DManager* collisionManager)
 
 void CheckPointManager::EditorCheckPointLoad()
 {
-	
-	for (uint32_t i = 0; i < checkPoints_.size(); ++i) {
-		checkPoints_[i].reset(nullptr);
-	}
-
-	checkPoints_.clear();
 
 	// マップデータ
 	std::map<std::string, std::map<std::string, CheckPointData>>* checkPoints = checkPointEditor_->GetDatas();
@@ -130,12 +124,42 @@ void CheckPointManager::EditorCheckPointLoad()
 			continue;
 		}
 
+		std::vector<uint32_t> usedNums_;
+
+		// 編集、追加
 		for (std::map<std::string, CheckPointData>::iterator terrainItr = stageItr->second.begin();
 			terrainItr != stageItr->second.end(); ++terrainItr) {
 
-			GenerateCheckPoint(terrainItr->second.position, terrainItr->second.checkPointNumber);
+			bool edited = false;
+
+			for (uint32_t i = 0; i < checkPoints_.size(); ++i) {
+				if (std::next(checkPoints_.begin(), i)->get()->GetCheckNum() == terrainItr->second.checkPointNumber) {
+					std::next(checkPoints_.begin(), i)->get()->SetPosition(terrainItr->second.position);
+					edited = true;
+					usedNums_.push_back(terrainItr->second.checkPointNumber);
+					break;
+				}
+			}
+
+			if (!edited) {
+				GenerateCheckPoint(terrainItr->second.position, terrainItr->second.checkPointNumber);
+				usedNums_.push_back(terrainItr->second.checkPointNumber);
+			}
 
 		}
+
+		// 名前確認してないやつ消す
+			// フラグによる死亡処理
+		checkPoints_.remove_if([=](std::unique_ptr<CheckPointObject>& checkPoint) {
+			
+			for (uint32_t i = 0; i < usedNums_.size(); ++i) {
+				if (usedNums_[i] == checkPoint->GetCheckNum()) {
+					return false;
+				}
+			}
+			checkPoint.reset();
+			return true;
+			});
 
 		break;
 
