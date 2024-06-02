@@ -7,6 +7,7 @@
 
 class GoalObject;
 class Player;
+class FollowCamera;
 class EnemyManager;
 /// <summary>
 /// チェックポイント管理クラス
@@ -79,6 +80,12 @@ public: // アクセッサ
 	/// <param name="uiManager">ゲーム画面UIマネージャー</param>
 	void SetGameUIManager(GameUIManager* uiManager) { gum_ = uiManager; }
 
+	/// <summary>
+	/// 追従カメラセッター
+	/// </summary>
+	/// <param name="camera">追従カメラ</param>
+	void SetFollowCamera(FollowCamera* camera) { camera_ = camera; };
+
 private:
 	/// <summary>
 	/// ゴール生成関数
@@ -111,5 +118,27 @@ private:
 
 	// ゲーム画面UIマネージャー
 	GameUIManager* gum_ = nullptr;
+
+	// 追従カメラ
+	FollowCamera* camera_ = nullptr;
+
+private: // 死亡演出用変数
+
+	// 死亡演出進捗
+	enum DeadStagingProgress {
+		kCameraMove, // カメラをプレイヤーに向けて動かす、集まっているようなパーティクル
+		kPaticleBlast, // パーティクル爆散、プレイヤー非表示
+		kFadeOut, // 暗転、リスポーン
+	};
+
+	// 死亡演出トリガー
+	bool isEndDeadStaging_ = false;
+
+	// 死亡演出進捗
+	int deadStagingProgress_ = kCameraMove;
+
+	// 爆散時の表示時間
+	float currentBlastTime_ = 0.0f;
+	float blastTime_		= 1.0f;
 
 };

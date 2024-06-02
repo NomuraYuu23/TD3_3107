@@ -192,6 +192,8 @@ void GameScene::Initialize() {
 
 	// ゲームシステムにUIマネージャーをセット
 	gameSystemManager_->SetGameUIManager(gameUIManager_.get());
+	// ゲームシステムにカメラをセット
+	gameSystemManager_->SetFollowCamera(followCamera_.get());
 }
 
 /// <summary>
@@ -254,10 +256,12 @@ void GameScene::Update() {
 	// マップ
 	mapManager_->Update();
 	// プレイヤー
-	player_->Update();
+	if (!player_->GetIsDead()) { // 死亡していないときのみ更新
+		player_->Update();
+	}
 	player_->DrawLinesMap(drawLine_);
 	// 敵
-	if (!player_->isGameClear_) {
+	if (!player_->isGameClear_ && !player_->GetIsDead()) {
 		enemyManager_->Update();
 	}
 

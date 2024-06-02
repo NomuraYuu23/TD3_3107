@@ -44,6 +44,21 @@ void GameUIManager::Update()
 		// HPUIの更新
 		HPUIUpdate();
 	}
+
+	// フェード演出更新
+	if (isFade_ && !isClear_) {
+		FadeUpdate();
+	}
+
+	if (!isFade_ && !isClear_) { // クリア状態でなければ徐々にフェードイン
+		// 現在の背景色を取得
+	 	float currentAlpha = uiSprites_[ClearBackFrameSprite]->GetColor().w;
+		// 線形補間で演出を行う
+		float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, currentAlpha, 0.0f, 0.2f);
+
+		// 背景は徐々に暗くする
+		uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, alpha });
+	}
 }
 
 void GameUIManager::Draw()
@@ -111,6 +126,19 @@ void GameUIManager::DisplayImGui()
 	}
 
 	ImGui::End();
+}
+
+void GameUIManager::SetIsFade(const bool isFade, const float fadeOutTime)
+{
+	// フェード演出トリガー設定
+	isFade_ = isFade;
+	// フェード時間設定
+	deadFadeOutTime_ = fadeOutTime;
+	// フェード時間リセット
+	currentDeadFadeOutTime_ = 0.0f;
+
+	// フェード終了トリガーリセット
+	isEndFade_ = false;
 }
 
 void GameUIManager::LoadTexture()
@@ -435,6 +463,24 @@ void GameUIManager::HPUIUpdate()
 
 	uiSprites_[HPGageSprite]->SetTextureSize({ texSize, 192.0f });
 	uiSprites_[HPGageSprite]->SetSize({ size, 64.0f });
+}
+
+void GameUIManager::FadeUpdate()
+{
+	// 演出時間中であれば
+	if (currentDeadFadeOutTime_ < deadFadeOutTime_) {
+		// 線形補間で演出を行う
+		float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 0.0f, 1.0f, currentDeadFadeOutTime_ / deadFadeOutTime_);
+
+		// 背景は徐々に暗くする
+		uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, alpha });
+		// 現在時間を加算
+		currentDeadFadeOutTime_ += kDeltaTime_;
+	}
+	else {
+		// フェード終了
+		isEndFade_ = true;
+	}
 }
 
 void GameUIManager::ClearUIUpdate()

@@ -3,6 +3,7 @@
 #include "../Enemy/EnemyManager.h"
 #include "../../../Engine/2D/ImguiManager.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
+#include "../GameCamera/FollowCamera.h"
 
 uint32_t GameSystemManager::sNowStageNum = 0;
 float GameSystemManager::sGameSpeed = 1.0f;
@@ -58,10 +59,59 @@ void GameSystemManager::CollisionRegister(Collision2DManager* collisionManager)
 
 void GameSystemManager::GameOverProcess()
 {
-	goal_->SetIsGoal(false);
-	player_->Reset(checkPointManager_->GetRespawnPosition());
-	enemyManager_->LoadEnemyData();
+	// 死亡演出終了時
+	if (isEndDeadStaging_) {
+		// プレイヤーリスポーン
+		goal_->SetIsGoal(false);
+		player_->Reset(checkPointManager_->GetRespawnPosition());
+		enemyManager_->LoadEnemyData();
 
+		// カメラリセット
+		camera_->Reset();
+		// フェードイン開始
+		gum_->SetIsFade(false, 0.0f);
+
+		// 自身の値リセット
+		isEndDeadStaging_ = false;
+		deadStagingProgress_ = kCameraMove;
+		currentBlastTime_ = 0.0f;
+	}
+	else { // 死亡演出が終了していない時
+		// 死亡演出段階で分岐
+		switch (deadStagingProgress_)
+		{
+		case kCameraMove:
+			// カメラがセットされている、かつ演出が終了していれば
+			if (camera_ != nullptr && camera_->GetIsEndDeadCameraStaging()) {
+				// 次の段階へ
+				deadStagingProgress_++;
+			}
+			break;
+		case kPaticleBlast:
+			// パーティクル爆発と同時にプレイヤー削除
+			player_->isDraw_ = false;
+			// 演出終了
+			if (currentBlastTime_ < blastTime_) {
+				// 経過時間加算
+				currentBlastTime_ += kDeltaTime_;
+			}
+			else {
+				// 次の段階へ
+				deadStagingProgress_++;
+
+				// フェード演出開始
+				gum_->SetIsFade(true, 1.0f);
+			}
+			break;
+		case kFadeOut:
+			if (gum_->GetIsEndFade()) { // フェード終了したら
+				// 死亡演出終了
+				isEndDeadStaging_ = true;
+			}
+			break;
+		}
+
+	}
 }
 
 void GameSystemManager::UpdateStageInfoOnCheckPoint()

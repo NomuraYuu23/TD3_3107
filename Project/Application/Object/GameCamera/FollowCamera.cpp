@@ -37,7 +37,8 @@ void FollowCamera::Update(float elapsedTime)
 		isLockCamera_ = true;
 	}
 
-	if (!isLockCamera_) {
+	// カメラがロック中でない時、プレイヤーが死んでない時
+	if (!isLockCamera_ && !player_->GetIsDead()) {
 		// 追従処理
 		if (targetTransform_) {
 
@@ -52,40 +53,43 @@ void FollowCamera::Update(float elapsedTime)
 			MoveCameraForward();
 		}
 
-		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
-			isLockCamera_ = true;
-		}*/
+		// 演出開始座を取得
+		prevTranslate_ = transform_.translate;
 	}
-	else {
-		/*if (input_->TriggerJoystick(JoystickButton::kJoystickButtonSTART)) {
-			isLockCamera_ = false;
-		}
 
-		if (input_->PushKey(DIK_W)) {
-			transform_.translate.z += 1.0f;
-		}
-		else if (input_->PushKey(DIK_S)) {
-			transform_.translate.z -= 1.0f;
-		}
+	// プレイヤー死亡時
+	if (player_->GetIsDead() && !isEndDeadCameraStaging_) {
+		// 遷移後座標を取得
+		Vector3 postT = player_->worldtransform_.transform_.translate;
+		postT.z = -15.0f;
+		postT.y += 4.5f;
 
-		if (input_->PushKey(DIK_LSHIFT)) {
-			transform_.translate.y += 1.0f;
+		if (currentForcusTime_ < forcusTime_) {
+			// カメラを徐々にプレイヤーに寄せる
+			transform_.translate = Ease::Easing(Ease::EaseName::EaseInOutQuad, prevTranslate_, postT, currentForcusTime_ / forcusTime_);
+			// 経過時間加算
+			currentForcusTime_ += kDeltaTime_;
 		}
-		else if (input_->PushKey(DIK_LCONTROL)) {
-			transform_.translate.y -= 1.0f;
+		else {
+			// 時間超過の場合は座標固定
+			transform_.translate = postT;
+			// 死亡カメラ演出終了
+			isEndDeadCameraStaging_ = true;
 		}
-
-		if (input_->PushKey(DIK_D)) {
-			transform_.translate.x += 1.0f;
-		}
-		else if (input_->PushKey(DIK_A)) {
-			transform_.translate.x -= 1.0f;
-		}*/
 	}
 
 	// 基底クラス更新
 	BaseCamera::Update(elapsedTime);
 
+}
+
+void FollowCamera::Reset()
+{
+	// 死亡演出時の秒数
+	currentForcusTime_ = 0.0f;
+
+	// カメラ自体の死亡演出が終了したか
+	isEndDeadCameraStaging_ = false;
 }
 
 void FollowCamera::ImGuiDraw()
