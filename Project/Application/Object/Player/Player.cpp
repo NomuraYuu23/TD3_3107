@@ -819,7 +819,11 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 
 void Player::Reset(const Vector3& position)
 {
+
+	float addPositionY = 2.0f;
+
 	worldtransform_.transform_.translate = position;
+	worldtransform_.transform_.translate.y += addPositionY;
 	velocity_ = {};
 	worldtransform_.UpdateMatrix();
 	isGround_ = true;
