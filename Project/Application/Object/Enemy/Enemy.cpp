@@ -136,7 +136,12 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		else if (/*std::holds_alternative<EnemyWaitState*>(judState_) && */std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
 			// 死亡パーティクル再生
 			EmitterDesc desc;
-			desc.transform = &transform_;
+			EulerTransform transform =
+			{	1.0f,1.0f,1.0f,
+				0.0f,0.0f,0.0f,
+				GetWorldPosition()
+			};
+			desc.transform = &transform;
 			desc.instanceCount = 25;
 			desc.frequency = 0.01f;
 			desc.lifeTime = 0.01f;
@@ -158,7 +163,12 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		if((*weapon)->IsPlayerJump() || std::holds_alternative<FreeFallState*>((*weapon)->GetNowState())){
 			// 死亡パーティクル再生
 			EmitterDesc desc;
-			desc.transform = &transform_;
+			EulerTransform transform =
+			{	1.0f,1.0f,1.0f,
+				0.0f,0.0f,0.0f,
+				GetWorldPosition()
+			};
+			desc.transform = &transform;
 			desc.instanceCount = 25;
 			desc.frequency = 0.01f;
 			desc.lifeTime = 0.01f; 
