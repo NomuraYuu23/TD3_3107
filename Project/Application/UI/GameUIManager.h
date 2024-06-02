@@ -132,6 +132,18 @@ public: // アクセッサ等
 	/// <returns>クリア演出終了状態</returns>
 	bool GetIsEndClearStaging() { return isEndClearStaging_; }
 
+	/// <summary>
+	/// 操作系UIの表示フラグセッター
+	/// </summary>
+	/// <param name="displayOperation">操作系UIの表示フラグ</param>
+	void SetDisplayOperation(bool displayOperation) { displayOperation_ = displayOperation; }
+
+	/// <summary>
+	/// 操作系UIの表示フラグゲッター
+	/// </summary>
+	/// <returns></returns>
+	bool GetDisplayOperation() { return displayOperation_; }
+
 private: // プライベートなメンバ関数
 
 	/// <summary>
@@ -193,6 +205,11 @@ private: // プライベートなメンバ関数
 	/// ステージセレクトへ戻るボタンUI更新関数
 	/// </summary>
 	void ClearButtonUpdate();
+
+	/// <summary>
+	/// 操作系UIの表示切り替え
+	/// </summary>
+	void DisplayOperationSwitching();
 
 private: // メンバ変数
 
@@ -283,6 +300,11 @@ private: // クリア演出用変数群
 	float buttonAppearTime_ = 1.0f; // 演出時間
 	// 表示後、ゆらゆらさせるためのトリガー
 	bool isButtonReturn_ = false;
+
+private: // 操作系UIの表示非表示
+
+	// 操作系UIの表示フラグ
+	bool displayOperation_ = true;
 
 };
 
