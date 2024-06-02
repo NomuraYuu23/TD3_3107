@@ -304,7 +304,7 @@ private: // クリア演出用変数群
 private: // 操作系UIの表示非表示
 
 	// 操作系UIの表示フラグ
-	bool displayOperation_ = true;
+	bool displayOperation_ = false;
 
 };
 

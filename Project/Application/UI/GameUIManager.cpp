@@ -21,8 +21,11 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 	stickUIPos_L_ = uiSprites_[LeftStickSprite]->GetPosition();
 	stickUIPos_R_ = uiSprites_[RightStickSprite]->GetPosition();
 
+#ifndef _DEBUG
 	// 操作系UIの表示フラグ
-	displayOperation_ = false;
+	displayOperation_ = true;
+#endif // !_DEBUG
+
 }
 
 void GameUIManager::Update()
@@ -82,7 +85,7 @@ void GameUIManager::Draw()
 	// 操作系UIの非表示
 	else {
 		// hpからループ
-		for (int i = HPGageSprite; i < spriteCount; i++) {
+		for (int i = ClearBackFrameSprite; i < spriteCount; i++) {
 			// スプライト描画
 			uiSprites_[i]->Draw();
 		}
