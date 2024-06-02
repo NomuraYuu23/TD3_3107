@@ -480,16 +480,138 @@
         }
     },
     "Stage02": {
-        "EnemyEmitter:00": {
-            "distance": 8.0,
-            "enemyMaxCount": 1,
-            "padding": 0,
+        "ChaseEnemy01": {
             "position": [
-                0.0,
-                0.0,
+                198.8000030517578,
+                72.5,
                 0.0
             ],
-            "rotateSpeed": 90.0
+            "searchLength": 10.0
+        },
+        "ChaseEnemy02": {
+            "position": [
+                216.89999389648438,
+                68.0,
+                0.0
+            ],
+            "searchLength": 15.0
+        },
+        "ChaseEnemy03": {
+            "position": [
+                197.89999389648438,
+                88.0999984741211,
+                0.0
+            ],
+            "searchLength": 15.0
+        },
+        "ChaseEnemy04": {
+            "position": [
+                246.10000610351563,
+                90.0,
+                0.0
+            ],
+            "searchLength": 15.0
+        },
+        "ChaseEnemy05": {
+            "position": [
+                311.70001220703125,
+                104.9000015258789,
+                0.0
+            ],
+            "searchLength": 18.0
+        },
+        "ChaseEnemy06": {
+            "position": [
+                252.60000610351563,
+                112.19999694824219,
+                0.0
+            ],
+            "searchLength": 17.0
+        },
+        "ChaseEnemy07": {
+            "position": [
+                328.0,
+                121.4000015258789,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "EnemyEmitter:00": {
+            "distance": 7.5,
+            "enemyMaxCount": 2,
+            "padding": 0,
+            "position": [
+                63.400001525878906,
+                7.300000190734863,
+                0.0
+            ],
+            "rotateSpeed": 150.0
+        },
+        "EnemyEmitter:01": {
+            "distance": 7.5,
+            "enemyMaxCount": 3,
+            "padding": 0,
+            "position": [
+                68.30000305175781,
+                30.299999237060547,
+                0.0
+            ],
+            "rotateSpeed": -130.0
+        },
+        "EnemyEmitter:02": {
+            "distance": 5.0,
+            "enemyMaxCount": 6,
+            "padding": 0,
+            "position": [
+                126.4000015258789,
+                47.20000076293945,
+                0.0
+            ],
+            "rotateSpeed": 150.0
+        },
+        "EnemyEmitter:03": {
+            "distance": 5.400000095367432,
+            "enemyMaxCount": 5,
+            "padding": 0,
+            "position": [
+                147.5,
+                56.900001525878906,
+                0.0
+            ],
+            "rotateSpeed": -150.0
+        },
+        "EnemyEmitter:04": {
+            "distance": 3.0,
+            "enemyMaxCount": 4,
+            "padding": 0,
+            "position": [
+                81.0999984741211,
+                20.100000381469727,
+                0.0
+            ],
+            "rotateSpeed": 150.0
+        },
+        "EnemyEmitter:05": {
+            "distance": 5.0,
+            "enemyMaxCount": 6,
+            "padding": 0,
+            "position": [
+                278.70001220703125,
+                92.19999694824219,
+                0.0
+            ],
+            "rotateSpeed": 120.0
+        },
+        "EnemyEmitter:06": {
+            "distance": 5.0,
+            "enemyMaxCount": 8,
+            "padding": 0,
+            "position": [
+                294.0,
+                118.4000015258789,
+                0.0
+            ],
+            "rotateSpeed": 120.0
         }
     },
     "Stage03": {},
