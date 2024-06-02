@@ -20,6 +20,9 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 	// 左スティックUIの座標を取得する
 	stickUIPos_L_ = uiSprites_[LeftStickSprite]->GetPosition();
 	stickUIPos_R_ = uiSprites_[RightStickSprite]->GetPosition();
+
+	// 操作系UIの表示フラグ
+	displayOperation = false;
 }
 
 void GameUIManager::Update()
@@ -48,11 +51,25 @@ void GameUIManager::Update()
 
 void GameUIManager::Draw()
 {
-	// 全スプライト分ループ
-	for (int i = 0; i < spriteCount; i++) {
-		// スプライト描画
-		uiSprites_[i]->Draw();
+
+	// 操作系UIの表示
+	if (displayOperation) {
+		// 全スプライト分ループ
+		for (int i = 0; i < spriteCount; i++) {
+			// スプライト描画
+			uiSprites_[i]->Draw();
+		}
 	}
+	// 操作系UIの非表示
+	else {
+		// hpからループ
+		for (int i = HPGageSprite; i < spriteCount; i++) {
+			// スプライト描画
+			uiSprites_[i]->Draw();
+		}
+	}
+
+
 }
 
 void GameUIManager::DisplayImGui()

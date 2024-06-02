@@ -256,5 +256,10 @@ private: // クリア演出用変数群
 	// 表示後、ゆらゆらさせるためのトリガー
 	bool isButtonReturn_ = false;
 
+private: // 操作系UIの表示非表示
+
+	// 操作系UIの表示フラグ
+	bool displayOperation = true;
+
 };
 
