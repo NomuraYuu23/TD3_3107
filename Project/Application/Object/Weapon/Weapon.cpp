@@ -365,10 +365,14 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 		std::visit([&](const auto& a) {
 			targetPos = a->GetColliderPosition();
 			}, target);
-
+		// 敵
+		if (std::holds_alternative<Enemy*>(target)) {
+			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
+			ChangeRequest(Weapon::StateName::kImpaled);
+			return;
+		}
 		// 壁・ブロックとの衝突判定
-		if (std::holds_alternative<Terrain*>(target)) {
-
+		else if (std::holds_alternative<Terrain*>(target)) {
 			if (throwInvTimer_.IsActive()) {
 
 				Vector2 targetPos = {};
@@ -402,7 +406,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 
 				// 四頂点
 				IObject::FourTop weapon4Point = IObject::GenerateFourTop(weaponMin, weaponMax);
- 				IObject::CollisionType type = IObject::GetCollisionType(weapon4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
+				IObject::CollisionType type = IObject::GetCollisionType(weapon4Point, { minPos.x,minPos.y }, { maxPos.x,maxPos.y });
 
 				if ((worldtransform_.direction_.y > 0) && type == IObject::CollisionType::kBottomSide) {
 					return;
@@ -470,11 +474,6 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.y += invDirect_.y * 1.5f;
 				worldtransform_.UpdateMatrix();
 			}
-			ChangeRequest(Weapon::StateName::kImpaled);
-			return;
-		}
-		else if (std::holds_alternative<Enemy*>(target)) {
-			invDirect_ = Vector2(worldtransform_.direction_.x, worldtransform_.direction_.y) * (-1.0f);
 			ChangeRequest(Weapon::StateName::kImpaled);
 			return;
 		}
