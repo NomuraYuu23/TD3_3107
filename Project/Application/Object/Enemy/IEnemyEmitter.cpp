@@ -133,14 +133,36 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	float tAngle = 0;
 	float add = 0;
 
-	if (maxCount_ == 5) {
+	if (maxCount_ == 3) {
 		if (rotation_ > 0) {
-			tAngle = 0;
-			add = 0.25f;
+			tAngle = 4.15f;
+			add = 2.0f;
 		}
 		else if (rotation_ < 0) {
-			tAngle = 0;
-			add = -0.5f;
+			tAngle = 5.75f;
+			add = 2.0f;
+		}
+	}
+
+	else if (maxCount_ == 4) {
+		if (rotation_ > 0) {
+			tAngle = 4.0f;
+			add = 1.5f;
+		}
+		else if (rotation_ < 0) {
+			tAngle = 5.75f;
+			add = 1.2f;
+		}
+	}
+
+	else if (maxCount_ == 5) {
+		if (rotation_ > 0) {
+			tAngle = 3.8f;
+			add = 1.2f;
+		}
+		else if (rotation_ < 0) {
+			tAngle = 6.1f;
+			add = 1.2f;
 		}
 	}
 
