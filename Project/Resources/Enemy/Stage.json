@@ -570,12 +570,12 @@
             "rotateSpeed": 150.0
         },
         "EnemyEmitter:03": {
-            "distance": 5.400000095367432,
-            "enemyMaxCount": 5,
+            "distance": 4.699999809265137,
+            "enemyMaxCount": 3,
             "padding": 0,
             "position": [
                 147.5,
-                56.900001525878906,
+                62.79999923706055,
                 0.0
             ],
             "rotateSpeed": -150.0
@@ -604,14 +604,16 @@
         },
         "EnemyEmitter:06": {
             "distance": 5.0,
-            "enemyMaxCount": 8,
+            "enemyMaxCount": 6,
             "padding": 0,
             "position": [
                 294.0,
                 118.4000015258789,
                 0.0
             ],
-            "rotateSpeed": 120.0
+            "rotateSpeed": -120.0
         }
-    }
+    },
+    "Stage03": {},
+    "Stage04": {}
 }
