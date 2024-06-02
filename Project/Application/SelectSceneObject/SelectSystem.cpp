@@ -16,9 +16,6 @@ void SelectSystem::Initialize(const std::array<uint32_t, StageNumberManager::kSt
 	easeTimer_ = 0.0f;
 	easeSpeed_ = 0.05f;
 
-	//// ステージ番号	
-	//StageNumberManager::stageNum_ = 0;
-
 	// ゲームシーンフラグ
 	gotoGameScene_ = false;
 	// タイトルシーン
@@ -52,43 +49,36 @@ void SelectSystem::Update()
 
 		// スティック入力
 		Vector2 leftStick = input_->GetLeftAnalogstick();
-		// 仮
-		//leftStick = { 0.0f,0.0f };
 
 		// 右移動
 		if (leftStick.x > 0.0f) {
 
-			if (StageNumberManager::stageNum_ == 0) {
-				isMoveRight_ = true;
-				easeTimer_ = 0.0f;
-				StageNumberManager::stageNum_++;
-				if (StageNumberManager::stageNum_ == StageNumberManager::kStageMax) {
-					StageNumberManager::stageNum_ = 0;
-				}
-				stageSelectUI_->SetStageNum();
-
-				// ステージ選択SE
-				audioManager_->PlayWave(kStageSelectSE);
+			isMoveRight_ = true;
+			easeTimer_ = 0.0f;
+			StageNumberManager::stageNum_++;
+			if (StageNumberManager::stageNum_ == StageNumberManager::kStageMax) {
+				StageNumberManager::stageNum_ = 0;
 			}
+			stageSelectUI_->SetStageNum();
+
+			// ステージ選択SE
+			audioManager_->PlayWave(kStageSelectSE);
 
 		}
 		// 左移動
 		else if (leftStick.x < 0.0f) {
 
-			if (StageNumberManager::stageNum_ == 1) {
-
-				isMoveLeft_ = true;
-				easeTimer_ = 0.0f;
-				StageNumberManager::stageNum_--;
-				if (StageNumberManager::stageNum_ == -1) {
-					StageNumberManager::stageNum_ = StageNumberManager::kStageMax - 1;
-				}
-				stageSelectUI_->SetStageNum();
-
-				// ステージ選択SE
-				audioManager_->PlayWave(kStageSelectSE);
-
+			isMoveLeft_ = true;
+			easeTimer_ = 0.0f;
+			StageNumberManager::stageNum_--;
+			if (StageNumberManager::stageNum_ == -1) {
+				StageNumberManager::stageNum_ = StageNumberManager::kStageMax - 1;
 			}
+			stageSelectUI_->SetStageNum();
+
+			// ステージ選択SE
+			audioManager_->PlayWave(kStageSelectSE);
+
 		}
 		// ゲームシーンへ
 		else if (input_->PushJoystick(JoystickButton::kJoystickButtonA)) {
