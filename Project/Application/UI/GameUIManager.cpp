@@ -25,7 +25,6 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 	// 操作系UIの表示フラグ
 	displayOperation_ = true;
 #endif // !_DEBUG
-
 }
 
 void GameUIManager::Update()
@@ -85,7 +84,7 @@ void GameUIManager::Draw()
 	// 操作系UIの非表示
 	else {
 		// hpからループ
-		for (int i = ClearBackFrameSprite; i < spriteCount; i++) {
+		for (int i = HPGageSprite; i < spriteCount; i++) {
 			// スプライト描画
 			uiSprites_[i]->Draw();
 		}
