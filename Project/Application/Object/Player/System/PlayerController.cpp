@@ -213,7 +213,7 @@ void PlayerController::GroundMoveProcess()
 
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない
-		if ((input_->TriggerJoystick(kJoystickButtonLB) || input_->TriggerJoystick(kJoystickButtonA)) && player_->isGround_) {
+		if ((input_->TriggerJoystick(kJoystickButtonLB) || input_->TriggerJoystick(kJoystickButtonA)) && player_->isGround_ && !player_->isGameClear_) {
 			// 切り替え
 			player_->ChangeState(std::make_unique<AerialState>());
 			return;

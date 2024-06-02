@@ -16,7 +16,7 @@ void GroundState::Initialize()
 	// 槍を踏んだかのフラグ
 	player_->isOneStepOn_ = false;
 
-#ifndef _DEBUG
+#ifdef _RELEASE
 
 	// 着地アニメーションの再生
 	if (player_->GetAnimManager() != nullptr) {

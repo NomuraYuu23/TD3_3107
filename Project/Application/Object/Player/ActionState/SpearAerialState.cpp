@@ -33,7 +33,7 @@ void SpearAerialState::Initialize()
 	player_->GetController()->isShortening_ = true;
 	acceptCooltime_.Start(15.0f);
 
-#ifndef _DEBUG
+#ifdef _RELEASE
 
 	// 槍ジャンアニメーションの再生
 	player_->GetAnimManager()->PlaySpearAnimation(PlayerAnimManager::SpearJump);

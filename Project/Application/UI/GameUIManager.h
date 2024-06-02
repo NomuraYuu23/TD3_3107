@@ -41,6 +41,8 @@ private: // プライベートなサブクラス
 		ReturnTextTex,
 		HPGageTex,
 		HPGageFrameTex,
+		ClearTextTex,
+		ReturnStageSelectTextTex,
 		indexCount,	// インデックス数管理用
 	};
 
@@ -58,10 +60,14 @@ private: // プライベートなサブクラス
 		RightStickSprite, // 右スティック用
 		AimSprite,		// エイム画像
 		RBButtonSprite, // RBボタン用
+		ThrowRStickBackSprite, // 戻す際の右スティック背景用
+		ThrowRightStickSprite, // 戻す際の右スティック
 		TextSprite,		// テキスト用
 		HPGageSprite,	 // ゲージ本体
 		HPGageFrameSprite, // ゲージ背景
 		ClearBackFrameSprite, // クリア背景
+		ClearTextSprite, // クリア文字
+		ReturnStageSelectTextSprite, // クリア文字
 		spriteCount, // スプライト数用
 	};
 
@@ -112,7 +118,7 @@ public: // アクセッサ等
 	/// クリア演出終了状態ゲッター
 	/// </summary>
 	/// <returns>クリア演出終了状態</returns>
-	bool GetClearAppear() { return isClearAppear_; }
+	bool GetIsEndClearStaging() { return isEndClearStaging_; }
 
 private: // プライベートなメンバ関数
 
@@ -155,6 +161,21 @@ private: // プライベートなメンバ関数
 	/// クリア時UIの更新関数
 	/// </summary>
 	void ClearUIUpdate();
+
+	/// <summary>
+	/// クリア後の暗転演出更新関数
+	/// </summary>
+	void BackOutStagingUpdate();
+
+	/// <summary>
+	/// クリア文字表示演出更新関数
+	/// </summary>
+	void ClearAppearUpdate();
+
+	/// <summary>
+	/// ステージセレクトへ戻るボタンUI更新関数
+	/// </summary>
+	void ClearButtonUpdate();
 
 private: // メンバ変数
 
@@ -212,16 +233,28 @@ private: // クリア演出用変数群
 	// クリアフラグ
 	bool isClear_ = false;
 
-	// 文字が出現し終わったか
-	bool isClearAppear_ = false;
+	// クリア演出終了トリガー
+	bool isEndClearStaging_ = false;
 
-	// クリア背景演出用
-	float currentBackAppearTime_ = 0.0f; // 現在時間
-	float backAppearTime_		 = 1.5f; // 演出時間
+	// 画面暗転演出終了トリガー
+	bool isBlackOut_ = false;
+	// 背景暗転演出用
+	float currentBlackOutTime_ = 0.0f; // 現在時間
+	float blackOutTime_		   = 1.0f; // 演出時間
 
-	// クリア文字演出用
+	// クリア文字表示演出終了トリガー
+	bool isAppearClear_ = false;
+	// クリア文字表示演出用
 	float currentClearAppearTime_ = 0.0f; // 現在時間
-	float clearAppearTime_		  = 1.0f; // 演出時間
+	float clearAppearTime_		  = 1.5f; // 演出時間
+	// 表示後、ゆらゆらさせるためのトリガー
+	bool isReturn_ = false;
+
+	// ボタン表示演出用
+	float currentButtonAppearTime_ = 0.0f; // 現在時間
+	float buttonAppearTime_ = 1.0f; // 演出時間
+	// 表示後、ゆらゆらさせるためのトリガー
+	bool isButtonReturn_ = false;
 
 };
 

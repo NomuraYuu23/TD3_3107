@@ -25,7 +25,7 @@ void IEnemyEmitter::Initialize(Model* model)
 	isRotateReturn_ = false;
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// アニメーション取得と初期化
 	anim_.Initialize(
 		model_->GetNodeAnimationData(),
@@ -59,16 +59,16 @@ void IEnemyEmitter::Update()
 
 	interval_.Update();
 
+#ifdef _RELEASE
 	// フラグによる死亡処理
-	#ifndef _DEBUG
 	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& enemy) {
 		if (enemy->IsDead()) {
 			enemy.reset();
 			return true;
 		}
 		return false;
-	});
-	#endif // !_DEBUG
+		});
+#endif // _RELEASE
 
 	// 回転処理
 	nowAngle_ += 1.0f / (rotation_ * GameSystemManager::sGameSpeed);
@@ -191,6 +191,33 @@ void IEnemyEmitter::ImGuiDraw()
 
 }
 
+void IEnemyEmitter::GenerateEnemys(float positionAngle, float transformAngle, float addAngle)
+{
+	// 敵の生成
+	for (uint32_t i = 0; i < maxCount_; ++i) {
+		// 角度からオフセットの計算
+		float angle = i * positionAngle + (float)std::numbers::pi / 2.0f;
+		Vector3 newPosition = {};
+		newPosition.x = (std::cosf(angle) * distance_);
+		newPosition.y = (std::sinf(angle) * distance_);
+
+		// 生成
+		std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
+		obj->Initialize();
+		//static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
+		static_cast<Enemy*>(obj.get())->SetEmitter(this);
+		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
+		obj->transform_.translate = newPosition;
+		obj->transform_.rotate.z = transformAngle;
+		transformAngle += addAngle;
+		obj->Update();
+		// 初期化
+		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
+		// リストに追加
+		objects_.push_back(std::move(obj));
+	}
+}
+
 void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 {
 
@@ -218,12 +245,15 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 		}
 
 		// 距離、回転とか修正
-		
+
 		// 角度からオフセットの計算
 		float angle = count * angleIncrement + (float)std::numbers::pi / 2.0f;
 		Vector3 newPosition = {};
 		newPosition.x = (std::cosf(angle) * distance_);
 		newPosition.y = (std::sinf(angle) * distance_);
+		if (!static_cast<Enemy*>(it->get())->parent_) {
+			static_cast<Enemy*>(it->get())->SetParent(&worldTransform_);
+		}
 		static_cast<Enemy*>(it->get())->SetDefaultOffset(newPosition);
 		it->get()->transform_.translate = newPosition;
 		it->get()->Update();
@@ -238,7 +268,7 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 
 	}
 	// オブジェクトの数が足りてないなら生成
-	else if(maxCount_ > count){
+	if (maxCount_ > count) {
 
 		while (true)
 		{
@@ -257,7 +287,7 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 			// 生成
 			std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
 			obj->Initialize();
-			//static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
+			static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
 			static_cast<Enemy*>(obj.get())->SetEmitter(this);
 			static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
 			obj->transform_.translate = newPosition;
@@ -273,31 +303,4 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 
 	}
 
-}
-
-void IEnemyEmitter::GenerateEnemys(float positionAngle, float transformAngle, float addAngle)
-{
-	// 敵の生成
-	for (uint32_t i = 0; i < maxCount_; ++i) {
-		// 角度からオフセットの計算
-		float angle = i * positionAngle + (float)std::numbers::pi / 2.0f;
-		Vector3 newPosition = {};
-		newPosition.x = (std::cosf(angle) * distance_);
-		newPosition.y = (std::sinf(angle) * distance_);
-
-		// 生成
-		std::unique_ptr<OneOfManyObjects> obj = std::make_unique<Enemy>();
-		obj->Initialize();
-		//static_cast<Enemy*>(obj.get())->SetParent(&worldTransform_);
-		static_cast<Enemy*>(obj.get())->SetEmitter(this);
-		static_cast<Enemy*>(obj.get())->SetDefaultOffset(newPosition);
-		obj->transform_.translate = newPosition;
-		obj->transform_.rotate.z = transformAngle;
-		transformAngle += addAngle;
-		obj->Update();
-		// 初期化
-		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<GroupEnemyState>(), 0);
-		// リストに追加
-		objects_.push_back(std::move(obj));
-	}
 }

@@ -139,6 +139,10 @@ void GameUIManager::LoadTexture()
 	texHandles_.insert({ ReturnTextTex, TextureManager::Load("Resources/UI/Game/ReturnSpearText.png", dxCommon_, texHandleManager_) });	 // 戻るテキスト画像
 	texHandles_.insert({ HPGageTex, TextureManager::Load("Resources/UI/Game/HealthGage.png", dxCommon_, texHandleManager_) });	 // HP画像
 	texHandles_.insert({ HPGageFrameTex, TextureManager::Load("Resources/UI/Game/HealthGageFrame.png", dxCommon_, texHandleManager_) });	 // HPフレーム画像
+
+	// クリア演出関係
+	texHandles_.insert({ ClearTextTex, TextureManager::Load("Resources/UI/Game/StageClearText.png", dxCommon_, texHandleManager_) });	 //クリアテキスト用 
+	texHandles_.insert({ ReturnStageSelectTextTex, TextureManager::Load("Resources/UI/Game/ReturnStageSelectText.png", dxCommon_, texHandleManager_) });	 //クリアテキスト用 
 }
 
 void GameUIManager::CreateSprite()
@@ -212,6 +216,20 @@ void GameUIManager::CreateSprite()
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 戻す状態であるとき、右スティック背景用
+	uiSprites_.back().reset(Sprite::Create(texHandles_[JoyStickBackTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 995.0f, 675.0f };
+	setSize = { 64.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 戻す状態であるとき、右スティック表示用
+	uiSprites_.back().reset(Sprite::Create(texHandles_[RightStickNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 995.0f, 675.0f };
+	setSize = { 64.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // テキスト画像用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[ThrowTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 1150.0f, 650.0f };
@@ -242,6 +260,18 @@ void GameUIManager::CreateSprite()
 	uiSprites_.back()->SetSize(setSize);
 	uiSprites_.back()->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
 
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // クリアテキスト
+	uiSprites_.back().reset(Sprite::Create(texHandles_[ClearTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 1712.0f, 250.0f };
+	//setSize = { 1280.0f, 720.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	//uiSprites_.back()->SetSize(setSize);
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // クリア時背景
+	uiSprites_.back().reset(Sprite::Create(texHandles_[ReturnStageSelectTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 640.0f, 650.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
 }
 
 void GameUIManager::LeftStickUIUpdate()
@@ -331,12 +361,35 @@ void GameUIManager::ThrowButtonUIUpdate()
 
 	if (player_->weapon_->isHold_) {
 		uiSprites_[TextSprite]->SetTextureHandle(texHandles_[ThrowTextTex]);  // テクスチャ変更
+
+		uiSprites_[RBButtonSprite]->SetPosition({ 975.0f, 650.0f });
+		uiSprites_[RBButtonSprite]->SetSize({ 84.0f, 84.0f });
+		uiSprites_[ThrowRStickBackSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+		uiSprites_[ThrowRightStickSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
 	}
 	else {
 		uiSprites_[TextSprite]->SetTextureHandle(texHandles_[ReturnTextTex]);  // テクスチャ変更
+
+		uiSprites_[RBButtonSprite]->SetPosition({ 935.0f, 625.0f });
+		uiSprites_[RBButtonSprite]->SetSize({ 64.0f, 64.0f });
+		uiSprites_[ThrowRStickBackSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		uiSprites_[ThrowRightStickSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+
+		// スティック入力取得
+		Vector2 stickVec = Vector2::Normalize(input_->GetRightAnalogstick()) * stickUIOffset_;
+
+		// スティック入力に応じてUIを動かす
+		if (stickVec.x < 0.0f || stickVec.x > 0.0f || stickVec.y < 0.0f || stickVec.y > 0.0f) {
+			uiSprites_[ThrowRightStickSprite]->SetPosition(uiSprites_[ThrowRStickBackSprite]->GetPosition() + stickVec); // 座標を動かす
+			uiSprites_[ThrowRightStickSprite]->SetTextureHandle(texHandles_[RightStickPressTex]);  // テクスチャ変更
+		}
+		else {
+			uiSprites_[ThrowRightStickSprite]->SetPosition(uiSprites_[ThrowRStickBackSprite]->GetPosition());					    // 元に戻す
+			uiSprites_[ThrowRightStickSprite]->SetTextureHandle(texHandles_[RightStickNoneTex]);  // テクスチャ変更
+		}
 	}
 
-	// 槍を所持していない時に灰色に
+	// 槍が刺さっていない時に灰色に
 	if (std::holds_alternative<ThrownState*>(player_->weapon_->GetNowState())) {
 		throwUIColor_ = { 0.5f, 0.5f, 0.5f, 1.0f };
 	}
@@ -345,6 +398,11 @@ void GameUIManager::ThrowButtonUIUpdate()
 	}
 	uiSprites_[RBButtonSprite]->SetColor(throwUIColor_);
 	uiSprites_[TextSprite]->SetColor(throwUIColor_);
+
+	if (!player_->weapon_->isHold_) {
+		uiSprites_[ThrowRStickBackSprite]->SetColor(throwUIColor_);
+		uiSprites_[ThrowRightStickSprite]->SetColor(throwUIColor_);
+	}
 }
 
 void GameUIManager::HPUIUpdate()
@@ -380,30 +438,143 @@ void GameUIManager::HPUIUpdate()
 }
 
 void GameUIManager::ClearUIUpdate()
-{
-	// クリア文字が出現しきってなかった場合
-	if (!isClearAppear_) {
-		if (currentClearAppearTime_ < clearAppearTime_) {
-			// 線形補間で演出を行う
-			float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 0.0f, 0.75f, currentClearAppearTime_ / clearAppearTime_);
-			float uiAlpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 1.0f, 0.0f, currentClearAppearTime_ / clearAppearTime_);
+{	
+	// 暗転演出が終了していなければ暗転演出を行う
+	if (!isBlackOut_) {
+		BackOutStagingUpdate();
+	}
 
-			// 全スプライト分ループ
-			for (int i = 0; i < spriteCount; i++) {
-				// UIを透明に
+	// クリア文字表示演出更新
+	ClearAppearUpdate();
+
+	if (isAppearClear_) {
+		ClearButtonUpdate();
+	}
+
+	// 演出が終了したら
+	if (isBlackOut_) {
+		// Bボタンが押されたらステージセレクトへ
+		if (input_->TriggerJoystick(kJoystickButtonB)) {
+			// 演出終了を伝える
+			isEndClearStaging_ = true;
+		}
+	}
+}
+
+void GameUIManager::BackOutStagingUpdate()
+{
+	// 暗転演出が終了していない場合
+	if (!isBlackOut_) {
+		if (currentBlackOutTime_ < blackOutTime_) {
+			// 線形補間で演出を行う
+			float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 0.0f, 0.75f, currentBlackOutTime_ / blackOutTime_);
+			float uiAlpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 1.0f, 0.0f, currentBlackOutTime_ / blackOutTime_);
+
+			// 全UIを徐々に透過
+			for (int i = 0; i < ClearBackFrameSprite; i++) {
 				Vector4 prevColor = uiSprites_[i]->GetColor();
 				uiSprites_[i]->SetColor({ prevColor.x, prevColor.y, prevColor.z, uiAlpha });
 			}
+			// 背景は徐々に暗くする
 			uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, alpha });
 			// 現在時間を加算
-			currentClearAppearTime_ += kDeltaTime_;
+			currentBlackOutTime_ += kDeltaTime_;
 		}
 		else {
-			// 終了時一定値で固定
+			// 終了時は一定値で固定
 			uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, 0.75f });
 
-			// クリア演出終了
-			isClearAppear_ = true;
+			// 暗転演出終了
+			isBlackOut_ = true;
+		}
+	}
+}
+
+void GameUIManager::ClearAppearUpdate()
+{
+	if (currentClearAppearTime_ < clearAppearTime_ && !isAppearClear_) {
+		// 線形補間で演出を行う
+		Vector2 pos = Ease::Easing(Ease::EaseName::EaseOutBack, Vector2{ 1712.0f, 250.0f }, Vector2{ 640.0f, 250.0f }, currentClearAppearTime_ / clearAppearTime_);
+
+		// 文字を出現させる
+		uiSprites_[ClearTextSprite]->SetPosition(pos);
+		// 現在時間を加算
+		currentClearAppearTime_ += kDeltaTime_;
+	}
+	else {
+		// 終了時は一定値で固定
+		//uiSprites_[ClearTextSprite]->SetPosition({ 640.0f, 250.0f });
+
+		// イージングを用いてゆらゆらさせる
+		if (isReturn_) {
+			if (currentClearAppearTime_ < clearAppearTime_) {
+				Vector2 pos = Ease::Easing(Ease::EaseName::EaseInOutQuad, Vector2{ 640.0f, 250.0f }, Vector2{ 640.0f, 275.0f }, (currentClearAppearTime_ / clearAppearTime_));
+
+				uiSprites_[ClearTextSprite]->SetPosition(pos);
+
+				// 経過秒数分加算
+				currentClearAppearTime_ += kDeltaTime_;
+			}
+			else {
+				currentClearAppearTime_ = 0.0f;
+				isReturn_ = false;
+			}
+
+		}
+		else {
+			if (currentClearAppearTime_ < clearAppearTime_) {
+				Vector2 pos = Ease::Easing(Ease::EaseName::EaseInOutQuad, Vector2{ 640.0f, 275.0f }, Vector2{ 640.0f, 250.0f }, (currentClearAppearTime_ / clearAppearTime_));
+
+				uiSprites_[ClearTextSprite]->SetPosition(pos);
+
+				// 経過秒数分加算
+				currentClearAppearTime_ += kDeltaTime_;
+			}
+			else {
+				currentClearAppearTime_ = 0.0f;
+				isReturn_ = true;
+			}
+		}
+
+		// 暗転演出終了
+		isAppearClear_ = true;
+	}
+}
+
+void GameUIManager::ClearButtonUpdate()
+{
+	// イージングを用いてゆらゆらさせる
+	if (isButtonReturn_) {
+		if (currentButtonAppearTime_ < buttonAppearTime_) {
+			// 線形補間で演出を行う
+			float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 1.0f, 0.0f, currentButtonAppearTime_ / buttonAppearTime_);
+			
+			// 背景は徐々に暗くする
+			uiSprites_[ReturnStageSelectTextSprite]->SetColor({ 1.0f, 1.0f, 1.0f, alpha });
+
+			// 経過秒数分加算
+			currentButtonAppearTime_ += kDeltaTime_;
+		}
+		else {
+			currentButtonAppearTime_ = 0.0f;
+			isButtonReturn_ = false;
+		}
+
+	}
+	else {
+		if (currentButtonAppearTime_ < buttonAppearTime_) {
+			// 線形補間で演出を行う
+			float alpha = Ease::Easing(Ease::EaseName::EaseInQuad, 0.0f, 1.0f, currentButtonAppearTime_ / buttonAppearTime_);
+
+			// 背景は徐々に暗くする
+			uiSprites_[ReturnStageSelectTextSprite]->SetColor({ 1.0f, 1.0f, 1.0f, alpha });
+
+			// 経過秒数分加算
+			currentButtonAppearTime_ += kDeltaTime_;
+		}
+		else {
+			currentButtonAppearTime_ = 0.0f;
+			isButtonReturn_ = true;
 		}
 	}
 }

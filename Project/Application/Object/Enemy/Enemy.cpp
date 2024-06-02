@@ -115,16 +115,22 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			if ((*weapon)->IsEnemyImpaled()) {
 				return;
 			}
-#ifndef _DEBUG
+//#ifndef _DEBUG
 			if (!std::holds_alternative<EnemyWaitState*>(judState_)) {
+				
+				#ifdef _RELEASE
 				ChangeState(std::make_unique<EnemyWaitState>(), IEnemyState::ActionMode::kMaxSize);
+				#endif // DEBUG
+				
 				weapon_ = (*weapon);
 
 				// デバッグ以外の場合行う
+				#ifdef _RELEASE
 				// 槍が刺さった効果音を再生
 				weapon_->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kSpearSting);
+				#endif // !_RELEASE
 			}
-#endif // !_DEBUG
+//#endif // !_DEBUG
 
 		}
 		else if (/*std::holds_alternative<EnemyWaitState*>(judState_) && */std::holds_alternative<ReturnState*>((*weapon)->GetNowState())) {
@@ -140,7 +146,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 
 			// デバッグ以外の場合行う
-			#ifndef _DEBUG
+			#ifdef _RELEASE
 			// 敵を倒す効果音を再生
 			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
 			#endif // !_DEBUG
@@ -162,7 +168,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 
 			// デバッグ以外の場合行う
-			#ifndef _DEBUG
+			#ifdef _RELEASE
 			// 敵を倒す効果音を再生
 			(*weapon)->GetPlayer()->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
 			#endif // !_DEBUG

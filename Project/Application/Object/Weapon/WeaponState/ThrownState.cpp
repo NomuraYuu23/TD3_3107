@@ -41,7 +41,7 @@ void ThrownState::Initialize()
 	weapon_->GetPlayer()->throwStopTimer_.Start(stopFrame);
 
 	// デバッグ以外の場合行う
-	#ifndef _DEBUG
+	#ifdef _RELEASE
 	// 槍投げアニメーション開始
 	//weapon_->GetAnimManager()->PlaySpearAnimation(SpearAnimManager::SpearThrow);
 	//weapon_->GetAnimManager()->PlayRingAnimation(SpearAnimManager::RingShot);

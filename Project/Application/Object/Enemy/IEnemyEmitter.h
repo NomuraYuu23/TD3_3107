@@ -64,12 +64,7 @@ public:
 
 	std::string GetName() { return name_; }
 
-	/// <summary>
-	/// 編集
-	/// </summary>
-	/// <param name="multiEnemyData"></param>
 	void Edit(const MultiEnemyData& multiEnemyData);
-
 
 private:
 	void GenerateEnemys(float positionAngle, float transformAngle, float addAngle);
