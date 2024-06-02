@@ -22,7 +22,7 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 	stickUIPos_R_ = uiSprites_[RightStickSprite]->GetPosition();
 
 	// 操作系UIの表示フラグ
-	displayOperation = false;
+	displayOperation_ = false;
 }
 
 void GameUIManager::Update()
@@ -46,6 +46,10 @@ void GameUIManager::Update()
 
 		// HPUIの更新
 		HPUIUpdate();
+
+		// 操作系UIの表示切り替え
+		DisplayOperationSwitching();
+
 	}
 }
 
@@ -53,7 +57,7 @@ void GameUIManager::Draw()
 {
 
 	// 操作系UIの表示
-	if (displayOperation) {
+	if (displayOperation_) {
 		// 全スプライト分ループ
 		for (int i = 0; i < spriteCount; i++) {
 			// スプライト描画
@@ -594,4 +598,19 @@ void GameUIManager::ClearButtonUpdate()
 			isButtonReturn_ = true;
 		}
 	}
+}
+
+void GameUIManager::DisplayOperationSwitching()
+{
+
+	// ボタンが押されたら切り替える
+	if (input_->TriggerJoystick(JoystickButton::kJoystickButtonBACK)) {
+		if (displayOperation_) {
+			displayOperation_ = false;
+		}
+		else {
+			displayOperation_ = true;
+		}
+	}
+
 }
