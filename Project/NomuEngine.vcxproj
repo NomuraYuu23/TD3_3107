@@ -218,6 +218,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.cpp" />
     <ClCompile Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.cpp" />
     <ClCompile Include="Application\Object\BackGround\BackGroundBamboo.cpp" />
+    <ClCompile Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\3D\DrawLine.cpp" />
     <ClCompile Include="Engine\3D\FogManager.cpp" />
@@ -453,6 +454,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadParticle.h" />
     <ClInclude Include="Application\Particle\user\EnemyDead\EnemyDeadEmitter.h" />
     <ClInclude Include="Application\Object\BackGround\BackGroundBamboo.h" />
+    <ClInclude Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\2D\LineForGPU.h" />
     <ClInclude Include="Engine\2D\SpriteForGPU.h" />

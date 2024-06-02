@@ -61,8 +61,8 @@ void FollowCamera::Update(float elapsedTime)
 	if (player_->GetIsDead() && !isEndDeadCameraStaging_) {
 		// 遷移後座標を取得
 		Vector3 postT = player_->worldtransform_.transform_.translate;
-		postT.z = -15.0f;
-		postT.y += 4.5f;
+		postT.z = -20.0f;
+		postT.y += 7.5f;
 
 		if (currentForcusTime_ < forcusTime_) {
 			// カメラを徐々にプレイヤーに寄せる

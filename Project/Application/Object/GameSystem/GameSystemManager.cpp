@@ -73,23 +73,68 @@ void GameSystemManager::GameOverProcess()
 
 		// 自身の値リセット
 		isEndDeadStaging_ = false;
-		deadStagingProgress_ = kCameraMove;
+		deadStagingProgress_ = kDeadStagingSetUp;
 		currentBlastTime_ = 0.0f;
 	}
 	else { // 死亡演出が終了していない時
 		// 死亡演出段階で分岐
 		switch (deadStagingProgress_)
 		{
+		case kDeadStagingSetUp:
+			// 生成座標、および発生レンジ設定
+			EulerTransform t = player_->worldtransform_.transform_;
+			t.translate.z -= 0.5f;
+			t.scale = { 2.5f, 3.0f };
+
+			// パーティクル再生
+			EmitterDesc desc;
+			desc.transform = &t;
+			desc.instanceCount = 3;
+			desc.frequency = 0.25f;
+			desc.lifeTime = 1.0f;
+			desc.velocity = { 0.1f, 0.1f, 0.0f };
+			desc.particleModelNum = kCircle;
+			desc.paeticleName = kDeadForcusingParticle;
+
+			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+			// 次の段階へ
+			deadStagingProgress_++;
+			break;
 		case kCameraMove:
+			if (Input::GetInstance()->TriggerJoystick(kJoystickButtonA)) {
+				deadStagingProgress_ = kFadeOut;
+				// フェード演出開始
+				gum_->SetIsFade(true, 1.0f);
+			}
+
 			// カメラがセットされている、かつ演出が終了していれば
 			if (camera_ != nullptr && camera_->GetIsEndDeadCameraStaging()) {
+				// 死亡パーティクル再生
+				EmitterDesc desc;
+				EulerTransform transform = player_->worldtransform_.transform_;
+				transform.translate.z -= 0.5f;
+				desc.transform = &transform;
+				desc.instanceCount = 25;
+				desc.frequency = 0.01f;
+				desc.lifeTime = 0.01f;
+				desc.particleModelNum = kCircle;
+				desc.paeticleName = kEnemyDeadParticle;
+
+				ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+				// パーティクル爆発と同時にプレイヤー削除
+				player_->isDraw_ = false;
 				// 次の段階へ
 				deadStagingProgress_++;
 			}
 			break;
 		case kPaticleBlast:
-			// パーティクル爆発と同時にプレイヤー削除
-			player_->isDraw_ = false;
+			if (Input::GetInstance()->TriggerJoystick(kJoystickButtonA)) {
+				deadStagingProgress_ = kFadeOut;
+				// フェード演出開始
+				gum_->SetIsFade(true, 1.0f);
+			}
 			// 演出終了
 			if (currentBlastTime_ < blastTime_) {
 				// 経過時間加算
