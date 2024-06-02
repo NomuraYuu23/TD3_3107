@@ -12,6 +12,11 @@ void ChaseEnemyState::Initialize()
 
 void ChaseEnemyState::Update()
 {
+	// 停止中なら早期
+	if (enemy_->GetMoveStop()) {
+		return;
+	}
+
 	// プレイヤー
 	Vector2 player = { enemy_->GetPlayer()->worldtransform_.GetWorldPosition().x,enemy_->GetPlayer()->worldtransform_.GetWorldPosition().y };
 	Vector2 enemy = { enemy_->GetWorldPosition().x,enemy_->GetWorldPosition().y };

@@ -55,8 +55,6 @@ void PlayerController::ImGuiDraw()
 
 void PlayerController::ControllerProcess()
 {
-	//Vector2 leftStick = input_->GetLeftAnalogstick();
-	//float moveSpeed_ = 15.0f;
 	bool CheckAction = false;
 	player_->isArrowUiDraw_ = false;
 
@@ -144,11 +142,9 @@ void PlayerController::ControllerProcess()
 		if (player_->isSlowNow_) {
 			// スローの倍率
 			GameSystemManager::sGameSpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
-			//player_->sPlaySpeed = GlobalVariables::GetInstance()->GetFloatValue("Common", "SlowFactor");
 		}
 		else {
 			GameSystemManager::sGameSpeed = 1.0f;
-			//player_->sPlaySpeed = 1.0f;
 		}
 
 	}
@@ -212,7 +208,7 @@ void PlayerController::GroundMoveProcess()
 		else if (leftStick.x < 0) {
 			moveValue = -1.0f;
 		}
-		//float moveValue = (float)leftStick.x / SHRT_MAX;
+
 		player_->velocity_.x = moveValue * groundSpeed_ * (1.0f / GameSystemManager::sGameSpeed);
 
 		// ジャンプ
@@ -252,16 +248,14 @@ void PlayerController::ThrownProcess()
 			if (player_->throwDirect_.x == 0.0f && player_->throwDirect_.y == 0.0f) {
 				return;
 			}
-			// 地上で投げた場合は槍の重力フラグをオン
-			if (std::holds_alternative<GroundState*>(player_->GetNowState())) {
-				player_->weapon_->SetIsGravity(false);
-			}
-			else {
-				player_->weapon_->SetIsGravity(false);
-			}
+
 			// 方向
 			player_->weapon_->throwDirect_ = player_->throwDirect_;
 			player_->weapon_->throwDirect_ = Vector3::Normalize(player_->weapon_->throwDirect_);
+
+			// 敵を止める
+			player_->GetCorrectSystem().TargetStop();
+
 			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
 		}
 		// 刺さってる→戻ってくる
@@ -282,18 +276,7 @@ void PlayerController::ThrownProcess()
 		else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
 			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 		}
-
 	}
-	//if (input_->TriggerJoystick(kJoystickButtonLB)) {
-	//	if ((std::holds_alternative<AerialState*>(player_->GetNowState()) || std::holds_alternative<SpearAerialState*>(player_->GetNowState()))) {
-	//		// 切り替え
-	//		if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-	//			player_->ChangeState(std::make_unique<AttractState>());
-	//			return;
-	//		}
-	//	}
-	//}
-
 }
 
 void PlayerController::KeyBoardProcess()

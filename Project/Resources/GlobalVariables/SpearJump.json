@@ -1,6 +1,7 @@
 {
     "SpearJump": {
         "AerialAcceleration": 15.0,
+        "FallStopFrame": 15.0,
         "Gravity": 8.0,
         "HorizontalPower": 25.0,
         "OnSpearWaitFrame": 5.0,

@@ -48,6 +48,10 @@ void SingleEnemyState::PatrolUpdate()
 	return;
 #endif // _DEBUG
 
+	if (enemy_->GetMoveStop()) {
+		return;
+	}
+
 	// 移動時間計算
 	moveChangeTimer_.Update(GameSystemManager::sGameSpeed);
 	// アクティブ中の移動処理

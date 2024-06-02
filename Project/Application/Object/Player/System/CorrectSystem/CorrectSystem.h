@@ -24,6 +24,15 @@ public:
 
 	bool IsLockOn() { return isLockOn_; }
 
+	OneOfManyObjects* GetTarget() {
+		if (targetPointer_) {
+			return targetPointer_;
+		}
+		return nullptr;
+	}
+
+	void TargetStop();
+
 private:
 
 	void NearLockOn(EnemyManager* enemyManager);

@@ -1,5 +1,6 @@
 #include "CorrectSystem.h"
 #include "../../Player.h"
+#include "../../../ObjectList.h"
 #include "../../../../../Engine/Math/Matrix3x3.h"
 #include "../../../Engine/Input/Input.h"
 #include "../../../Engine/GlobalVariables/GlobalVariables.h"
@@ -64,7 +65,6 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 	else {
 		player_->throwDirect_ = targetDirect_;
 	}
-
 	prevLeftStick_ = leftStick;
 	// 方向ベクトル
 	//targetDirection;
@@ -77,6 +77,14 @@ void CorrectSystem::ImGuiDraw()
 	ImGui::Text("isInNearArea : %d", isInNearArea_);
 	ImGui::Text("isLock : %d", isLockOn_);
 	ImGui::DragFloat3("TVect", &targetDirect_.x);
+}
+
+void CorrectSystem::TargetStop()
+{
+	if (targetPointer_) {
+		static_cast<Enemy*>(targetPointer_)->SetIsMoveStop(true);
+	}
+
 }
 
 void CorrectSystem::NearLockOn(EnemyManager* enemyManager)

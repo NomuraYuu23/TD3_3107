@@ -37,7 +37,8 @@ void ThrownState::Initialize()
 	//weapon_->safeLaunchTimer_.Start(2.0f);
 
 	// 投げるタイマー
-	weapon_->GetPlayer()->throwStopTimer_.Start(15.0f);
+	float stopFrame = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "FallStopFrame");
+	weapon_->GetPlayer()->throwStopTimer_.Start(stopFrame);
 
 	// デバッグ以外の場合行う
 	#ifndef _DEBUG

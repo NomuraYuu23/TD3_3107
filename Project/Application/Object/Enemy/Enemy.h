@@ -120,6 +120,8 @@ public:
 	// プレイヤーのポインタ
 	Player* GetPlayer() { return player_; }
 
+	void SetIsMoveStop(bool isStop) { isMoveStop_ = isStop; }
+	bool GetMoveStop() { return isMoveStop_;}
 private:
 
 	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::ActionMode pattern);
@@ -175,7 +177,10 @@ public:
 
 	TimerLib interval_;
 
+public:
 	// 追尾用システム
 	DetectionSystem detectionSystem_;
+	// ロックした状態によるストップシステム
+	LockStop lockStopSystem_;
 
 };

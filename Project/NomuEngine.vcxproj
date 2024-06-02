@@ -177,6 +177,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\State\IEnemyState.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\DetectionRay.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
+    <ClCompile Include="Application\Object\Enemy\System\LockStop.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointEditor.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointManager.cpp" />
@@ -394,6 +395,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\System\DetectionRay.h" />
     <ClInclude Include="Application\Object\Enemy\System\DetectionSystem.h" />
     <ClInclude Include="Application\Object\Enemy\System\EnemySytemList.h" />
+    <ClInclude Include="Application\Object\Enemy\System\LockStop.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\GameSystem\GameSystemManager.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointData.h" />

@@ -139,6 +139,10 @@ private: // データ用構造体クラス
 		float highJumpPower_;
 		// 槍じゃん用の重力
 		float jumpGravity_;
+
+		// 投げた直後の落下を停止するフレーム数
+		float throwFallStopFrame_;
+
 	};
 
 	struct BossData {

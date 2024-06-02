@@ -27,8 +27,10 @@ void Enemy::Initialize()
 
 	isDead_ = false;
 	isGround_ = false;
+	isMoveStop_ = false;
 
 	detectionSystem_.Initialize(this);
+	lockStopSystem_.Initialize(this);
 
 }
 
@@ -46,6 +48,10 @@ void Enemy::Update()
 	prevPosition_ = { transform_.translate.x,transform_.translate.y };
 	// 前フレーム座標取得
 	prevTranslate_ = transform_.translate;
+
+	// 停止システム
+	lockStopSystem_.Update();
+
 	// 設定した状態の処理
 	if (state_) {
 		state_->Update();
@@ -71,6 +77,7 @@ void Enemy::ImGuiDraw()
 	std::string rot = "transform" + name_;
 	ImGui::DragFloat3(rot.c_str(), &transform_.rotate.x, 0.01f);
 	ImGui::DragFloat2("scale", &scale2D_.x);
+	ImGui::Text("IsMoveStop : %d", isMoveStop_);
 	ImGui::Text("%d", isDead_);
 	std::string name = typeid(*state_).name();
 	ImGui::Text(name.c_str());
