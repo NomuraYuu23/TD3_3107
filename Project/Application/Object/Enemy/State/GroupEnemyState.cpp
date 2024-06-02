@@ -13,12 +13,12 @@ void GroupEnemyState::Initialize()
 void GroupEnemyState::Update()
 {
 
-	if (enemy_->GetMoveStop()) {
-		enemy_->ReleaseParent();
-	}
-	else {
-		enemy_->ResetParent();
-	}
+	//if (enemy_->GetMoveStop()) {
+	//	enemy_->ReleaseParent();
+	//}
+	//else {
+	//	enemy_->ResetParent();
+	//}
 
 	// 行動の更新
 	(this->*actionFuncs_[actionPattern_].updateFunc_)();
