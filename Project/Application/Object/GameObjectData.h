@@ -199,7 +199,7 @@ private:
 	// プレイヤーの情報
 	PlayerData player_;
 	// エイムの補正関係
-	CorrectData aimCorrect_;
+	CorrectData aimCorrect_[3];
 	// 武器の情報
 	WeaponData weapon_;
 	// 槍ジャンプの情報

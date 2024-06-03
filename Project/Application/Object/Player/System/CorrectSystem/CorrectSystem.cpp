@@ -10,24 +10,29 @@ void CorrectSystem::Initialize(Player* player)
 	// ポインタ登録
 	player_ = player;
 
+	// システムをオンに
+	isSystem_ = true;
+	// アシストの値設定
+	SetAssistValue();
+
 }
 
 void CorrectSystem::Update(EnemyManager* enemyManager)
 {
-	Input* input = Input::GetInstance();
+	if (!isSystem_) {
+		targetPointer_ = nullptr;
+	}
 
+	Input* input = Input::GetInstance();
 	Vector2 rightStick = input->GetRightAnalogstick();
 	Vector2 leftStick = input->GetLeftAnalogstick();
-	//targetDirect_ = NearEnemyLockOn(enemyManager);
 
-	if (targetPointer_) {
+	if (isSystem_ && targetPointer_) {
 		isLockOn_ = true;
-		// 現在の最小の長さ
-		float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
 		// 長さを作成
 		float length = Vector3::Length(targetPointer_->GetWorldPosition() - player_->worldtransform_.GetWorldPosition());
 		// 長さが短いか確認
-		if (length < lengthMin) {
+		if (length < assistValue_.InitLength_) {
 			isInNearArea_ = true;
 			targetDirect_ = targetPointer_->GetWorldPosition() - player_->worldtransform_.GetWorldPosition();
 		}
@@ -35,13 +40,13 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 			targetPointer_ = nullptr;
 		}
 	}
-	else {
+	else if(isSystem_ && !targetPointer_){
 		isLockOn_ = false;
 		NearLockOn(enemyManager);
 	}
 	// スティックを倒した時にロックオンを解除する際の傾きのデッドゾーンの値
 	float lockCancell = 0.75f;
-	if (rightStick.x != 0 || rightStick.y != 0) {
+	if (isSystem_ && rightStick.x != 0 || rightStick.y != 0) {
 		// 解除処理
 		if (std::fabsf(rightStick.x) > lockCancell || std::fabsf(rightStick.y) > lockCancell) {
 			targetPointer_ = nullptr;
@@ -51,7 +56,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		// 仮のアシスト君
 		player_->throwDirect_ = StickAimAssist(enemyManager, normalize);
 	}
-	else if (leftStick.x != 0 || leftStick.y != 0) {
+	else if (isSystem_ && leftStick.x != 0 || leftStick.y != 0) {
 		// 解除処理
 		if (std::fabsf(leftStick.x) > lockCancell || std::fabsf(leftStick.y) > lockCancell) {
 			targetPointer_ = nullptr;
@@ -66,9 +71,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		player_->throwDirect_ = targetDirect_;
 	}
 	prevLeftStick_ = leftStick;
-	// 方向ベクトル
-	//targetDirection;
-	//player_->throwDirect_;
+
 	isInNearArea_ = false;
 }
 
@@ -77,12 +80,38 @@ void CorrectSystem::ImGuiDraw()
 	ImGui::Text("isInNearArea : %d", isInNearArea_);
 	ImGui::Text("isLock : %d", isLockOn_);
 	ImGui::DragFloat3("TVect", &targetDirect_.x);
+
+	ImGui::Checkbox("isLock", &isSystem_);
+	int level = assistLevel_;
+	ImGui::DragInt("Level", &level, 1);
+	assistLevel_ = level;
 }
 
 void CorrectSystem::TargetStop()
 {
 	if (targetPointer_) {
 		static_cast<Enemy*>(targetPointer_)->SetIsMoveStop(true);
+	}
+
+}
+
+void CorrectSystem::SetAssistValue()
+{
+	if (assistLevel_ == 0) {
+		// 最低の長さ
+		assistValue_.InitLength_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength_Normal");
+		// 幅
+		assistValue_.rotationWidth_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "RotateWidth_Normal");
+		// エイムアシストの幅
+		assistValue_.assistWidth_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "AssistWidth_Normal");
+	}
+	else {
+		// 最低の長さ
+		assistValue_.InitLength_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength_Hard");
+		// 幅
+		assistValue_.rotationWidth_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "RotateWidth_Hard");
+		// エイムアシストの幅
+		assistValue_.assistWidth_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "AssistWidth_Hard");
 	}
 
 }
@@ -97,9 +126,6 @@ void CorrectSystem::NearLockOn(EnemyManager* enemyManager)
 	Vector3 toEnemy = { 0.0f,0.0f,0.0f };
 	// 長さ
 	float length = 0.0f;
-	// 現在の最小の長さ
-	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
-	//float lengthMin = kInitLengthMin_;
 	// 方向ベクトル
 	Vector3 direction = { 0.0f, 0.0f,0.0f };
 	// 目指す方向ベクトル
@@ -107,12 +133,10 @@ void CorrectSystem::NearLockOn(EnemyManager* enemyManager)
 
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { player_->throwDirect_.x, player_->throwDirect_.y };
-	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "RotateWidth");
-	//float rotateWidth = kRotationWidth_;
-	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
+
+	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-assistValue_.rotationWidth_);
 	// 方向確認用の行列(右範囲)
-	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(rotateWidth);
+	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(assistValue_.rotationWidth_);
 	// 方向確認用のベクトル(エネミー)
 	Vector2 enemyDirection = { 0.0f, 0.0f };
 
@@ -120,6 +144,8 @@ void CorrectSystem::NearLockOn(EnemyManager* enemyManager)
 	float leftCross = 0.0f;
 	// クロス積右
 	float rightCross = 0.0f;
+
+	float lengthMin = assistValue_.InitLength_;
 
 	// ループ文
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
@@ -172,9 +198,6 @@ Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
 	Vector3 toEnemy = { 0.0f,0.0f,0.0f };
 	// 長さ
 	float length = 0.0f;
-	// 現在の最小の長さ
-	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
-	//float lengthMin = kInitLengthMin_;
 	// 方向ベクトル
 	Vector3 direction = { 0.0f, 0.0f,0.0f };
 	// 目指す方向ベクトル
@@ -182,12 +205,10 @@ Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
 
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { player_->throwDirect_.x, player_->throwDirect_.y };
-	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "RotateWidth");
-	//float rotateWidth = kRotationWidth_;
-	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
+
+	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-assistValue_.rotationWidth_);
 	// 方向確認用の行列(右範囲)
-	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(rotateWidth);
+	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(assistValue_.rotationWidth_);
 	// 方向確認用のベクトル(エネミー)
 	Vector2 enemyDirection = { 0.0f, 0.0f };
 
@@ -195,6 +216,9 @@ Vector3 CorrectSystem::NearEnemyLockOn(EnemyManager* enemyManager)
 	float leftCross = 0.0f;
 	// クロス積右
 	float rightCross = 0.0f;
+
+	// 現在の最小の長さ
+	float lengthMin = assistValue_.InitLength_;
 
 	// ループ文
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
@@ -246,9 +270,7 @@ Vector3 CorrectSystem::StickAimAssist(EnemyManager* enemyManager, const Vector3&
 	Vector3 toEnemy = { 0.0f,0.0f,0.0f };
 	// 長さ
 	float length = 0.0f;
-	// 現在の最小の長さ
-	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
-	//float lengthMin = kInitLengthMin_;
+
 	// 方向ベクトル
 	Vector3 direction = { 0.0f, 0.0f,0.0f };
 	// 目指す方向ベクトル
@@ -256,12 +278,10 @@ Vector3 CorrectSystem::StickAimAssist(EnemyManager* enemyManager, const Vector3&
 
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { stickDirect.x, stickDirect.y };
-	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "AssistWidth");
-	//float rotateWidth = kRotationWidth_;
-	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
+
+	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-assistValue_.assistWidth_);
 	// 方向確認用の行列(右範囲)
-	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(rotateWidth);
+	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(assistValue_.assistWidth_);
 	// 方向確認用のベクトル(エネミー)
 	Vector2 enemyDirection = { 0.0f, 0.0f };
 
@@ -269,6 +289,9 @@ Vector3 CorrectSystem::StickAimAssist(EnemyManager* enemyManager, const Vector3&
 	float leftCross = 0.0f;
 	// クロス積右
 	float rightCross = 0.0f;
+
+	// 現在の最小の長さ
+	float lengthMin = assistValue_.InitLength_;
 
 	// ループ文
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
@@ -293,7 +316,6 @@ Vector3 CorrectSystem::StickAimAssist(EnemyManager* enemyManager, const Vector3&
 				leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
 				rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-				//if (leftCross * rightCross <= 0.0f) {
 				if (leftCross <= 0.0f && rightCross > 0.0f) {
 					isInNearArea_ = true;
 					// 目指す方向ベクトルを更新
@@ -319,9 +341,7 @@ Vector3 CorrectSystem::LeftStickAimAssist(EnemyManager* enemyManager, const Vect
 	Vector3 toEnemy = { 0.0f,0.0f,0.0f };
 	// 長さ
 	float length = 0.0f;
-	// 現在の最小の長さ
-	float lengthMin = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength");
-	//float lengthMin = kInitLengthMin_;
+
 	// 方向ベクトル
 	Vector3 direction = { 0.0f, 0.0f,0.0f };
 	// 目指す方向ベクトル
@@ -329,12 +349,10 @@ Vector3 CorrectSystem::LeftStickAimAssist(EnemyManager* enemyManager, const Vect
 
 	// 方向確認用のベクトル(プレイヤー)
 	Vector2 playerDirection = { stickDirect.x, stickDirect.y };
-	// 方向確認用の行列(左範囲)
-	float rotateWidth = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "AssistWidth");
-	//float rotateWidth = kRotationWidth_;
-	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-rotateWidth);
+
+	Matrix3x3 leftRotateMatrix = Matrix3x3::MakeRotateMatrix(-assistValue_.assistWidth_);
 	// 方向確認用の行列(右範囲)
-	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(rotateWidth);
+	Matrix3x3 rightRotateMatrix = Matrix3x3::MakeRotateMatrix(assistValue_.assistWidth_);
 	// 方向確認用のベクトル(エネミー)
 	Vector2 enemyDirection = { 0.0f, 0.0f };
 
@@ -342,6 +360,9 @@ Vector3 CorrectSystem::LeftStickAimAssist(EnemyManager* enemyManager, const Vect
 	float leftCross = 0.0f;
 	// クロス積右
 	float rightCross = 0.0f;
+
+	// 現在の最小の長さ
+	float lengthMin = assistValue_.InitLength_;
 
 	// ループ文
 	std::list<std::unique_ptr<LargeNumberOfObjects>>::iterator emitItr = enemyManager->GetEmitterLists()->begin();
@@ -366,7 +387,6 @@ Vector3 CorrectSystem::LeftStickAimAssist(EnemyManager* enemyManager, const Vect
 				leftCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, leftRotateMatrix));
 				rightCross = Vector2::Cross(enemyDirection, Matrix3x3::Transform(playerDirection, rightRotateMatrix));
 
-				//if (leftCross * rightCross <= 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0)||(toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
 				if (leftCross <= 0.0f && rightCross > 0.0f && ((toEnemy.x > 0 && player_->worldtransform_.direction_.x > 0) || (toEnemy.x < 0 && player_->worldtransform_.direction_.x < 0))) {
 					isInNearArea_ = true;
 					// 目指す方向ベクトルを更新

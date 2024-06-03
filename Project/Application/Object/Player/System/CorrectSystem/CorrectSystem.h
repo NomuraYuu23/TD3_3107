@@ -6,6 +6,15 @@ class Player;
 
 class CorrectSystem
 {
+private:
+	struct AssistValue {
+		// 角度
+		float rotationWidth_;
+		// 領域範囲
+		float InitLength_;
+		// エイム補正の幅
+		float assistWidth_;
+	};
 public:
 
 	/// <summary>
@@ -33,6 +42,23 @@ public:
 
 	void TargetStop();
 
+	/// <summary>
+	/// システムのフラグセッター
+	/// </summary>
+	/// <param name="isSystem"></param>
+	void SetIsSystem(bool isSystem) { isSystem_ = isSystem; }
+
+private:
+	// システムのオンオフ
+	bool isSystem_ = false;
+	// アシストの強さ
+	uint16_t assistLevel_ = 0;
+	// アシストの値
+	AssistValue assistValue_ = {};
+
+	// アシスト値の設定関数（レベル変えてから呼び出せば変わる
+	void SetAssistValue();
+
 private:
 
 	void NearLockOn(EnemyManager* enemyManager);
@@ -50,6 +76,7 @@ private:
 
 	bool isInNearArea_ = false;
 	bool isLockOn_ = false;
+
 
 	Vector3 targetDirect_ = {};
 
