@@ -42,7 +42,7 @@ void SingleEnemyRegister::Update()
 	for (; itr != objects_.end(); ++itr) {
 		OneOfManyObjects* obj = itr->get();
 		float length = Vector3::Length(obj->GetWorldPosition() - player_->worldtransform_.GetWorldPosition());
-		if (length > 700) {
+		if (length > 1000) {
 			continue;
 		}
 		obj->Update();

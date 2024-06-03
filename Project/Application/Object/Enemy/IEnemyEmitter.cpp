@@ -4,6 +4,7 @@
 #include "../../../Engine/base/SRVDescriptorHerpManager.h"
 #include "../../../Engine/3D/ModelDraw.h"
 #include "../GameSystem/GameSystemManager.h"
+#include "../ObjectList.h"
 
 #include <numbers>
 #include <cmath>
@@ -51,6 +52,13 @@ void IEnemyEmitter::Initialize(Model* model,const std::string& name)
 
 void IEnemyEmitter::Update()
 {
+
+	float length = Vector3::Length(player_->worldtransform_.GetWorldPosition() - worldTransform_.GetWorldPosition());
+
+	if (length > 1000) {
+		return;
+	}
+
 	if (isRotateReturn_ && !interval_.IsActive()) {
 		isRotateReturn_ = false;
 	}
@@ -152,6 +160,12 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 
 void IEnemyEmitter::Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles)
 {
+	float length = Vector3::Length(player_->worldtransform_.GetWorldPosition() - worldTransform_.GetWorldPosition());
+
+	if (length > 1000) {
+		return;
+	}
+
 	Map(camera.GetViewProjectionMatrix());
 
 	ModelDraw::ManyAnimObjectsDesc desc;

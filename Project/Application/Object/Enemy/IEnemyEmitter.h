@@ -66,12 +66,20 @@ public:
 
 	void Edit(const MultiEnemyData& multiEnemyData);
 
+	void Setting(Player* player, BaseCamera* camera) {
+		player_ = player;
+		camera_ = camera;
+	}
+
 private:
 	void GenerateEnemys(float positionAngle, float transformAngle, float addAngle);
 
 private:
 	// 
 	std::string name_;
+
+	Player* player_ = nullptr;
+	BaseCamera* camera_ = nullptr;
 
 private:
 	// 親
