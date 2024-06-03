@@ -128,6 +128,7 @@ void GameScene::Initialize() {
 	enemyTextures_[2].push_back(chaseTexture_);
 	enemyManager_ = std::make_unique<EnemyManager>();
 	enemyManager_->SetPlayer(player_.get());
+	enemyManager_->SetCamera(&camera_);
 	enemyManager_->Initialize(enemyModel_.get(), &enemyTextures_[0], &enemyTextures_[2]);
 
 	player_->SetEnemyManager(enemyManager_.get());

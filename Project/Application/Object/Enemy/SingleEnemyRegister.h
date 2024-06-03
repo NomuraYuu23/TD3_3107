@@ -54,6 +54,11 @@ public:
 		texture_ = texture;
 	}
 
+	void Setting(Player* player, BaseCamera* camera) {
+		player_ = player;
+		camera_ = camera;
+	}
+
 private:
 	// 
 	std::string name_;
@@ -64,4 +69,8 @@ private:
 	// テクスチャ
 	std::vector<UINT>* texture_;
 	UINT singleTexture_ = 0;
+
+	Player* player_ = nullptr;
+	BaseCamera* camera_ = nullptr;
+
 };

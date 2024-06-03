@@ -335,6 +335,7 @@ void EnemyManager::CreateSingleEnemy(std::vector<UINT>* texture, std::vector<UIN
 	// 単体管理用の初期化
 	singleEnemys_ = std::make_unique<SingleEnemyRegister>();
 	singleEnemys_->Initialize(model_);
+	static_cast<SingleEnemyRegister*>(singleEnemys_.get())->Setting(player_, camera_);
 	// テクスチャの設定
 	static_cast<SingleEnemyRegister*>(singleEnemys_.get())->SetTexture(texture);
 	// リストにプッシュ
@@ -344,6 +345,7 @@ void EnemyManager::CreateSingleEnemy(std::vector<UINT>* texture, std::vector<UIN
 	// 追尾管理用の初期化
 	chaseEnemys_ = std::make_unique<SingleEnemyRegister>();
 	chaseEnemys_->Initialize(model_);
+	static_cast<SingleEnemyRegister*>(chaseEnemys_.get())->Setting(player_, camera_);
 	// テクスチャの設定
 	static_cast<SingleEnemyRegister*>(chaseEnemys_.get())->SetTexture(chaseTexture);
 	// リストにプッシュ

@@ -59,6 +59,7 @@ public:
 	/// </summary>
 	/// <param name="player"></param>
 	void SetPlayer(Player* player) { player_ = player; }
+	void SetCamera(BaseCamera* camera) { camera_ = camera; }
 
 public:
 	/// <summary>
@@ -104,6 +105,7 @@ private:
 	Model* model_;
 
 	Player* player_ = nullptr;
+	BaseCamera* camera_ = nullptr;
 
 	// エネミーエディタ
 	std::unique_ptr<EnemyEditor> enemyEditor_;

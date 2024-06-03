@@ -37,7 +37,16 @@ void SingleEnemyRegister::Initialize(Model* model)
 void SingleEnemyRegister::Update()
 {
 
-	LargeNumberOfObjects::Update();
+	//LargeNumberOfObjects::Update();
+	std::list<std::unique_ptr<OneOfManyObjects>>::iterator itr = objects_.begin();
+	for (; itr != objects_.end(); ++itr) {
+		OneOfManyObjects* obj = itr->get();
+		float length = Vector3::Length(obj->GetWorldPosition() - player_->worldtransform_.GetWorldPosition());
+		if (length > 700) {
+			continue;
+		}
+		obj->Update();
+	}
 
 #ifdef _RELEASE
 	// フラグによる死亡処理
