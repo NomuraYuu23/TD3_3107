@@ -10,7 +10,7 @@ void PlayerController::Initialize(Player* player)
 
 	player_ = player;
 	// キーの設定
-	throwType_ = ThrowType::kStickRelease;
+	//throwType_ = ThrowType::kStickRelease;
 	KeyConfigSetting();
 
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");

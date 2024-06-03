@@ -41,7 +41,7 @@ public:
 		kStickRelease,
 	};
 
-	int32_t throwType_ = 0;
+	int32_t throwType_ = ThrowType::kDefault;
 
 private:
 	/// <summary>
