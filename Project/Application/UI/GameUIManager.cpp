@@ -753,8 +753,8 @@ void GameUIManager::ClearUIUpdate()
 
 	// 演出が終了したら
 	if (isBlackOut_) {
-		// Bボタンが押されたらステージセレクトへ
-		if (input_->TriggerJoystick(kJoystickButtonB)) {
+		// Aボタンが押されたらステージセレクトへ
+		if (input_->TriggerJoystick(kJoystickButtonA)) {
 			// 演出終了を伝える
 			isEndClearStaging_ = true;
 		}
