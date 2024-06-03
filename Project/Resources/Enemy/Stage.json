@@ -648,6 +648,92 @@
             ],
             "searchLength": 20.0
         },
+        "ChaseEnemy04": {
+            "position": [
+                167.1999969482422,
+                12.199999809265137,
+                0.0
+            ],
+            "searchLength": 20.0
+        },
+        "ChaseEnemy05": {
+            "position": [
+                148.6999969482422,
+                30.200000762939453,
+                0.0
+            ],
+            "searchLength": 25.0
+        },
+        "Enemy00": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 60.0,
+            "position": [
+                93.0,
+                -10.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy01": {
+            "easeEndPosition": [
+                -23.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 60.0,
+            "position": [
+                193.0,
+                -14.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy02": {
+            "easeEndPosition": [
+                -60.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 60.0,
+            "position": [
+                210.0,
+                22.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy03": {
+            "easeEndPosition": [
+                -50.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 50.0,
+            "position": [
+                200.0,
+                25.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy04": {
+            "easeEndPosition": [
+                -40.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 40.0,
+            "position": [
+                190.0,
+                28.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
         "EnemyEmitter:00": {
             "distance": 6.199999809265137,
             "enemyMaxCount": 6,
@@ -669,6 +755,28 @@
                 0.0
             ],
             "rotateSpeed": -120.0
+        },
+        "EnemyEmitter:02": {
+            "distance": 15.0,
+            "enemyMaxCount": 8,
+            "padding": 0,
+            "position": [
+                150.0,
+                -16.5,
+                0.0
+            ],
+            "rotateSpeed": -90.0
+        },
+        "EnemyEmitter:03": {
+            "distance": 10.0,
+            "enemyMaxCount": 5,
+            "padding": 0,
+            "position": [
+                210.0,
+                -10.699999809265137,
+                0.0
+            ],
+            "rotateSpeed": -150.0
         }
     }
 }
