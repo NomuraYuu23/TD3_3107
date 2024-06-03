@@ -24,36 +24,37 @@ void CheckPointEditor::ImGuiDraw()
 
 	if (ImGui::BeginTabBar("StageNum")) {
 
+		// 終了位置
 	 	size_t end = datas_.size();
+
+		// データを回す
 		for (std::map<std::string, Group>::iterator datasItr = datas_.begin();
 			datasItr != datas_.end(); ++datasItr) {
 
+			// 終了位置に来ていたら終了
 			if (end == stageCount) {
 				break;
 			}
 
-			std::string stageName = "Stage" + std::to_string(stageCount);
-
-			if (stageCount < 10) {
-				stageName = "Stage0" + std::to_string(stageCount);
-			}
-
-			std::string datasStageName = datasItr->first;
+			// データから情報取得
+			std::string datasName = datasItr->first;
 			Group& group = datasItr->second;
+			
+			// 無限ループ
 			while (1) {
 
+				// 確認用の名前
 				std::string chackName = "CheckPoint" + std::to_string(stageCount);
-
 				if (stageCount < 10) {
 					chackName = "CheckPoint0" + std::to_string(stageCount);
 				}
 
-
 				// 同じなんで抜ける
-				if (datasStageName == chackName) {
+				if (datasName == chackName) {
 					break;
 				}
 
+				// データの追加
 				DataAdd(chackName, stageCount, imGuiSpeed);
 
 				// 次のステージへ
@@ -61,7 +62,14 @@ void CheckPointEditor::ImGuiDraw()
 				end++;
 			}
 
-			if (ImGui::BeginTabItem(datasStageName.c_str())) {
+			// タブ用の名前
+			std::string stageName = "Stage" + std::to_string(stageCount);
+			if (stageCount < 10) {
+				stageName = "Stage0" + std::to_string(stageCount);
+			}
+
+			// タブ作成
+			if (ImGui::BeginTabItem(stageName.c_str())) {
 
 				// ブロックの追加
 				ImGui::SeparatorText("CheckPointAdd");
@@ -89,10 +97,9 @@ void CheckPointEditor::ImGuiDraw()
 					}
 
 					// 追加
-					SetValue(datasStageName, key, addCheckPointData_);
+					SetValue(datasName, key, addCheckPointData_);
 					addCheckPointNum_++;
 				}
-
 
 				// ブロックの削除
 				ImGui::SeparatorText("CheckPointDelete");
@@ -128,8 +135,8 @@ void CheckPointEditor::ImGuiDraw()
 					std::string name = groupItr->first;
 					ImGui::SeparatorText(name.c_str());
 
-					std::string namePosition = datasStageName + name + "Position";
-					std::string nameCheckPointNumber = datasStageName + name + "CheckPointNumber";
+					std::string namePosition = datasName + name + "Position";
+					std::string nameCheckPointNumber = datasName + name + "CheckPointNumber";
 
 					ImGui::DragFloat2(namePosition.c_str(), &item.position.x, imGuiSpeed);
 					ImGui::DragInt(nameCheckPointNumber.c_str(), &item.checkPointNumber, imGuiSpeed);
@@ -148,7 +155,6 @@ void CheckPointEditor::ImGuiDraw()
 		for (; stageCount < StageNumberManager::kStageMax; ++stageCount) {
 
 			std::string chackName = "CheckPoint" + std::to_string(stageCount);
-
 			if (stageCount < 10) {
 				chackName = "CheckPoint0" + std::to_string(stageCount);
 			}
@@ -329,7 +335,6 @@ void CheckPointEditor::DataAdd(const std::string& chackName, uint32_t stageCount
 
 	// 追加
 	datas_[chackName];
-
 
 	std::string stageName = "Stage" + std::to_string(stageCount);
 
