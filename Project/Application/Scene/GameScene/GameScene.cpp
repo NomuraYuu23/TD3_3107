@@ -419,7 +419,7 @@ void GameScene::Draw() {
 		postEffectBit += 8;
 	}
 
-	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState())) {
+	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState()) && !player_->IsDead()) {
 		postEffectBit += 16;
 		PostEffect::GetInstance()->SetKernelSize(33);
 		PostEffect::GetInstance()->SetSigma(33.0f);
