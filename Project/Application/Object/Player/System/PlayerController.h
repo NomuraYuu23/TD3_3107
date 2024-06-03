@@ -34,6 +34,15 @@ public:
 		int32_t throwKey;	// 投げ
 	};
 
+	enum ThrowType
+	{
+		kDefault,
+		kButtonRelease,
+		kStickRelease,
+	};
+
+	int16_t throwType_ = 0;
+
 private:
 	/// <summary>
 	/// 戻しの処理

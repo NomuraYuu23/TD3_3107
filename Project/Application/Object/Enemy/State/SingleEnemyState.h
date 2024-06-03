@@ -21,9 +21,13 @@ public:
 	/// 更新
 	/// </summary>
 	void Update() override;
-
-
-	void SettingMoveInfo(const Vector3& endPoint, Ease::EaseName name = Ease::EaseName::Lerp);
+	/// <summary>
+	/// 移動の設定
+	/// </summary>
+	/// <param name="endPoint"></param>
+	/// <param name="endFrame"></param>
+	/// <param name="name"></param>
+	void SettingMoveInfo(const Vector3& endPoint,float endFrame ,Ease::EaseName name = Ease::EaseName::Lerp);
 
 private:
 	// 近距離
