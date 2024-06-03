@@ -1148,15 +1148,15 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 		// 重みの合計分割る
 		blurOutput *= rcp(blurWeightSum);
 		
-		float32_t blurAlphaSum = output.a + blurOutput.a;
+		float32_t blurAlphaSum = 1.0f + blurOutput.a;
 
 		if (blurAlphaSum != 0.0f) {
-			float32_t a1 = output.a * rcp(blurAlphaSum);
+			float32_t a1 = rcp(blurAlphaSum);
 			float32_t a2 = blurOutput.a * rcp(blurAlphaSum);
 
 			float32_t3 col = output.rgb * a1 + blurOutput.rgb * a2;
 
-			output = float32_t4(col, min(blurAlphaSum, 1.0f));
+			output = float32_t4(col, 1.0f);
 		}
 
 	}
