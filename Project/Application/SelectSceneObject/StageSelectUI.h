@@ -15,6 +15,7 @@ public: // サブクラス
 		kSpriteIndexRightArrow, // 右矢印
 		kSpriteIndexStage, // 「ステージ」
 		kSpriteIndexStageNumber, // ステージ番号(連番)
+		kSpriteIndexPracticeStage, // 練習場ステージ
 		kSpriteIndexOperation, // 操作
 		kSpriteIndexOfCount // 数える用。使わない
 	};
