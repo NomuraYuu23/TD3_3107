@@ -442,7 +442,8 @@ void GameScene::Draw() {
 
 void GameScene::ImguiDraw() {
 
-#ifdef _DEMO
+
+#ifdef _DEBUG
 
 	ImGui::Begin("GameScene");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
@@ -457,12 +458,6 @@ void GameScene::ImguiDraw() {
 	ImGui::Checkbox("IsImpact", &isImpact_);
 	ImGui::End();
 
-	//Obj
-	mapManager_->ImGuiDraw();
-	// プレイヤー
-	player_->ImGuiDraw();
-	// 敵
-	enemyManager_->ImGuiDraw();
 	// ボス
 	//bossEnemy_->ImGuiDraw();
 
@@ -471,10 +466,6 @@ void GameScene::ImguiDraw() {
 
 	// スカイドーム
 	//skydome_->ImGuiDraw();
-
-	debugCamera_->ImGuiDraw();
-
-	gameSystemManager_->ImGuiDraw();
 
 	//collision2DDebugDraw_->ImGuiDraw();
 
@@ -495,6 +486,21 @@ void GameScene::ImguiDraw() {
 	gameUIManager_->DisplayImGui();
 
 #endif // _DEBUG
+
+#ifdef _DEMO
+
+	//Obj
+	mapManager_->ImGuiDraw();
+	// プレイヤー
+	player_->ImGuiDraw();
+	// 敵
+	enemyManager_->ImGuiDraw();
+
+	gameSystemManager_->ImGuiDraw();
+
+	debugCamera_->ImGuiDraw();
+
+#endif // _DEMO
 
 }
 
