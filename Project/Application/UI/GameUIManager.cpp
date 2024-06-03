@@ -22,7 +22,7 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 	stickUIPos_R_ = uiSprites_[RightStickSprite]->GetPosition();
 
 	// 操作系UIの表示フラグ
-	displayOperation_ = false;
+	displayOperation_ = true;
 }
 
 void GameUIManager::Update()
