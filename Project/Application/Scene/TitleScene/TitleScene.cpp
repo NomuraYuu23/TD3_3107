@@ -29,6 +29,14 @@ void TitleScene::Initialize()
 	audioManager_->StaticInitialize();
 	audioManager_->Initialize();
 
+	for (uint32_t i = 0; i < TitleAudioNameIndex::kTitleAudioNameIndexOfCount; ++i) {
+		audioManager_->PlayWave(i);
+	}
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		audioManager_->StopWave(i);
+	}
+
 	// ビュープロジェクション
 	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
@@ -152,7 +160,6 @@ void TitleScene::Update()
 		}
 	}
 
-
 	//パーティクル
 	particleManager_->Update(camera_);
 
@@ -253,9 +260,7 @@ void TitleScene::TextureLoad()
 void TitleScene::LowerVolumeBGM()
 {
 
-	const uint32_t startHandleIndex = 3;
-
-	float decreasingVolume = 1.0f / 60.0f;
+	float decreasingVolume = 1.0f / 180.0f;
 	float volume = audioManager_->GetPlayingSoundDatas()[kTitleSceneBGM].volume_ - decreasingVolume;
 	if (volume < 0.0f) {
 		volume = 0.0f;

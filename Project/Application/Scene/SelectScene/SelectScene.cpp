@@ -9,8 +9,15 @@ void SelectScene::Initialize()
 	TextureLoad();
 
 	audioManager_ = std::make_unique<StageSelectAudioManager>();
-	audioManager_->StaticInitialize();
 	audioManager_->Initialize();
+
+	for (uint32_t i = 0; i < StageSelectAudioNameIndex::kStageSelectAudioNameIndexOfCount; ++i) {
+		audioManager_->PlayWave(i);
+	}
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		audioManager_->StopWave(i);
+	}
 
 	selectSystem_ = std::make_unique<SelectSystem>();
 	selectSystem_->Initialize(stagePhotTextureHandles_, stageUITextureHandles_, audioManager_.get());
@@ -140,7 +147,7 @@ void SelectScene::LowerVolumeBGM()
 
 	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
 		if (audioManager_->GetPlayingSoundDatas()[i].handle_ == index) {
-			float decreasingVolume = 1.0f / 60.0f;
+			float decreasingVolume = 1.0f / 180.0f;
 			float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
 			if (volume < 0.0f) {
 				volume = 0.0f;
