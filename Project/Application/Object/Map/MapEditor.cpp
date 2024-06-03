@@ -122,6 +122,8 @@ void MapEditor::ImGuiDraw()
 			if (stageCount < 10) {
 				stageName = "Stage0" + std::to_string(stageCount);
 			}
+			// 追加
+			datas_[stageName];
 			if (ImGui::BeginTabItem(stageName.c_str())) {
 
 				// ブロックの追加

@@ -614,6 +614,8 @@ void EnemyEditor::ImGuiMultiEnemy()
 				stageName = "Stage0" + std::to_string(stageCount);
 			}
 
+			// 追加
+			datas_[stageName];
 			if (ImGui::BeginTabItem(stageName.c_str())) {
 
 				// マルチエネミーの追加

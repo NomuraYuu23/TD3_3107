@@ -41,6 +41,8 @@ public: // メンバ関数(読み込みなど)
 	/// <param name="groupName"></param>
 	void SaveFile(const std::string& groupName);
 
+	void DataAdd(const std::string& chackName, uint32_t stageCount, float imGuiSpeed);
+
 	std::map<std::string, std::map<std::string, CheckPointData>>* GetDatas() { return &datas_; }
 
 
