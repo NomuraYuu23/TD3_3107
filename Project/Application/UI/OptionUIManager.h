@@ -190,10 +190,10 @@ private: // カテゴリ関連変数群
 	Vector2 aimAssistTextPos_;
 
 	// 操作タイプ
-	int SelectedControlType_ = Control_RBPressThrow;
+	static int SelectedControlType_;
 
 	// エイムアシストタイプ
-	int SelectedAimAssistType_ = Assist_Medium;
+	static int SelectedAimAssistType_;
 
 };
 

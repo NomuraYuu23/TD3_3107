@@ -4,6 +4,9 @@
 #include "../Object/Weapon/Weapon.h"
 #include "../../../Engine/Math/Ease.h"
 
+int OptionUIManager::SelectedControlType_ = OptionUIManager::Control_RBPressThrow;
+int OptionUIManager::SelectedAimAssistType_ = OptionUIManager::Assist_Medium;
+
 void OptionUIManager::Initialze(ITextureHandleManager* texHandleManager)
 {
 	// インスタンスの取得
