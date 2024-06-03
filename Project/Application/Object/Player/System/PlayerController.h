@@ -41,7 +41,7 @@ public:
 		kStickRelease,
 	};
 
-	int32_t throwType_ = ThrowType::kDefault;
+	int32_t throwType_ = ThrowType::kButtonRelease;
 
 private:
 	/// <summary>

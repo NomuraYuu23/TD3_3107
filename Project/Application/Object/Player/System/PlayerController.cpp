@@ -128,16 +128,16 @@ void PlayerController::ControllerProcess()
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 		player_->isSlowNow_ = false;
-		bool key = actionButton_.throwButton;
+		bool key = false;
 		if (throwType_ == ThrowType::kDefault) {
-			key = actionButton_.throwButton;
+			key = true;
 		}
 		else if (throwType_ == ThrowType::kButtonRelease) {
 			Vector2 rightStick = input_->GetRightAnalogstick();
-			key = input_->ReleaseJoystick(setButton_.throwKey) && (rightStick.x != 0.0f || rightStick.y != 0.0f);
+			key = input_->PushJoystick(setButton_.throwKey);
 		}
 		else if (throwType_ == ThrowType::kStickRelease) {
-
+			key = true;
 		}
 
 		// スローモーション
@@ -146,7 +146,7 @@ void PlayerController::ControllerProcess()
 			Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 			float deadZoneValue = 0.25f;
 			if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
-				!player_->IsRecoil() && input_->PushJoystick(setButton_.throwKey)) {
+				!player_->IsRecoil() && key) {
 				if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
 					// UI表示
 					player_->isArrowUiDraw_ = true;
