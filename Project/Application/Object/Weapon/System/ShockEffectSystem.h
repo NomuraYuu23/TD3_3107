@@ -30,12 +30,11 @@ public:
 
 	void ImGuiDraw();
 
-	void StartShockWave(float frame) {
-		effectTimer_.Start(frame);
-		shockWaveManager_->SetRadius(0.0f);
-	}
+	void StartShockWave(float frame);
 
 	bool IsActive() { return effectTimer_.IsActive(); }
+
+	void SetCameraAddPosition(const Vector3 cameraAddPosition) { cameraAddPosition_ = cameraAddPosition; }
 
 private:
 	// 親
@@ -49,5 +48,11 @@ private:
 
 	// エフェクトの時間管理
 	TimerLib effectTimer_;
+
+	// 位置
+	Vector3 position_ = { 0.0f,0.0f,0.0f };
+
+	// カメラのずれ
+	Vector3 cameraAddPosition_ = { 0.0f,0.0f,0.0f };
 
 };

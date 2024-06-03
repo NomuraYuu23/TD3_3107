@@ -532,6 +532,8 @@ void GameScene::DebugCameraUpdate()
 			camera_.ShakeStart(0.3f, 2);
 		}
 		player_->GetWeapon()->GetEffectSystem()->SetScreenPosition(camera_);
+		player_->GetWeapon()->GetEffectSystem()->SetCameraAddPosition(followCamera_->GetDefaultOffsetAdd());
+
 		player_->GetWeaponGuardEffect()->SetScreenPosition(camera_);
 		player_->GetWeaponGuardEffect()->SetCameraAddPosition(followCamera_->GetDefaultOffsetAdd());
 
