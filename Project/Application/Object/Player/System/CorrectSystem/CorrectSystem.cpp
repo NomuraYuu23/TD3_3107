@@ -10,8 +10,6 @@ void CorrectSystem::Initialize(Player* player)
 	// ポインタ登録
 	player_ = player;
 
-	// システムをオンに
-	isSystem_ = true;
 	// アシストの値設定
 	SetAssistValue();
 
@@ -19,8 +17,28 @@ void CorrectSystem::Initialize(Player* player)
 
 void CorrectSystem::Update(EnemyManager* enemyManager)
 {
-	if (!isSystem_) {
+	// エイムアシストの段階
+	if (assistLevel_ == AssistLevel::kNone) {
+		// システムをオンに
+		isSystem_ = false;
+		// ターゲット消す
 		targetPointer_ = nullptr;
+	}
+	else if (assistLevel_ == AssistLevel::kNormal) {
+		// システムをオンに
+		isSystem_ = true;
+		// アシストの値変更
+		SetAssistValue();
+	}
+	else if (assistLevel_ == AssistLevel::kHard) {
+		// システムをオンに
+		isSystem_ = true;
+		// アシストの値変更
+		SetAssistValue();
+	}
+	else {
+		// システムをオンに
+		isSystem_ = true;
 	}
 
 	Input* input = Input::GetInstance();
@@ -46,7 +64,7 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 	}
 	// スティックを倒した時にロックオンを解除する際の傾きのデッドゾーンの値
 	float lockCancell = 0.75f;
-	if (isSystem_ && rightStick.x != 0 || rightStick.y != 0) {
+	if (rightStick.x != 0 || rightStick.y != 0) {
 		// 解除処理
 		if (std::fabsf(rightStick.x) > lockCancell || std::fabsf(rightStick.y) > lockCancell) {
 			targetPointer_ = nullptr;
@@ -54,9 +72,14 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		Vector3 normalize = { rightStick.x / SHRT_MAX,rightStick.y / SHRT_MAX,0 };
 		normalize.y *= -1.0f;
 		// 仮のアシスト君
-		player_->throwDirect_ = StickAimAssist(enemyManager, normalize);
+		if (isSystem_) {
+			player_->throwDirect_ = StickAimAssist(enemyManager, normalize);
+		}
+		else {
+			player_->throwDirect_ = normalize;
+		}
 	}
-	else if (isSystem_ && leftStick.x != 0 || leftStick.y != 0) {
+	else if (leftStick.x != 0 || leftStick.y != 0) {
 		// 解除処理
 		if (std::fabsf(leftStick.x) > lockCancell || std::fabsf(leftStick.y) > lockCancell) {
 			targetPointer_ = nullptr;
@@ -64,8 +87,12 @@ void CorrectSystem::Update(EnemyManager* enemyManager)
 		Vector3 normalize = { leftStick.x / SHRT_MAX,leftStick.y / SHRT_MAX,0 };
 		normalize.y *= -1.0f;
 		// 仮のアシスト君
-		player_->throwDirect_ = LeftStickAimAssist(enemyManager, normalize);
-
+		if (isSystem_) {
+			player_->throwDirect_ = LeftStickAimAssist(enemyManager, normalize);
+		}
+		else {
+			player_->throwDirect_ = normalize;
+		}
 	}
 	else {
 		player_->throwDirect_ = targetDirect_;
@@ -97,7 +124,7 @@ void CorrectSystem::TargetStop()
 
 void CorrectSystem::SetAssistValue()
 {
-	if (assistLevel_ == 0) {
+	if (assistLevel_ == AssistLevel::kNormal) {
 		// 最低の長さ
 		assistValue_.InitLength_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength_Normal");
 		// 幅
@@ -105,7 +132,7 @@ void CorrectSystem::SetAssistValue()
 		// エイムアシストの幅
 		assistValue_.assistWidth_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "AssistWidth_Normal");
 	}
-	else {
+	else if(assistLevel_ == AssistLevel::kHard){
 		// 最低の長さ
 		assistValue_.InitLength_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "InitLength_Hard");
 		// 幅
@@ -113,7 +140,6 @@ void CorrectSystem::SetAssistValue()
 		// エイムアシストの幅
 		assistValue_.assistWidth_ = GlobalVariables::GetInstance()->GetFloatValue("AimCorrection", "AssistWidth_Hard");
 	}
-
 }
 
 void CorrectSystem::NearLockOn(EnemyManager* enemyManager)

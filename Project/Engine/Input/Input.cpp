@@ -352,6 +352,16 @@ Vector2 Input::GetRightAnalogstick(float deadZone) {
 
 }
 
+Vector2 Input::GetPrevRightAnalogstick(float deadZone)
+{
+	if (usedXInput_) {
+		return XGetPrevRightAnalogstick(deadZone);
+	}
+	else {
+		return DirectGetRightAnalogstick(deadZone);
+	}
+}
+
 float Input::GetLRTrrigger() {
 
 	if (usedXInput_) {
@@ -510,6 +520,29 @@ Vector2 Input::XGetRightAnalogstick(float deadZone)
 {
 
 	Vector2 sThumbR = { float(xJoystickState_.Gamepad.sThumbRX), float(-xJoystickState_.Gamepad.sThumbRY) };
+
+	//if (sThumbR.x < deadZone &&
+	//	sThumbR.x > -deadZone) {
+	//	sThumbR.x = 0.0f;
+	//}
+	//if (sThumbR.y < deadZone &&
+	//	sThumbR.y > -deadZone) {
+	//	sThumbR.y = 0.0f;
+	//}
+
+	if (std::fabsf(sThumbR.y) < deadZone && std::fabsf(sThumbR.x) < deadZone) {
+		sThumbR.x = 0.0f;
+		sThumbR.y = 0.0f;
+	}
+
+	return sThumbR;
+
+}
+
+Vector2 Input::XGetPrevRightAnalogstick(float deadZone)
+{
+
+	Vector2 sThumbR = { float(xJoystickPreState_.Gamepad.sThumbRX), float(-xJoystickPreState_.Gamepad.sThumbRY) };
 
 	//if (sThumbR.x < deadZone &&
 	//	sThumbR.x > -deadZone) {
