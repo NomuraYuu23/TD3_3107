@@ -107,6 +107,10 @@ void IEnemyEmitter::InitializeEmitter(float spinSpeed)
 
 	rotation_ = spinSpeed;
 
+	if (rotation_ == 0.0f) {
+		rotation_ = 1.0f;
+	}
+
 	if (rotation_ > 0) {
 		oneLapAngle_ = 6.28f;
 		isMinusRotation_ = false;
