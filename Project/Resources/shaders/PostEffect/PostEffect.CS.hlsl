@@ -1019,6 +1019,44 @@ float32_t4 TAKEYARIMONOGATARI_First(in const float32_t2 index) {
 		indexTmp.y *= gComputeConstants.threadIdTotalY;
 	}
 
+	// 衝撃波2
+	if (gComputeConstants.executionFlag & 32) {
+
+		float32_t2 indexTmp2 = {0.0f,0.0f};
+
+		// 比率
+		float32_t ratio = float32_t(gComputeConstants.threadIdTotalY) * rcp(gComputeConstants.threadIdTotalX);
+
+		// テクスチャ比率に依存しない真円
+		float32_t2 scaleUV = (texcoord - float32_t2(0.5f, 0.0f)) * float32_t2(rcp(ratio), 1.0f) + float32_t2(0.5f, 0.0f);
+
+		// 中心を基準にした位置
+		float32_t2 position = scaleUV - gShockWaveConstants1.center;
+
+		// マスク
+		float32_t mask =
+			(1.0f - smoothstep(gShockWaveConstants1.radius - 0.1f, gShockWaveConstants1.radius, length(position))) *
+			smoothstep(gShockWaveConstants1.radius - gShockWaveConstants1.thickness - 0.1f, gShockWaveConstants1.radius - gShockWaveConstants1.thickness, length(position));
+
+		// 歪み
+		float32_t2 distortion = normalize(position) * gShockWaveConstants1.distortion * mask;
+
+		// 新しいインデックス
+		indexTmp2 = texcoord - distortion;
+		indexTmp2.x *= gComputeConstants.threadIdTotalX;
+		indexTmp2.y *= gComputeConstants.threadIdTotalY;
+
+		if (gComputeConstants.executionFlag & 1) {
+
+			indexTmp = (indexTmp + indexTmp2) * 0.5f;
+
+		}
+		else {
+			indexTmp = indexTmp2;
+		}
+
+	}
+
 	// グリッチ
 	if (gComputeConstants.executionFlag & 2) {
 		float32_t horzNoise = Noise(

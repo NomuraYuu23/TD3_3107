@@ -20,6 +20,8 @@
 
 #include "System/SlowEffect/SlowEffect.h"
 
+#include "System/WeaponGuardEffect/WeaponGuardEffect.h"
+
 class EnemyManager;
 class GameUIManager;
 
@@ -222,6 +224,12 @@ public:
 	/// <param name="model">矢印モデル</param>
 	void SetArrowModel(Model* model);
 
+	/// <summary>
+	/// 武器ガードエフェクトゲッター
+	/// </summary>
+	/// <returns></returns>
+	WeaponGuardEffect* GetWeaponGuardEffect() { return weaponGuardEffect_.get(); }
+
 public:
 	// ステート
 	std::unique_ptr<IActionState> actionState_;
@@ -348,6 +356,10 @@ public:
 private: // モーションブラー
 
 	std::unique_ptr<Velocity2DManager> velocity2DManager_;
+
+private: // ガードエフェクト
+
+	std::unique_ptr<WeaponGuardEffect> weaponGuardEffect_;
 
 private:
 	void SystemInitialize();

@@ -25,12 +25,19 @@ void ShockEffectSystem::Update()
 
 void ShockEffectSystem::SetScreenPosition(const BaseCamera& camera)
 {
-	screenPosition_ = MathUtility::WorldToScreen(weapon_->worldtransform_.GetWorldPosition(), &const_cast<BaseCamera&>(camera));
-	screenPositionRatio_ = MathUtility::ScreenPositionRatio(weapon_->worldtransform_.GetWorldPosition(), &const_cast<BaseCamera&>(camera));
+	screenPosition_ = MathUtility::WorldToScreen(position_ - cameraAddPosition_, &const_cast<BaseCamera&>(camera));
+	screenPositionRatio_ = MathUtility::ScreenPositionRatio(position_ - cameraAddPosition_, &const_cast<BaseCamera&>(camera));
 }
 void ShockEffectSystem::ImGuiDraw()
 {
 	ImGui::DragFloat2("ScreenPos", &screenPosition_.x);
 	ImGui::DragFloat2("ScreenRatio", &screenPositionRatio_.x);
 	shockWaveManager_->ImGuiDraw();
+}
+
+void ShockEffectSystem::StartShockWave(float frame)
+{
+	effectTimer_.Start(frame);
+	shockWaveManager_->SetRadius(0.0f);
+	position_ = weapon_->worldtransform_.GetWorldPosition();
 }

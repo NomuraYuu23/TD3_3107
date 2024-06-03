@@ -53,6 +53,9 @@ public:
 	/// <returns></returns>
 	bool GetIsEndDeadCameraStaging() { return isEndDeadCameraStaging_; }
 
+
+	Vector3 GetDefaultOffsetAdd() { return defaultOffsetAdd_; }
+
 private:
 	// プレイヤー
 	Player* player_ = nullptr;

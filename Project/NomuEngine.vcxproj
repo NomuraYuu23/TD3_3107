@@ -201,6 +201,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
     <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Player\System\SlowEffect\SlowEffect.cpp" />
+    <ClCompile Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.cpp" />
     <ClCompile Include="Application\Object\Sample\SampleObject.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\AutoComeBack.cpp" />
     <ClCompile Include="Application\Object\Weapon\System\ShockEffectSystem.cpp" />
@@ -639,6 +640,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Particle\user\SmokeParticle\SmokeParticle.h" />
     <ClInclude Include="Application\Particle\user\ImapledParticle\ImpaledParticle.h" />
     <ClInclude Include="Application\AudioManager\StageSelectAudioManager.h" />
+    <ClInclude Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

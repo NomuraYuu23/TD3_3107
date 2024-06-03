@@ -47,6 +47,11 @@ public:
 	void ImGuiDraw();
 
 	/// <summary>
+	/// hitEffectTimer_を終了
+	/// </summary>
+	void HitEffectTimerEnd() { hitEffectTimer_.End(); }
+
+	/// <summary>
 	/// 無敵中か
 	/// </summary>
 	/// <returns></returns>
