@@ -55,7 +55,7 @@ void IEnemyEmitter::Update()
 
 	float length = Vector3::Length(player_->worldtransform_.GetWorldPosition() - worldTransform_.GetWorldPosition());
 
-	if (length > 1000) {
+	if (length > 600) {
 		return;
 	}
 
@@ -162,7 +162,7 @@ void IEnemyEmitter::Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles)
 {
 	float length = Vector3::Length(player_->worldtransform_.GetWorldPosition() - worldTransform_.GetWorldPosition());
 
-	if (length > 1000) {
+	if (length > 600) {
 		return;
 	}
 
