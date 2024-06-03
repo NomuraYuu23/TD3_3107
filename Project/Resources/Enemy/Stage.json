@@ -1,5 +1,17 @@
 {
-    "Stage00": {},
+    "Stage00": {
+        "EnemyEmitter:00": {
+            "distance": 7.099999904632568,
+            "enemyMaxCount": 8,
+            "padding": 0,
+            "position": [
+                53.0,
+                4.199999809265137,
+                0.0
+            ],
+            "rotateSpeed": -150.0
+        }
+    },
     "Stage01": {
         "Enemy00": {
             "easeEndPosition": [
@@ -1092,39 +1104,6 @@
                 0.0
             ],
             "rotateSpeed": 180.0
-        },
-        "EnemyEmitter:12": {
-            "distance": 3.0,
-            "enemyMaxCount": 4,
-            "padding": 0,
-            "position": [
-                700.0,
-                20.399999618530273,
-                0.0
-            ],
-            "rotateSpeed": -120.0
-        },
-        "EnemyEmitter:13": {
-            "distance": 7.0,
-            "enemyMaxCount": 6,
-            "padding": 0,
-            "position": [
-                700.0,
-                20.399999618530273,
-                0.0
-            ],
-            "rotateSpeed": -150.0
-        },
-        "EnemyEmitter:14": {
-            "distance": 12.0,
-            "enemyMaxCount": 8,
-            "padding": 0,
-            "position": [
-                700.0,
-                20.399999618530273,
-                0.0
-            ],
-            "rotateSpeed": -180.0
         },
         "EnemyEmitter:15": {
             "distance": 16.899999618530273,
