@@ -398,6 +398,7 @@ void GameScene::Draw() {
 	uint32_t postEffectBit = 0;
 	PostEffect::ExecutionAdditionalDesc desc = {};
 	desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
+	desc.shockWaveManagers[1] = player_->GetWeaponGuardEffect()->GetShockWaveManager();
 	desc.velocity2DManagers[0] = player_->GetVelocity2DManager();
 
 	if (player_->GetHitManager().IsHitEffectActive()) {
@@ -423,6 +424,11 @@ void GameScene::Draw() {
 		PostEffect::GetInstance()->SetKernelSize(33);
 		PostEffect::GetInstance()->SetSigma(33.0f);
 	}
+
+	if (player_->GetWeaponGuardEffect()->IsActive()) {
+		postEffectBit += 32;
+	}
+
 	PostEffect::GetInstance()->SetExecutionFlag(postEffectBit);
 	PostEffect::GetInstance()->Execution(
 		dxCommon_->GetCommadList(),
@@ -526,9 +532,12 @@ void GameScene::DebugCameraUpdate()
 			camera_.ShakeStart(0.3f, 2);
 		}
 		player_->GetWeapon()->GetEffectSystem()->SetScreenPosition(camera_);
+		player_->GetWeaponGuardEffect()->SetScreenPosition(camera_);
+		player_->GetWeaponGuardEffect()->SetCameraAddPosition(followCamera_->GetDefaultOffsetAdd());
+
 
 		// 
-		camera_.Update();
+		//camera_.Update();
 	}
 
 }

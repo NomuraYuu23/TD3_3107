@@ -756,6 +756,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
 
+			weaponGuardEffect_->StartShockWave(15.0f);
+
 		}
 		else {
 
@@ -994,6 +996,11 @@ void Player::SystemInitialize()
 	slowEffect_->Initalize(this);
 	// 着地アシスト
 	landingAdjuster_.Initialize(this, weapon_.get());
+
+	// ガードエフェクト
+	weaponGuardEffect_ = std::make_unique<WeaponGuardEffect>();
+	weaponGuardEffect_->Initialize(this);
+
 }
 
 void Player::SystemUpdate()
@@ -1021,4 +1028,8 @@ void Player::SystemUpdate()
 
 	// 
 	throwStopTimer_.Update();
+
+	// ガードエフェクト
+	weaponGuardEffect_->Update();
+
 }
