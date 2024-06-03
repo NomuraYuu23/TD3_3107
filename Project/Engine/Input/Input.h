@@ -177,6 +177,8 @@ public:
 	/// <returns></returns>
 	Vector2 GetRightAnalogstick(float deadZone = static_cast<float>(XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE));
 
+	Vector2 GetPrevRightAnalogstick(float deadZone = static_cast<float>(XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE));
+
 	/// <summary>
 	/// 左右のトリガーの状態を取得()
 	/// </summary>
@@ -255,6 +257,8 @@ private: //XInput
 	/// <param name="deadZone">デッドゾーン</param>
 	/// <returns></returns>
 	Vector2 XGetRightAnalogstick(float deadZone);
+
+	Vector2 XGetPrevRightAnalogstick(float deadZone);
 
 	/// <summary>
 	/// 

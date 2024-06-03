@@ -10,6 +10,7 @@ void PlayerController::Initialize(Player* player)
 
 	player_ = player;
 	// キーの設定
+	//throwType_ = ThrowType::kStickRelease;
 	KeyConfigSetting();
 
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
@@ -54,6 +55,9 @@ void PlayerController::ImGuiDraw()
 	ImGui::DragFloat2("rightStick", &stickDirect.x);
 	Vector2 normalize = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 	ImGui::DragFloat2("normStick", &normalize.x);
+
+	ImGui::DragInt("ThrowType", &throwType_, 1);
+
 }
 
 void PlayerController::GetBackWeaponProcess()
@@ -124,6 +128,17 @@ void PlayerController::ControllerProcess()
 		// 投げる方向
 		Vector2 stickDirect = input_->GetRightAnalogstick();
 		player_->isSlowNow_ = false;
+		bool key = false;
+		if (throwType_ == ThrowType::kDefault) {
+			key = true;
+		}
+		else if (throwType_ == ThrowType::kButtonRelease) {
+			Vector2 rightStick = input_->GetRightAnalogstick();
+			key = input_->PushJoystick(setButton_.throwKey);
+		}
+		else if (throwType_ == ThrowType::kStickRelease) {
+			key = true;
+		}
 
 		// スローモーション
 		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
@@ -131,7 +146,7 @@ void PlayerController::ControllerProcess()
 			Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 			float deadZoneValue = 0.25f;
 			if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
-				!player_->IsRecoil() && input_->PushJoystick(setButton_.throwKey)) {
+				!player_->IsRecoil() && key) {
 				if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
 					// UI表示
 					player_->isArrowUiDraw_ = true;
@@ -268,9 +283,24 @@ void PlayerController::WaitKeyProcess()
 
 void PlayerController::ThrownProcess()
 {
-	bool key = input_->ReleaseJoystick(setButton_.throwKey);
+	bool key = actionButton_.throwButton;
+	if (throwType_ == ThrowType::kDefault) {
+		key = actionButton_.throwButton;
+	}
+	else if (throwType_ == ThrowType::kButtonRelease) {
+		Vector2 rightStick = input_->GetRightAnalogstick();
+		key = input_->ReleaseJoystick(setButton_.throwKey) && (rightStick.x != 0.0f || rightStick.y != 0.0f);
+	}
+	else if (throwType_ == ThrowType::kStickRelease) {
+		Vector2 prevRightStick = input_->GetPrevRightAnalogstick();
+		Vector2 rightStick = input_->GetRightAnalogstick();
+		key = (rightStick.x == 0 && rightStick.y == 0) && (prevRightStick.x != 0.0f || prevRightStick.y != 0.0f);
+		//rightStick = Vector2::Normalize(rightStick);
+		//float deadzone = 0.1f;
+		//key = (std::fabsf(rightStick.x) <= deadzone && std::fabsf(rightStick.y) <= deadzone) && (prevRightStick.x != 0.0f || prevRightStick.y != 0.0f);
+	}
 
-	if (key && !player_->isGameClear_ /*&& (player_->throwDirect_.x != 0.0f || player_->throwDirect_.y != 0.0f)*/) {
+	if (key && !player_->isGameClear_) {
 		// 投げ入力
 		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
 			// 右スティックの入力がなければキャンセル
@@ -287,11 +317,14 @@ void PlayerController::ThrownProcess()
 
 			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
 		}
+	}
+
+	key = actionButton_.throwButton;
+
+	if (key && !player_->isGameClear_) {
 		// 刺さってる→戻ってくる
-		else if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-			if (!std::holds_alternative<AttractState*>(player_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			}
+		if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
+			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 		}
 		else if (std::holds_alternative<FreeFallState*>(player_->weapon_->GetNowState())) {
 			if (!player_->IsCanReturn()) {
@@ -306,4 +339,5 @@ void PlayerController::ThrownProcess()
 			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 		}
 	}
+
 }

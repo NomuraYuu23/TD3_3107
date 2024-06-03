@@ -41,7 +41,7 @@ public:
 		kStickRelease,
 	};
 
-	int16_t throwType_ = 0;
+	int32_t throwType_ = ThrowType::kButtonRelease;
 
 private:
 	/// <summary>
@@ -101,6 +101,10 @@ private:
 	ActionButton actionButton_;
 	// キーの内容
 	SettingButton setButton_;
+
+	// 前フレームの右スティック
+	Vector2 prevRightStick_ = {};
+
 public:
 
 	// 短縮処理

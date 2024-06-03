@@ -419,6 +419,75 @@ void Player::OnCollision(ColliderParentObject2D target)
 			return;
 		}
 	}
+	// 雑魚敵との当たり判定
+	else if (std::holds_alternative<Enemy*>(target)) {
+		// 無敵中なら早期
+		//if (invisibleTimer_.IsActive()) {
+		//	return;
+		//}
+#ifdef _DEMO
+		return;
+#endif // !_DEBUG
+
+
+		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
+			return;
+		}
+		// 反動生成
+		Enemy** enemy = std::get_if<Enemy*>(&target);
+		if (std::holds_alternative<EnemyWaitState*>((*enemy)->GetState())) {
+			return;
+		}
+
+		// 持ってないかどうか
+		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+			// 持ってるから何か起きる
+			// 反動生成
+			//Enemy** enemy = std::get_if<Enemy*>(&target);
+			Vector3 newDirect = {};
+			newDirect.x = worldtransform_.GetWorldPosition().x - (*enemy)->GetWorldPosition().x;
+			newDirect.y = 1.0f;
+			knockBackSystem_.CreateKnockBack(newDirect);
+			// 引き寄せの
+			float value = 3.0f;
+			if (worldtransform_.GetWorldPosition().x > weapon_->worldtransform_.GetWorldPosition().x) {
+				weapon_->velocity_.x = -1.0f * value;
+			}
+			else {
+				weapon_->velocity_.x = 1.0f * value;
+			}
+			SetFallTimer();
+
+			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
+
+			weaponGuardEffect_->StartShockWave(15.0f);
+
+		}
+		else {
+
+			hpManager_.OnHit(1);
+		}
+		// キャンセル
+		assistDash_.SlowCancel();
+
+	}
+	// ボス
+	else if (std::holds_alternative<PrevSmallBoss*>(target)) {
+		// 無敵中なら早期
+		//if (invisibleTimer_.IsActive()) {
+		//	return;
+		//}
+
+		// 持ってないかどうか
+		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+			// 持ってるから何か起きる
+
+		}
+		else {
+			hpManager_.OnHit(1);
+		}
+
+	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
 		// 前の座標から現座標へのベクトル
@@ -462,14 +531,14 @@ void Player::OnCollision(ColliderParentObject2D target)
 		float correctValue = 0.1f;
 		switch (type)
 		{
-		// 左側
+			// 左側
 		case IObject::kLeftSide:
 			// プレイヤーの修正されたX座標を計算
 			correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
-		// 右側
+			// 右側
 		case IObject::kRightSide:
 			// プレイヤーの修正されたX座標を計算
 			correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
@@ -507,6 +576,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
+					return;
 				}
 				else if (velocity_.y < 0) {
 					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
@@ -517,6 +587,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 						ChangeState(std::make_unique<GroundState>());
 					}
 					isGround_ = true;
+
+					return;
 				}
 			}
 			else {
@@ -689,7 +761,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			//}
 
 			weapon_->throwDirect_ = Vector3::Normalize(moveDirect);
-			
+
 			weapon_->worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();
 			// 受付フラグ
 			recoil_.Accept();
@@ -714,76 +786,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 
 		}
 
-	}
-	// 雑魚敵との当たり判定
-	else if (std::holds_alternative<Enemy*>(target)) {
-		// 無敵中なら早期
-		//if (invisibleTimer_.IsActive()) {
-		//	return;
-		//}
-#ifdef _DEMO
-		return;
-#endif // !_DEBUG
-
-
-		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
-			return;
-		}
-		// 反動生成
-		Enemy** enemy = std::get_if<Enemy*>(&target);
-		if (std::holds_alternative<EnemyWaitState*>((*enemy)->GetState())) {
-			return;
 		}
 
-		// 持ってないかどうか
-		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
-			// 持ってるから何か起きる
-			// 反動生成
-			//Enemy** enemy = std::get_if<Enemy*>(&target);
-			Vector3 newDirect = {};
-			newDirect.x = worldtransform_.GetWorldPosition().x - (*enemy)->GetWorldPosition().x;
-			newDirect.y = 1.0f;
-			knockBackSystem_.CreateKnockBack(newDirect);
-			// 引き寄せの
-			float value = 3.0f;
-			if (worldtransform_.GetWorldPosition().x > weapon_->worldtransform_.GetWorldPosition().x) {
-				weapon_->velocity_.x = -1.0f * value;
-			}
-			else {
-				weapon_->velocity_.x = 1.0f * value;
-			}
-			SetFallTimer();
-
-			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
-
-			weaponGuardEffect_->StartShockWave(15.0f);
-
-		}
-		else {
-
-			hpManager_.OnHit(1);
-		}
-		// キャンセル
-		assistDash_.SlowCancel();
-
-	}
-	// ボス
-	else if (std::holds_alternative<PrevSmallBoss*>(target)) {
-		// 無敵中なら早期
-		//if (invisibleTimer_.IsActive()) {
-		//	return;
-		//}
-
-		// 持ってないかどうか
-		if (std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
-			// 持ってるから何か起きる
-
-		}
-		else {
-			hpManager_.OnHit(1);
-		}
-
-	}
 }
 
 void Player::ChangeState(std::unique_ptr<IActionState> newState)

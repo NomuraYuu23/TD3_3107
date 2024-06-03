@@ -154,7 +154,7 @@ public: // アニメーション関連関数群
 	/// エイムアシストシステム
 	/// </summary>
 	/// <returns></returns>
-	CorrectSystem GetCorrectSystem() { return correctSystem_; }
+	CorrectSystem& GetCorrectSystem() { return correctSystem_; }
 
 public:
 	// 矢印モデル

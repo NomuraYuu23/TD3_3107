@@ -223,6 +223,7 @@
     <ClCompile Include="Application\Object\Enemy\System\LockStop.cpp" />
     <ClCompile Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.cpp" />
     <ClCompile Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.cpp" />
+    <ClCompile Include="Application\UI\OptionUIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -499,6 +500,7 @@
     <ClInclude Include="Application\Object\Enemy\System\LockStop.h" />
     <ClInclude Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.h" />
     <ClInclude Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.h" />
+    <ClInclude Include="Application\UI\OptionUIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
