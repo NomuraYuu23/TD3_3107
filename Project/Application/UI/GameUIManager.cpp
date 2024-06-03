@@ -20,6 +20,11 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 	// 左スティックUIの座標を取得する
 	stickUIPos_L_ = uiSprites_[LeftStickSprite]->GetPosition();
 	stickUIPos_R_ = uiSprites_[RightStickSprite]->GetPosition();
+
+#ifndef _DEBUG
+	// 操作系UIの表示フラグ
+	displayOperation_ = true;
+#endif // !_DEBUG
 }
 
 void GameUIManager::Update()
@@ -43,16 +48,49 @@ void GameUIManager::Update()
 
 		// HPUIの更新
 		HPUIUpdate();
+
+		// 操作系UIの表示切り替え
+		DisplayOperationSwitching();
+
+	}
+
+	// フェード演出更新
+	if (isFade_ && !isClear_) {
+		FadeUpdate();
+	}
+
+	if (!isFade_ && !isClear_) { // クリア状態でなければ徐々にフェードイン
+		// 現在の背景色を取得
+	 	float currentAlpha = uiSprites_[ClearBackFrameSprite]->GetColor().w;
+		// 線形補間で演出を行う
+		float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, currentAlpha, 0.0f, 0.2f);
+
+		// 背景は徐々に暗くする
+		uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, alpha });
 	}
 }
 
 void GameUIManager::Draw()
 {
-	// 全スプライト分ループ
-	for (int i = 0; i < spriteCount; i++) {
-		// スプライト描画
-		uiSprites_[i]->Draw();
+
+	// 操作系UIの表示
+	if (displayOperation_) {
+		// 全スプライト分ループ
+		for (int i = 0; i < spriteCount; i++) {
+			// スプライト描画
+			uiSprites_[i]->Draw();
+		}
 	}
+	// 操作系UIの非表示
+	else {
+		// hpからループ
+		for (int i = HPGageSprite; i < spriteCount; i++) {
+			// スプライト描画
+			uiSprites_[i]->Draw();
+		}
+	}
+
+
 }
 
 void GameUIManager::DisplayImGui()
@@ -111,6 +149,19 @@ void GameUIManager::DisplayImGui()
 	}
 
 	ImGui::End();
+}
+
+void GameUIManager::SetIsFade(const bool isFade, const float fadeOutTime)
+{
+	// フェード演出トリガー設定
+	isFade_ = isFade;
+	// フェード時間設定
+	deadFadeOutTime_ = fadeOutTime;
+	// フェード時間リセット
+	currentDeadFadeOutTime_ = 0.0f;
+
+	// フェード終了トリガーリセット
+	isEndFade_ = false;
 }
 
 void GameUIManager::LoadTexture()
@@ -437,6 +488,24 @@ void GameUIManager::HPUIUpdate()
 	uiSprites_[HPGageSprite]->SetSize({ size, 64.0f });
 }
 
+void GameUIManager::FadeUpdate()
+{
+	// 演出時間中であれば
+	if (currentDeadFadeOutTime_ < deadFadeOutTime_) {
+		// 線形補間で演出を行う
+		float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, 0.0f, 1.0f, currentDeadFadeOutTime_ / deadFadeOutTime_);
+
+		// 背景は徐々に暗くする
+		uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, alpha });
+		// 現在時間を加算
+		currentDeadFadeOutTime_ += kDeltaTime_;
+	}
+	else {
+		// フェード終了
+		isEndFade_ = true;
+	}
+}
+
 void GameUIManager::ClearUIUpdate()
 {	
 	// 暗転演出が終了していなければ暗転演出を行う
@@ -577,4 +646,19 @@ void GameUIManager::ClearButtonUpdate()
 			isButtonReturn_ = true;
 		}
 	}
+}
+
+void GameUIManager::DisplayOperationSwitching()
+{
+
+	// ボタンが押されたら切り替える
+	if (input_->TriggerJoystick(JoystickButton::kJoystickButtonBACK)) {
+		if (displayOperation_) {
+			displayOperation_ = false;
+		}
+		else {
+			displayOperation_ = true;
+		}
+	}
+
 }

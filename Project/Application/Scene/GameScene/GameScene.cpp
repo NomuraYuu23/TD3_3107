@@ -144,7 +144,7 @@ void GameScene::Initialize() {
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
-	if (StageNumberManager::stageNum_ == 0) {
+	if (StageNumberManager::stageNum_ == 1) {
 		// 最初のステージならチュートリアルモデルを設定
 		backGround_->SetTutorialPlaneModel(textureHandleManager_.get(), spearJumpTutorialPlaneModel_.get(), enemyTutorialPlaneModel_.get());
 	}
@@ -192,6 +192,8 @@ void GameScene::Initialize() {
 
 	// ゲームシステムにUIマネージャーをセット
 	gameSystemManager_->SetGameUIManager(gameUIManager_.get());
+	// ゲームシステムにカメラをセット
+	gameSystemManager_->SetFollowCamera(followCamera_.get());
 }
 
 /// <summary>
@@ -254,10 +256,12 @@ void GameScene::Update() {
 	// マップ
 	mapManager_->Update();
 	// プレイヤー
-	player_->Update();
+	if (!player_->GetIsDead()) { // 死亡していないときのみ更新
+		player_->Update();
+	}
 	player_->DrawLinesMap(drawLine_);
 	// 敵
-	if (!player_->isGameClear_) {
+	if (!player_->isGameClear_ && !player_->GetIsDead()) {
 		enemyManager_->Update();
 	}
 
@@ -570,7 +574,7 @@ void GameScene::ModelCreate()
 	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
 
 	// ステージ番号が 00 のときのみロード
-	if (StageNumberManager::stageNum_ == 0) {
+	if (StageNumberManager::stageNum_ == 1) {
 		spearJumpTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
 		enemyTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
 	}

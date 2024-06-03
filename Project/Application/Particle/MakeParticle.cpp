@@ -7,6 +7,7 @@
 #include "user/GoalParticle/GoalParticle.h"
 #include "user/SmokeParticle/SmokeParticle.h"
 #include "user/ImapledParticle/ImpaledParticle.h"
+#include "user/DeadForcusing/DeadForcusingParticle.h"
 #include <cassert>
 
 MakeParticle* MakeParticle::GetInstance()
@@ -57,6 +58,11 @@ IParticle* MakeParticle::Run(ParticleDesc* particleDesc, uint32_t paeticleName)
 		particle = new ImpaledParticle();
 		particle->Initialize(particleDesc);
 		break;
+	case kDeadForcusingParticle:
+		particle = new DeadForcusingParticle();
+		particle->Initialize(particleDesc);
+		break;
+
 	case kCountOfParticleName:
 		break;
 	default:

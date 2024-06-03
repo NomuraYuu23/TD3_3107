@@ -16,6 +16,11 @@ public:
 	/// </summary>
 	void Update(float elapsedTime = 0.0f) override;
 
+	/// <summary>
+	/// 主に死亡演出終了後にリセットする関数
+	/// </summary>
+	void Reset();
+
 public:
 	/// <summary>
 	/// ImGuiの描画
@@ -41,6 +46,12 @@ public:
 	/// </summary>
 	/// <param name="isLock">カメラをロックするか</param>
 	void SetLockCamera(const bool isLock) { isLockCamera_ = isLock; }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsEndDeadCameraStaging() { return isEndDeadCameraStaging_; }
 
 private:
 	// プレイヤー
@@ -77,4 +88,15 @@ private: // お試し
 	float scalingRate_ = 0.0f;
 	float scalingRateT_ = 0.2f;
 
+private: // 死亡演出時
+
+	// 死亡演出時の秒数
+	float currentForcusTime_ = 0.0f;
+	float forcusTime_ = 2.0f;
+
+	 // 演出開始時の座標
+	Vector3 prevTranslate_;
+
+	// カメラ自体の死亡演出が終了したか
+	bool isEndDeadCameraStaging_ = false;
 };

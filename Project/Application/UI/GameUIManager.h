@@ -109,6 +109,18 @@ public: // アクセッサ等
 	void SetIsGround(bool& isGround) { isGrounded_ = isGround; }
 
 	/// <summary>
+	/// フェード演出トリガーセッター
+	/// </summary>
+	/// <param name="isFade">フェード演出トリガー状態</param>
+	void SetIsFade(const bool isFade, const float fadeOutTime);
+
+	/// <summary>
+	///  フェード演出終了トリガーゲッター
+	/// </summary>
+	/// <returns>フェード演出終了トリガー</returns>
+	bool GetIsEndFade() { return isEndFade_; }
+
+	/// <summary>
 	/// クリア状態セッター
 	/// </summary>
 	/// <param name="isClear">クリア状態</param>
@@ -119,6 +131,18 @@ public: // アクセッサ等
 	/// </summary>
 	/// <returns>クリア演出終了状態</returns>
 	bool GetIsEndClearStaging() { return isEndClearStaging_; }
+
+	/// <summary>
+	/// 操作系UIの表示フラグセッター
+	/// </summary>
+	/// <param name="displayOperation">操作系UIの表示フラグ</param>
+	void SetDisplayOperation(bool displayOperation) { displayOperation_ = displayOperation; }
+
+	/// <summary>
+	/// 操作系UIの表示フラグゲッター
+	/// </summary>
+	/// <returns></returns>
+	bool GetDisplayOperation() { return displayOperation_; }
 
 private: // プライベートなメンバ関数
 
@@ -158,6 +182,11 @@ private: // プライベートなメンバ関数
 	void HPUIUpdate();
 
 	/// <summary>
+	/// 暗転演出関数
+	/// </summary>
+	void FadeUpdate();
+
+	/// <summary>
 	/// クリア時UIの更新関数
 	/// </summary>
 	void ClearUIUpdate();
@@ -176,6 +205,11 @@ private: // プライベートなメンバ関数
 	/// ステージセレクトへ戻るボタンUI更新関数
 	/// </summary>
 	void ClearButtonUpdate();
+
+	/// <summary>
+	/// 操作系UIの表示切り替え
+	/// </summary>
+	void DisplayOperationSwitching();
 
 private: // メンバ変数
 
@@ -227,6 +261,17 @@ private: // 右スティック用変数群
 
 private: // hp用変数群
 
+private: // 死亡時のフェード演出用変数群
+
+	// フェード演出用
+	float currentDeadFadeOutTime_ = 0.0f;
+	float deadFadeOutTime_		  = 1.0f;
+
+	// フェードトリガー
+	bool isFade_ = false;
+
+	// フェード終了トリガー
+	bool isEndFade_ = false;
 
 private: // クリア演出用変数群
 
@@ -255,6 +300,11 @@ private: // クリア演出用変数群
 	float buttonAppearTime_ = 1.0f; // 演出時間
 	// 表示後、ゆらゆらさせるためのトリガー
 	bool isButtonReturn_ = false;
+
+private: // 操作系UIの表示非表示
+
+	// 操作系UIの表示フラグ
+	bool displayOperation_ = false;
 
 };
 

@@ -488,12 +488,17 @@ Vector2 Input::XGetLeftAnalogstick(float deadZone)
 
 	Vector2 sThumbL = { float(xJoystickState_.Gamepad.sThumbLX), float(-xJoystickState_.Gamepad.sThumbLY) };
 
-	if (sThumbL.x < deadZone &&
-		sThumbL.x > -deadZone) {
+	//if (sThumbL.x < deadZone &&
+	//	sThumbL.x > -deadZone) {
+	//	sThumbL.x = 0.0f;
+	//}
+	//if (sThumbL.y < deadZone &&
+	//	sThumbL.y > -deadZone) {
+	//	sThumbL.y = 0.0f;
+	//}
+
+	if (std::fabsf(sThumbL.y) < deadZone && std::fabsf(sThumbL.x) < deadZone) {
 		sThumbL.x = 0.0f;
-	}
-	if (sThumbL.y < deadZone &&
-		sThumbL.y > -deadZone) {
 		sThumbL.y = 0.0f;
 	}
 
@@ -506,12 +511,17 @@ Vector2 Input::XGetRightAnalogstick(float deadZone)
 
 	Vector2 sThumbR = { float(xJoystickState_.Gamepad.sThumbRX), float(-xJoystickState_.Gamepad.sThumbRY) };
 
-	if (sThumbR.x < deadZone &&
-		sThumbR.x > -deadZone) {
+	//if (sThumbR.x < deadZone &&
+	//	sThumbR.x > -deadZone) {
+	//	sThumbR.x = 0.0f;
+	//}
+	//if (sThumbR.y < deadZone &&
+	//	sThumbR.y > -deadZone) {
+	//	sThumbR.y = 0.0f;
+	//}
+
+	if (std::fabsf(sThumbR.y) < deadZone && std::fabsf(sThumbR.x) < deadZone) {
 		sThumbR.x = 0.0f;
-	}
-	if (sThumbR.y < deadZone &&
-		sThumbR.y > -deadZone) {
 		sThumbR.y = 0.0f;
 	}
 
@@ -685,10 +695,15 @@ Vector2 Input::DirectGetLeftAnalogstick(float deadZone) const
 
 	Vector2 result = { float(directJoystickState_.lX) - 32767.0f, float(directJoystickState_.lY) - 32767.0f };
 
-	if (std::fabsf(result.x) < deadZone) {
+	//if (std::fabsf(result.x) < deadZone) {
+	//	result.x = 0.0f;
+	//}
+	//if (std::fabsf(result.y) < deadZone) {
+	//	result.y = 0.0f;
+	//}
+
+	if (std::fabsf(result.y) < deadZone && std::fabsf(result.x) < deadZone) {
 		result.x = 0.0f;
-	}
-	if (std::fabsf(result.y) < deadZone) {
 		result.y = 0.0f;
 	}
 
@@ -703,10 +718,15 @@ Vector2 Input::DirectGetRightAnalogstick(float deadZone) const
 
 	Vector2 result = { float(directJoystickState_.lRx) - 32767.0f, float(directJoystickState_.lRy) - 32767.0f };
 
-	if (std::fabsf(result.x) < deadZone) {
+	//if (std::fabsf(result.x) < deadZone) {
+	//	result.x = 0.0f;
+	//}
+	//if (std::fabsf(result.y) < deadZone) {
+	//	result.y = 0.0f;
+	//}
+
+	if (std::fabsf(result.y) < deadZone && std::fabsf(result.x) < deadZone) {
 		result.x = 0.0f;
-	}
-	if (std::fabsf(result.y) < deadZone) {
 		result.y = 0.0f;
 	}
 

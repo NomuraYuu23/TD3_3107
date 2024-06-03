@@ -99,6 +99,8 @@ public:
 	/// <param name="attackPattern"></param>
 	void StateInitialize(std::unique_ptr<IEnemyState> newState, uint32_t attackPattern);
 
+	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::ActionMode pattern);
+
 	//void ChangeRequest()
 
 	void SetState(EnemyState state) {
@@ -123,8 +125,6 @@ public:
 	void SetIsMoveStop(bool isStop) { isMoveStop_ = isStop; }
 	bool GetMoveStop() { return isMoveStop_;}
 private:
-
-	void ChangeState(std::unique_ptr<IEnemyState> newState, IEnemyState::ActionMode pattern);
 
 	void CheckParent();
 
