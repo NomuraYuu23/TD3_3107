@@ -10,7 +10,7 @@ void GoalObject::Initialize(Model* model)
 	// コライダー用の座標・スケール
 	position2D_ = { worldtransform_.transform_.translate.x,worldtransform_.transform_.translate.y };
 	scale2D_ = { worldtransform_.transform_.scale.x, worldtransform_.transform_.scale.y };
-	scale2D_ = { 2.0f,2.0f };
+	scale2D_ = { 4.0f,10.0f };
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeGoalObject);

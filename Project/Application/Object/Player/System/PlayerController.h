@@ -23,23 +23,47 @@ public:
 
 	void ImGuiDraw();
 
-public: // アクセッサ等
+public:
+	struct ActionButton {
+		bool jumpButton;
+		bool throwButton;
+	};
+
+	struct SettingButton {
+		int32_t jumpKey;	// 飛び
+		int32_t throwKey;	// 投げ
+	};
+
+	enum ThrowType
+	{
+		kDefault,
+		kButtonRelease,
+		kStickRelease,
+	};
+
+	int16_t throwType_ = 0;
+
+private:
+	/// <summary>
+	/// 戻しの処理
+	/// </summary>
+	void GetBackWeaponProcess();
 
 	/// <summary>
-	/// 入力取得
+	/// ボタンの設定（毎フレーム
 	/// </summary>
-	/// <returns>入力</returns>
-	Input* GetInput() { return input_; }
+	void KeySetting();
+
+	/// <summary>
+	/// キーの設定
+	/// </summary>
+	void KeyConfigSetting();
 
 private: // 外付け機器の処理（大枠
 	/// <summary>
 	/// コントローラー操作処理
 	/// </summary>
 	void ControllerProcess();
-	/// <summary>
-	/// キーボード操作処理
-	/// </summary>
-	void KeyBoardProcess();
 
 private: // ステートごとの処理
 	/// <summary>
@@ -73,7 +97,10 @@ private:
 	float groundSpeed_ = 0;
 	// 空中の速度
 	float aerialSpeed_ = 0;
-
+	// 入力
+	ActionButton actionButton_;
+	// キーの内容
+	SettingButton setButton_;
 public:
 
 	// 短縮処理

@@ -22,14 +22,15 @@ void SingleEnemyState::Update()
 
 }
 
-void SingleEnemyState::SettingMoveInfo(const Vector3& endPoint, Ease::EaseName name)
+void SingleEnemyState::SettingMoveInfo(const Vector3& endPoint, float endFrame, Ease::EaseName name)
 {
 	// イージングする座標
 	startPoint_ = { enemy_->GetWorldPosition(),true };
 	endPoint_ = { endPoint,false };
 	// イージングパターン
 	easeName_ = name;
-
+	// 終了フレーム
+	moveChangeFrame_ = endFrame;
 }
 
 void SingleEnemyState::PatrolInitialize()
@@ -37,14 +38,14 @@ void SingleEnemyState::PatrolInitialize()
 	// タイマースタート
 	//if (!moveChangeTimer_.IsActive()) {
 	// 終了フレーム
-	moveChangeFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Enemy", "EaseEndFrame");
+	//moveChangeFrame_ = GlobalVariables::GetInstance()->GetFloatValue("Enemy", "EaseEndFrame");
 	moveChangeTimer_.Start(moveChangeFrame_);
 	//}
 }
 
 void SingleEnemyState::PatrolUpdate()
 {
-#ifdef _DEBUG
+#ifdef _DEMO
 	return;
 #endif // _DEBUG
 

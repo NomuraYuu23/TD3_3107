@@ -201,20 +201,6 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update() {
 
-#ifdef _DEMO
-	ImguiDraw();
-
-	if (input_->TriggerKey(DIK_L)) {
-		requestSceneNo_ = kTitle;
-	}
-
-
-#endif
-
-	if (input_->TriggerKey(DIK_L)) {
-		requestSceneNo_ = kTitle;
-	}
-
 	if (requestSceneNo_ == kClear || requestSceneNo_ == kTitle || isBeingReset_) {
 		resetScene_ = false;
 		// BGM音量下げる
@@ -224,12 +210,21 @@ void GameScene::Update() {
 		return;
 	}
 
+#ifdef _DEMO
+	ImguiDraw();
+
+	if (input_->TriggerKey(DIK_L)) {
+		requestSceneNo_ = kTitle;
+	}
+
 	// リスタート
 	if (input_->TriggerKey(DIK_R)) {
 		resetScene_ = true;
 		isBeingReset_ = true;
 		isDecreasingVolume = true;
 	}
+
+#endif
 
 	if (gameSystemManager_->GetIsGameClear()) {
 		requestSceneNo_ = kSelect;

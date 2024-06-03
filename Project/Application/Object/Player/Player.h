@@ -94,6 +94,8 @@ public: // メンバ関数
 		weapon_->SetPlayer(this);
 	}
 
+	void ClearProcessing();
+
 	/// <summary>
 	/// 武器のポインタ取得
 	/// </summary>

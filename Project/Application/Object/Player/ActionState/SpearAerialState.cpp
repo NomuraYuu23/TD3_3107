@@ -59,7 +59,7 @@ void SpearAerialState::Update()
 	float inActiveRatio = GlobalVariables::GetInstance()->GetFloatValue("Player", "AerialInActiveDecelerateRatio");
 	Vector2 leftStick = Input::GetInstance()->GetLeftAnalogstick();
 
-	StickInput();
+	//StickInput();
 
 	// 移動処理
 	if (player_->throwStopTimer_.IsActive() && player_->velocity_.y < 0) {

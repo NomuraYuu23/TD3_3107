@@ -1,7 +1,10 @@
 {
     "AimCorrection": {
-        "AssistWidth": 0.20000000298023224,
-        "InitLength": 30.0,
-        "RotateWidth": 0.15000000596046448
+        "AssistWidth_Hard": 0.30000001192092896,
+        "AssistWidth_Normal": 0.20000000298023224,
+        "InitLength_Hard": 40.0,
+        "InitLength_Normal": 30.0,
+        "RotateWidth_Hard": 0.25,
+        "RotateWidth_Normal": 0.15000000596046448
     }
 }

@@ -107,6 +107,10 @@ void IEnemyEmitter::InitializeEmitter(float spinSpeed)
 
 	rotation_ = spinSpeed;
 
+	if (rotation_ == 0.0f) {
+		rotation_ = 1.0f;
+	}
+
 	if (rotation_ > 0) {
 		oneLapAngle_ = 6.28f;
 		isMinusRotation_ = false;
@@ -124,24 +128,22 @@ void IEnemyEmitter::CreateEnemy(const Vector3& transformPosition, float distance
 	worldTransform_.transform_.translate = transformPosition;
 	distance_ = distance;
 	maxCount_ = enemyCount;
-	// 敵の角度生成
-	float angleIncrement = 0.0f;
-	if (maxCount_ != 0) {
-		angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
+
+	if (maxCount_ == 0) {
+		return;
 	}
 
-	float tAngle = 0;
-	float add = 0;
+	// 敵の角度生成
+	float angleIncrement = 2.0f * (float)std::numbers::pi / static_cast<float>(maxCount_);
 
-	if (maxCount_ == 5) {
-		if (rotation_ > 0) {
-			tAngle = 0;
-			add = 0.25f;
-		}
-		else if (rotation_ < 0) {
-			tAngle = 0;
-			add = -0.5f;
-		}
+	float tAngle = 0.0f;
+	float add = 6.14f / static_cast<float>(maxCount_);
+
+	if (rotation_ > 0) {
+		tAngle = 3.14f;
+	}
+	else if (rotation_ < 0) {
+		tAngle = 0.0f;
 	}
 
 	GenerateEnemys(angleIncrement, tAngle, add);

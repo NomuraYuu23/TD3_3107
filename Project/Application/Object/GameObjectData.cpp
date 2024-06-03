@@ -31,9 +31,12 @@ void GameObjectData::Initialize()
 
 	// 補正用
 	groupName = "AimCorrection";
-	globalVariables_->AddItem(groupName, "InitLength", aimCorrect_.InitLength_);
-	globalVariables_->AddItem(groupName, "RotateWidth", aimCorrect_.rotationWidth_);
-	globalVariables_->AddItem(groupName, "AssistWidth", aimCorrect_.assistWidth_);
+	globalVariables_->AddItem(groupName, "InitLength_Normal", aimCorrect_[0].InitLength_);
+	globalVariables_->AddItem(groupName, "RotateWidth_Normal", aimCorrect_[0].rotationWidth_);
+	globalVariables_->AddItem(groupName, "AssistWidth_Normal", aimCorrect_[0].assistWidth_);
+	globalVariables_->AddItem(groupName, "InitLength_Hard", aimCorrect_[1].InitLength_);
+	globalVariables_->AddItem(groupName, "RotateWidth_Hard", aimCorrect_[1].rotationWidth_);
+	globalVariables_->AddItem(groupName, "AssistWidth_Hard", aimCorrect_[1].assistWidth_);
 
 	groupName = "Weapon";
 	// グループを追加
@@ -48,6 +51,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "FreeFallInitPower", weapon_.freeFallKickPower_);
 	globalVariables_->AddItem(groupName, "FreeFallGravityRate", weapon_.freeFallGravityRate_);
 	globalVariables_->AddItem(groupName, "FreeFallSpinSpeed", weapon_.freeFallSpinSpeed_);
+	globalVariables_->AddItem(groupName, "GetBackFrame", weapon_.getbackFrame_);
 
 	groupName = "SpearJump";
 	// グループを追加
@@ -114,9 +118,12 @@ void GameObjectData::ApplyGlobalVariables()
 
 	// 補正用
 	groupName = "AimCorrection";
-	aimCorrect_.InitLength_ = globalVariables_->GetFloatValue(groupName, "InitLength");
-	aimCorrect_.rotationWidth_ = globalVariables_->GetFloatValue(groupName, "RotateWidth");
-	aimCorrect_.assistWidth_ = globalVariables_->GetFloatValue(groupName, "AssistWidth");
+	aimCorrect_[0].InitLength_ = globalVariables_->GetFloatValue(groupName, "InitLength_Normal");
+	aimCorrect_[0].rotationWidth_ = globalVariables_->GetFloatValue(groupName, "RotateWidth_Normal");
+	aimCorrect_[0].assistWidth_ = globalVariables_->GetFloatValue(groupName, "AssistWidth_Normal");
+	aimCorrect_[1].InitLength_ = globalVariables_->GetFloatValue(groupName, "InitLength_Hard");
+	aimCorrect_[1].rotationWidth_ = globalVariables_->GetFloatValue(groupName, "RotateWidth_Hard");
+	aimCorrect_[1].assistWidth_ = globalVariables_->GetFloatValue(groupName, "AssistWidth_Hard");
 
 	groupName = "Weapon";
 	weapon_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
@@ -129,6 +136,7 @@ void GameObjectData::ApplyGlobalVariables()
 	weapon_.freeFallKickPower_ = globalVariables_->GetVector2Value(groupName, "FreeFallInitPower");
 	weapon_.freeFallGravityRate_ = globalVariables_->GetFloatValue(groupName, "FreeFallGravityRate");
 	weapon_.freeFallSpinSpeed_ = globalVariables_->GetFloatValue(groupName, "FreeFallSpinSpeed");
+	weapon_.getbackFrame_ = globalVariables_->GetFloatValue(groupName, "GetBackFrame");
 
 	groupName = "SpearJump";
 	spearJump_.horizontalPower_ = globalVariables_->GetFloatValue(groupName, "HorizontalPower");
