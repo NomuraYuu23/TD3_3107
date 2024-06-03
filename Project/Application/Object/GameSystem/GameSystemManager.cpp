@@ -49,6 +49,7 @@ void GameSystemManager::Update()
 			gum_->SetDisplayPoseUI(false);
 		}
 		else {
+			player_->gameAudioManager_->PlayWave(kPoseOpenSE);
 			gum_->SetDisplayPoseUI(true);
 		}
 	}
@@ -118,6 +119,8 @@ void GameSystemManager::GameOverProcess()
 
 			ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
 
+			player_->gameAudioManager_->PlayWave(kPlayerDead1);
+
 			// 次の段階へ
 			deadStagingProgress_++;
 			break;
@@ -142,6 +145,8 @@ void GameSystemManager::GameOverProcess()
 				desc.paeticleName = kEnemyDeadParticle;
 
 				ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+				player_->gameAudioManager_->PlayWave(kPlayerDead2);
 
 				// パーティクル爆発と同時にプレイヤー削除
 				player_->isDraw_ = false;
@@ -189,7 +194,9 @@ void GameSystemManager::UpdateStageInfoOnCheckPoint()
 void GameSystemManager::GameClearProcess()
 {
 	// クリア演出開始
-	gum_->SetISClear(true);
+	if (!gum_->GetIsClear()) {
+		gum_->SetISClear(true);
+	}
 
 	// プレイヤーを操作不能に
 	player_->ClearProcessing();

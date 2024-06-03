@@ -144,7 +144,7 @@ public: // アクセッサ等
 	/// クリア状態セッター
 	/// </summary>
 	/// <param name="isClear">クリア状態</param>
-	void SetISClear(const bool isClear) { isClear_ = isClear; }
+	void SetISClear(const bool isClear);
 	/// <summary>
 	/// クリア状態ゲッター
 	/// </summary>

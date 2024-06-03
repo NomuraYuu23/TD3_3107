@@ -200,6 +200,12 @@ void GameUIManager::SetIsFade(const bool isFade, const float fadeOutTime)
 	isEndFade_ = false;
 }
 
+void GameUIManager::SetISClear(const bool isClear)
+{
+	player_->gameAudioManager_->PlayWave(kClearSE);
+	isClear_ = isClear;
+}
+
 void GameUIManager::SetDisplayPoseUI(const bool displayPose)
 {
 	// ポーズUI表示
@@ -650,6 +656,9 @@ void GameUIManager::PoseUIUpdate()
 		if (currentCursorCoolTime_ > cursorCoolTime_) {
 			// 選択項目を上に
 			if (leftStick.y < -0.5f) {
+
+				player_->gameAudioManager_->PlayWave(kCurosrSE);
+
 				// 入力があった時点でスプライトを現在の座標に戻す
 				uiSprites_[selectingButtonUI_]->SetPosition(prevPosePos_);
 
@@ -669,6 +678,9 @@ void GameUIManager::PoseUIUpdate()
 
 			// 選択項目を下に
 			if (leftStick.y > 0.5f) {
+
+				player_->gameAudioManager_->PlayWave(kCurosrSE);
+
 				// 入力があった時点でスプライトを現在の座標に戻す
 				uiSprites_[selectingButtonUI_]->SetPosition(prevPosePos_);
 
@@ -740,6 +752,8 @@ void GameUIManager::PoseUIUpdate()
 				// ポーズUI表示
 				isDisplayPoseUI_ = false;
 
+				player_->gameAudioManager_->PlayWave(kEnterSE);
+
 				// 演出時間初期化
 				currentPoseSelectTime_ = 0.0f;
 				// UI座標リセット
@@ -751,12 +765,18 @@ void GameUIManager::PoseUIUpdate()
 
 				break;
 			case kOption:
+
+				player_->gameAudioManager_->PlayWave(kEnterSE);
+
 				// オプション描画を行う
 				isDrawOption_ = true;
 				// オプション描画マネージャーに描画を行うことを告げる
 				oUIManager_->SetIsDraw(true);
 				break;
 			case kReturnStageSelect:
+
+				player_->gameAudioManager_->PlayWave(kEnterSE);
+
 				// ステージ選択画面へ戻る
 				isReturnStageSelect_ = true;
 				break;
@@ -795,7 +815,8 @@ void GameUIManager::ClearUIUpdate()
 	// 演出が終了したら
 	if (isBlackOut_) {
 		// Aボタンが押されたらステージセレクトへ
-		if (input_->TriggerJoystick(kJoystickButtonA)) {
+		if (input_->TriggerJoystick(kJoystickButtonA) && !isEndClearStaging_) {
+			player_->gameAudioManager_->PlayWave(kReturnStageSelectSE);
 			// 演出終了を伝える
 			isEndClearStaging_ = true;
 		}
