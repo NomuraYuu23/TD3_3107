@@ -7,6 +7,7 @@
 #include "../../../Engine/Particle/ParticleManager.h"
 #include "../../Particle/EmitterName.h"
 #include "../../../Engine//Math/DeltaTime.h"
+#include "../../AllSceneObject/StageNumberManager.h"
 
 TitleScene::~TitleScene()
 {
@@ -95,6 +96,8 @@ void TitleScene::Initialize()
 	ParticleManager::GetInstance()->MakeEmitter(&fallingLeafDesc_, EmitterName::kInfiniteEmitter);
 
 #endif // !_DEBUG
+
+	StageNumberManager::stageNum_ = 0;
 
 }
 
