@@ -13,7 +13,7 @@ void Enemy::Initialize()
 	// コライダー用の座標・スケール
 	position2D_ = { transform_.translate.x,transform_.translate.y };
 	scale2D_ = { transform_.scale.x, transform_.scale.y };
-	scale2D_ = { 2.0f,2.0f };
+	scale2D_ = { 3.5f,2.0f };
 	// コライダーの初期化
 	boxCollider_.Initialize(position2D_, scale2D_.x, scale2D_.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributeEnemy);
@@ -112,7 +112,7 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		//// 武器のポインタにキャスト
 		Weapon** weapon = std::get_if<Weapon*>(&target);
 		if (std::holds_alternative<ImpaledState*>((*weapon)->GetNowState())) {
-			if ((*weapon)->IsEnemyImpaled()) {
+			if ((*weapon)->IsEnemyImpaled() && !std::holds_alternative<EnemyWaitState*>(judState_)) {
 				return;
 			}
 //#ifndef _DEBUG
