@@ -95,6 +95,15 @@ private: // 関数
 	void ImGuiSingleEnemy();
 
 	/// <summary>
+	/// データの追加
+	/// </summary>
+	/// <param name="chackName">確認用の名前</param>
+	/// <param name="stageCount">ステージカウント</param>
+	/// <param name="imGuiSpeed">imGUiの速度</param>
+	void DataAddSingleEnemy(const std::string& chackName, uint32_t stageCount, float imGuiSpeed);
+
+
+	/// <summary>
 	/// マルチ用
 	/// </summary>
 	void ImGuiMultiEnemy();
