@@ -857,6 +857,9 @@ void Player::Reset(const Vector3& position)
 		// 更新
 		ponytail_->Update();
 	}
+
+	hpManager_.HitEffectTimerEnd();
+
 }
 
 void Player::SetFallTimer()
