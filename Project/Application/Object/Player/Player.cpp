@@ -174,58 +174,60 @@ void Player::Update()
 
 void Player::Draw(const BaseCamera& camera)
 {
-	// 矢印用の座標
-	Vector3 offset = throwDirect_ * 2.0f;
-	screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &const_cast<BaseCamera&>(camera));
+	if (isDraw_) {
+		// 矢印用の座標
+		Vector3 offset = throwDirect_ * 2.0f;
+		screenPos_ = MathUtility::WorldToScreen(worldtransform_.GetWorldPosition() + offset, &const_cast<BaseCamera&>(camera));
 
-	// プレイヤーの描画
-	ModelDraw::AnimObjectDesc desc;
-	desc.camera = &const_cast<BaseCamera&>(camera);
-	desc.localMatrixManager = localMatrixManager_.get();
-	desc.material = material_.get();
-	desc.model = model_;
-	desc.worldTransform = &worldtransform_;
+		// プレイヤーの描画
+		ModelDraw::AnimObjectDesc desc;
+		desc.camera = &const_cast<BaseCamera&>(camera);
+		desc.localMatrixManager = localMatrixManager_.get();
+		desc.material = material_.get();
+		desc.model = model_;
+		desc.worldTransform = &worldtransform_;
 
-	// デバッグ以外の場合行う
-	#ifdef _RELEASE
-	if (anim_->GetIsRight()) {
+		// デバッグ以外の場合行う
+		#ifdef _RELEASE
+		if (anim_->GetIsRight()) {
+			ModelDraw::AnimObjectDraw(desc);
+			ModelDraw::AnimObjectDraw(desc, 2);
+		}
+		else {
+			ModelDraw::AnimInverseObjectDraw(desc);
+			ModelDraw::AnimInverseObjectDraw(desc, 2);
+		}
+		#endif // !_DEBUG
+		// デバッグのみで行う
+		#ifndef _RELEASE
 		ModelDraw::AnimObjectDraw(desc);
 		ModelDraw::AnimObjectDraw(desc, 2);
-}
-	else {
-		ModelDraw::AnimInverseObjectDraw(desc);
-		ModelDraw::AnimInverseObjectDraw(desc, 2);
-	}
-	#endif // !_DEBUG
-	// デバッグのみで行う
-	#ifndef _RELEASE
-	ModelDraw::AnimObjectDraw(desc);
-	ModelDraw::AnimObjectDraw(desc, 2);
-	#endif // _DEBUG
+		#endif // _DEBUG
 
-	// 武器の描画
-	if (weapon_) {
-		weapon_->Draw(camera);
-	}
-	// 足場のモデル描画
-	if (isDebugDraw_) {
-		footCollider_.DebugDraw(camera);
-	}
+		// 武器の描画
+		if (weapon_) {
+			weapon_->Draw(camera);
+		}
+		// 足場のモデル描画
+		if (isDebugDraw_) {
+			footCollider_.DebugDraw(camera);
+		}
 
-	// ポニーテール描画
-	if (ponytail_ != nullptr) {
-		ponytail_->Draw(const_cast<BaseCamera&>(camera));
-	}
+		// ポニーテール描画
+		if (ponytail_ != nullptr) {
+			ponytail_->Draw(const_cast<BaseCamera&>(camera));
+		}
 
-	// 矢印描画
-	if (arrowModel_ != nullptr && std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
-		arrowMaterial_->SetUvTransform(arrowUVTransform_.transform_);
-		ModelDraw::NormalObjectDesc desc;
-		desc.camera = &const_cast<BaseCamera&>(camera);
-		desc.material = arrowMaterial_.get();
-		desc.model = arrowModel_;
-		desc.worldTransform = &arrowTransform_;
-		ModelDraw::NormalObjectDraw(desc);
+		// 矢印描画
+		if (arrowModel_ != nullptr && std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+			arrowMaterial_->SetUvTransform(arrowUVTransform_.transform_);
+			ModelDraw::NormalObjectDesc desc;
+			desc.camera = &const_cast<BaseCamera&>(camera);
+			desc.material = arrowMaterial_.get();
+			desc.model = arrowModel_;
+			desc.worldTransform = &arrowTransform_;
+			ModelDraw::NormalObjectDraw(desc);
+		}
 	}
 }
 
@@ -834,6 +836,9 @@ void Player::Reset(const Vector3& position)
 	weapon_->ChangeRequest(Weapon::StateName::kHold);
 
 	localMatrixManager_->Map();
+
+	// プレイヤーは再度描画する
+	isDraw_ = true;
 
 	// ポニーテールがセットされてる場合
 	if (ponytail_ != nullptr) {

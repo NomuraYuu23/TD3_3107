@@ -221,6 +221,7 @@
     <ClCompile Include="Application\Particle\user\ImapledParticle\ImpaledParticle.cpp" />
     <ClCompile Include="Application\AudioManager\StageSelectAudioManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\LockStop.cpp" />
+    <ClCompile Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -495,6 +496,7 @@
     <ClInclude Include="Application\Particle\user\ImapledParticle\ImpaledParticle.h" />
     <ClInclude Include="Application\AudioManager\StageSelectAudioManager.h" />
     <ClInclude Include="Application\Object\Enemy\System\LockStop.h" />
+    <ClInclude Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -179,6 +179,11 @@ public:
 	/// </summary>
 	/// <param name="isDead"></param>
 	void SetIsDead(bool isDead) { isDead_ = isDead; }
+	/// <summary>
+	/// 死亡フラグゲッター
+	/// </summary>
+	/// <returns>死亡フラグ</returns>
+	bool GetIsDead() { return isDead_; }
 
 	bool IsCanReturn() { return (!knockBackSystem_.IsHit() && !recoil_.IsActive()); }
 
@@ -237,6 +242,9 @@ public:
 
 	// ゲームクリアフラグ
 	bool isGameClear_ = false;
+	
+	// プレイヤーの描画フラグ
+	bool isDraw_ = true;
 
 	// 足元コライダー
 	PlayerFootCollider footCollider_;

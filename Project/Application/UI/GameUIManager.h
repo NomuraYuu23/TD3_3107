@@ -109,6 +109,18 @@ public: // アクセッサ等
 	void SetIsGround(bool& isGround) { isGrounded_ = isGround; }
 
 	/// <summary>
+	/// フェード演出トリガーセッター
+	/// </summary>
+	/// <param name="isFade">フェード演出トリガー状態</param>
+	void SetIsFade(const bool isFade, const float fadeOutTime);
+
+	/// <summary>
+	///  フェード演出終了トリガーゲッター
+	/// </summary>
+	/// <returns>フェード演出終了トリガー</returns>
+	bool GetIsEndFade() { return isEndFade_; }
+
+	/// <summary>
 	/// クリア状態セッター
 	/// </summary>
 	/// <param name="isClear">クリア状態</param>
@@ -168,6 +180,11 @@ private: // プライベートなメンバ関数
 	/// HPに関するUIの更新関数
 	/// </summary>
 	void HPUIUpdate();
+
+	/// <summary>
+	/// 暗転演出関数
+	/// </summary>
+	void FadeUpdate();
 
 	/// <summary>
 	/// クリア時UIの更新関数
@@ -244,6 +261,17 @@ private: // 右スティック用変数群
 
 private: // hp用変数群
 
+private: // 死亡時のフェード演出用変数群
+
+	// フェード演出用
+	float currentDeadFadeOutTime_ = 0.0f;
+	float deadFadeOutTime_		  = 1.0f;
+
+	// フェードトリガー
+	bool isFade_ = false;
+
+	// フェード終了トリガー
+	bool isEndFade_ = false;
 
 private: // クリア演出用変数群
 
@@ -276,7 +304,7 @@ private: // クリア演出用変数群
 private: // 操作系UIの表示非表示
 
 	// 操作系UIの表示フラグ
-	bool displayOperation_ = true;
+	bool displayOperation_ = false;
 
 };
 
