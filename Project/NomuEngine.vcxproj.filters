@@ -222,6 +222,7 @@
     <ClCompile Include="Application\AudioManager\StageSelectAudioManager.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\LockStop.cpp" />
     <ClCompile Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.cpp" />
+    <ClCompile Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -497,6 +498,7 @@
     <ClInclude Include="Application\AudioManager\StageSelectAudioManager.h" />
     <ClInclude Include="Application\Object\Enemy\System\LockStop.h" />
     <ClInclude Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.h" />
+    <ClInclude Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
