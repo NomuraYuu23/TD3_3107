@@ -256,12 +256,12 @@ void GameScene::Update() {
 	// マップ
 	mapManager_->Update();
 	// プレイヤー
-	if (!player_->GetIsDead()) { // 死亡していないときのみ更新
+	if (!player_->GetIsDead() && !gameUIManager_->GetDisplayPoseUI()) { // 死亡していないときのみ更新
 		player_->Update();
 	}
 	player_->DrawLinesMap(drawLine_);
 	// 敵
-	if (!player_->isGameClear_ && !player_->GetIsDead()) {
+	if (!player_->isGameClear_ && !player_->GetIsDead() && !gameUIManager_->GetDisplayPoseUI()) {
 		enemyManager_->Update();
 	}
 
