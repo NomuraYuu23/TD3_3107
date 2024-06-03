@@ -121,6 +121,9 @@ private: // データ用構造体クラス
 		float freeFallGravityRate_;
 		// 落下中の回転速度
 		float freeFallSpinSpeed_;
+
+		// 戻しができる迄のフレーム
+		float getbackFrame_;
 	};
 
 	/// <summary>

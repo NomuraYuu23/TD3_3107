@@ -9,6 +9,9 @@ void PlayerController::Initialize(Player* player)
 	input_ = Input::GetInstance();
 
 	player_ = player;
+	// キーの設定
+	KeyConfigSetting();
+
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
 	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
 }
@@ -53,12 +56,42 @@ void PlayerController::ImGuiDraw()
 	ImGui::DragFloat2("normStick", &normalize.x);
 }
 
+void PlayerController::GetBackWeaponProcess()
+{
+	Weapon* weapon = player_->GetWeapon();
+
+	if (std::holds_alternative<ImpaledState*>(weapon->GetNowState())) {
+		Vector2 rightStick = Input::GetInstance()->GetRightAnalogstick();
+		if ((rightStick.x != 0 || rightStick.y != 0) && !weapon->getbackAccepter_.IsActive()) {
+			player_->GetWeapon()->ChangeRequest(Weapon::StateName::kReturn);
+			player_->GetController()->isShortening_ = false;
+		}
+	}
+}
+
+void PlayerController::KeySetting()
+{
+	// キーの受け取り
+	actionButton_.jumpButton = input_->TriggerJoystick(setButton_.jumpKey);
+	actionButton_.throwButton = input_->TriggerJoystick(setButton_.throwKey);
+
+}
+
+void PlayerController::KeyConfigSetting()
+{
+	setButton_.jumpKey = kJoystickButtonLB;
+	setButton_.throwKey = kJoystickButtonRB;
+}
+
 void PlayerController::ControllerProcess()
 {
 	bool CheckAction = false;
 	player_->isArrowUiDraw_ = false;
 
 	if (input_->GetJoystickConnected()) {
+		// キーの設定
+		KeySetting();
+
 		// 待機処理
 		WaitKeyProcess();
 
@@ -68,15 +101,10 @@ void PlayerController::ControllerProcess()
 		// 地上処理
 		GroundMoveProcess();
 
-		//---どの状態でも行える操作---//
-
 		// 投げ処理
 		ThrownProcess();
-
-		// 戻ってくる入力
-		//if (input_->TriggerJoystick(kJoystickButtonLB) && std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-		//	player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-		//}
+		// 戻しの処理
+		GetBackWeaponProcess();
 
 		if (player_->IsRecoil()) {
 			player_->isArrowUiDraw_ = true;
@@ -213,7 +241,7 @@ void PlayerController::GroundMoveProcess()
 
 		// ジャンプ
 		// ジャンプ中は入力を受け付けない
-		if ((input_->TriggerJoystick(kJoystickButtonLB) || input_->TriggerJoystick(kJoystickButtonA)) && player_->isGround_ && !player_->isGameClear_) {
+		if ((actionButton_.jumpButton || input_->TriggerJoystick(kJoystickButtonA)) && player_->isGround_ && !player_->isGameClear_) {
 			// 切り替え
 			player_->ChangeState(std::make_unique<AerialState>());
 			return;
@@ -240,8 +268,8 @@ void PlayerController::WaitKeyProcess()
 }
 
 void PlayerController::ThrownProcess()
-{
-	if (input_->TriggerJoystick(kJoystickButtonRB) && !player_->isGameClear_) {
+{	
+	if (actionButton_.throwButton && !player_->isGameClear_) {
 		// 投げ入力
 		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
 			// 右スティックの入力がなければキャンセル
@@ -277,45 +305,4 @@ void PlayerController::ThrownProcess()
 			player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
 		}
 	}
-}
-
-void PlayerController::KeyBoardProcess()
-{
-	// 武器
-	if (player_->weapon_) {
-		if (input_->TriggerKey(DIK_E)) {
-			//player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			// 待機に入る
-			if (std::holds_alternative<ImpaledState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kWait);
-			}
-			// 戻ってくる
-			else if (std::holds_alternative<ReturnWaitState*>(player_->weapon_->GetNowState())) {
-				player_->weapon_->ChangeRequest(Weapon::StateName::kReturn);
-			}
-		}
-		if (input_->TriggerKey(DIK_Q)) {
-			player_->weapon_->throwDirect_ = player_->throwDirect_;
-			player_->weapon_->ChangeRequest(Weapon::StateName::kThrown);
-		}
-	}
-
-	float moveSpeed_ = 6.0f;
-	// ステート変更
-	bool CheckAction = std::holds_alternative<AerialState*>(player_->GetNowState());
-	if (input_->TriggerKey(DIK_SPACE) && !CheckAction) {
-		// 切り替え
-		player_->ChangeState(std::make_unique<AerialState>());
-		return;
-	}
-
-	// 移動入力
-	if (input_->PushKey(DIK_A)) {
-		player_->velocity_.x = -moveSpeed_;
-	}
-	else if (input_->PushKey(DIK_D)) {
-		player_->velocity_.x = moveSpeed_;
-	}
-	player_->worldtransform_.transform_.translate.x += player_->velocity_.x * kDeltaTime_;
-
 }

@@ -7,6 +7,7 @@
             40.0
         ],
         "FreeFallSpinSpeed": 16.0,
+        "GetBackFrame": 20.0,
         "Gravity": 3.0,
         "KickBackCooltime": 10.0,
         "LocalPosition": [

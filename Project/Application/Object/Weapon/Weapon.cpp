@@ -582,6 +582,9 @@ void Weapon::SystemUpdate()
 	attractInvTimer_.Update();
 	throwInvTimer_.Update();
 
+	// スティック戻し用のタイマー
+	getbackAccepter_.Update();
+
 	shockEffect_.Update();
 }
 

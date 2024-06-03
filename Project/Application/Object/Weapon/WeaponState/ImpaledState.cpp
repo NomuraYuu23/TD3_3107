@@ -10,6 +10,8 @@ void ImpaledState::Initialize()
 	weapon_->worldtransform_.transform_.translate = weapon_->worldtransform_.GetWorldPosition();
 	weapon_->worldtransform_.parent_ = nullptr;
 	weapon_->worldtransform_.UpdateMatrix();
+	float cooltime = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "GetBackFrame");
+	weapon_->getbackAccepter_.Start(cooltime);
 
 	// デバッグ以外の場合行う
 	#ifdef _RELEASE

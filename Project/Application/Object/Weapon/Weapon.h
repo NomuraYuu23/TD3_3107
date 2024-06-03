@@ -272,6 +272,9 @@ private: // アニメーション関連
 private:
 	ShockEffectSystem shockEffect_;
 
+public:
+	TimerLib getbackAccepter_;
+
 private: // モーションブラー
 
 	//std::unique_ptr<Velocity2DManager> velocity2DManager_;
