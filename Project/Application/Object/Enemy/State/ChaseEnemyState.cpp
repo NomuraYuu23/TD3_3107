@@ -4,8 +4,9 @@
 void ChaseEnemyState::Initialize()
 {
 	enemy_->SetState(this);
+	enemy_->transform_.rotate.z = 3.14f;
 	enemy_->MatrixUpdate();
-	enemy_->usedDirection_ = true;
+	enemy_->usedDirection_ = false;
 	sensorRay_.Initialize(enemy_);
 
 }
