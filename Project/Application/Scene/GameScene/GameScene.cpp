@@ -201,20 +201,6 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update() {
 
-#ifdef _DEMO
-	ImguiDraw();
-
-	if (input_->TriggerKey(DIK_L)) {
-		requestSceneNo_ = kTitle;
-	}
-
-
-#endif
-
-	if (input_->TriggerKey(DIK_L)) {
-		requestSceneNo_ = kTitle;
-	}
-
 	if (requestSceneNo_ == kClear || requestSceneNo_ == kTitle || isBeingReset_) {
 		resetScene_ = false;
 		// BGM音量下げる
@@ -224,12 +210,21 @@ void GameScene::Update() {
 		return;
 	}
 
+#ifdef _DEMO
+	ImguiDraw();
+
+	if (input_->TriggerKey(DIK_L)) {
+		requestSceneNo_ = kTitle;
+	}
+
 	// リスタート
 	if (input_->TriggerKey(DIK_R)) {
 		resetScene_ = true;
 		isBeingReset_ = true;
 		isDecreasingVolume = true;
 	}
+
+#endif
 
 	if (gameSystemManager_->GetIsGameClear()) {
 		requestSceneNo_ = kSelect;
@@ -256,12 +251,12 @@ void GameScene::Update() {
 	// マップ
 	mapManager_->Update();
 	// プレイヤー
-	if (!player_->GetIsDead()) { // 死亡していないときのみ更新
+	if (!player_->GetIsDead() && !gameUIManager_->GetDisplayPoseUI()) { // 死亡していないときのみ更新
 		player_->Update();
 	}
 	player_->DrawLinesMap(drawLine_);
 	// 敵
-	if (!player_->isGameClear_ && !player_->GetIsDead()) {
+	if (!player_->isGameClear_ && !player_->GetIsDead() && !gameUIManager_->GetDisplayPoseUI()) {
 		enemyManager_->Update();
 	}
 
@@ -398,6 +393,7 @@ void GameScene::Draw() {
 	uint32_t postEffectBit = 0;
 	PostEffect::ExecutionAdditionalDesc desc = {};
 	desc.shockWaveManagers[0] = player_->GetWeapon()->GetEffectSystem()->GetShockWaveManager();
+	desc.shockWaveManagers[1] = player_->GetWeaponGuardEffect()->GetShockWaveManager();
 	desc.velocity2DManagers[0] = player_->GetVelocity2DManager();
 
 	if (player_->GetHitManager().IsHitEffectActive()) {
@@ -418,11 +414,16 @@ void GameScene::Draw() {
 		postEffectBit += 8;
 	}
 
-	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState())) {
+	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState()) && !player_->IsDead()) {
 		postEffectBit += 16;
 		PostEffect::GetInstance()->SetKernelSize(33);
 		PostEffect::GetInstance()->SetSigma(33.0f);
 	}
+
+	if (player_->GetWeaponGuardEffect()->IsActive()) {
+		postEffectBit += 32;
+	}
+
 	PostEffect::GetInstance()->SetExecutionFlag(postEffectBit);
 	PostEffect::GetInstance()->Execution(
 		dxCommon_->GetCommadList(),
@@ -436,7 +437,8 @@ void GameScene::Draw() {
 
 void GameScene::ImguiDraw() {
 
-#ifdef _DEMO
+
+#ifdef _DEBUG
 
 	ImGui::Begin("GameScene");
 	ImGui::Text("Frame rate: %6.2f fps", ImGui::GetIO().Framerate);
@@ -451,12 +453,6 @@ void GameScene::ImguiDraw() {
 	ImGui::Checkbox("IsImpact", &isImpact_);
 	ImGui::End();
 
-	//Obj
-	mapManager_->ImGuiDraw();
-	// プレイヤー
-	player_->ImGuiDraw();
-	// 敵
-	enemyManager_->ImGuiDraw();
 	// ボス
 	//bossEnemy_->ImGuiDraw();
 
@@ -465,10 +461,6 @@ void GameScene::ImguiDraw() {
 
 	// スカイドーム
 	//skydome_->ImGuiDraw();
-
-	debugCamera_->ImGuiDraw();
-
-	gameSystemManager_->ImGuiDraw();
 
 	//collision2DDebugDraw_->ImGuiDraw();
 
@@ -490,12 +482,27 @@ void GameScene::ImguiDraw() {
 
 #endif // _DEBUG
 
+#ifdef _DEMO
+
+	//Obj
+	mapManager_->ImGuiDraw();
+	// プレイヤー
+	player_->ImGuiDraw();
+	// 敵
+	enemyManager_->ImGuiDraw();
+
+	gameSystemManager_->ImGuiDraw();
+
+	debugCamera_->ImGuiDraw();
+
+#endif // _DEMO
+
 }
 
 void GameScene::DebugCameraUpdate()
 {
 
-#ifdef _DEBUG
+#ifdef _DEMO
 	if (input_->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;
@@ -526,9 +533,14 @@ void GameScene::DebugCameraUpdate()
 			camera_.ShakeStart(0.3f, 2);
 		}
 		player_->GetWeapon()->GetEffectSystem()->SetScreenPosition(camera_);
+		player_->GetWeapon()->GetEffectSystem()->SetCameraAddPosition(followCamera_->GetDefaultOffsetAdd());
+
+		player_->GetWeaponGuardEffect()->SetScreenPosition(camera_);
+		player_->GetWeaponGuardEffect()->SetCameraAddPosition(followCamera_->GetDefaultOffsetAdd());
+
 
 		// 
-		camera_.Update();
+		//camera_.Update();
 	}
 
 }

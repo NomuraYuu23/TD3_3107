@@ -43,6 +43,11 @@ private: // プライベートなサブクラス
 		HPGageFrameTex,
 		ClearTextTex,
 		ReturnStageSelectTextTex,
+		PoseTextTex,
+		PoseCursorTex,
+		ResumeButtonTex,
+		OptionButtonTex,
+		PoseReturnStageSelectButtonTex,
 		indexCount,	// インデックス数管理用
 	};
 
@@ -66,9 +71,23 @@ private: // プライベートなサブクラス
 		HPGageSprite,	 // ゲージ本体
 		HPGageFrameSprite, // ゲージ背景
 		ClearBackFrameSprite, // クリア背景
+		PoseTextSprite,	// ポーズと表示するだけのスプライト
+		PoseCursorSprite, // ポーズメニューの選択矢印
+		PoseResumeSprite, // 続ける
+		PoseOptionSprite, // オプション
+		PoseStageSelectSprite, // ステージセレクトへ
 		ClearTextSprite, // クリア文字
 		ReturnStageSelectTextSprite, // クリア文字
 		spriteCount, // スプライト数用
+	};
+
+	/// <summary>
+	/// ポーズ時、選択されているスプライト
+	/// </summary>
+	enum PoseSelectingMenu {
+		kResume = PoseResumeSprite, // 続ける
+		kOption = PoseOptionSprite, // オプション
+		kReturnStageSelect = PoseStageSelectSprite, // ステージセレクトへ
 	};
 
 public: // メンバ関数
@@ -125,6 +144,11 @@ public: // アクセッサ等
 	/// </summary>
 	/// <param name="isClear">クリア状態</param>
 	void SetISClear(const bool isClear) { isClear_ = isClear; }
+	/// <summary>
+	/// クリア状態ゲッター
+	/// </summary>
+	/// <returns>クリア状態</returns>
+	bool GetIsClear() { return isClear_; }
 
 	/// <summary>
 	/// クリア演出終了状態ゲッター
@@ -143,6 +167,23 @@ public: // アクセッサ等
 	/// </summary>
 	/// <returns></returns>
 	bool GetDisplayOperation() { return displayOperation_; }
+
+	/// <summary>
+	/// ポーズUI表示フラグセッター
+	/// </summary>
+	/// <param name="displayPose">ポーズUI表示フラグ</param>
+	void SetDisplayPoseUI(const bool displayPose);
+	/// <summary>
+	/// ポーズUI表示ゲッター
+	/// </summary>
+	/// <returns>ポーズUI表示フラグ</returns>
+	bool GetDisplayPoseUI() { return isDisplayPoseUI_; }
+
+	/// <summary>
+	/// ステージ選択画面へ戻る
+	/// </summary>
+	/// <returns>ステージ選択画面へ戻るかトリガー</returns>
+	bool GetIsReturnStageSelect() { return isReturnStageSelect_; }
 
 private: // プライベートなメンバ関数
 
@@ -185,6 +226,11 @@ private: // プライベートなメンバ関数
 	/// 暗転演出関数
 	/// </summary>
 	void FadeUpdate();
+
+	/// <summary>
+	/// ポーズUI更新関数
+	/// </summary>
+	void PoseUIUpdate();
 
 	/// <summary>
 	/// クリア時UIの更新関数
@@ -259,7 +305,29 @@ private: // 右スティック用変数群
 	Vector4 rStickUIColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 	Vector4 throwUIColor_ = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-private: // hp用変数群
+private: // ポーズ演出用変数群
+
+	// ポーズUIの表示フラグ
+	bool isDisplayPoseUI_ = false;
+
+	// ポーズ中選択されているスプライト
+	int selectingButtonUI_ = kResume;
+
+	// カーソル移動クールタイム
+	float currentCursorCoolTime_ = 3.0f;
+	float cursorCoolTime_ = 0.25f;
+
+	// 選択項目をゆらゆらさせるための変数
+	float currentPoseSelectTime_ = 0.0f; // 現在時間
+	float PoseSelectTime_ = 1.0f; // 演出時間
+	// 表示後、ゆらゆらさせるためのトリガー
+	bool isPoseReturn_ = false;
+
+	Vector2 prevPosePos_;
+	Vector2 postPosePos_;
+
+	// ステージ選択画面へ戻るトリガー
+	bool isReturnStageSelect_ = false;
 
 private: // 死亡時のフェード演出用変数群
 

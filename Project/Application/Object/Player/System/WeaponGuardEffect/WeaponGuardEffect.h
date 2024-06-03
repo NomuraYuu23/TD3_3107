@@ -1,18 +1,18 @@
 #pragma once
-#include "../../GameUtility/TimerLib.h"
-#include "../../GameUtility/MathUtility.h"
+#include "../../../GameUtility/TimerLib.h"
+#include "../../../GameUtility/MathUtility.h"
 #include "../../../Engine/PostEffect/ShockWaveManager.h"
 
-class Weapon;
+class Player;
 
-class ShockEffectSystem 
+class WeaponGuardEffect
 {
 public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="weapon"></param>
-	void Initialize(Weapon* weapon);
+	/// <param name="player"></param>
+	void Initialize(Player* player);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -38,10 +38,9 @@ public:
 
 private:
 	// 親
-	Weapon* weapon_ = nullptr;
+	Player* player_ = nullptr;
 	// スクリーンの割合座標
 	Vector2 screenPositionRatio_ = {};
-	Vector2 screenPosition_ = {};
 
 	// 衝撃波マネ
 	std::unique_ptr<ShockWaveManager> shockWaveManager_;
@@ -56,3 +55,4 @@ private:
 	Vector3 cameraAddPosition_ = { 0.0f,0.0f,0.0f };
 
 };
+

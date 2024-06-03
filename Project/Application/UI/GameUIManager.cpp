@@ -52,6 +52,8 @@ void GameUIManager::Update()
 		// 操作系UIの表示切り替え
 		DisplayOperationSwitching();
 
+		// ポーズUI更新
+		PoseUIUpdate();
 	}
 
 	// フェード演出更新
@@ -59,7 +61,7 @@ void GameUIManager::Update()
 		FadeUpdate();
 	}
 
-	if (!isFade_ && !isClear_) { // クリア状態でなければ徐々にフェードイン
+	if (!isFade_ && !isClear_ && !isDisplayPoseUI_) { // クリア状態でなければ徐々にフェードイン
 		// 現在の背景色を取得
 	 	float currentAlpha = uiSprites_[ClearBackFrameSprite]->GetColor().w;
 		// 線形補間で演出を行う
@@ -164,6 +166,27 @@ void GameUIManager::SetIsFade(const bool isFade, const float fadeOutTime)
 	isEndFade_ = false;
 }
 
+void GameUIManager::SetDisplayPoseUI(const bool displayPose)
+{
+	// ポーズUI表示
+	isDisplayPoseUI_ = displayPose;
+
+	// 演出時間初期化
+	currentPoseSelectTime_ = 0.0f;
+
+	if (displayPose) {
+		selectingButtonUI_ = kResume;
+		prevPosePos_ = uiSprites_[selectingButtonUI_]->GetPosition();
+		postPosePos_ = { prevPosePos_.x, prevPosePos_.y + 10.0f };
+	}
+	else {
+		uiSprites_[selectingButtonUI_]->SetPosition(prevPosePos_);
+		selectingButtonUI_ = kResume;
+		uiSprites_[PoseCursorSprite]->SetPosition({ 300.0f, 300.0f });
+	}
+	
+}
+
 void GameUIManager::LoadTexture()
 {
 	/// テクスチャロードを行う
@@ -194,6 +217,13 @@ void GameUIManager::LoadTexture()
 	// クリア演出関係
 	texHandles_.insert({ ClearTextTex, TextureManager::Load("Resources/UI/Game/StageClearText.png", dxCommon_, texHandleManager_) });	 //クリアテキスト用 
 	texHandles_.insert({ ReturnStageSelectTextTex, TextureManager::Load("Resources/UI/Game/ReturnStageSelectText.png", dxCommon_, texHandleManager_) });	 //クリアテキスト用 
+
+	// ポーズ関連
+	texHandles_.insert({ PoseTextTex, TextureManager::Load("Resources/UI/Game/PoseTextTex.png", dxCommon_, texHandleManager_) });	 // ポーズテキスト
+	texHandles_.insert({ PoseCursorTex, TextureManager::Load("Resources/UI/Game/PoseCusorTex.png", dxCommon_, texHandleManager_) });	 // ポーズ選択矢印
+	texHandles_.insert({ ResumeButtonTex, TextureManager::Load("Resources/UI/Game/ResumeButtonTex.png", dxCommon_, texHandleManager_) });	 // 続けるテキスト
+	texHandles_.insert({ OptionButtonTex, TextureManager::Load("Resources/UI/Game/OptionButtonTex.png", dxCommon_, texHandleManager_) });	 // オプションテキスト
+	texHandles_.insert({ PoseReturnStageSelectButtonTex, TextureManager::Load("Resources/UI/Game/ReturnStageSelectButtonTex.png", dxCommon_, texHandleManager_) });	 // ステージセレクトへ戻るテキスト
 }
 
 void GameUIManager::CreateSprite()
@@ -203,7 +233,8 @@ void GameUIManager::CreateSprite()
 	Vector2 setSize;	 // 大きさ
 
 	/// スプライト生成
-	// ボタン関係
+#pragma region ゲームUI関連
+
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 左スティック背景用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[JoyStickBackTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 80.0f, 525.0f };
@@ -287,14 +318,14 @@ void GameUIManager::CreateSprite()
 	setSize = { 256.0f, 64.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
-	
+
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ゲージ用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[HPGageTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 192.0f - (384.0f / 2.0f), 60.0f };
 	setSize = { 384.0f, 64.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
-	uiSprites_.back()->SetAnchorPoint({0.0f, 0.5f});
+	uiSprites_.back()->SetAnchorPoint({ 0.0f, 0.5f });
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ゲージフレーム用
 	uiSprites_.back().reset(Sprite::Create(texHandles_[HPGageFrameTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
@@ -303,13 +334,59 @@ void GameUIManager::CreateSprite()
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
-	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // クリア時背景
+#pragma endregion
+#pragma region ポーズUI関連
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 背景
 	uiSprites_.back().reset(Sprite::Create(texHandles_[White2x2Tex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 640.0f, 360.0f };
 	setSize = { 1280.0f, 720.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 	uiSprites_.back()->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ポーズテキスト
+	uiSprites_.back().reset(Sprite::Create(texHandles_[PoseTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 640.0f, 100.0f };
+	//setSize = { 1280.0f, 720.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	//uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ポーズカーソル
+	uiSprites_.back().reset(Sprite::Create(texHandles_[PoseCursorTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 300.0f, 300.0f };
+	setSize = { 64.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 続けるテキスト
+	uiSprites_.back().reset(Sprite::Create(texHandles_[ResumeButtonTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 640.0f, 300.0f };
+	setSize = { 192.0f, 96.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // オプションテキスト
+	uiSprites_.back().reset(Sprite::Create(texHandles_[OptionButtonTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 640.0f, 450.0f };
+	setSize = { 360.0f, 96.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ステージ選択画面に戻るテキスト
+	uiSprites_.back().reset(Sprite::Create(texHandles_[PoseReturnStageSelectButtonTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 640.0f, 600.0f };
+	setSize = { 540.0f, 96.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+#pragma endregion
+#pragma region クリアUI関連
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // クリアテキスト
 	uiSprites_.back().reset(Sprite::Create(texHandles_[ClearTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
@@ -323,6 +400,8 @@ void GameUIManager::CreateSprite()
 	setPosition = { 640.0f, 650.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+#pragma endregion
 }
 
 void GameUIManager::LeftStickUIUpdate()
@@ -506,6 +585,158 @@ void GameUIManager::FadeUpdate()
 	}
 }
 
+void GameUIManager::PoseUIUpdate()
+{
+	// ポーズUI表示を行うなら
+	if (isDisplayPoseUI_) {
+		// 現在の背景色を取得
+		float currentAlpha = uiSprites_[ClearBackFrameSprite]->GetColor().w;
+		// 線形補間で演出を行う
+		float alpha = Ease::Easing(Ease::EaseName::EaseOutQuad, currentAlpha, 0.75f, 0.2f);
+
+		// 背景は徐々に暗くする
+		uiSprites_[ClearBackFrameSprite]->SetColor({ 0.0f, 0.0f, 0.0f, alpha });
+
+		// 現在の背景色を取得
+		float currentUIAlpha = uiSprites_[PoseTextSprite]->GetColor().w;
+		// 線形補間で演出を行う
+		float uIalpha = Ease::Easing(Ease::EaseName::EaseOutQuad, currentUIAlpha, 1.0f, 0.2f);
+
+		// ポーズUIをフェードインさせる
+		for (int i = PoseTextSprite; i <= PoseStageSelectSprite; i++) {
+			uiSprites_[i]->SetColor({ 1.0f, 1.0f, 1.0f, uIalpha });
+		}
+
+		// 左スティックの入力取得
+		Vector2 leftStick = input_->GetLeftAnalogstick();
+
+		if (currentCursorCoolTime_ > cursorCoolTime_) {
+			// 選択項目を上に
+			if (leftStick.y < -0.5f) {
+				// 入力があった時点でスプライトを現在の座標に戻す
+				uiSprites_[selectingButtonUI_]->SetPosition(prevPosePos_);
+
+				if (selectingButtonUI_ == kResume) {
+					selectingButtonUI_ = kReturnStageSelect;
+				}
+				else {
+					selectingButtonUI_--;
+				}
+				currentCursorCoolTime_ = 0.0f;
+				currentPoseSelectTime_ = 0.0f;
+
+				// 変換し次第値を更新
+				prevPosePos_ = uiSprites_[selectingButtonUI_]->GetPosition();
+				postPosePos_ = { prevPosePos_.x, prevPosePos_.y + 15.0f };
+			}
+
+			// 選択項目を下に
+			if (leftStick.y > 0.5f) {
+				// 入力があった時点でスプライトを現在の座標に戻す
+				uiSprites_[selectingButtonUI_]->SetPosition(prevPosePos_);
+
+				if (selectingButtonUI_ == kReturnStageSelect) {
+					selectingButtonUI_ = kResume;
+				}
+				else {
+					selectingButtonUI_++;
+				}
+				currentCursorCoolTime_ = 0.0f;
+				currentPoseSelectTime_ = 0.0f;
+
+				// 変換し次第値を更新
+				prevPosePos_ = uiSprites_[selectingButtonUI_]->GetPosition();
+				postPosePos_ = { prevPosePos_.x, prevPosePos_.y + 15.0f };
+			}
+		}
+		else {
+			// 経過秒数加算
+			currentCursorCoolTime_ += kDeltaTime_;
+
+			// 入力が無ければクールタイムリセット
+			if (leftStick.y == 0.0f) {
+				currentCursorCoolTime_ = 10.0f;
+			}
+
+		}
+
+		// カーソルを移動させる
+		float cursorPosY = Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[PoseCursorSprite]->GetPosition().y, prevPosePos_.y, 0.2f);
+		uiSprites_[PoseCursorSprite]->SetPosition({ uiSprites_[PoseCursorSprite]->GetPosition().x, cursorPosY });
+
+		// 選択中項目をゆらゆらさせる
+		if (isPoseReturn_) {
+			if (currentPoseSelectTime_ < PoseSelectTime_) {
+				Vector2 pos = Ease::Easing(Ease::EaseName::EaseInOutQuad, prevPosePos_, postPosePos_, (currentPoseSelectTime_ / PoseSelectTime_));
+
+				uiSprites_[selectingButtonUI_]->SetPosition(pos);
+
+				// 経過秒数分加算
+				currentPoseSelectTime_ += kDeltaTime_;
+			}
+			else {
+				currentPoseSelectTime_ = 0.0f;
+				isPoseReturn_ = false;
+			}
+
+		}
+		else {
+			if (currentPoseSelectTime_ < PoseSelectTime_) {
+				Vector2 pos = Ease::Easing(Ease::EaseName::EaseInOutQuad, postPosePos_, prevPosePos_, (currentPoseSelectTime_ / PoseSelectTime_));
+
+				uiSprites_[selectingButtonUI_]->SetPosition(pos);
+
+				// 経過秒数分加算
+				currentPoseSelectTime_ += kDeltaTime_;
+			}
+			else {
+				currentPoseSelectTime_ = 0.0f;
+				isPoseReturn_ = true;
+			}
+		}
+
+		// Aボタンをおしたら選択項目に関する処理を行う
+		if (input_->TriggerJoystick(kJoystickButtonA)) {
+			switch (selectingButtonUI_)
+			{
+			case kResume: // ゲームを続ける
+				// ポーズUI表示
+				isDisplayPoseUI_ = false;
+
+				// 演出時間初期化
+				currentPoseSelectTime_ = 0.0f;
+				// UI座標リセット
+				uiSprites_[selectingButtonUI_]->SetPosition(prevPosePos_);
+				selectingButtonUI_ = kResume;
+
+				// カーソル位置リセット
+				uiSprites_[PoseCursorSprite]->SetPosition({ 300.0f, 300.0f });
+
+				break;
+			case kOption:
+				break;
+			case kReturnStageSelect:
+				// ステージ選択画面へ戻る
+				isReturnStageSelect_ = true;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	else {
+		// 現在の背景色を取得
+		float currentAlpha = uiSprites_[PoseTextSprite]->GetColor().w;
+		// 線形補間で演出を行う
+		float uIalpha = Ease::Easing(Ease::EaseName::EaseOutQuad, currentAlpha, 0.0f, 0.2f);
+
+		// ポーズUIをフェードアウトさせる
+		for (int i = PoseTextSprite; i <= PoseStageSelectSprite; i++) {
+			uiSprites_[i]->SetColor({ 1.0f, 1.0f, 1.0f, uIalpha });
+		}
+	}
+}
+
 void GameUIManager::ClearUIUpdate()
 {	
 	// 暗転演出が終了していなければ暗転演出を行う
@@ -522,8 +753,8 @@ void GameUIManager::ClearUIUpdate()
 
 	// 演出が終了したら
 	if (isBlackOut_) {
-		// Bボタンが押されたらステージセレクトへ
-		if (input_->TriggerJoystick(kJoystickButtonB)) {
+		// Aボタンが押されたらステージセレクトへ
+		if (input_->TriggerJoystick(kJoystickButtonA)) {
 			// 演出終了を伝える
 			isEndClearStaging_ = true;
 		}

@@ -44,6 +44,26 @@ void GameSystemManager::Update()
 		player_->SetIsDead(true);
 	}
 
+	if (Input::GetInstance()->TriggerJoystick(kJoystickButtonSTART) && !player_->GetIsDead() && !gum_->GetIsClear()){
+		if (gum_->GetDisplayPoseUI()) {
+			gum_->SetDisplayPoseUI(false);
+		}
+		else {
+			gum_->SetDisplayPoseUI(true);
+		}
+	}
+
+	if (gum_->GetDisplayPoseUI()) {
+		camera_->SetLockCamera(true);
+	}
+	else {
+		camera_->SetLockCamera(false);
+	}
+
+	if (gum_->GetIsReturnStageSelect()) {
+		isGameClear_ = true;
+	}
+
 	// クリアかゲームオーバーの処理を判断
 	CheckGameStatus();
 

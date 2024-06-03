@@ -49,6 +49,7 @@ void EnemyManager::Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles)
 
 void EnemyManager::ImGuiDraw()
 {
+
 	ImGui::Begin("EnemyManager");
 
 	//ImGui::DragFloat3("pos", &resPoint_.x, 0.01f, -100.0f, 100.0f);

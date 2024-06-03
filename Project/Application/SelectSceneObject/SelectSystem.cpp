@@ -81,13 +81,13 @@ void SelectSystem::Update()
 
 		}
 		// ゲームシーンへ
-		else if (input_->PushJoystick(JoystickButton::kJoystickButtonA)) {
+		else if (input_->TriggerJoystick(JoystickButton::kJoystickButtonA)) {
 			// ステージ開始SE
 			audioManager_->PlayWave(kStageStartSE);
 			gotoGameScene_ = true;
 		}
 		// タイトルへ
-		if (input_->PushJoystick(JoystickButton::kJoystickButtonBACK)) {
+		if (input_->TriggerJoystick(JoystickButton::kJoystickButtonBACK)) {
 			// タイトルへ戻るSE
 			audioManager_->PlayWave(kBackTitleSE);
 			gotoTitleScene_ = true;

@@ -721,7 +721,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 		//if (invisibleTimer_.IsActive()) {
 		//	return;
 		//}
-#ifdef _DEBUG
+#ifdef _DEMO
 		return;
 #endif // !_DEBUG
 
@@ -755,6 +755,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 			SetFallTimer();
 
 			weapon_->ChangeRequest(Weapon::StateName::kFreeFall);
+
+			weaponGuardEffect_->StartShockWave(15.0f);
 
 		}
 		else {
@@ -821,7 +823,11 @@ void Player::DrawLinesMap(DrawLine* drawLine)
 
 void Player::Reset(const Vector3& position)
 {
+
+	float addPositionY = 2.0f;
+
 	worldtransform_.transform_.translate = position;
+	worldtransform_.transform_.translate.y += addPositionY;
 	velocity_ = {};
 	worldtransform_.UpdateMatrix();
 	isGround_ = true;
@@ -851,6 +857,9 @@ void Player::Reset(const Vector3& position)
 		// 更新
 		ponytail_->Update();
 	}
+
+	hpManager_.HitEffectTimerEnd();
+
 }
 
 void Player::SetFallTimer()
@@ -990,6 +999,11 @@ void Player::SystemInitialize()
 	slowEffect_->Initalize(this);
 	// 着地アシスト
 	landingAdjuster_.Initialize(this, weapon_.get());
+
+	// ガードエフェクト
+	weaponGuardEffect_ = std::make_unique<WeaponGuardEffect>();
+	weaponGuardEffect_->Initialize(this);
+
 }
 
 void Player::SystemUpdate()
@@ -1017,4 +1031,8 @@ void Player::SystemUpdate()
 
 	// 
 	throwStopTimer_.Update();
+
+	// ガードエフェクト
+	weaponGuardEffect_->Update();
+
 }
