@@ -192,7 +192,7 @@ void GameSystemManager::GameClearProcess()
 	gum_->SetISClear(true);
 
 	// プレイヤーを操作不能に
-	player_->isGameClear_ = true;
+	player_->ClearProcessing();
 
 	// クリア演出終了時
 	if (gum_->GetIsEndClearStaging()) {

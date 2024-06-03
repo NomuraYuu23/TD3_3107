@@ -219,7 +219,7 @@ void Player::Draw(const BaseCamera& camera)
 		}
 
 		// 矢印描画
-		if (arrowModel_ != nullptr && std::holds_alternative<HoldState*>(weapon_->GetNowState())) {
+		if (arrowModel_ != nullptr && std::holds_alternative<HoldState*>(weapon_->GetNowState()) && !isGameClear_) {
 			arrowMaterial_->SetUvTransform(arrowUVTransform_.transform_);
 			ModelDraw::NormalObjectDesc desc;
 			desc.camera = &const_cast<BaseCamera&>(camera);
@@ -794,6 +794,20 @@ void Player::ChangeState(std::unique_ptr<IActionState> newState)
 	newState->Initialize();
 	// ステート渡し
 	actionState_ = std::move(newState);
+}
+
+void Player::ClearProcessing()
+{
+
+	// クリアフラグ
+	isGameClear_ = true;
+
+	// 速度
+	velocity_.x = 0.0f;
+
+	// ステート変更
+	weapon_->ChangeRequest(Weapon::StateName::kHold);
+
 }
 
 void Player::DrawLinesMap(DrawLine* drawLine)
