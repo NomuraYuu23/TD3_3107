@@ -112,6 +112,7 @@ void GameUIManager::Draw()
 	else {
 		// 背景だけは特別に描画
 		uiSprites_[ClearBackFrameSprite]->Draw();
+		uiSprites_[PoseButtonSprite]->Draw();
 		// オプション用描画
 		oUIManager_->Draw();
 	}
@@ -247,6 +248,9 @@ void GameUIManager::LoadTexture()
 	texHandles_.insert({ RightStickNoneTex, TextureManager::Load("Resources/UI/Button/joystick_right_N.png", dxCommon_, texHandleManager_) });			 // 右スティック入力なし
 	texHandles_.insert({ RightStickPressTex, TextureManager::Load("Resources/UI/Button/joystick_right_P.png", dxCommon_, texHandleManager_) });			 // 右スティック入力あり
 	texHandles_.insert({ JoyStickBackTex, TextureManager::Load("Resources/UI/Button/joystick_Back.png", dxCommon_, texHandleManager_) });	 // スティック背景用
+	texHandles_.insert({ MenuNoneTex, TextureManager::Load("Resources/UI/Button/button_menu_N.png", dxCommon_, texHandleManager_) });	 // ポーズボタン入力無し
+	texHandles_.insert({ MenuPressTex, TextureManager::Load("Resources/UI/Button/button_menu_P.png", dxCommon_, texHandleManager_) });	 // ポーズボタン入力あり
+
 
 	// 画像関係
 	texHandles_.insert({ DashImageTex, TextureManager::Load("Resources/UI/Game/dash.png", dxCommon_, texHandleManager_) });	 // ダッシュ画像
@@ -254,6 +258,7 @@ void GameUIManager::LoadTexture()
 	texHandles_.insert({ AimImageTex, TextureManager::Load("Resources/UI/Game/Aim.png", dxCommon_, texHandleManager_) });	 // エイム画像
 	texHandles_.insert({ ThrowTextTex, TextureManager::Load("Resources/UI/Game/ThrowSpearText.png", dxCommon_, texHandleManager_) });	 // 投げるテキスト画像
 	texHandles_.insert({ ReturnTextTex, TextureManager::Load("Resources/UI/Game/ReturnSpearText.png", dxCommon_, texHandleManager_) });	 // 戻るテキスト画像
+	texHandles_.insert({ PoseTextTex, TextureManager::Load("Resources/UI/Game/PoseTextTex.png", dxCommon_, texHandleManager_) });	 // 戻るテキスト画像
 	texHandles_.insert({ HPGageTex, TextureManager::Load("Resources/UI/Game/HealthGage.png", dxCommon_, texHandleManager_) });	 // HP画像
 	texHandles_.insert({ HPGageFrameTex, TextureManager::Load("Resources/UI/Game/HealthGageFrame.png", dxCommon_, texHandleManager_) });	 // HPフレーム画像
 
@@ -387,6 +392,13 @@ void GameUIManager::CreateSprite()
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 	uiSprites_.back()->SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ポーズボタン用
+	uiSprites_.back().reset(Sprite::Create(texHandles_[MenuNoneTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 1225.0f, 55.0f };
+	setSize = { 84.0f, 84.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // ポーズテキスト
 	uiSprites_.back().reset(Sprite::Create(texHandles_[PoseTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
@@ -630,6 +642,14 @@ void GameUIManager::FadeUpdate()
 
 void GameUIManager::PoseUIUpdate()
 {
+	// ポーズボタン
+	if (input_->PushJoystick(kJoystickButtonSTART)) {
+		uiSprites_[PoseButtonSprite]->SetTextureHandle(texHandles_[MenuPressTex]);  // テクスチャ変更
+	}
+	else {
+		uiSprites_[PoseButtonSprite]->SetTextureHandle(texHandles_[MenuNoneTex]);  // テクスチャ変更
+	}
+
 	// ポーズUI表示を行うなら
 	if (isDisplayPoseUI_) {
 		// 現在の背景色を取得

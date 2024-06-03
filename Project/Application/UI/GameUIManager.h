@@ -35,6 +35,8 @@ private: // プライベートなサブクラス
 		RightStickNoneTex,
 		RightStickPressTex,
 		JoyStickBackTex,
+		MenuNoneTex,
+		MenuPressTex,
 		DashImageTex,
 		JumpImageTex,
 		AimImageTex,
@@ -72,6 +74,7 @@ private: // プライベートなサブクラス
 		HPGageSprite,	 // ゲージ本体
 		HPGageFrameSprite, // ゲージ背景
 		ClearBackFrameSprite, // クリア背景
+		PoseButtonSprite, // ポーズボタン
 		PoseTextSprite,	// ポーズと表示するだけのスプライト
 		PoseCursorSprite, // ポーズメニューの選択矢印
 		PoseResumeSprite, // 続ける
