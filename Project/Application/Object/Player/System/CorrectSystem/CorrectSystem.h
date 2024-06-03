@@ -16,6 +16,11 @@ private:
 		float assistWidth_;
 	};
 public:
+	enum AssistLevel {
+		kNone,		// なし
+		kNormal,	// 普通
+		kHard,		// 大きい
+	};
 
 	/// <summary>
 	/// 初期化
@@ -47,12 +52,14 @@ public:
 	/// </summary>
 	/// <param name="isSystem"></param>
 	void SetIsSystem(bool isSystem) { isSystem_ = isSystem; }
+public:
+	// アシストのレベル
+	int32_t assistLevel_ = kNormal;
 
 private:
 	// システムのオンオフ
 	bool isSystem_ = false;
-	// アシストの強さ
-	uint16_t assistLevel_ = 0;
+
 	// アシストの値
 	AssistValue assistValue_ = {};
 
