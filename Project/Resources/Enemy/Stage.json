@@ -670,7 +670,7 @@
                 0.0,
                 0.0
             ],
-            "endFrame": 60.0,
+            "endFrame": 150.0,
             "position": [
                 93.0,
                 -10.0,
@@ -684,7 +684,7 @@
                 0.0,
                 0.0
             ],
-            "endFrame": 60.0,
+            "endFrame": 150.0,
             "position": [
                 193.0,
                 -14.0,
@@ -694,11 +694,11 @@
         },
         "Enemy02": {
             "easeEndPosition": [
-                -60.0,
+                -40.0,
                 0.0,
                 0.0
             ],
-            "endFrame": 60.0,
+            "endFrame": 170.0,
             "position": [
                 210.0,
                 22.0,
@@ -708,11 +708,11 @@
         },
         "Enemy03": {
             "easeEndPosition": [
-                -50.0,
+                -30.0,
                 0.0,
                 0.0
             ],
-            "endFrame": 50.0,
+            "endFrame": 160.0,
             "position": [
                 200.0,
                 25.0,
@@ -722,14 +722,56 @@
         },
         "Enemy04": {
             "easeEndPosition": [
-                -40.0,
+                -20.0,
                 0.0,
                 0.0
             ],
-            "endFrame": 40.0,
+            "endFrame": 150.0,
             "position": [
                 190.0,
                 28.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy05": {
+            "easeEndPosition": [
+                -37.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                307.0,
+                11.800000190734863,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy06": {
+            "easeEndPosition": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 160.0,
+            "position": [
+                307.0,
+                15.5,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy07": {
+            "easeEndPosition": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 170.0,
+            "position": [
+                307.0,
+                19.5,
                 0.0
             ],
             "typeNum": 0
