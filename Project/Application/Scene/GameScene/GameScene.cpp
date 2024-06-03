@@ -641,7 +641,7 @@ void GameScene::LowerVolumeBGM()
 
 	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
 		if (audioManager_->GetPlayingSoundDatas()[i].handle_ == index) {
-			float decreasingVolume = 1.0f / 60.0f;
+			float decreasingVolume = 1.0f / 180.0f;
 			float volume = audioManager_->GetPlayingSoundDatas()[i].volume_ - decreasingVolume;
 			if (volume < 0.0f) {
 				volume = 0.0f;

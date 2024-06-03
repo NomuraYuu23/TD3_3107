@@ -260,7 +260,7 @@ void TitleScene::TextureLoad()
 void TitleScene::LowerVolumeBGM()
 {
 
-	float decreasingVolume = 1.0f / 60.0f;
+	float decreasingVolume = 1.0f / 180.0f;
 	float volume = audioManager_->GetPlayingSoundDatas()[kTitleSceneBGM].volume_ - decreasingVolume;
 	if (volume < 0.0f) {
 		volume = 0.0f;
