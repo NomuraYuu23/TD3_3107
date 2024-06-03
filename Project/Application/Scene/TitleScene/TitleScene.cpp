@@ -29,6 +29,14 @@ void TitleScene::Initialize()
 	audioManager_->StaticInitialize();
 	audioManager_->Initialize();
 
+	for (uint32_t i = 0; i < TitleAudioNameIndex::kTitleAudioNameIndexOfCount; ++i) {
+		audioManager_->PlayWave(i);
+	}
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		audioManager_->StopWave(i);
+	}
+
 	// ビュープロジェクション
 	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
@@ -151,7 +159,6 @@ void TitleScene::Update()
 			isReturn_ = true;
 		}
 	}
-
 
 	//パーティクル
 	particleManager_->Update(camera_);

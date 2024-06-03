@@ -9,8 +9,15 @@ void SelectScene::Initialize()
 	TextureLoad();
 
 	audioManager_ = std::make_unique<StageSelectAudioManager>();
-	audioManager_->StaticInitialize();
 	audioManager_->Initialize();
+
+	for (uint32_t i = 0; i < StageSelectAudioNameIndex::kStageSelectAudioNameIndexOfCount; ++i) {
+		audioManager_->PlayWave(i);
+	}
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		audioManager_->StopWave(i);
+	}
 
 	selectSystem_ = std::make_unique<SelectSystem>();
 	selectSystem_->Initialize(stagePhotTextureHandles_, stageUITextureHandles_, audioManager_.get());

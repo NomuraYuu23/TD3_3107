@@ -32,6 +32,18 @@ void GameScene::Initialize() {
 	ModelCreate();
 	TextureLoad();
 
+	// オーディオマネージャー
+	audioManager_ = std::make_unique<GameAudioManager>();
+	audioManager_->Initialize();
+
+	for (uint32_t i = 0; i < GameAudioNameIndex::kGameAudioNameIndexOfCount; ++i) {
+		audioManager_->PlayWave(i);
+	}
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		audioManager_->StopWave(i);
+	}
+
 	// ビュープロジェクション
 	EulerTransform baseCameraTransform = {
 		1.0f, 1.0f, 1.0f,
@@ -59,10 +71,7 @@ void GameScene::Initialize() {
 	//UIマネージャー
 	//uiManager_ = std::make_unique<UIManager>();
 	//uiManager_->Initialize(uiTextureHandles_);
-
-	// オーディオマネージャー
-	audioManager_ = std::make_unique<GameAudioManager>();
-	audioManager_->Initialize();
+	// 
 	//uiManager_->SetAudioManager(audioManager_.get());
 
 	// スカイドーム
@@ -201,7 +210,7 @@ void GameScene::Initialize() {
 /// </summary>
 void GameScene::Update() {
 
-	if (requestSceneNo_ == kClear || requestSceneNo_ == kTitle || isBeingReset_) {
+	if (requestSceneNo_ == kSelect || requestSceneNo_ == kTitle || isBeingReset_) {
 		resetScene_ = false;
 		// BGM音量下げる
 		if (isDecreasingVolume) {
