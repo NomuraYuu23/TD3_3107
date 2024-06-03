@@ -554,17 +554,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
+					return;
 				}
 				else if (velocity_.y < 0) {
 					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
+					return;
 				}
 			}
 			else {
 				correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y / 2.0f) - correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
 				velocity_.y = 0;
+				return;
 			}
 			break;
 			// 下側
@@ -600,6 +603,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					ChangeState(std::make_unique<GroundState>());
 				}
 				isGround_ = true;
+				return;
 			}
 			//// プレイヤーの修正されたY座標を計算
 			//correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
