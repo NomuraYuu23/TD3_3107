@@ -25,6 +25,11 @@ private: // プライベートなサブクラス
 		CursorTex, // カーソル
 		ControlTextTex, // 操作テキスト
 		AimAssistTextTex, // エイムアシスト
+		ChangeControlTypeTex, // 操作タイプ切り替えテクスチャ
+		RightArrowTex, // 右矢印テクスチャ
+		LeftArrowTex, // 左矢印テクスチャ
+		ThrowControlsTex, // 投げ操作に関する連番テクスチャ
+		AimStrengthTex, // エイムアシスト操作に関する連番テクスチャ
 		OTextureCount,
 	};
 
@@ -36,6 +41,9 @@ private: // プライベートなサブクラス
 		OptionCategoryCursorSprite, // カーソル(カテゴリ用)
 		OptionControlTextSprite, // 操作カテゴリスプライト
 		OptionAimAssistSprite, // エイムアシストカテゴリスプライト
+		OptionSelectedCategoryUI, // 選択中カテゴリUI
+		Control_RightArrowSprite, // 右矢印UI
+		Control_LeftArrowSprite, // 左矢印UI
 		OSpriteCount,
 	};
 
@@ -45,6 +53,24 @@ private: // プライベートなサブクラス
 	enum CategorySpriteIndex {
 		Category_Control, // 操作系
 		Category_AimAssist, // エイムアシスト
+	};
+
+	/// <summary>
+	/// 操作オプション選択値
+	/// </summary>
+	enum ControlType {
+		Control_RBPressThrow,
+		Control_RBReleaseThrow,
+		Control_RStickReleaseThrow,
+	};
+
+	/// <summary>
+	/// エイムアシストオプション選択値
+	/// </summary>
+	enum AssistType {
+		Assist_Low,
+		Assist_Medium,
+		Assist_High,
 	};
 
 public: // メンバ関数
@@ -87,7 +113,7 @@ public: // アクセッサ等
 	/// 描画フラグセッター
 	/// </summary>
 	/// <param name="isDraw">描画を行うか</param>
-	void SetIsDraw(const bool isDraw) { isDraw_ = isDraw; }
+	void SetIsDraw(const bool isDraw);
 
 private: // プライベートなメンバ関数
 
@@ -162,6 +188,12 @@ private: // カテゴリ関連変数群
 	Vector2 categoryTextPos_;
 	// エイムアシストカテゴリ座標
 	Vector2 aimAssistTextPos_;
+
+	// 操作タイプ
+	int SelectedControlType_ = Control_RBPressThrow;
+
+	// エイムアシストタイプ
+	int SelectedAimAssistType_ = Assist_Medium;
 
 };
 

@@ -101,14 +101,31 @@ void OptionUIManager::DisplayImGui()
 	ImGui::End();
 }
 
+
+void OptionUIManager::SetIsDraw(const bool isDraw) {
+	// フラグ取得
+	isDraw_ = isDraw;
+
+	// 選択リセット
+	isCategorySelected_ = false;
+}
+
 void OptionUIManager::LoadTexture()
 {
 	/// テクスチャロードを行う
 	// オプションテキスト
 	texHandles_.insert({ OptionTextTex, TextureManager::Load("Resources/UI/Game/OptionTextTex.png", dxCommon_, texHandleManager_) }); // オプションテキスト
 	texHandles_.insert({ CursorTex, TextureManager::Load("Resources/UI/Game/PoseCusorTex.png", dxCommon_, texHandleManager_) }); // カーソル
+	// 操作カテゴリ系
 	texHandles_.insert({ ControlTextTex, TextureManager::Load("Resources/UI/Game/OptionControlTextTex.png", dxCommon_, texHandleManager_) }); // 操作テキスト
+	texHandles_.insert({ ChangeControlTypeTex, TextureManager::Load("Resources/UI/Game/ChangeControlType.png", dxCommon_, texHandleManager_) }); // 操作テキスト
+	texHandles_.insert({ RightArrowTex, TextureManager::Load("Resources/UI/Game/RightArrow.png", dxCommon_, texHandleManager_) }); // 操作テキスト
+	texHandles_.insert({ LeftArrowTex, TextureManager::Load("Resources/UI/Game/LeftArrow.png", dxCommon_, texHandleManager_) }); // 操作テキスト
+	texHandles_.insert({ ThrowControlsTex, TextureManager::Load("Resources/UI/Game/ThrowControlsUI.png", dxCommon_, texHandleManager_) }); // 操作テキスト
+	// エイムアシスト系
 	texHandles_.insert({ AimAssistTextTex, TextureManager::Load("Resources/UI/Game/AimAssistTextTex.png", dxCommon_, texHandleManager_) }); // エイムアシストテキスト
+	texHandles_.insert({ AimStrengthTex, TextureManager::Load("Resources/UI/Game/AimAssistStrength.png", dxCommon_, texHandleManager_) }); // エイムアシストテキスト
+
 }
 
 void OptionUIManager::CreateSprite()
@@ -140,19 +157,47 @@ void OptionUIManager::CreateSprite()
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 操作カテゴリ
 	uiSprites_.back().reset(Sprite::Create(texHandles_[ControlTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 640.0f, 350.0f };
-	setSize = { 540.0f, 96.0f };
+	setSize = { 720.0f, 128.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // エイムアシストカテゴリ
 	uiSprites_.back().reset(Sprite::Create(texHandles_[AimAssistTextTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
 	setPosition = { 640.0f, 550.0f };
-	setSize = { 540.0f, 96.0f };
+	setSize = { 720.0f, 128.0f };
 	uiSprites_.back()->SetPosition(setPosition);
 	uiSprites_.back()->SetSize(setSize);
 
 #pragma endregion
 
+#pragma region 選択したカテゴリの表示UI
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 選択中カテゴリUI
+	uiSprites_.back().reset(Sprite::Create(texHandles_[ThrowControlsTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 640.0f, 550.0f };
+	setSize = { 720.0f, 96.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetTextureSize({720.0f, 96.0f});
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 右カーソル
+	uiSprites_.back().reset(Sprite::Create(texHandles_[RightArrowTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 1025.0f, 550.0f };
+	setSize = { 64.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+	uiSprites_.push_back(std::move(std::make_unique<Sprite>())); // 左カーソル
+	uiSprites_.back().reset(Sprite::Create(texHandles_[LeftArrowTex], { 0.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
+	setPosition = { 250.0f, 550.0f };
+	setSize = { 64.0f, 64.0f };
+	uiSprites_.back()->SetPosition(setPosition);
+	uiSprites_.back()->SetSize(setSize);
+	uiSprites_.back()->SetColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+
+#pragma endregion
 
 }
 
@@ -193,7 +238,7 @@ void OptionUIManager::CategoryUpdate()
 		currentCategoryCursorCoolTime_ += kDeltaTime_;
 
 		// 入力が無ければクールタイムリセット
-		if (leftStick.y == 0.0f) {
+		if (leftStick.x == 0.0f && leftStick.y == 0.0f) {
 			currentCategoryCursorCoolTime_ = 10.0f;
 		}
 
@@ -222,6 +267,8 @@ void OptionUIManager::CategoryUpdate()
 				uiSprites_[OptionControlTextSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 				// 選択状態に
 				isCategorySelected_ = true;
+
+				uiSprites_[OptionSelectedCategoryUI]->SetTextureHandle(texHandles_[ThrowControlsTex]);
 			}
 		}
 
@@ -246,6 +293,8 @@ void OptionUIManager::CategoryUpdate()
 				uiSprites_[OptionAimAssistSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 				// 選択状態に
 				isCategorySelected_ = true;
+
+				uiSprites_[OptionSelectedCategoryUI]->SetTextureHandle(texHandles_[AimStrengthTex]);
 			}
 		}
 
@@ -267,8 +316,13 @@ void OptionUIManager::CategoryUpdate()
 		// カテゴリ位置制御
 		uiSprites_[OptionControlTextSprite]->SetPosition(Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionControlTextSprite]->GetPosition(), categoryTextPos_, 0.2f));
 		uiSprites_[OptionAimAssistSprite]->SetPosition(Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionAimAssistSprite]->GetPosition(), aimAssistTextPos_, 0.2f));
-	}
 
+		// 選択カテゴリに透明度制御
+		//uiSprites_[OptionSelectedCategoryText]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryText]->GetColor().w, 0.0f, 0.2f) });
+		uiSprites_[OptionSelectedCategoryUI]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetColor().w, 0.0f, 0.2f) });
+		uiSprites_[Control_RightArrowSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[Control_RightArrowSprite]->GetColor().w, 0.0f, 0.2f) });
+		uiSprites_[Control_LeftArrowSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[Control_LeftArrowSprite]->GetColor().w, 0.0f, 0.2f) });
+	}
 }
 
 void OptionUIManager::ControlCategoryUpdate()
@@ -277,7 +331,59 @@ void OptionUIManager::ControlCategoryUpdate()
 	uiSprites_[OptionAimAssistSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionAimAssistSprite]->GetColor().w, 0.0f, 0.2f) });
 
 	// 選択カテゴリスプライトを動作させる
-	uiSprites_[OptionControlTextSprite]->SetPosition(Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionControlTextSprite]->GetPosition(), { uiSprites_[OptionControlTextSprite]->GetPosition().x , 275.0f }, 0.2f));
+	uiSprites_[OptionControlTextSprite]->SetPosition(Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionControlTextSprite]->GetPosition(), { uiSprites_[OptionControlTextSprite]->GetPosition().x , 300.0f }, 0.2f));
+
+	// 選択カテゴリに関するUIを表示
+	//uiSprites_[OptionSelectedCategoryText]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryText]->GetColor().w, 1.0f, 0.2f) });
+	uiSprites_[OptionSelectedCategoryUI]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetColor().w, 1.0f, 0.2f) });
+	uiSprites_[Control_RightArrowSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[Control_RightArrowSprite]->GetColor().w, 1.0f, 0.2f) });
+	uiSprites_[Control_LeftArrowSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[Control_LeftArrowSprite]->GetColor().w, 1.0f, 0.2f) });
+
+	// 左スティックの入力取得
+	Vector2 leftStick = input_->GetLeftAnalogstick();
+
+	if (currentCategoryCursorCoolTime_ > categoryCursorCoolTime_) {
+		// 選択項目を上に
+		if (leftStick.x < -0.5f) {
+
+			if (SelectedControlType_ == Control_RBPressThrow) {
+				SelectedControlType_ = Control_RStickReleaseThrow;
+			}
+			else {
+				SelectedControlType_--;
+			}
+			currentCategoryCursorCoolTime_ = 0.0f;
+		}
+
+		// 選択項目を下に
+		if (leftStick.x > 0.5f) {
+
+			if (SelectedControlType_ == Control_RStickReleaseThrow) {
+				SelectedControlType_ = Control_RBPressThrow;
+			}
+			else {
+				SelectedControlType_++;
+			}
+			currentCategoryCursorCoolTime_ = 0.0f;
+		}
+	}
+
+	float range;
+
+	switch (SelectedControlType_)
+	{
+	case Control_RBPressThrow: // RBをプッシュした時に投げる
+		range = Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetTextureLeftTop().x, 0.0f, 0.3f);
+		break;
+	case Control_RBReleaseThrow: // RBを離した時に投げる
+		range = Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetTextureLeftTop().x, 720.0f, 0.3f);
+		break;
+	case Control_RStickReleaseThrow: // スティックを離した時に投げる
+		range = Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetTextureLeftTop().x, 1440.0f, 0.3f);
+		break;
+	}
+
+	uiSprites_[OptionSelectedCategoryUI]->SetTextureLeftTop({ range, 0.0f });
 
 }
 
@@ -287,6 +393,57 @@ void OptionUIManager::AimAssistCategoryUpdate()
 	uiSprites_[OptionControlTextSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionControlTextSprite]->GetColor().w, 0.0f, 0.2f) });
 	
 	// 選択カテゴリスプライトを動作させる
-	uiSprites_[OptionAimAssistSprite]->SetPosition(Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionAimAssistSprite]->GetPosition(), { uiSprites_[OptionAimAssistSprite]->GetPosition().x , 275.0f }, 0.2f));
+	uiSprites_[OptionAimAssistSprite]->SetPosition(Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionAimAssistSprite]->GetPosition(), { uiSprites_[OptionAimAssistSprite]->GetPosition().x , 300.0f }, 0.2f));
 
+	// 選択カテゴリに関するUIを表示
+	//uiSprites_[OptionSelectedCategoryText]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryText]->GetColor().w, 1.0f, 0.2f) });
+	uiSprites_[OptionSelectedCategoryUI]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetColor().w, 1.0f, 0.2f) });
+	uiSprites_[Control_RightArrowSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[Control_RightArrowSprite]->GetColor().w, 1.0f, 0.2f) });
+	uiSprites_[Control_LeftArrowSprite]->SetColor({ 1.0f, 1.0f, 1.0f, Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[Control_LeftArrowSprite]->GetColor().w, 1.0f, 0.2f) });
+
+	// 左スティックの入力取得
+	Vector2 leftStick = input_->GetLeftAnalogstick();
+
+	if (currentCategoryCursorCoolTime_ > categoryCursorCoolTime_) {
+		// 選択項目を上に
+		if (leftStick.x < -0.5f) {
+
+			if (SelectedAimAssistType_ == Assist_Low) {
+				SelectedAimAssistType_ = Assist_High;
+			}
+			else {
+				SelectedAimAssistType_--;
+			}
+			currentCategoryCursorCoolTime_ = 0.0f;
+		}
+
+		// 選択項目を下に
+		if (leftStick.x > 0.5f) {
+
+			if (SelectedAimAssistType_ == Assist_High) {
+				SelectedAimAssistType_ = Assist_Low;
+			}
+			else {
+				SelectedAimAssistType_++;
+			}
+			currentCategoryCursorCoolTime_ = 0.0f;
+		}
+	}
+
+	float range;
+
+	switch (SelectedAimAssistType_)
+	{
+	case Control_RBPressThrow: // RBをプッシュした時に投げる
+		range = Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetTextureLeftTop().x, 0.0f, 0.3f);
+		break;
+	case Control_RBReleaseThrow: // RBを離した時に投げる
+		range = Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetTextureLeftTop().x, 720.0f, 0.3f);
+		break;
+	case Control_RStickReleaseThrow: // スティックを離した時に投げる
+		range = Ease::Easing(Ease::EaseName::EaseOutQuad, uiSprites_[OptionSelectedCategoryUI]->GetTextureLeftTop().x, 1440.0f, 0.3f);
+		break;
+	}
+
+	uiSprites_[OptionSelectedCategoryUI]->SetTextureLeftTop({ range, 0.0f });
 }
