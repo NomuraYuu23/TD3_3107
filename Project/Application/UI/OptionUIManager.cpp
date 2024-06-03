@@ -223,6 +223,8 @@ void OptionUIManager::CategoryUpdate()
 			// 選択項目を上に
 			if (leftStick.y < -0.5f) {
 
+				player_->gameAudioManager_->PlayWave(kCurosrSE);
+
 				if (SelectedCategory_ == Category_Control) {
 					SelectedCategory_ = Category_AimAssist;
 				}
@@ -234,6 +236,8 @@ void OptionUIManager::CategoryUpdate()
 
 			// 選択項目を下に
 			if (leftStick.y > 0.5f) {
+
+				player_->gameAudioManager_->PlayWave(kCurosrSE);
 
 				if (SelectedCategory_ == Category_AimAssist) {
 					SelectedCategory_ = Category_Control;
@@ -276,6 +280,9 @@ void OptionUIManager::CategoryUpdate()
 		}
 		else {
 			if (input_->TriggerJoystick(kJoystickButtonA)) {
+				
+				player_->gameAudioManager_->PlayWave(kEnterSE);
+				
 				// 選択されたUIの透明度を1に
 				uiSprites_[OptionControlTextSprite]->SetColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 				// 選択状態に
@@ -360,6 +367,8 @@ void OptionUIManager::ControlCategoryUpdate()
 		// 選択項目を上に
 		if (leftStick.x < -0.5f) {
 
+			player_->gameAudioManager_->PlayWave(kLeftSE);
+
 			if (SelectedControlType_ == Control_RBPressThrow) {
 				SelectedControlType_ = Control_RStickReleaseThrow;
 			}
@@ -371,6 +380,8 @@ void OptionUIManager::ControlCategoryUpdate()
 
 		// 選択項目を下に
 		if (leftStick.x > 0.5f) {
+
+			player_->gameAudioManager_->PlayWave(kRightSE);
 
 			if (SelectedControlType_ == Control_RStickReleaseThrow) {
 				SelectedControlType_ = Control_RBPressThrow;
@@ -422,6 +433,8 @@ void OptionUIManager::AimAssistCategoryUpdate()
 		// 選択項目を上に
 		if (leftStick.x < -0.5f) {
 
+			player_->gameAudioManager_->PlayWave(kLeftSE);
+
 			if (SelectedAimAssistType_ == Assist_Low) {
 				SelectedAimAssistType_ = Assist_High;
 			}
@@ -433,6 +446,8 @@ void OptionUIManager::AimAssistCategoryUpdate()
 
 		// 選択項目を下に
 		if (leftStick.x > 0.5f) {
+
+			player_->gameAudioManager_->PlayWave(kRightSE);
 
 			if (SelectedAimAssistType_ == Assist_High) {
 				SelectedAimAssistType_ = Assist_Low;
