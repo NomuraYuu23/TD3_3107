@@ -110,11 +110,13 @@ void GameUIManager::Draw()
 		}
 	}
 	else {
-		// 背景だけは特別に描画
-		uiSprites_[ClearBackFrameSprite]->Draw();
-		uiSprites_[PoseButtonSprite]->Draw();
-		// オプション用描画
-		oUIManager_->Draw();
+		if (!isClear_) {
+			// 背景だけは特別に描画
+			uiSprites_[ClearBackFrameSprite]->Draw();
+			uiSprites_[PoseButtonSprite]->Draw();
+			// オプション用描画
+			oUIManager_->Draw();
+		}	
 	}
 }
 
