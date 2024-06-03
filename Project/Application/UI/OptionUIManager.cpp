@@ -102,6 +102,15 @@ void OptionUIManager::DisplayImGui()
 }
 
 
+void OptionUIManager::SetPlayer(Player* player)
+{
+	// プレイヤー取得
+	player_ = player;
+
+	player_->GetController()->throwType_ = SelectedControlType_;
+	player_->GetCorrectSystem().assistLevel_ = SelectedAimAssistType_;
+}
+
 void OptionUIManager::SetIsDraw(const bool isDraw) {
 	// フラグ取得
 	isDraw_ = isDraw;
@@ -259,6 +268,7 @@ void OptionUIManager::CategoryUpdate()
 			if (input_->TriggerJoystick(kJoystickButtonB)) {
 				// 選択していない状態に
 				isCategorySelected_ = false;
+				player_->GetController()->throwType_ = SelectedControlType_;
 			}
 		}
 		else {
@@ -285,6 +295,7 @@ void OptionUIManager::CategoryUpdate()
 			if (input_->TriggerJoystick(kJoystickButtonB)) {
 				// 選択していない状態に
 				isCategorySelected_ = false;
+				player_->GetCorrectSystem().assistLevel_ = SelectedAimAssistType_;
 			}
 		}
 		else {

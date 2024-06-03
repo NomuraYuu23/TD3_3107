@@ -102,7 +102,7 @@ public: // アクセッサ等
 	/// プレイヤーセッター
 	/// </summary>
 	/// <param name="player">プレイヤー</param>
-	void SetPlayer(Player* player) { player_ = player; }
+	void SetPlayer(Player* player);;
 
 	/// <summary>
 	/// 描画フラグゲッター
