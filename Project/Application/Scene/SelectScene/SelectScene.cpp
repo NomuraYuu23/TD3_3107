@@ -124,6 +124,7 @@ void SelectScene::TextureLoad()
 		TextureManager::Load("Resources/SelectObject/UI/RightArrow.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
 		TextureManager::Load("Resources/SelectObject/UI/Stage.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
 		TextureManager::Load("Resources/SelectObject/UI/StageNumber.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
+		TextureManager::Load("Resources/SelectObject/UI/Practice.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
 		TextureManager::Load("Resources/SelectObject/UI/Operation.png", DirectXCommon::GetInstance(), textureHandleManager_.get())
 	};
 

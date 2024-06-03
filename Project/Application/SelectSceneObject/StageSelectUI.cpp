@@ -50,6 +50,9 @@ void StageSelectUI::Initialize(const std::array<uint32_t, SpriteIndex::kSpriteIn
 
 	globalVariables->AddItem(groupName, "stageUiPostion", spriteDatas_[kSpriteIndexOperation].postion_);
 	globalVariables->AddItem(groupName, "stageUiSize", spriteDatas_[kSpriteIndexOperation].size_);
+	
+	globalVariables->AddItem(groupName, "practiceUIPostion", spriteDatas_[kSpriteIndexPracticeStage].postion_);
+	globalVariables->AddItem(groupName, "practiceUISize", spriteDatas_[kSpriteIndexPracticeStage].size_);
 
 	ApplyGlobalVariables();
 
@@ -72,8 +75,13 @@ void StageSelectUI::Draw(bool notMove)
 	if (notMove) {
 		spriteDatas_[kSpriteIndexLeftArrow].sprite_->Draw();
 		spriteDatas_[kSpriteIndexRightArrow].sprite_->Draw();
-		spriteDatas_[kSpriteIndexStage].sprite_->Draw();
-		spriteDatas_[kSpriteIndexStageNumber].sprite_->Draw();
+		if (StageNumberManager::stageNum_ != 0) { // ステージ番号が0以外のときのみ
+			spriteDatas_[kSpriteIndexStage].sprite_->Draw();
+			spriteDatas_[kSpriteIndexStageNumber].sprite_->Draw();
+		}
+		else { // 練習場描画
+			spriteDatas_[kSpriteIndexPracticeStage].sprite_->Draw();
+		}
 		spriteDatas_[kSpriteIndexOperation].sprite_->Draw();
 	}
 
@@ -82,7 +90,7 @@ void StageSelectUI::Draw(bool notMove)
 void StageSelectUI::SetStageNum()
 {
 
-	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ kStageNumSize.x * (StageNumberManager::stageNum_ + 1), 0.0f});
+	spriteDatas_[kSpriteIndexStageNumber].sprite_->SetTextureLeftTop(Vector2{ kStageNumSize.x * (StageNumberManager::stageNum_), 0.0f});
 
 }
 
@@ -109,6 +117,9 @@ void StageSelectUI::ApplyGlobalVariables()
 	spriteDatas_[kSpriteIndexOperation].postion_ = globalVariables->GetVector2Value(groupName, "stageUiPostion");
 	spriteDatas_[kSpriteIndexOperation].size_ = globalVariables->GetVector2Value(groupName, "stageUiSize");
 
+	spriteDatas_[kSpriteIndexPracticeStage].postion_ = globalVariables->GetVector2Value(groupName, "practiceUIPostion");
+	spriteDatas_[kSpriteIndexPracticeStage].size_ = globalVariables->GetVector2Value(groupName, "practiceUISize");
+
 	// ここからスプライトに反映
 
 	spriteDatas_[kSpriteIndexLeftArrow].sprite_->SetPosition(spriteDatas_[kSpriteIndexLeftArrow].postion_);
@@ -126,6 +137,8 @@ void StageSelectUI::ApplyGlobalVariables()
 	spriteDatas_[kSpriteIndexOperation].sprite_->SetPosition(spriteDatas_[kSpriteIndexOperation].postion_);
 	spriteDatas_[kSpriteIndexOperation].sprite_->SetSize(spriteDatas_[kSpriteIndexOperation].size_);
 
+	spriteDatas_[kSpriteIndexPracticeStage].sprite_->SetPosition(spriteDatas_[kSpriteIndexPracticeStage].postion_);
+	spriteDatas_[kSpriteIndexPracticeStage].sprite_->SetSize(spriteDatas_[kSpriteIndexPracticeStage].size_);
 }
 
 void StageSelectUI::SpriteStruct::Initialize(
