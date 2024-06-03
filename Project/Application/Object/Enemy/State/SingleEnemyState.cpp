@@ -45,7 +45,7 @@ void SingleEnemyState::PatrolInitialize()
 
 void SingleEnemyState::PatrolUpdate()
 {
-#ifdef _DEBUG
+#ifdef _DEMO
 	return;
 #endif // _DEBUG
 
