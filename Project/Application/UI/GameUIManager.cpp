@@ -17,6 +17,10 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 	// スプライト生成
 	CreateSprite();
 
+	// オプション用UIマネージャー生成
+	oUIManager_ = std::make_unique<OptionUIManager>();
+	oUIManager_->Initialze(texHandleManager);
+
 	// 左スティックUIの座標を取得する
 	stickUIPos_L_ = uiSprites_[LeftStickSprite]->GetPosition();
 	stickUIPos_R_ = uiSprites_[RightStickSprite]->GetPosition();
@@ -52,8 +56,21 @@ void GameUIManager::Update()
 		// 操作系UIの表示切り替え
 		DisplayOperationSwitching();
 
-		// ポーズUI更新
-		PoseUIUpdate();
+		// オプションを描画しない場合
+		if (!isDrawOption_) {
+			// ポーズUI更新
+			PoseUIUpdate();
+		}
+		else {
+
+			// オプション描画マネージャー更新
+			oUIManager_->Update();
+
+			// 描画するか
+			if (!oUIManager_->GetIsDraw()) {
+				isDrawOption_ = false;
+			}
+		}
 	}
 
 	// フェード演出更新
@@ -74,25 +91,30 @@ void GameUIManager::Update()
 
 void GameUIManager::Draw()
 {
-
 	// 操作系UIの表示
-	if (displayOperation_) {
-		// 全スプライト分ループ
-		for (int i = 0; i < spriteCount; i++) {
-			// スプライト描画
-			uiSprites_[i]->Draw();
+	if (!isDrawOption_) { // オプション描画を行わない場合
+		if (displayOperation_) {
+			// 全スプライト分ループ
+			for (int i = 0; i < spriteCount; i++) {
+				// スプライト描画
+				uiSprites_[i]->Draw();
+			}
+		}
+		// 操作系UIの非表示
+		else {
+			// hpからループ
+			for (int i = HPGageSprite; i < spriteCount; i++) {
+				// スプライト描画
+				uiSprites_[i]->Draw();
+			}
 		}
 	}
-	// 操作系UIの非表示
 	else {
-		// hpからループ
-		for (int i = HPGageSprite; i < spriteCount; i++) {
-			// スプライト描画
-			uiSprites_[i]->Draw();
-		}
+		// 背景だけは特別に描画
+		uiSprites_[ClearBackFrameSprite]->Draw();
+		// オプション用描画
+		oUIManager_->Draw();
 	}
-
-
 }
 
 void GameUIManager::DisplayImGui()
@@ -151,6 +173,18 @@ void GameUIManager::DisplayImGui()
 	}
 
 	ImGui::End();
+
+	// オプション用も描画
+	oUIManager_->DisplayImGui();
+}
+
+void GameUIManager::SetPlayer(Player* player)
+{
+	// プレイヤー取得
+	player_ = player;
+
+	// オプション用にもセット
+	oUIManager_->SetPlayer(player);
 }
 
 void GameUIManager::SetIsFade(const bool isFade, const float fadeOutTime)
@@ -185,6 +219,9 @@ void GameUIManager::SetDisplayPoseUI(const bool displayPose)
 		uiSprites_[PoseCursorSprite]->SetPosition({ 300.0f, 300.0f });
 	}
 	
+	// オプションを描画しない
+	isDrawOption_ = false;
+
 }
 
 void GameUIManager::LoadTexture()
@@ -714,6 +751,10 @@ void GameUIManager::PoseUIUpdate()
 
 				break;
 			case kOption:
+				// オプション描画を行う
+				isDrawOption_ = true;
+				// オプション描画マネージャーに描画を行うことを告げる
+				oUIManager_->SetIsDraw(true);
 				break;
 			case kReturnStageSelect:
 				// ステージ選択画面へ戻る

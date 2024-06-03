@@ -6,6 +6,7 @@
 #include "../../Engine/base/TextureManager.h"
 #include "../../Engine/2D/Sprite.h"
 #include "../../../Engine/Input/Input.h"
+#include "OptionUIManager.h"
 
 // クラスの前方宣言
 class Player;
@@ -119,7 +120,7 @@ public: // アクセッサ等
 	/// プレイヤーセッター
 	/// </summary>
 	/// <param name="player">プレイヤー</param>
-	void SetPlayer(Player* player) { player_ = player; }
+	void SetPlayer(Player* player);
 
 	/// <summary>
 	/// 接地状態セッター
@@ -328,6 +329,12 @@ private: // ポーズ演出用変数群
 
 	// ステージ選択画面へ戻るトリガー
 	bool isReturnStageSelect_ = false;
+
+	// オプション用UIマネージャー
+	std::unique_ptr<OptionUIManager> oUIManager_;
+
+	// オプション描画フラグ
+	bool isDrawOption_ = false;
 
 private: // 死亡時のフェード演出用変数群
 

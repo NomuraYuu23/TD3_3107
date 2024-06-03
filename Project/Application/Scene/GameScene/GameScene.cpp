@@ -186,8 +186,8 @@ void GameScene::Initialize() {
 
 	// UIマネージャーの生成
 	gameUIManager_ = std::make_unique<GameUIManager>();		// 生成
-	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
 	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
+	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
 	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
 
 	// ゲームシステムにUIマネージャーをセット
@@ -482,12 +482,12 @@ void GameScene::ImguiDraw() {
 	// フォグのImGuiの表示
 	FogManager::GetInstance()->ImGuiDraw();
 
-	// UIマネージャー用
-	gameUIManager_->DisplayImGui();
-
 #endif // _DEBUG
 
 #ifdef _DEMO
+
+	// UIマネージャー用
+	gameUIManager_->DisplayImGui();
 
 	//Obj
 	mapManager_->ImGuiDraw();
