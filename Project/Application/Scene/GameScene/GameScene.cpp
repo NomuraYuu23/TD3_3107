@@ -501,7 +501,7 @@ void GameScene::ImguiDraw() {
 void GameScene::DebugCameraUpdate()
 {
 
-#ifdef _DEBUG
+#ifdef _DEMO
 	if (input_->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_) {
 			isDebugCameraActive_ = false;

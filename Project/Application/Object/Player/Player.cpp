@@ -721,7 +721,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 		//if (invisibleTimer_.IsActive()) {
 		//	return;
 		//}
-#ifdef _DEBUG
+#ifdef _DEMO
 		return;
 #endif // !_DEBUG
 
