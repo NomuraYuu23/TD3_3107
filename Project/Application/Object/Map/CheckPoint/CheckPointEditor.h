@@ -41,6 +41,14 @@ public: // メンバ関数(読み込みなど)
 	/// <param name="groupName"></param>
 	void SaveFile(const std::string& groupName);
 
+	/// <summary>
+	/// データの追加
+	/// </summary>
+	/// <param name="chackName">確認用の名前</param>
+	/// <param name="stageCount">ステージカウント</param>
+	/// <param name="imGuiSpeed">imGUiの速度</param>
+	void DataAdd(const std::string& chackName, uint32_t stageCount, float imGuiSpeed);
+
 	std::map<std::string, std::map<std::string, CheckPointData>>* GetDatas() { return &datas_; }
 
 

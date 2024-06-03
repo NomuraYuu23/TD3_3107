@@ -24,18 +24,52 @@ void CheckPointEditor::ImGuiDraw()
 
 	if (ImGui::BeginTabBar("StageNum")) {
 
+		// 終了位置
+	 	size_t end = datas_.size();
+
+		// データを回す
 		for (std::map<std::string, Group>::iterator datasItr = datas_.begin();
 			datasItr != datas_.end(); ++datasItr) {
 
-			std::string stageName = "Stage" + std::to_string(stageCount);
+			// 終了位置に来ていたら終了
+			if (end == stageCount) {
+				break;
+			}
 
+			// データから情報取得
+			std::string datasName = datasItr->first;
+			Group& group = datasItr->second;
+			
+			// 無限ループ
+			while (1) {
+
+				// 確認用の名前
+				std::string chackName = "CheckPoint" + std::to_string(stageCount);
+				if (stageCount < 10) {
+					chackName = "CheckPoint0" + std::to_string(stageCount);
+				}
+
+				// 同じなんで抜ける
+				if (datasName == chackName) {
+					break;
+				}
+
+				// データの追加
+				DataAdd(chackName, stageCount, imGuiSpeed);
+
+				// 次のステージへ
+				stageCount++;
+				end++;
+			}
+
+			// タブ用の名前
+			std::string stageName = "Stage" + std::to_string(stageCount);
 			if (stageCount < 10) {
 				stageName = "Stage0" + std::to_string(stageCount);
 			}
-			if (ImGui::BeginTabItem(stageName.c_str())) {
 
-				std::string stageName = datasItr->first;
-				Group& group = datasItr->second;
+			// タブ作成
+			if (ImGui::BeginTabItem(stageName.c_str())) {
 
 				// ブロックの追加
 				ImGui::SeparatorText("CheckPointAdd");
@@ -63,10 +97,9 @@ void CheckPointEditor::ImGuiDraw()
 					}
 
 					// 追加
-					SetValue(stageName, key, addCheckPointData_);
+					SetValue(datasName, key, addCheckPointData_);
 					addCheckPointNum_++;
 				}
-
 
 				// ブロックの削除
 				ImGui::SeparatorText("CheckPointDelete");
@@ -102,8 +135,8 @@ void CheckPointEditor::ImGuiDraw()
 					std::string name = groupItr->first;
 					ImGui::SeparatorText(name.c_str());
 
-					std::string namePosition = stageName + name + "Position";
-					std::string nameCheckPointNumber = stageName + name + "CheckPointNumber";
+					std::string namePosition = datasName + name + "Position";
+					std::string nameCheckPointNumber = datasName + name + "CheckPointNumber";
 
 					ImGui::DragFloat2(namePosition.c_str(), &item.position.x, imGuiSpeed);
 					ImGui::DragInt(nameCheckPointNumber.c_str(), &item.checkPointNumber, imGuiSpeed);
@@ -121,47 +154,12 @@ void CheckPointEditor::ImGuiDraw()
 		// データが入ってない分
 		for (; stageCount < StageNumberManager::kStageMax; ++stageCount) {
 
-			std::string stageName = "Stage" + std::to_string(stageCount);
-
+			std::string chackName = "CheckPoint" + std::to_string(stageCount);
 			if (stageCount < 10) {
-				stageName = "Stage0" + std::to_string(stageCount);
-			}
-			if (ImGui::BeginTabItem(stageName.c_str())) {
-
-				// ブロックの追加
-				ImGui::SeparatorText("CheckPointAdd");
-
-				ImGui::DragFloat2("AddCheckPointPosition", &addCheckPointData_.position.x, imGuiSpeed);
-				ImGui::DragInt("AddCheckPointNumber", &addCheckPointData_.checkPointNumber, imGuiSpeed, 0);
-				ImGui::DragInt("AddCheckPointNum", &addCheckPointNum_, 0.1f, 0);
-
-				if (addCheckPointNum_ < 0) {
-					addCheckPointNum_ = 0;
-				}
-
-				if (addCheckPointData_.checkPointNumber < 0) {
-					addCheckPointData_.checkPointNumber = 0;
-				}
-
-				std::string nameCheckPointAdd = "CheckPointAdd" + std::to_string(stageCount);
-
-				if (ImGui::Button(nameCheckPointAdd.c_str())) {
-					// キー
-					std::string key = "CheckPoint" + std::to_string(addCheckPointNum_);
-
-					if (addCheckPointNum_ < 10) {
-						key = "CheckPoint0" + std::to_string(addCheckPointNum_);
-					}
-
-					// 追加
-					SetValue(stageName, key, addCheckPointData_);
-					addCheckPointNum_++;
-				}
-
-				ImGui::EndTabItem();
-
+				chackName = "CheckPoint0" + std::to_string(stageCount);
 			}
 
+			DataAdd(chackName, stageCount, imGuiSpeed);
 		}
 
 		// タブバーを終了
@@ -329,5 +327,54 @@ void CheckPointEditor::SaveFile(const std::string& groupName)
 	ofs << std::setw(4) << root << std::endl;
 	// ファイルを閉じる
 	ofs.close();
+
+}
+
+void CheckPointEditor::DataAdd(const std::string& chackName, uint32_t stageCount, float imGuiSpeed)
+{
+
+	// 追加
+	datas_[chackName];
+
+	std::string stageName = "Stage" + std::to_string(stageCount);
+
+	if (stageCount < 10) {
+		stageName = "Stage0" + std::to_string(stageCount);
+	}
+
+	if (ImGui::BeginTabItem(stageName.c_str())) {
+
+		// ブロックの追加
+		ImGui::SeparatorText("CheckPointAdd");
+
+		ImGui::DragFloat2("AddCheckPointPosition", &addCheckPointData_.position.x, imGuiSpeed);
+		ImGui::DragInt("AddCheckPointNumber", &addCheckPointData_.checkPointNumber, imGuiSpeed, 0);
+		ImGui::DragInt("AddCheckPointNum", &addCheckPointNum_, 0.1f, 0);
+
+		if (addCheckPointNum_ < 0) {
+			addCheckPointNum_ = 0;
+		}
+
+		if (addCheckPointData_.checkPointNumber < 0) {
+			addCheckPointData_.checkPointNumber = 0;
+		}
+
+		std::string nameCheckPointAdd = "CheckPointAdd" + std::to_string(stageCount);
+
+		if (ImGui::Button(nameCheckPointAdd.c_str())) {
+			// キー
+			std::string key = "CheckPoint" + std::to_string(addCheckPointNum_);
+
+			if (addCheckPointNum_ < 10) {
+				key = "CheckPoint0" + std::to_string(addCheckPointNum_);
+			}
+			// 追加
+			SetValue(chackName, key, addCheckPointData_);
+			addCheckPointNum_++;
+		}
+
+		ImGui::EndTabItem();
+
+	}
 
 }
