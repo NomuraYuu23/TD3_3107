@@ -55,21 +55,21 @@ void GameUIManager::Update()
 
 		// 操作系UIの表示切り替え
 		DisplayOperationSwitching();
+	}
 
-		// オプションを描画しない場合
-		if (!isDrawOption_) {
-			// ポーズUI更新
-			PoseUIUpdate();
-		}
-		else {
+	// オプションを描画しない場合
+	if (!isDrawOption_) {
+		// ポーズUI更新
+		PoseUIUpdate();
+	}
+	else {
 
-			// オプション描画マネージャー更新
-			oUIManager_->Update();
+		// オプション描画マネージャー更新
+		oUIManager_->Update();
 
-			// 描画するか
-			if (!oUIManager_->GetIsDraw()) {
-				isDrawOption_ = false;
-			}
+		// 描画するか
+		if (!oUIManager_->GetIsDraw()) {
+			isDrawOption_ = false;
 		}
 	}
 
