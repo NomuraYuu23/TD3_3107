@@ -102,7 +102,7 @@ void SingleEnemyRegister::Edit(const std::string& name, const SingleEnemyData& s
 			obj->transform_.translate = singleEnemyData.position;
 			Vector3 end = Vector3::Add(singleEnemyData.position, singleEnemyData.endPosition);
 			static_cast<Enemy*>(obj)->ChangeState(std::make_unique<SingleEnemyState>(), static_cast<IEnemyState::ActionMode>(singleEnemyData.typeNum));
-			static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj)->GetNowState())->SettingMoveInfo(end);
+			static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj)->GetNowState())->SettingMoveInfo(end, singleEnemyData.endFrame);
 
 			isEdit = true;
 			break;
@@ -119,7 +119,7 @@ void SingleEnemyRegister::Edit(const std::string& name, const SingleEnemyData& s
 		static_cast<Enemy*>(obj.get())->StateInitialize(std::make_unique<SingleEnemyState>(), singleEnemyData.typeNum);
 		// 単体のやつ専用
 		Vector3 end = obj->GetWorldPosition() + singleEnemyData.endPosition;
-		static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SettingMoveInfo(end);
+		static_cast<SingleEnemyState*>(static_cast<Enemy*>(obj.get())->GetNowState())->SettingMoveInfo(end, singleEnemyData.endFrame);
 		static_cast<Enemy*>(obj.get())->SetPlayer(player);
 		// 追加
 		objects_.push_back(std::move(obj));

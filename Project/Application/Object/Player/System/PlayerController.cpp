@@ -131,14 +131,13 @@ void PlayerController::ControllerProcess()
 			Vector2 deadZone = { stickDirect.x / SHRT_MAX,stickDirect.y / SHRT_MAX };
 			float deadZoneValue = 0.25f;
 			if ((std::fabsf(stickDirect.x) > deadZoneValue || std::fabsf(stickDirect.y) > deadZoneValue) &&
-				!player_->IsRecoil()) {
+				!player_->IsRecoil() && input_->PushJoystick(setButton_.throwKey)) {
 				if (!std::holds_alternative<GroundState*>(player_->GetNowState())) {
 					// UI表示
 					player_->isArrowUiDraw_ = true;
 					player_->isSlowNow_ = true;
 				}
 			}
-
 			// デバッグ以外の場合行う
 			#ifndef _DEBUG
 			// 槍のエイムアニメーション再生
@@ -268,8 +267,10 @@ void PlayerController::WaitKeyProcess()
 }
 
 void PlayerController::ThrownProcess()
-{	
-	if (actionButton_.throwButton && !player_->isGameClear_) {
+{
+	bool key = input_->ReleaseJoystick(setButton_.throwKey);
+
+	if (key && !player_->isGameClear_ /*&& (player_->throwDirect_.x != 0.0f || player_->throwDirect_.y != 0.0f)*/) {
 		// 投げ入力
 		if (std::holds_alternative<HoldState*>(player_->weapon_->GetNowState())) {
 			// 右スティックの入力がなければキャンセル

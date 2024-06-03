@@ -326,7 +326,7 @@ void EnemyEditor::ImGuiSingleEnemy()
 				ImGui::DragInt("AddTypeNum", &addSingleEnemyData_.typeNum, imGuiSpeed, 0);
 				ImGui::DragInt("AddSingleEnemyNum", &addSingleEnemyNum_, 0.1f, 0);
 				ImGui::DragFloat3("AddEaseEndPosition", &addSingleEnemyData_.endPosition.x, imGuiSpeed);
-				ImGui::DragInt("AddPadding", &addSingleEnemyData_.pad, 0.1f, 0);
+				ImGui::DragFloat("AddEndFrame", &addSingleEnemyData_.endFrame, 0.1f, 0);
 
 				if (addSingleEnemyNum_ < 0) {
 					addSingleEnemyNum_ = 0;
@@ -398,12 +398,12 @@ void EnemyEditor::ImGuiSingleEnemy()
 						std::string namePosition = stageName + name + "Position";
 						std::string nameTypeNum = stageName + name + "TypeNum";
 						std::string nameEaseEndPosition = stageName + name + "EndPosition";
-						std::string namePad = stageName + name + "pad";
+						std::string namePad = stageName + name + "EndFrame";
 
 						ImGui::DragFloat3(namePosition.c_str(), &item.position.x, imGuiSpeed);
 						ImGui::DragInt(nameTypeNum.c_str(), &item.typeNum, imGuiSpeed);
 						ImGui::DragFloat3(nameEaseEndPosition.c_str(), &item.endPosition.x, imGuiSpeed);
-						ImGui::DragInt(namePad.c_str(), &item.pad, imGuiSpeed);
+						ImGui::DragFloat(namePad.c_str(), &item.endFrame, imGuiSpeed);
 
 						if (item.typeNum < 0) {
 							item.typeNum = 0;
@@ -442,7 +442,7 @@ void EnemyEditor::ImGuiSingleEnemy()
 				ImGui::DragInt("AddTypeNum", &addSingleEnemyData_.typeNum, imGuiSpeed, 0);
 				ImGui::DragInt("AddSingleEnemyNum", &addSingleEnemyNum_, 0.1f, 0);
 				ImGui::DragFloat3("AddEaseEndPosition", &addSingleEnemyData_.endPosition.x, imGuiSpeed);
-				ImGui::DragInt("AddPadding", &addSingleEnemyData_.pad, 0.1f, 0);
+				ImGui::DragFloat("AddEndFrame", &addSingleEnemyData_.endFrame, 0.1f, 0);
 
 				if (addSingleEnemyNum_ < 0) {
 					addSingleEnemyNum_ = 0;

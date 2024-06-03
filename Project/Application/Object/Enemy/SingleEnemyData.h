@@ -8,7 +8,7 @@ struct SingleEnemyData {
 	Vector3 position;
 	int32_t typeNum;
     Vector3 endPosition;
-    int32_t pad;
+    float endFrame;
 };
 
 inline void to_json(nlohmann::json& json, const SingleEnemyData& value) {
@@ -16,7 +16,7 @@ inline void to_json(nlohmann::json& json, const SingleEnemyData& value) {
         {"position",value.position },
         {"typeNum",value.typeNum },
         {"easeEndPosition" ,value.endPosition},
-        {"pad" ,value.pad}
+        {"endFrame" ,value.endFrame}
     };
 }
 
@@ -26,12 +26,12 @@ inline void from_json(const nlohmann::json& json, SingleEnemyData& value) {
     if (json.contains("position") && json["position"].is_array() &&
         json.contains("typeNum") && json["typeNum"].is_number_integer() &&
         json.contains("easeEndPosition") && json["easeEndPosition"].is_array() &&
-        json.contains("pad") && json["pad"].is_number_integer()) {
+        json.contains("endFrame") && json["endFrame"].is_number_float()) {
 
         value.position = json["position"].get<Vector3>();
         value.typeNum = json["typeNum"].get<int32_t>();
         value.endPosition = json["easeEndPosition"].get<Vector3>();
-        value.pad = json["pad"].get<int32_t>();
+        value.endFrame = json["endFrame"].get<float>();
     }
 
 }
