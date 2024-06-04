@@ -591,6 +591,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					return;
 				}
 			}
+			// じゃない
 			else {
 				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
@@ -601,14 +602,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 				}
 				isGround_ = true;
 			}
-			//// プレイヤーの修正されたY座標を計算
-			//correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
-			//worldtransform_.transform_.translate.y = correctPosition.y;
 			break;
 
 			///---一点のみの衝突---///
 #pragma region 左下
 		case IObject::kLBPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -621,17 +620,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 					isGround_ = true;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
+			return;
 			break;
 #pragma endregion
 
 #pragma region 左上
 		case IObject::kLTPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -640,18 +642,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 					velocity_.y = 0;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-
+			return;
 			break;
 #pragma endregion
 
 #pragma region 右下
 		case IObject::kRBPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -664,17 +668,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 					isGround_ = true;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
+			return;
 			break;
 #pragma endregion
 
 #pragma region 右上
 		case IObject::kRTPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -683,13 +690,14 @@ void Player::OnCollision(ColliderParentObject2D target)
 					velocity_.y = 0;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-
+			return;
 			break;
 #pragma endregion
 
