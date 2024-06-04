@@ -2,7 +2,6 @@
 #include "../../Engine/Audio/AudioManager.h"
 
 enum GameAudioNameIndex {
-	kGameAudioNameIndexSample, // サンプル
 	kGameSceneBGM,
 	kPlayerJump,
 	kPlayerLand,
@@ -12,6 +11,15 @@ enum GameAudioNameIndex {
 	kThrowSpear,
 	kEliminateEnemy,
 	kPassCheckPoint,
+	kClearSE,
+	kPlayerDead1,
+	kPlayerDead2,
+	kReturnStageSelectSE,
+	kPoseOpenSE,
+	kRightSE,
+	kLeftSE,
+	kCurosrSE,
+	kEnterSE,
 	kGameAudioNameIndexOfCount // 数
 };
 
@@ -47,7 +55,6 @@ private: // メンバ変数
 	// ファイル名
 	std::array<const std::string, GameAudioNameIndex::kGameAudioNameIndexOfCount> audioNames_ = 
 	{
-		"default/Alarm01.mp3",
 		"Audio/BGM/GameSceneBGM.mp3",
 		"Audio/SE/Jump.mp3",
 		"Audio/SE/Land.mp3",
@@ -57,6 +64,15 @@ private: // メンバ変数
 		"Audio/SE/ThrowSpear.mp3",
 		"Audio/SE/EnemyDeadSound.mp3",
 		"Audio/SE/CheckPointPass.mp3",
+		"Audio/SE/Clear.mp3",
+		"Audio/SE/PlayerDead.mp3",
+		"Audio/SE/PlayerDead2.mp3",
+		"Audio/SE/GameStart.mp3",
+		"Audio/SE/Pause.mp3",
+		"Audio/SE/Right.mp3",
+		"Audio/SE/Left.mp3",
+		"Audio/SE/StageSelect.mp3",
+		"Audio/SE/StageStart.mp3",
 	};
 
 };

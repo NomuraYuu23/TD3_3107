@@ -236,6 +236,8 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 	if (maxCount_ != 0) {
 		angleIncrement = 2.0f * (float)std::numbers::pi / maxCount_;
 	}
+	float tAngle = 0.0f;
+	float add = 6.14f / static_cast<float>(maxCount_);
 
 	// オブジェクト分回す
 	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
@@ -303,6 +305,26 @@ void IEnemyEmitter::Edit(const MultiEnemyData& multiEnemyData)
 
 		}
 
+	}
+
+	count = 0;
+
+	if (rotation_ > 0) {
+		tAngle = 3.14f;
+	}
+	else if (rotation_ < 0) {
+		tAngle = 0.0f;
+	}
+
+	for (std::list<std::unique_ptr<OneOfManyObjects>>::iterator it = objects_.begin();
+		it != objects_.end(); ++it) {
+	
+		float angle = count * angleIncrement + (float)std::numbers::pi / 2.0f;
+		it->get()->transform_.rotate.z = tAngle;
+		tAngle += add;
+
+		it->get()->Update();
+	
 	}
 
 }

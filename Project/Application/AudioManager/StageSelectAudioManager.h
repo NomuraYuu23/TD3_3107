@@ -2,7 +2,6 @@
 #include "../../Engine/Audio/AudioManager.h"
 
 enum StageSelectAudioNameIndex {
-	kStageSelectAudioNameIndexSample, // サンプル
 	kStageSelectSceneBGM, // BGM
 	kStageSelectSE, // 選択SE
 	kStageStartSE, // ステージ開始SE
@@ -41,7 +40,6 @@ private: // メンバ変数
 	// ファイル名
 	std::array<const std::string, StageSelectAudioNameIndex::kStageSelectAudioNameIndexOfCount> audioNames_ =
 	{
-		"default/Alarm01.mp3",
 		"Audio/BGM/StageSelectSceneBGM.mp3",
 		"Audio/SE/StageSelect.mp3",
 		"Audio/SE/StageStart.mp3",

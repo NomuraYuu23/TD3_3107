@@ -7,6 +7,7 @@
 #include "../../../Engine/Particle/ParticleManager.h"
 #include "../../Particle/EmitterName.h"
 #include "../../../Engine//Math/DeltaTime.h"
+#include "../../AllSceneObject/StageNumberManager.h"
 
 TitleScene::~TitleScene()
 {
@@ -28,6 +29,14 @@ void TitleScene::Initialize()
 	audioManager_ = std::make_unique<TitleAudioManager>();
 	audioManager_->StaticInitialize();
 	audioManager_->Initialize();
+
+	for (uint32_t i = 0; i < TitleAudioNameIndex::kTitleAudioNameIndexOfCount; ++i) {
+		audioManager_->PlayWave(i);
+	}
+
+	for (uint32_t i = 0; i < audioManager_->kMaxPlayingSoundData; ++i) {
+		audioManager_->StopWave(i);
+	}
 
 	// ビュープロジェクション
 	EulerTransform baseCameraTransform = {
@@ -87,6 +96,8 @@ void TitleScene::Initialize()
 	ParticleManager::GetInstance()->MakeEmitter(&fallingLeafDesc_, EmitterName::kInfiniteEmitter);
 
 #endif // !_DEBUG
+
+	StageNumberManager::stageNum_ = 0;
 
 }
 
@@ -151,7 +162,6 @@ void TitleScene::Update()
 			isReturn_ = true;
 		}
 	}
-
 
 	//パーティクル
 	particleManager_->Update(camera_);
@@ -253,9 +263,7 @@ void TitleScene::TextureLoad()
 void TitleScene::LowerVolumeBGM()
 {
 
-	const uint32_t startHandleIndex = 3;
-
-	float decreasingVolume = 1.0f / 60.0f;
+	float decreasingVolume = 1.0f / 180.0f;
 	float volume = audioManager_->GetPlayingSoundDatas()[kTitleSceneBGM].volume_ - decreasingVolume;
 	if (volume < 0.0f) {
 		volume = 0.0f;
