@@ -114,9 +114,9 @@ void GameScene::Initialize() {
 	#ifdef _RELEASE
 	// ポニーテール
 	player_->SetPonyTail(ponyTailModel_.get());
+	#endif // !_DEBUG
 	// オーディオマネージャーを渡す
 	player_->gameAudioManager_ = audioManager_.get();
-	#endif // !_DEBUG
 	// 矢印モデルをセット
 	player_->SetArrowModel(arrowModel_.get());
 

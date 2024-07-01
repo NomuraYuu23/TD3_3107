@@ -127,18 +127,6 @@ void Mesh::UAVBuffInitialize(
 	// UAVデータ
 	vertBuffUAV_ = BufferResource::CreateBufferResourceUAV(sDevice, ((sizeof(VertexData) + 0xff) & ~0xff) * vertices.size());
 
-	//リソースの先頭のアドレスから使う
-	vbViewUAV_.BufferLocation = vertBuffUAV_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点3つ分のサイズ
-	vbViewUAV_.SizeInBytes = UINT(sizeof(VertexData) * vertices.size());
-	//1頂点あたりのサイズ
-	vbViewUAV_.StrideInBytes = sizeof(VertexData);
-
-	//書き込むためのアドレスを取得
-	vertBuffUAV_->Map(0, nullptr, reinterpret_cast<void**>(&vertMapUAV_));
-	//頂点データをリソースにコピー
-	std::memcpy(vertMapUAV_, vertices.data(), sizeof(VertexData) * vertices.size());
-
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc{};
 
 	uavDesc.Format = DXGI_FORMAT_UNKNOWN;
