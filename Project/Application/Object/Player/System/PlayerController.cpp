@@ -58,6 +58,8 @@ void PlayerController::ImGuiDraw()
 
 	ImGui::DragInt("ThrowType", &throwType_, 1);
 
+	ImGui::Checkbox("StickBackFlag", &isStickBack_);
+
 }
 
 void PlayerController::GetBackWeaponProcess()
@@ -67,6 +69,9 @@ void PlayerController::GetBackWeaponProcess()
 	if (std::holds_alternative<ImpaledState*>(weapon->GetNowState())) {
 		Vector2 rightStick = Input::GetInstance()->GetRightAnalogstick();
 		if ((rightStick.x != 0 || rightStick.y != 0) && !weapon->getbackAccepter_.IsActive()) {
+			if (!isStickBack_) {
+				return;
+			}
 			player_->GetWeapon()->ChangeRequest(Weapon::StateName::kReturn);
 			player_->GetController()->isShortening_ = false;
 		}
