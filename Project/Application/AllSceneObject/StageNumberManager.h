@@ -18,7 +18,7 @@ public: // 変数
 public: // 定数
 
 	// 最大ステージ番号
-	static const uint32_t kStageMax = 5;
+	static const uint32_t kStageMax = 7;
 
 };
 
