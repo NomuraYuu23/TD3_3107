@@ -35,6 +35,11 @@ private:
 		const EulerTransform& transform,
 		const std::string& name);
 
+	/// <summary>
+	/// 保存
+	/// </summary>
+	void Save();
+
 private:
 
 	// 追加用トランスフォーム
@@ -42,6 +47,10 @@ private:
 
 	// 追加用名前
 	int32_t addNameNumber_;
+
+	// グローバル変数の保存先ファイルパス
+	const std::string kDirectoryPath = "Resources/Arrow/";
+
 
 };
 

@@ -20,12 +20,16 @@ public:
 	/// </summary>
 	void ImGuiDraw();
 
+	/// <summary>
+	/// 名前取得
+	/// </summary>
+	/// <returns></returns>
+	std::string GetName() { return name_; }
+
 private: 
 
 	// 名前
 	std::string name_;
-
-	
 
 };
 
