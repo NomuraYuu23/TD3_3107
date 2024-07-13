@@ -24,6 +24,15 @@ void ArrowManager::Initialize(Model* model)
 void ArrowManager::Update()
 {
 
+	// フラグによる死亡処理
+	objects_.remove_if([this](std::unique_ptr<OneOfManyObjects>& obj) {
+		if (obj->IsDead()) {
+			obj.reset();
+			return true;
+		}
+		return false;
+		});
+
 	LargeNumberOfObjects::Update();
 
 }
