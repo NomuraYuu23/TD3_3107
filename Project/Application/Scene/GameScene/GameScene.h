@@ -25,6 +25,7 @@
 #include "../../../Engine/Collision2D/Collision2DDebugDraw.h"
 
 #include "../../UI/GameUIManager.h"
+#include "../../Object/Arrow/ArrowManager.h"
 
 class GameScene : public IScene
 {
@@ -195,5 +196,9 @@ private:
 
 	// スカイボックス
 	uint32_t skyboxTextureHandle_ = 0;
+
+	// 矢印
+	std::unique_ptr<ArrowManager> roadArrowManager_;
+	std::unique_ptr<Model> roadArrowModel_;
 
 };

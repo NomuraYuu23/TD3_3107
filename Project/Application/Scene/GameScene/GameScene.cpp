@@ -203,6 +203,11 @@ void GameScene::Initialize() {
 	gameSystemManager_->SetGameUIManager(gameUIManager_.get());
 	// ゲームシステムにカメラをセット
 	gameSystemManager_->SetFollowCamera(followCamera_.get());
+
+	// 矢印
+	roadArrowManager_ = std::make_unique<ArrowManager>();
+	roadArrowManager_->Initialize(roadArrowModel_.get());
+
 }
 
 /// <summary>
@@ -291,6 +296,9 @@ void GameScene::Update() {
 
 	//パーティクル
 	particleManager_->Update(camera_);
+	
+	// 矢印
+	roadArrowManager_->Update();
 
 }
 
@@ -330,6 +338,9 @@ void GameScene::Draw() {
 
 	// 背景
 	backGround_->Draw(camera_);
+
+	// 矢印
+	roadArrowManager_->Draw(camera_);
 
 	//bossEnemy_->Draw(camera_);
 
@@ -467,6 +478,9 @@ void GameScene::ImguiDraw() {
 
 	// 背景
 	backGround_->ImGuiDraw();
+
+	//矢印
+	roadArrowManager_->ImGuiDraw();
 
 	// スカイドーム
 	//skydome_->ImGuiDraw();
@@ -608,6 +622,9 @@ void GameScene::ModelCreate()
 	#ifndef _RELEASE // デバッグの場合低負荷モデルを読み込む
 	enemyModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
 	#endif // _DEBUG
+
+	// 矢印
+	roadArrowModel_.reset(Model::Create("Resources/Model/Arrow", "Arrow.obj", dxCommon_, textureHandleManager_.get()));
 
 }
 

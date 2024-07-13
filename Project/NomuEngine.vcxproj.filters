@@ -224,6 +224,8 @@
     <ClCompile Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.cpp" />
     <ClCompile Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.cpp" />
     <ClCompile Include="Application\UI\OptionUIManager.cpp" />
+    <ClCompile Include="Application\Object\Arrow\ArrowManager.cpp" />
+    <ClCompile Include="Application\Object\Arrow\Arrow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -501,6 +503,8 @@
     <ClInclude Include="Application\Particle\user\DeadForcusing\DeadForcusingParticle.h" />
     <ClInclude Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.h" />
     <ClInclude Include="Application\UI\OptionUIManager.h" />
+    <ClInclude Include="Application\Object\Arrow\ArrowManager.h" />
+    <ClInclude Include="Application\Object\Arrow\Arrow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

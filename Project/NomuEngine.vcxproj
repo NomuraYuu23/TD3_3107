@@ -157,6 +157,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\AllSceneObject\StageNumberManager.cpp" />
+    <ClCompile Include="Application\Object\Arrow\ArrowManager.cpp" />
+    <ClCompile Include="Application\Object\Arrow\Arrow.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\Common\IBoss.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\Common\State\BossWaitState.cpp" />
     <ClCompile Include="Application\Object\BossEnemy\Common\State\IBossState.cpp" />
@@ -371,6 +373,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
+    <ClInclude Include="Application\Object\Arrow\ArrowManager.h" />
+    <ClInclude Include="Application\Object\Arrow\Arrow.h" />
     <ClInclude Include="Application\Object\BossEnemy\BossList.h" />
     <ClInclude Include="Application\Object\BossEnemy\Common\IBoss.h" />
     <ClInclude Include="Application\Object\BossEnemy\Common\State\BossWaitState.h" />
