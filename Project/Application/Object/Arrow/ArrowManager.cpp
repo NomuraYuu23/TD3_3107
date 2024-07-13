@@ -17,6 +17,8 @@ void ArrowManager::Initialize(Model* model)
 
 	addNameNumber_ = 0;
 
+	Load();
+
 }
 
 void ArrowManager::Update()
@@ -102,7 +104,7 @@ void ArrowManager::Save()
 	}
 	// 書き込むJSONファイルのフルパスを合成する
 
-	std::string groupName = "Arrow_" + StageNumberManager::stageNum_;
+	std::string groupName = "Arrow_" + std::to_string(StageNumberManager::stageNum_);
 
 	std::string filePath = kDirectoryPath + groupName + ".json";
 	// 書き込み用ファイルストリーム
@@ -121,5 +123,41 @@ void ArrowManager::Save()
 	ofs << std::setw(4) << root << std::endl;
 	// ファイルを閉じる
 	ofs.close();
+
+}
+
+void ArrowManager::Load()
+{
+
+	// 読み込むJSONファイルのフルパスを合成する
+	std::string groupName = "Arrow_" + std::to_string(StageNumberManager::stageNum_);
+	std::string filePath = kDirectoryPath + groupName + ".json";
+	// 読み込み用ファイルストリーム
+	std::ifstream ifs;
+	// ファイルを読み込み用に開く
+	ifs.open(filePath);
+	// ファイルオープン失敗
+	if (!std::filesystem::exists(filePath)) {
+		// ファイルを閉じる
+		ifs.close();
+
+		return;
+	}
+	json root;
+
+	// json文字列からjsonのデータ構造に展開
+	ifs >> root;
+	// ファイルを閉じる
+	ifs.close();
+
+	json::iterator itr = root.find("Arrow");
+
+	for (json::iterator itItem = itr->begin(); itItem != itr->end(); ++itItem) {
+		// アイテム名を取得
+		const std::string& itemName = itItem.key();
+		EulerTransform value = *itItem;
+
+		Register(value, itemName);
+	}
 
 }

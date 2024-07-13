@@ -40,6 +40,11 @@ private:
 	/// </summary>
 	void Save();
 
+	/// <summary>
+	/// 読み込み
+	/// </summary>
+	void Load();
+
 private:
 
 	// 追加用トランスフォーム
