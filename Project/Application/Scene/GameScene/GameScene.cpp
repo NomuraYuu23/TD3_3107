@@ -479,9 +479,6 @@ void GameScene::ImguiDraw() {
 	// 背景
 	backGround_->ImGuiDraw();
 
-	//矢印
-	roadArrowManager_->ImGuiDraw();
-
 	// スカイドーム
 	//skydome_->ImGuiDraw();
 
@@ -517,6 +514,9 @@ void GameScene::ImguiDraw() {
 	gameSystemManager_->ImGuiDraw();
 
 	debugCamera_->ImGuiDraw();
+
+	//矢印
+	roadArrowManager_->ImGuiDraw();
 
 #endif // _DEMO
 
