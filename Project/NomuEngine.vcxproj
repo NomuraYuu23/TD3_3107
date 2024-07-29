@@ -199,6 +199,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Player\System\FreeFall\FreeFallTimer.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\KnockBack.cpp" />
     <ClCompile Include="Application\Object\Player\System\HitManager\PlayerHitManager.cpp" />
+    <ClCompile Include="Application\Object\Player\System\JumpAttack\JumpAttack.cpp" />
     <ClCompile Include="Application\Object\Player\System\Parabola\PlayerParabola.cpp" />
     <ClCompile Include="Application\Object\Player\System\SlowEffect\SlowEffect.cpp" />
     <ClCompile Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.cpp" />
@@ -432,6 +433,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Player\System\HitManager\HitEffect.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\KnockBack.h" />
     <ClInclude Include="Application\Object\Player\System\HitManager\PlayerHitManager.h" />
+    <ClInclude Include="Application\Object\Player\System\JumpAttack\JumpAttack.h" />
     <ClInclude Include="Application\Object\Player\System\Parabola\PlayerParabola.h" />
     <ClInclude Include="Application\Object\Player\System\PlayerSystemList.h" />
     <ClInclude Include="Application\Object\Player\System\SlowEffect\SlowEffect.h" />

@@ -12,3 +12,4 @@
 #include "HitManager/KnockBack.h"
 #include "AssistDash/AssistDash.h"
 #include "CorrectSystem/SpearLandingAdjuster.h"
+#include "JumpAttack/JumpAttack.h"

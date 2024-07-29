@@ -171,6 +171,8 @@ public:
 	bool IsFreeFallTimerEnd() { return fallTimer_.IsEnd(); }
 	bool FreeFallActive() { return fallTimer_.IsActive(); }
 
+	bool IsJumpAttack() { return jumpAttack_.IsActive(); }
+
 	void SetFallTimer();
 
 	/// <summary>
@@ -310,6 +312,9 @@ private: // システム
 
 	// 槍着地補正システム
 	SpearLandingAdjuster landingAdjuster_;
+
+	// ジャンプ中の攻撃
+	JumpAttack jumpAttack_;
 
 private: // UI関連
 
