@@ -100,6 +100,31 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		Player** playerPtr = std::get_if<Player*>(&target);
 		if (playerPtr != nullptr) {
 			Player* player = *playerPtr;
+			if (player->IsJumpAttack()) {
+				// 死亡パーティクル再生
+				EmitterDesc desc;
+				EulerTransform transform =
+				{ 1.0f,1.0f,1.0f,
+					0.0f,0.0f,0.0f,
+					GetWorldPosition()
+				};
+				desc.transform = &transform;
+				desc.instanceCount = 25;
+				desc.frequency = 0.01f;
+				desc.lifeTime = 0.01f;
+				desc.particleModelNum = kCircle;
+				desc.paeticleName = kEnemyDeadParticle;
+
+				ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+				// デバッグ以外の場合行う
+#ifdef _RELEASE
+// 敵を倒す効果音を再生
+				player->gameAudioManager_->PlayWave(GameAudioNameIndex::kEliminateEnemy);
+#endif // !_DEBUG
+
+				isDead_ = true;
+			}
 			if (std::holds_alternative<HoldState*>(player->GetWeapon()->GetNowState())) {
 				// こいつ吹っ飛ぶ処理をここに
 				//transform_.translate.y += 1;
