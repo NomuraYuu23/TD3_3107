@@ -374,7 +374,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (leftStick.x != 0) {
 						// 槍じゃんステートへ
 						spearJumpAccepter_.Start(2.0f);
-						jumpAttack_.StartAccept();
+						jumpAttack_.StartAccept(GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AttackFrame"));
 						ChangeState(std::make_unique<SpearAerialState>());
 					}
 					else {
