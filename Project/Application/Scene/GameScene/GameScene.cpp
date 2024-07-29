@@ -150,6 +150,10 @@ void GameScene::Initialize() {
 	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance());
 	mapManager_->Initialize(terrainModel_.get());
 
+	mapBackGroundManager_ = std::make_unique<MapBackGroundManager>();
+	mapBackGroundManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance());
+	mapBackGroundManager_->Initialize(terrainModel_.get());
+
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
@@ -264,6 +268,7 @@ void GameScene::Update() {
 	//Obj
 	// マップ
 	mapManager_->Update();
+	mapBackGroundManager_->Update();
 	// プレイヤー
 	if (!player_->GetIsDead() && !gameUIManager_->GetDisplayPoseUI()) { // 死亡していないときのみ更新
 		player_->Update();
@@ -345,6 +350,7 @@ void GameScene::Draw() {
 	//bossEnemy_->Draw(camera_);
 
 	// ブロック用
+	mapBackGroundManager_->Draw(camera_);
 	mapManager_->Draw(camera_);
 	// ゴール系
 	gameSystemManager_->Draw(camera_);
@@ -506,6 +512,7 @@ void GameScene::ImguiDraw() {
 
 	//Obj
 	mapManager_->ImGuiDraw();
+	mapBackGroundManager_->ImGuiDraw();
 	// プレイヤー
 	player_->ImGuiDraw();
 	// 敵

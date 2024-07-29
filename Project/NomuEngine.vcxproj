@@ -181,6 +181,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\LockStop.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
+    <ClCompile Include="Application\Object\MapBackGround\MapBackGroundEditor.cpp" />
+    <ClCompile Include="Application\Object\MapBackGround\MapBackGroundManager.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointEditor.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointManager.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointObject.cpp" />
@@ -411,6 +413,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\System\LockStop.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\GameSystem\GameSystemManager.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundData.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundEditor.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundManager.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointData.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointEditor.h" />
     <ClInclude Include="Application\Object\Map\MapBlockData.h" />

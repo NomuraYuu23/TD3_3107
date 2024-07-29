@@ -232,6 +232,8 @@
     <ClCompile Include="Engine\Particle\BillBoardMatrix.cpp" />
     <ClCompile Include="Engine\Particle\GPUPaticle.cpp" />
     <ClCompile Include="Engine\Physics\Gravity.cpp" />
+    <ClCompile Include="Application\Object\MapBackGround\MapBackGroundEditor.cpp" />
+    <ClCompile Include="Application\Object\MapBackGround\MapBackGroundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -523,6 +525,9 @@
     <ClInclude Include="Engine\Particle\ParticleCS.h" />
     <ClInclude Include="Engine\Physics\Gravity.h" />
     <ClInclude Include="Engine\PostEffect\HSVFilter.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundData.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundEditor.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

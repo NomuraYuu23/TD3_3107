@@ -1,0 +1,92 @@
+#pragma once
+#include <list>
+#include "../Map/Terrain.h"
+#include "../../../Engine/3D/Model.h"
+#include "../../../Engine/Collider2D/Box.h"
+#include "../../../Engine/Collision2D/Collision2DManager.h"
+#include "../../../Engine/3D/LargeNumberOfObjects.h"
+#include "MapBackGroundEditor.h"
+
+class MapBackGroundManager : public LargeNumberOfObjects
+{
+public:
+	uint32_t blockTexture_ = 0u;
+
+public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="model"></param>
+	void Initialize(Model* model) override;
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update() override;
+
+	/// <summary>
+	/// ImGUi
+	/// </summary>
+	void ImGuiDraw();
+	/// <summary>
+	/// コライダーに登録する処理
+	/// </summary>
+	/// <param name="collisionManager"></param>
+	void CollisionRegister(Collision2DManager* collisionManager, const BaseCamera& camera);
+
+private:
+	/// <summary>
+	/// ブロックの追加
+	/// </summary>
+	void RegisterBlock(const Vector3& position);
+	void RegisterBlock(const Vector3& position, const Vector3& scale, const std::string& name);
+
+	/// <summary>
+	/// カメラに影響を与えるブロック登録
+	/// </summary>
+	/// <param name="position"></param>
+	void RegisterTerrainBlock(const Vector3& position);
+	/// <summary>
+	/// カメラに影響を与えないブロック登録
+	/// </summary>
+	/// <param name="position"></param>
+	void RegisterObstacleBlock(const Vector3& position);
+
+	/// <summary>
+	/// 壁
+	/// </summary>
+	/// <param name="position"></param>
+	void RegisterWallBlock(const Vector3& position);
+
+	/// <summary>
+	/// とりあえずのマップ
+	/// </summary>
+	void InitializePlacement();
+
+	/// <summary>
+	/// ボス戦用のマップ配置
+	/// </summary>
+	void InitializeBossMap();
+
+	/// <summary>
+	/// マップチップ使わない法
+	/// </summary>
+	void InitializeLongPatternMap();
+
+private: 
+
+	void EditorMapLoad();
+
+private:
+	// マップのオブジェクト登録用の関数ポインタ
+	void(MapBackGroundManager::* registerFuncs[static_cast<uint32_t>(Terrain::BlockType::kMaxSize)])(const Vector3&) = {
+		&MapBackGroundManager::RegisterBlock,
+		&MapBackGroundManager::RegisterTerrainBlock,
+		&MapBackGroundManager::RegisterObstacleBlock,
+		&MapBackGroundManager::RegisterWallBlock
+	};
+
+	// 
+	std::unique_ptr<MapBackGroundEditor> mapEditor_;
+
+};
+
