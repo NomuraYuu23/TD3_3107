@@ -111,7 +111,7 @@ void SelectScene::Draw()
 void SelectScene::ModelCreate()
 {
 
-	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
+	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_));
 
 }
 
@@ -119,23 +119,23 @@ void SelectScene::TextureLoad()
 {
 
 	stagePhotTextureHandles_ = {
-		TextureManager::Load("Resources/SelectObject/Phot/Phot_01.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/Phot/Phot_02.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/Phot/Phot_03.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/Phot/Phot_04.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/Phot/Phot_05.png", DirectXCommon::GetInstance(), textureHandleManager_.get())
+		TextureManager::Load("Resources/SelectObject/Phot/Phot_01.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/Phot/Phot_02.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/Phot/Phot_03.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/Phot/Phot_04.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/Phot/Phot_05.png", DirectXCommon::GetInstance())
 	};
 
 	stageUITextureHandles_ = {
-		TextureManager::Load("Resources/SelectObject/UI/LeftArrow.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/UI/RightArrow.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/UI/Stage.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/UI/StageNumber.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/UI/Practice.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/SelectObject/UI/Operation.png", DirectXCommon::GetInstance(), textureHandleManager_.get())
+		TextureManager::Load("Resources/SelectObject/UI/LeftArrow.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/UI/RightArrow.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/UI/Stage.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/UI/StageNumber.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/UI/Practice.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/UI/Operation.png", DirectXCommon::GetInstance())
 	};
 
-	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance());
 
 }
 

@@ -66,7 +66,7 @@ void RootParameterManager::Initialize()
 	data.push_back(kSRV_PSIndexSpotLight); // スポットライト
 	data.push_back(kCBV_PSIndexFog); // 霧
 	data.push_back(kSRV_PSIndexEnvironmentTexture); // 環境マップ(映り込み用テクスチャ)
-	data.push_back(kUAV_VSIndexVertex); // 頂点
+	data.push_back(kSRV_VSIndexVertex); // 頂点
 	Analyze(kRootParameterIndexAnimModel, data); // 解析
 	data.clear(); // クリア
 #pragma endregion
@@ -109,21 +109,12 @@ void RootParameterManager::Initialize()
 	data.push_back(kSRV_VSIndexTransformationMatrix); // ワールドトランスフォーム
 	data.push_back(kCBV_PSIndexFog); // 霧
 	data.push_back(kSRV_PSIndexEnvironmentTexture); // 環境マップ(映り込み用テクスチャ)
-	data.push_back(kUAV_VSIndexVertex); // 頂点
+	data.push_back(kSRV_VSIndexVertex); // 頂点
 	Analyze(kRootParameterIndexManyAnimModels, data); // 解析
 	data.clear(); // クリア
 #pragma endregion
 
-#pragma region アニメーションなしアウトライン
-	//CreateForNormalOutline();
-	data.push_back(kCBV_VSIndexWorldTransform); // ワールドトランスフォーム
-	data.push_back(kCBV_VSIndexOutlineData); // アウトラインデータ
-	Analyze(kRootParameterIndexNormalOutline, data); // 解析
-	data.clear(); // クリア
-#pragma endregion
-
 #pragma region スプライト
-	//RootParameterInitializeForSprite();
 	data.push_back(kCBV_VSIndexSpriteForGPU); // スプライト用
 	data.push_back(kCBV_PSIndexMaterial); // マテリアル
 	data.push_back(kSRV_PSIndexTexture0); // テクスチャ
@@ -132,7 +123,6 @@ void RootParameterManager::Initialize()
 #pragma endregion
 
 #pragma region パーティクル
-	//RootParameterInitializeForParticle();
 	data.push_back(kCBV_PSIndexMaterial); // マテリアル
 	data.push_back(kSRV_VSIndexParticleForGPU); // パーティクル用
 	data.push_back(kSRV_PSIndexTexture0); // テクスチャ
@@ -141,8 +131,27 @@ void RootParameterManager::Initialize()
 	data.clear(); // クリア
 #pragma endregion
 
+#pragma region GPUパーティクル
+	data.push_back(kSRV_VSIndexGPUParticleForGPU); // GPUパーティクル用
+	data.push_back(kCBV_VSIndexGPUParticleView); // GPUパーティクルのView
+	data.push_back(kSRV_PSIndexTexture0); // テクスチャ
+	data.push_back(kCBV_PSIndexMaterial); // マテリアル
+	Analyze(kRootParameterIndexGPUParticle, data); // 解析
+	data.clear(); // クリア
+#pragma endregion
+
+
+#pragma region GPUパーティクル
+	data.push_back(kSRV_VSIndexGPUParticleForGPU); // GPUパーティクル用
+	data.push_back(kCBV_VSIndexGPUParticleView); // GPUパーティクルのView
+	data.push_back(kSRV_PSIndexTexture0); // テクスチャ
+	data.push_back(kCBV_PSIndexMaterial); // マテリアル
+	data.push_back(kSRV_PSIndexDissolve); // Dissolveデータ(float)
+	Analyze(kRootParameterIndexGPUParticleDissolve, data); // 解析
+	data.clear(); // クリア
+#pragma endregion
+
 #pragma region コライダーデバッグ2D
-	//RootParameterInitializeForCollision2DDebugDraw();
 	data.push_back(kCBV_PSIndexMaterial); // マテリアル
 	data.push_back(kSRV_VSIndexCollider2DDebugDrawForGPU); // コライダーデバッグ2D用
 	data.push_back(kSRV_PSIndexTexture0); // テクスチャ
@@ -152,7 +161,6 @@ void RootParameterManager::Initialize()
 #pragma endregion
 
 #pragma region 線
-	//RootParameterInitializeForLine();
 	data.push_back(kCBV_VSIndexViewProjection); // VP
 	data.push_back(kSRV_VSIndexLineForGPU); // LineForGPU
 	Analyze(kRootParameterIndexLine, data); // 解析
@@ -162,12 +170,6 @@ void RootParameterManager::Initialize()
 #pragma region ウィンドウスプライトSRV
 	data.push_back(kSRV_PSIndexTexture0); // テクスチャ
 	Analyze(kRootParameterIndexWindowSpriteSRV, data); // 解析
-	data.clear(); // クリア
-#pragma endregion
-
-#pragma region ウィンドウスプライトUAV
-	data.push_back(kUAV_PSIndexTexture0); // テクスチャUAV
-	Analyze(kRootParameterIndexWindowSpriteUAV, data); // 解析
 	data.clear(); // クリア
 #pragma endregion
 

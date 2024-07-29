@@ -201,7 +201,7 @@ void SwapChain::Draw(ID3D12GraphicsCommandList* commandList,
 #ifdef _DEMO
 	//実際のcommandListのImGuiの描画コマンドを積む
 	ImGuiManager::GetInstance()->Draw();
-#endif // _DEBUG
+#endif // _DEMO
 
 	PostDraw();
 

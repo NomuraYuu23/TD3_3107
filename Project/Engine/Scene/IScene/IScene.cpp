@@ -22,7 +22,12 @@ RenderTargetTexture* IScene::renderTargetTexture_;
 
 DrawLine* IScene::drawLine_ = nullptr;
 
-void IScene::StaticInitialize()
+// レベルデータマネージャー
+LevelDataManager* IScene::levelDataManager_;
+// モデルマネージャー
+ModelManager* IScene::modelManager_;
+
+void IScene::StaticInitialize(LevelDataManager* levelDataManager)
 {
 
 	//機能
@@ -45,6 +50,12 @@ void IScene::StaticInitialize()
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexLine].Get(),
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexLine].Get());
 
+	// レベルデータマネージャー
+	levelDataManager_ = levelDataManager;
+
+	// モデルマネージャー
+	modelManager_ = ModelManager::GetInstance();
+
 }
 
 void IScene::Initialize()
@@ -52,9 +63,6 @@ void IScene::Initialize()
 
 	sceneNoCheck_ = sceneNo_;
 	requestSceneNoCheck_ = requestSceneNo_;
-
-	textureHandleManager_ = std::make_unique<ITextureHandleManager>();
-	textureHandleManager_->Initialize();
 
 	// 点光源
 	pointLightManager_ = std::make_unique<PointLightManager>();
@@ -93,7 +101,7 @@ void IScene::Initialize()
 
 IScene::~IScene(){
 
-	textureHandleManager_->ResetTextureHandles();
+	modelManager_->Finalize();
 
 }
 

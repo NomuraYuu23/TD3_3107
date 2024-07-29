@@ -5,7 +5,7 @@ void MyFramework::Initialize()
 
 	//ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow(L"3107_竹槍物語");
+	win->CreateGameWindow(L"NomuEngine");
 
 	//DirectX初期化
 	dxCommon = DirectXCommon::GetInstance();
@@ -37,8 +37,7 @@ void MyFramework::Initialize()
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexManyModels].Get(),
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexAnimManyModels].Get(),
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexAnimModelRT2].Get(),
-		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexAnimInverseModelRT2].Get(),
-		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexNormalOutline].Get() };
+		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexAnimInverseModelRT2].Get() };
 
 	std::array<ID3D12PipelineState*, ModelDraw::PipelineStateIndex::kPipelineStateIndexOfCount> pipelineState = {
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexModel].Get(),
@@ -47,10 +46,10 @@ void MyFramework::Initialize()
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexManyModels].Get(),
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexAnimManyModels].Get(),
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexAnimModelRT2].Get(),
-		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexAnimInverseModelRT2].Get(),
-		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexNormalOutline].Get() };
+		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexAnimInverseModelRT2].Get() };
 	
 	Model::StaticInitialize(dxCommon->GetDevice());
+	ModelManager::GetInstance()->Initialize(dxCommon);
 
 	// モデル描画
 	ModelDraw::Initialize(rootSignature, pipelineState);
@@ -66,17 +65,24 @@ void MyFramework::Initialize()
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexParticle].Get()
 	);
 
+	// GPUパーティクル
+	GPUPaticle::StaticInitialzie();
+
 	// ポストエフェクト
 	PostEffect::GetInstance()->Initialize();
 
 	// 霧
 	FogManager::GetInstance()->Initialize();
 
-	// ウィンドウスプライト保存
-	WindowSpriteStorage::GetInstance()->Initialize();
+	// オブジェクト
+	//IObject::StaticInitialize(dxCommon->GetCommadList());
+
+#ifdef _DEMO
 
 	// クエリタイムスタンプ
-	//QueryTimestamp::GetInstance()->Initialize(dxCommon->GetDevice());
+	QueryTimestamp::GetInstance()->Initialize(dxCommon->GetDevice());
+
+#endif // _DEMO
 
 	//サウンド
 	audio = Audio::GetInstance();
@@ -133,8 +139,12 @@ void MyFramework::Update()
 	// グローバル変数の更新
 	GlobalVariables::GetInstance()->Update();
 
+#ifdef _DEMO
+
 	// クエリタイムスタンプ
-	//QueryTimestamp::GetInstance()->ImGuiDraw();
+	QueryTimestamp::GetInstance()->ImGuiDraw();
+
+#endif // _DEMO
 
 }
 

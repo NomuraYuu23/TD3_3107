@@ -4,11 +4,10 @@
 #include "../Object/Weapon/Weapon.h"
 #include "../../../Engine/Math/Ease.h"
 
-void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
+void GameUIManager::Initialze()
 {
 	// インスタンスの取得
 	dxCommon_		  = DirectXCommon::GetInstance(); // DirectX汎用クラス
-	texHandleManager_ = texHandleManager;			  // テクスチャハンドルマネージャー
 	input_			  = Input::GetInstance();		  // 入力
 
 	// テクスチャロード開始
@@ -19,7 +18,7 @@ void GameUIManager::Initialze(ITextureHandleManager* texHandleManager)
 
 	// オプション用UIマネージャー生成
 	oUIManager_ = std::make_unique<OptionUIManager>();
-	oUIManager_->Initialze(texHandleManager);
+	oUIManager_->Initialze();
 
 	// 左スティックUIの座標を取得する
 	stickUIPos_L_ = uiSprites_[LeftStickSprite]->GetPosition();
@@ -237,43 +236,43 @@ void GameUIManager::LoadTexture()
 {
 	/// テクスチャロードを行う
 	// 白テクスチャ
-	texHandles_.insert({ White2x2Tex, TextureManager::Load("Resources/default/white2x2.png", dxCommon_, texHandleManager_) }); // 白
+	texHandles_.insert({ White2x2Tex, TextureManager::Load("Resources/default/white2x2.png", dxCommon_) }); // 白
 	// ボタン関係
-	texHandles_.insert({ LeftStickNoneTex, TextureManager::Load("Resources/UI/Button/joystick_left_N.png", dxCommon_, texHandleManager_) }); // 左スティック入力無し
-	texHandles_.insert({ LeftStickPressTex, TextureManager::Load("Resources/UI/Button/joystick_left_P.png", dxCommon_, texHandleManager_) }); // 左スティック入力あり
-	texHandles_.insert({ AButtonNoneTex, TextureManager::Load("Resources/UI/Button/button_a_N.png", dxCommon_, texHandleManager_) });		 // Aボタン入力無し
-	texHandles_.insert({ AButtonPressTex, TextureManager::Load("Resources/UI/Button/button_a_P.png", dxCommon_, texHandleManager_) });		 // Aボタン入力アリ
-	texHandles_.insert({ LeftThumbNoneTex, TextureManager::Load("Resources/UI/Button/lb_N.png", dxCommon_, texHandleManager_) });			 // LBボタン入力無し
-	texHandles_.insert({ LeftThumbPressTex, TextureManager::Load("Resources/UI/Button/lb_P.png", dxCommon_, texHandleManager_) });			 // LBボタン入力あり
-	texHandles_.insert({ RightThumbNoneTex, TextureManager::Load("Resources/UI/Button/rb_N.png", dxCommon_, texHandleManager_) });			 // RBボタン入力なし
-	texHandles_.insert({ RightThumbPressTex, TextureManager::Load("Resources/UI/Button/rb_P.png", dxCommon_, texHandleManager_) });			 // RBボタン入力あり
-	texHandles_.insert({ RightStickNoneTex, TextureManager::Load("Resources/UI/Button/joystick_right_N.png", dxCommon_, texHandleManager_) });			 // 右スティック入力なし
-	texHandles_.insert({ RightStickPressTex, TextureManager::Load("Resources/UI/Button/joystick_right_P.png", dxCommon_, texHandleManager_) });			 // 右スティック入力あり
-	texHandles_.insert({ JoyStickBackTex, TextureManager::Load("Resources/UI/Button/joystick_Back.png", dxCommon_, texHandleManager_) });	 // スティック背景用
-	texHandles_.insert({ MenuNoneTex, TextureManager::Load("Resources/UI/Button/button_menu_N.png", dxCommon_, texHandleManager_) });	 // ポーズボタン入力無し
-	texHandles_.insert({ MenuPressTex, TextureManager::Load("Resources/UI/Button/button_menu_P.png", dxCommon_, texHandleManager_) });	 // ポーズボタン入力あり
+	texHandles_.insert({ LeftStickNoneTex, TextureManager::Load("Resources/UI/Button/joystick_left_N.png", dxCommon_) }); // 左スティック入力無し
+	texHandles_.insert({ LeftStickPressTex, TextureManager::Load("Resources/UI/Button/joystick_left_P.png", dxCommon_) }); // 左スティック入力あり
+	texHandles_.insert({ AButtonNoneTex, TextureManager::Load("Resources/UI/Button/button_a_N.png", dxCommon_) });		 // Aボタン入力無し
+	texHandles_.insert({ AButtonPressTex, TextureManager::Load("Resources/UI/Button/button_a_P.png", dxCommon_) });		 // Aボタン入力アリ
+	texHandles_.insert({ LeftThumbNoneTex, TextureManager::Load("Resources/UI/Button/lb_N.png", dxCommon_) });			 // LBボタン入力無し
+	texHandles_.insert({ LeftThumbPressTex, TextureManager::Load("Resources/UI/Button/lb_P.png", dxCommon_) });			 // LBボタン入力あり
+	texHandles_.insert({ RightThumbNoneTex, TextureManager::Load("Resources/UI/Button/rb_N.png", dxCommon_) });			 // RBボタン入力なし
+	texHandles_.insert({ RightThumbPressTex, TextureManager::Load("Resources/UI/Button/rb_P.png", dxCommon_) });			 // RBボタン入力あり
+	texHandles_.insert({ RightStickNoneTex, TextureManager::Load("Resources/UI/Button/joystick_right_N.png", dxCommon_) });			 // 右スティック入力なし
+	texHandles_.insert({ RightStickPressTex, TextureManager::Load("Resources/UI/Button/joystick_right_P.png", dxCommon_) });			 // 右スティック入力あり
+	texHandles_.insert({ JoyStickBackTex, TextureManager::Load("Resources/UI/Button/joystick_Back.png", dxCommon_) });	 // スティック背景用
+	texHandles_.insert({ MenuNoneTex, TextureManager::Load("Resources/UI/Button/button_menu_N.png", dxCommon_) });	 // ポーズボタン入力無し
+	texHandles_.insert({ MenuPressTex, TextureManager::Load("Resources/UI/Button/button_menu_P.png", dxCommon_) });	 // ポーズボタン入力あり
 
 
 	// 画像関係
-	texHandles_.insert({ DashImageTex, TextureManager::Load("Resources/UI/Game/dash.png", dxCommon_, texHandleManager_) });	 // ダッシュ画像
-	texHandles_.insert({ JumpImageTex, TextureManager::Load("Resources/UI/Game/jump.png", dxCommon_, texHandleManager_) });	 // ジャンプ画像
-	texHandles_.insert({ AimImageTex, TextureManager::Load("Resources/UI/Game/Aim.png", dxCommon_, texHandleManager_) });	 // エイム画像
-	texHandles_.insert({ ThrowTextTex, TextureManager::Load("Resources/UI/Game/ThrowSpearText.png", dxCommon_, texHandleManager_) });	 // 投げるテキスト画像
-	texHandles_.insert({ ReturnTextTex, TextureManager::Load("Resources/UI/Game/ReturnSpearText.png", dxCommon_, texHandleManager_) });	 // 戻るテキスト画像
-	texHandles_.insert({ PoseTextTex, TextureManager::Load("Resources/UI/Game/PoseTextTex.png", dxCommon_, texHandleManager_) });	 // 戻るテキスト画像
-	texHandles_.insert({ HPGageTex, TextureManager::Load("Resources/UI/Game/HealthGage.png", dxCommon_, texHandleManager_) });	 // HP画像
-	texHandles_.insert({ HPGageFrameTex, TextureManager::Load("Resources/UI/Game/HealthGageFrame.png", dxCommon_, texHandleManager_) });	 // HPフレーム画像
+	texHandles_.insert({ DashImageTex, TextureManager::Load("Resources/UI/Game/dash.png", dxCommon_) });	 // ダッシュ画像
+	texHandles_.insert({ JumpImageTex, TextureManager::Load("Resources/UI/Game/jump.png", dxCommon_) });	 // ジャンプ画像
+	texHandles_.insert({ AimImageTex, TextureManager::Load("Resources/UI/Game/Aim.png", dxCommon_) });	 // エイム画像
+	texHandles_.insert({ ThrowTextTex, TextureManager::Load("Resources/UI/Game/ThrowSpearText.png", dxCommon_) });	 // 投げるテキスト画像
+	texHandles_.insert({ ReturnTextTex, TextureManager::Load("Resources/UI/Game/ReturnSpearText.png", dxCommon_) });	 // 戻るテキスト画像
+	texHandles_.insert({ PoseTextTex, TextureManager::Load("Resources/UI/Game/PoseTextTex.png", dxCommon_) });	 // 戻るテキスト画像
+	texHandles_.insert({ HPGageTex, TextureManager::Load("Resources/UI/Game/HealthGage.png", dxCommon_) });	 // HP画像
+	texHandles_.insert({ HPGageFrameTex, TextureManager::Load("Resources/UI/Game/HealthGageFrame.png", dxCommon_) });	 // HPフレーム画像
 
 	// クリア演出関係
-	texHandles_.insert({ ClearTextTex, TextureManager::Load("Resources/UI/Game/StageClearText.png", dxCommon_, texHandleManager_) });	 //クリアテキスト用 
-	texHandles_.insert({ ReturnStageSelectTextTex, TextureManager::Load("Resources/UI/Game/ReturnStageSelectText.png", dxCommon_, texHandleManager_) });	 //クリアテキスト用 
+	texHandles_.insert({ ClearTextTex, TextureManager::Load("Resources/UI/Game/StageClearText.png", dxCommon_) });	 //クリアテキスト用 
+	texHandles_.insert({ ReturnStageSelectTextTex, TextureManager::Load("Resources/UI/Game/ReturnStageSelectText.png", dxCommon_) });	 //クリアテキスト用 
 
 	// ポーズ関連
-	texHandles_.insert({ PoseTextTex, TextureManager::Load("Resources/UI/Game/PoseTextTex.png", dxCommon_, texHandleManager_) });	 // ポーズテキスト
-	texHandles_.insert({ PoseCursorTex, TextureManager::Load("Resources/UI/Game/PoseCusorTex.png", dxCommon_, texHandleManager_) });	 // ポーズ選択矢印
-	texHandles_.insert({ ResumeButtonTex, TextureManager::Load("Resources/UI/Game/ResumeButtonTex.png", dxCommon_, texHandleManager_) });	 // 続けるテキスト
-	texHandles_.insert({ OptionButtonTex, TextureManager::Load("Resources/UI/Game/OptionButtonTex.png", dxCommon_, texHandleManager_) });	 // オプションテキスト
-	texHandles_.insert({ PoseReturnStageSelectButtonTex, TextureManager::Load("Resources/UI/Game/ReturnStageSelectButtonTex.png", dxCommon_, texHandleManager_) });	 // ステージセレクトへ戻るテキスト
+	texHandles_.insert({ PoseTextTex, TextureManager::Load("Resources/UI/Game/PoseTextTex.png", dxCommon_) });	 // ポーズテキスト
+	texHandles_.insert({ PoseCursorTex, TextureManager::Load("Resources/UI/Game/PoseCusorTex.png", dxCommon_) });	 // ポーズ選択矢印
+	texHandles_.insert({ ResumeButtonTex, TextureManager::Load("Resources/UI/Game/ResumeButtonTex.png", dxCommon_) });	 // 続けるテキスト
+	texHandles_.insert({ OptionButtonTex, TextureManager::Load("Resources/UI/Game/OptionButtonTex.png", dxCommon_) });	 // オプションテキスト
+	texHandles_.insert({ PoseReturnStageSelectButtonTex, TextureManager::Load("Resources/UI/Game/ReturnStageSelectButtonTex.png", dxCommon_) });	 // ステージセレクトへ戻るテキスト
 }
 
 void GameUIManager::CreateSprite()

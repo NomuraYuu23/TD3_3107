@@ -5,7 +5,6 @@
 #include "../../Audio/Audio.h"// サウンド再生
 #include "../../Input/Input.h"//入力デバイス
 #include "../../base/TextureManager.h" // テクスチャマネージャー
-#include "../../base/ITextureHandleManager.h" // テクスチャハンドルマネージャー
 #include "../../base/D3DResourceLeakChecker.h" // リソース解放確認
 #include "../../2D/ImguiManager.h" // imGuiマネージャー
 #include "../../GlobalVariables/GlobalVariables.h" // グローバル変数
@@ -24,8 +23,8 @@
 #include "../../Particle/ParticleManager.h" // パーティクルマネージャー
 #include "../../PostEffect/PostEffect.h" // ポストエフェクト
 #include "../../../Engine/3D/ModelDraw.h" // モデル描画
-#include "../../../Engine/base/WindowSpriteStorage.h" // ウインドウスプライト保存
 #include "../../../Engine/base/WindowSprite.h" // ウインドウスプライト
+#include "../../Particle/GPUPaticle.h" // GPUパーティクル
 
 // 数学系
 #include "../../Math/DeltaTime.h" // デルタタイム
@@ -44,6 +43,8 @@
 
 // アプリケーション側
 #include "../../../Application/Scene/SceneName.h" // シーンの名前
+#include "../../Level/LevelDataManager.h"
+#include "../../3D/ModelManager.h"
 
 /// <summary>
 /// シーンの元になるクラス
@@ -75,14 +76,23 @@ protected: // 静的メンバ変数
 
 	// 線描画
 	static DrawLine* drawLine_;
+	
+	// レベルデータマネージャー
+	static LevelDataManager* levelDataManager_;
+
+	// モデルマネージャー
+	static ModelManager* modelManager_;
+
+	// GPUパーティクル
+	static GPUPaticle* gpuParticle_;
 
 public: // メンバ関数
 
 	/// <summary>
 	/// 静的初期化
 	/// </summary>
-	void StaticInitialize();
-
+	static void StaticInitialize(LevelDataManager* levelDataManager);
+	 
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -131,9 +141,6 @@ protected:  // メンバ関数
 	void InitilaizeCheck();
 
 protected: // メンバ変数
-
-	// テクスチャハンドル管理
-	std::unique_ptr<ITextureHandleManager> textureHandleManager_ = nullptr;
 
 	// シーンをリセット
 	bool resetScene_ = false;

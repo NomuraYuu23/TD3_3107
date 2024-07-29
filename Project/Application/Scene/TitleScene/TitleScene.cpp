@@ -236,26 +236,26 @@ void TitleScene::ImguiDraw()
 void TitleScene::ModelCreate()
 {
 	// パーティクル
-	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.gltf", dxCommon_, textureHandleManager_.get()));
-	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_, textureHandleManager_.get()));
-	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_, textureHandleManager_.get()));
-	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_, textureHandleManager_.get()));
-	particleSmokeModel_.reset(Model::Create("Resources/Particle/Smoke", "Smoke.obj", dxCommon_, textureHandleManager_.get()));
+	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.gltf", dxCommon_));
+	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_));
+	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_));
+	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_));
+	particleSmokeModel_.reset(Model::Create("Resources/Particle/Smoke", "Smoke.obj", dxCommon_));
 
 	// スカイドーム
-	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
+	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_));
 
 }
 
 void TitleScene::TextureLoad()
 {
 
-	skyDomeTexHandle_ = TextureManager::Load("Resources/Model/SkyDome/SkyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	skyDomeTexHandle_ = TextureManager::Load("Resources/Model/SkyDome/SkyTex.png", DirectXCommon::GetInstance());
 
-	logoTexHandle_ = TextureManager::Load("Resources/UI/Title/TitleLogo.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-	buttonTexHandle_ = TextureManager::Load("Resources/UI/Title/Button.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	logoTexHandle_ = TextureManager::Load("Resources/UI/Title/TitleLogo.png", DirectXCommon::GetInstance());
+	buttonTexHandle_ = TextureManager::Load("Resources/UI/Title/Button.png", DirectXCommon::GetInstance());
 
-	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance());
 
 
 }

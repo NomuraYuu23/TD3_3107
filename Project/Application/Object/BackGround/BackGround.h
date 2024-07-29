@@ -53,14 +53,12 @@ public: // アクセッサ
 	/// <param name="texHandleManager">テクスチャハンドルマネージャー</param>
 	/// <param name="spearJump">槍ジャンプ</param>
 	/// <param name="enemy">敵</param>
-	void SetTutorialPlaneModel(ITextureHandleManager* texHandleManager, Model* spearJump, Model* enemy);
+	void SetTutorialPlaneModel(Model* spearJump, Model* enemy);
 
 private: // メンバ変数
 
 	// DirectX汎用クラスのインスタンス
 	DirectXCommon* dxCommon_ = nullptr;
-	// テクスチャハンドルのマネージャー
-	ITextureHandleManager* texHandleManager_ = nullptr;
 
 	// 2個目の背景オブジェクトのトランスフォーム
 	WorldTransform transform2_;

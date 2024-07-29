@@ -125,40 +125,39 @@ Vector2 BackGround::GetColliderSize()
 	return Vector2();
 }
 
-void BackGround::SetTutorialPlaneModel(ITextureHandleManager* texHandleManager, Model* spearJump, Model* enemy)
+void BackGround::SetTutorialPlaneModel(Model* spearJump, Model* enemy)
 {
 	// インスタンスの取得
 	dxCommon_ = DirectXCommon::GetInstance(); // DirectX汎用クラス
-	texHandleManager_ = texHandleManager;	  // テクスチャハンドルマネージャー
 
 	// 引数からモデル取得
 	speartutorialPlaneModel_ = spearJump;
 	enemytutorialPlaneModel_ = enemy;
 
 	// 槍ジャンプ用チュートリアル画像
-	spearTutorialTexHandles_.insert({ 0, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_00.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 1, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_01.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 2, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_02.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 3, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_03.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 4, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_04.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 5, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_05.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 6, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_06.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 7, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_07.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 8, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_08.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 9, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_09.png", dxCommon_, texHandleManager_) });
-	spearTutorialTexHandles_.insert({ 10, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_10.png", dxCommon_, texHandleManager_) });
+	spearTutorialTexHandles_.insert({ 0, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_00.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 1, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_01.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 2, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_02.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 3, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_03.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 4, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_04.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 5, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_05.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 6, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_06.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 7, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_07.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 8, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_08.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 9, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_09.png", dxCommon_) });
+	spearTutorialTexHandles_.insert({ 10, TextureManager::Load("Resources/UI/Tutorials/SpearJump/SpearJump_10.png", dxCommon_) });
 
 	// 敵用チュートリアル画像
-	enemyTutorialTexHandles_.insert({ 0, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_00.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 1, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_01.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 2, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_02.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 3, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_03.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 4, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_04.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 5, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_05.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 6, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_06.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 7, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_07.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 8, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_08.png", dxCommon_, texHandleManager_) });
-	enemyTutorialTexHandles_.insert({ 9, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_09.png", dxCommon_, texHandleManager_) });
+	enemyTutorialTexHandles_.insert({ 0, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_00.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 1, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_01.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 2, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_02.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 3, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_03.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 4, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_04.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 5, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_05.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 6, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_06.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 7, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_07.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 8, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_08.png", dxCommon_) });
+	enemyTutorialTexHandles_.insert({ 9, TextureManager::Load("Resources/UI/Tutorials/Enemy/Enemy_09.png", dxCommon_) });
 
 	// モデルのデフォルトテクスチャを変更
 	speartutorialPlaneModel_->SetTextureHandle(spearTutorialTexHandles_[0], 0);

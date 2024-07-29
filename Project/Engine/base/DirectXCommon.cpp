@@ -94,7 +94,12 @@ void DirectXCommon::Initialize(
 // 描画前処理
 void DirectXCommon::PreDraw() {
 
-	//QueryTimestamp::GetInstance()->Preprocessing(command_->GetCommadList());
+
+#ifdef _DEMO
+
+	QueryTimestamp::GetInstance()->Preprocessing(command_->GetCommadList());
+
+#endif // _DEMO
 
 	renderTargetTexture_->PreDraw(command_->GetCommadList());
 
@@ -133,12 +138,19 @@ void DirectXCommon::PostDraw() {
 		WaitForSingleObject(fenceEvent, INFINITE);
 	}
 
-	//QueryTimestamp::GetInstance()->Postprocessing(command_->GetCommadList());
+#ifdef _DEMO
 
+	QueryTimestamp::GetInstance()->Postprocessing(command_->GetCommadList());
+
+#endif // _DEMO
 	// FPS固定
 	UpdateFixFPS();
 
-	//QueryTimestamp::GetInstance()->Reading();
+#ifdef _DEMO
+	
+	QueryTimestamp::GetInstance()->Reading();
+
+#endif // _DEMO
 
 	//次のフレーム用のコマンドリストを準備
 	hr = command_->GetCommandAllocator()->Reset();
@@ -199,14 +211,14 @@ void DirectXCommon::UpdateFixFPS()
 void DirectXCommon::DebugLayer()
 {
 
-	//if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
 
-	//	// デバッグレイヤーを有効化する
-	//	debugController_->EnableDebugLayer();
-	//	// GPU
-	//	debugController_->SetEnableGPUBasedValidation(TRUE);
+		// デバッグレイヤーを有効化する
+		debugController_->EnableDebugLayer();
+		// GPU
+		debugController_->SetEnableGPUBasedValidation(TRUE);
 
-	//}
+	}
 
 }
 

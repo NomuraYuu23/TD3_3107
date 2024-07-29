@@ -70,7 +70,7 @@ void RenderTargetTexture::Initialize(
 	depthTextureSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	depthTextureSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	depthTextureSrvDesc.Texture2D.MipLevels = 1;
-
+	
 	//SRVを作成するDescriptorHeapの場所を決める
 	depthSrvCPUHandles_ = SRVDescriptorHerpManager::GetCPUDescriptorHandle();
 	depthSrvGPUHandles_ = SRVDescriptorHerpManager::GetGPUDescriptorHandle();
@@ -208,7 +208,7 @@ void RenderTargetTexture::ClearRenderTarget(uint32_t resourceIndex)
 {
 
 	//指定した色で画面全体をクリアする
-	float clearColor[] = {
+	float clearColor[] = { 
 		kClearColor_.x,
 		kClearColor_.y,
 		kClearColor_.z,
@@ -281,7 +281,7 @@ void RenderTargetTexture::ChangePixelShaderResource(uint32_t resourceIndex)
 	commandList_->ResourceBarrier(1, &barrier);
 
 	resouceStates_[resourceIndex] = kResouceStateIndexPixelShaderResource;
-
+ 
 }
 
 void RenderTargetTexture::ChangeNonPixelShaderResource(uint32_t resourceIndex)

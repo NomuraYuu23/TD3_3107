@@ -83,7 +83,6 @@
     <ClCompile Include="Engine\base\GraphicsPipelineState\InputLayoutManager.cpp" />
     <ClCompile Include="Engine\base\GraphicsPipelineState\RootParameterManager.cpp" />
     <ClCompile Include="Engine\base\GraphicsPipelineState\SamplerManager.cpp" />
-    <ClCompile Include="Engine\base\ITextureHandleManager.cpp" />
     <ClCompile Include="Engine\base\Log.cpp" />
     <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
     <ClCompile Include="Engine\base\RenderTargetTexture.cpp" />
@@ -92,7 +91,6 @@
     <ClCompile Include="Engine\base\SwapChain.cpp" />
     <ClCompile Include="Engine\base\TextureUAV.cpp" />
     <ClCompile Include="Engine\base\WindowSprite.cpp" />
-    <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
     <ClCompile Include="Engine\Collider2D\Box.cpp" />
     <ClCompile Include="Engine\Collider2D\Circle.cpp" />
     <ClCompile Include="Engine\Collider2D\Collider2D.cpp" />
@@ -226,6 +224,14 @@
     <ClCompile Include="Application\UI\OptionUIManager.cpp" />
     <ClCompile Include="Application\Object\Arrow\ArrowManager.cpp" />
     <ClCompile Include="Application\Object\Arrow\Arrow.cpp" />
+    <ClCompile Include="Engine\3D\ModelManager.cpp" />
+    <ClCompile Include="Engine\Level\LevelData.cpp" />
+    <ClCompile Include="Engine\Level\LevelDataLoader.cpp" />
+    <ClCompile Include="Engine\Level\LevelDataManager.cpp" />
+    <ClCompile Include="Engine\Level\LevelDataViewing.cpp" />
+    <ClCompile Include="Engine\Particle\BillBoardMatrix.cpp" />
+    <ClCompile Include="Engine\Particle\GPUPaticle.cpp" />
+    <ClCompile Include="Engine\Physics\Gravity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -340,7 +346,6 @@
     <ClInclude Include="Engine\base\GraphicsPipelineState\InputLayoutManager.h" />
     <ClInclude Include="Engine\base\GraphicsPipelineState\RootParameterManager.h" />
     <ClInclude Include="Engine\base\GraphicsPipelineState\SamplerManager.h" />
-    <ClInclude Include="Engine\base\ITextureHandleManager.h" />
     <ClInclude Include="Engine\base\Log.h" />
     <ClInclude Include="Engine\base\OutputLog.h" />
     <ClInclude Include="Engine\base\QueryTimestamp.h" />
@@ -350,7 +355,6 @@
     <ClInclude Include="Engine\base\SwapChain.h" />
     <ClInclude Include="Engine\base\TextureUAV.h" />
     <ClInclude Include="Engine\base\WindowSprite.h" />
-    <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
     <ClInclude Include="Engine\Camera\CameraForGPU.h" />
     <ClInclude Include="Engine\Camera\ViewProjectionMatrix.h" />
     <ClInclude Include="Engine\Collider2D\Box.h" />
@@ -505,13 +509,24 @@
     <ClInclude Include="Application\UI\OptionUIManager.h" />
     <ClInclude Include="Application\Object\Arrow\ArrowManager.h" />
     <ClInclude Include="Application\Object\Arrow\Arrow.h" />
+    <ClInclude Include="Engine\3D\ModelManager.h" />
+    <ClInclude Include="Engine\Level\LevelData.h" />
+    <ClInclude Include="Engine\Level\LevelDataLoader.h" />
+    <ClInclude Include="Engine\Level\LevelDataManager.h" />
+    <ClInclude Include="Engine\Level\LevelDataViewing.h" />
+    <ClInclude Include="Engine\Level\LevelIndex.h" />
+    <ClInclude Include="Engine\Math\PerFrame.h" />
+    <ClInclude Include="Engine\Particle\BillBoardMatrix.h" />
+    <ClInclude Include="Engine\Particle\EmitterCS.h" />
+    <ClInclude Include="Engine\Particle\GPUPerticleView.h" />
+    <ClInclude Include="Engine\Particle\GPUPaticle.h" />
+    <ClInclude Include="Engine\Particle\ParticleCS.h" />
+    <ClInclude Include="Engine\Physics\Gravity.h" />
+    <ClInclude Include="Engine\PostEffect\HSVFilter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="NomuEngine.vcxproj.user" />
-    <None Include="Resources\shaders\WindowSpriteStorage.hlsli" />
-    <None Include="Resources\shaders\Outline.hlsli" />
-    <None Include="Resources\shaders\PostEffect.hlsli" />
     <None Include="Resources\shaders\Sprite\Sprite.hlsli" />
     <None Include="Resources\shaders\Skybox\Skybox.hlsli" />
     <None Include="Resources\shaders\PostEffect\PostEffect.hlsli" />
@@ -525,8 +540,6 @@
     <Text Include="externals\imgui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\shaders\Outline.PS.hlsl" />
-    <FxCompile Include="Resources\shaders\Outline.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite\Sprite.VS.hlsl" />
     <FxCompile Include="Resources\shaders\Sprite\Sprite.PS.hlsl" />
     <FxCompile Include="Resources\shaders\Skybox\Skybox.PS.hlsl" />
