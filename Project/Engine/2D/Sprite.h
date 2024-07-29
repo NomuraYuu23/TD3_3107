@@ -235,3 +235,4 @@ private: // メンバ変数(マテリアル)
 	int enableLighting_;
 
 };
+

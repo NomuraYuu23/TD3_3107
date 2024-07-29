@@ -26,13 +26,12 @@ public: // サブクラス
 		kPipelineStateIndexManyModels, // たくさんのモデル
 		kPipelineStateIndexAnimManyModels, // たくさんのアニメーションモデル
 
-		kPipelineStateIndexNormalOutline, // アニメーション無しモデルアウトライン
-
 		kPipelineStateIndexSprite, //スプライト
 		kPipelineStateIndexWindowSpriteSRV, // ウィンドウスプライトSRV
-		kPipelineStateIndexWindowSpriteUAV, // ウィンドウスプライトUAV
 		kPipelineStateIndexLine, // 線
 		kPipelineStateIndexParticle, // パーティクル
+		kPipelineStateIndexGPUParticle, // GPUパーティクル
+		kPipelineStateIndexGPUParticleDissolve, // GPUパーティクルDissolveあり
 
 		kPipelineStateIndexCollision2DDebugDraw, // コライダーデバッグ2D
 		kPipelineStateIndexSkyBox, // スカイボックス
@@ -40,8 +39,6 @@ public: // サブクラス
 
 		kPipelineStateIndexAnimModelRT2, // アニメーションモデルRT2
 		kPipelineStateIndexAnimInverseModelRT2, // 反転モデル(右手座標系)RT2
-		//kPipelineStateIndexAnimModelRT3, // アニメーションモデルRT3
-		//kPipelineStateIndexAnimInverseModelRT3, // 反転モデル(右手座標系)RT3
 
 		kPipelineStateIndexOfCount // 使わない
 	};

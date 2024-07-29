@@ -181,6 +181,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Object\Enemy\System\DetectionSystem.cpp" />
     <ClCompile Include="Application\Object\Enemy\System\LockStop.cpp" />
     <ClCompile Include="Application\Object\GameCamera\FollowCamera.cpp" />
+    <ClCompile Include="Application\Object\MapBackGround\MapBackGroundEditor.cpp" />
+    <ClCompile Include="Application\Object\MapBackGround\MapBackGroundManager.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointEditor.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointManager.cpp" />
     <ClCompile Include="Application\Object\Map\CheckPoint\CheckPointObject.cpp" />
@@ -229,6 +231,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\Mesh.cpp" />
     <ClCompile Include="Engine\3D\ModelDraw.cpp" />
     <ClCompile Include="Engine\3D\ModelLoader.cpp" />
+    <ClCompile Include="Engine\3D\ModelManager.cpp" />
     <ClCompile Include="Engine\3D\ModelNode.cpp" />
     <ClCompile Include="Engine\3D\OneOfManyObjects.cpp" />
     <ClCompile Include="Engine\3D\Outline.cpp" />
@@ -247,7 +250,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\GraphicsPipelineState\InputLayoutManager.cpp" />
     <ClCompile Include="Engine\base\GraphicsPipelineState\RootParameterManager.cpp" />
     <ClCompile Include="Engine\base\GraphicsPipelineState\SamplerManager.cpp" />
-    <ClCompile Include="Engine\base\ITextureHandleManager.cpp" />
     <ClCompile Include="Engine\base\Log.cpp" />
     <ClCompile Include="Engine\base\QueryTimestamp.cpp" />
     <ClCompile Include="Engine\base\RenderTargetTexture.cpp" />
@@ -256,7 +258,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\SwapChain.cpp" />
     <ClCompile Include="Engine\base\TextureUAV.cpp" />
     <ClCompile Include="Engine\base\WindowSprite.cpp" />
-    <ClCompile Include="Engine\base\WindowSpriteStorage.cpp" />
     <ClCompile Include="Engine\Collider2D\Box.cpp" />
     <ClCompile Include="Engine\Collider2D\Circle.cpp" />
     <ClCompile Include="Engine\Collider2D\Collider2D.cpp" />
@@ -266,6 +267,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Collision2D\Collision2DDebugDraw.cpp" />
     <ClCompile Include="Engine\Collision2D\Collision2DManager.cpp" />
     <ClCompile Include="Engine\ContactRecord\ContactRecord.cpp" />
+    <ClCompile Include="Engine\Level\LevelData.cpp" />
+    <ClCompile Include="Engine\Level\LevelDataLoader.cpp" />
+    <ClCompile Include="Engine\Level\LevelDataManager.cpp" />
+    <ClCompile Include="Engine\Level\LevelDataViewing.cpp" />
     <ClCompile Include="Engine\Light\PointLight\PointLightManager.cpp" />
     <ClCompile Include="Engine\Light\SpotLight\SpotLightManager.cpp" />
     <ClCompile Include="Engine\Line\Line.cpp" />
@@ -274,6 +279,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Math\Quaternion.cpp" />
     <ClCompile Include="Engine\Math\ShortestDistance.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />
+    <ClCompile Include="Engine\Particle\BillBoardMatrix.cpp" />
+    <ClCompile Include="Engine\Particle\GPUPaticle.cpp" />
     <ClCompile Include="Engine\Particle\IEmitter.cpp" />
     <ClCompile Include="Engine\Particle\IParticle.cpp" />
     <ClCompile Include="Engine\Particle\ParticleManager.cpp" />
@@ -288,6 +295,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Math\Ease.cpp" />
     <ClCompile Include="Engine\Math\Math.cpp" />
+    <ClCompile Include="Engine\Physics\Gravity.cpp" />
     <ClCompile Include="Engine\Physics\InertiaTensor.cpp" />
     <ClCompile Include="Engine\Physics\massPoint.cpp" />
     <ClCompile Include="Engine\Physics\RigidBody.cpp" />
@@ -405,6 +413,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\Object\Enemy\System\LockStop.h" />
     <ClInclude Include="Application\Object\GameCamera\FollowCamera.h" />
     <ClInclude Include="Application\Object\GameSystem\GameSystemManager.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundData.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundEditor.h" />
+    <ClInclude Include="Application\Object\MapBackGround\MapBackGroundManager.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointData.h" />
     <ClInclude Include="Application\Object\Map\CheckPoint\CheckPointEditor.h" />
     <ClInclude Include="Application\Object\Map\MapBlockData.h" />
@@ -474,6 +485,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\Mesh.h" />
     <ClInclude Include="Engine\3D\ModelDraw.h" />
     <ClInclude Include="Engine\3D\ModelLoader.h" />
+    <ClInclude Include="Engine\3D\ModelManager.h" />
     <ClInclude Include="Engine\3D\ModelNode.h" />
     <ClInclude Include="Engine\3D\ModelNodeData.h" />
     <ClInclude Include="Engine\3D\OneOfManyObjects.h" />
@@ -497,7 +509,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\GraphicsPipelineState\InputLayoutManager.h" />
     <ClInclude Include="Engine\base\GraphicsPipelineState\RootParameterManager.h" />
     <ClInclude Include="Engine\base\GraphicsPipelineState\SamplerManager.h" />
-    <ClInclude Include="Engine\base\ITextureHandleManager.h" />
     <ClInclude Include="Engine\base\Log.h" />
     <ClInclude Include="Engine\base\OutputLog.h" />
     <ClInclude Include="Engine\base\QueryTimestamp.h" />
@@ -507,7 +518,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\SwapChain.h" />
     <ClInclude Include="Engine\base\TextureUAV.h" />
     <ClInclude Include="Engine\base\WindowSprite.h" />
-    <ClInclude Include="Engine\base\WindowSpriteStorage.h" />
     <ClInclude Include="Engine\Camera\CameraForGPU.h" />
     <ClInclude Include="Engine\Camera\ViewProjectionMatrix.h" />
     <ClInclude Include="Engine\Collider2D\Box.h" />
@@ -523,6 +533,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Collision2D\Collision2DManager.h" />
     <ClInclude Include="Engine\Collision\CollisionData.h" />
     <ClInclude Include="Engine\ContactRecord\ContactRecord.h" />
+    <ClInclude Include="Engine\Level\LevelData.h" />
+    <ClInclude Include="Engine\Level\LevelDataLoader.h" />
+    <ClInclude Include="Engine\Level\LevelDataManager.h" />
+    <ClInclude Include="Engine\Level\LevelDataViewing.h" />
+    <ClInclude Include="Engine\Level\LevelIndex.h" />
     <ClInclude Include="Engine\Light\PointLight\PointLightData.h" />
     <ClInclude Include="Engine\Light\PointLight\PointLightManager.h" />
     <ClInclude Include="Engine\Light\SpotLight\SpotLightData.h" />
@@ -530,12 +545,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Line\Line.h" />
     <ClInclude Include="Engine\Line\Segment.h" />
     <ClInclude Include="Engine\Math\Matrix3x3.h" />
+    <ClInclude Include="Engine\Math\PerFrame.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
     <ClInclude Include="Engine\Math\RandomEngine.h" />
     <ClInclude Include="Engine\Math\ShortestDistance.h" />
+    <ClInclude Include="Engine\Particle\BillBoardMatrix.h" />
+    <ClInclude Include="Engine\Particle\EmitterCS.h" />
     <ClInclude Include="Engine\Particle\EmitterDesc.h" />
+    <ClInclude Include="Engine\Particle\GPUPaticle.h" />
+    <ClInclude Include="Engine\Particle\GPUPerticleView.h" />
     <ClInclude Include="Engine\Particle\IEmitter.h" />
     <ClInclude Include="Engine\Particle\IParticle.h" />
+    <ClInclude Include="Engine\Particle\ParticleCS.h" />
     <ClInclude Include="Engine\Particle\ParticleDesc.h" />
     <ClInclude Include="Engine\Particle\ParticleForGPU.h" />
     <ClInclude Include="Engine\Particle\ParticleManager.h" />
@@ -554,12 +575,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Math\Ease.h" />
     <ClInclude Include="Engine\Math\Math.h" />
     <ClInclude Include="Application\SceneTransition\SceneTransitionBlackOut\SceneTransitionBlackOut.h" />
+    <ClInclude Include="Engine\Physics\Gravity.h" />
     <ClInclude Include="Engine\Physics\InertiaTensor.h" />
     <ClInclude Include="Engine\Physics\massPoint.h" />
     <ClInclude Include="Engine\Physics\RigidBody.h" />
     <ClInclude Include="Engine\Physics\Spring.h" />
     <ClInclude Include="Engine\Physics\String.h" />
     <ClInclude Include="Engine\Physics\StructuralSpring.h" />
+    <ClInclude Include="Engine\PostEffect\HSVFilter.h" />
     <ClInclude Include="Engine\PostEffect\PostEffect.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveData.h" />
     <ClInclude Include="Engine\PostEffect\ShockWaveManager.h" />
@@ -679,17 +702,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
     </None>
-    <None Include="Resources\shaders\Outline.hlsli">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
-    </None>
     <None Include="Resources\shaders\Particle\Particle.hlsli">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="Resources\shaders\PostEffect.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
@@ -705,11 +718,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="Resources\shaders\Sprite\Sprite.hlsli">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="Resources\shaders\WindowSpriteStorage.hlsli">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
@@ -772,16 +780,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Resources\shaders\Model\NormalModel.VS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\Outline.PS.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\Outline.VS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Demo|x64'">true</ExcludedFromBuild>

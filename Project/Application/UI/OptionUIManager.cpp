@@ -7,11 +7,10 @@
 int OptionUIManager::SelectedControlType_ = OptionUIManager::Control_RBPressThrow;
 int OptionUIManager::SelectedAimAssistType_ = OptionUIManager::Assist_Medium;
 
-void OptionUIManager::Initialze(ITextureHandleManager* texHandleManager)
+void OptionUIManager::Initialze()
 {
 	// インスタンスの取得
 	dxCommon_ = DirectXCommon::GetInstance(); // DirectX汎用クラス
-	texHandleManager_ = texHandleManager;			  // テクスチャハンドルマネージャー
 	input_ = Input::GetInstance();		  // 入力
 
 	// テクスチャロード開始
@@ -126,17 +125,17 @@ void OptionUIManager::LoadTexture()
 {
 	/// テクスチャロードを行う
 	// オプションテキスト
-	texHandles_.insert({ OptionTextTex, TextureManager::Load("Resources/UI/Game/OptionTextTex.png", dxCommon_, texHandleManager_) }); // オプションテキスト
-	texHandles_.insert({ CursorTex, TextureManager::Load("Resources/UI/Game/PoseCusorTex.png", dxCommon_, texHandleManager_) }); // カーソル
+	texHandles_.insert({ OptionTextTex, TextureManager::Load("Resources/UI/Game/OptionTextTex.png", dxCommon_) }); // オプションテキスト
+	texHandles_.insert({ CursorTex, TextureManager::Load("Resources/UI/Game/PoseCusorTex.png", dxCommon_) }); // カーソル
 	// 操作カテゴリ系
-	texHandles_.insert({ ControlTextTex, TextureManager::Load("Resources/UI/Game/OptionControlTextTex.png", dxCommon_, texHandleManager_) }); // 操作テキスト
-	texHandles_.insert({ ChangeControlTypeTex, TextureManager::Load("Resources/UI/Game/ChangeControlType.png", dxCommon_, texHandleManager_) }); // 操作テキスト
-	texHandles_.insert({ RightArrowTex, TextureManager::Load("Resources/UI/Game/RightArrow.png", dxCommon_, texHandleManager_) }); // 操作テキスト
-	texHandles_.insert({ LeftArrowTex, TextureManager::Load("Resources/UI/Game/LeftArrow.png", dxCommon_, texHandleManager_) }); // 操作テキスト
-	texHandles_.insert({ ThrowControlsTex, TextureManager::Load("Resources/UI/Game/ThrowControlsUI.png", dxCommon_, texHandleManager_) }); // 操作テキスト
+	texHandles_.insert({ ControlTextTex, TextureManager::Load("Resources/UI/Game/OptionControlTextTex.png", dxCommon_) }); // 操作テキスト
+	texHandles_.insert({ ChangeControlTypeTex, TextureManager::Load("Resources/UI/Game/ChangeControlType.png", dxCommon_) }); // 操作テキスト
+	texHandles_.insert({ RightArrowTex, TextureManager::Load("Resources/UI/Game/RightArrow.png", dxCommon_) }); // 操作テキスト
+	texHandles_.insert({ LeftArrowTex, TextureManager::Load("Resources/UI/Game/LeftArrow.png", dxCommon_) }); // 操作テキスト
+	texHandles_.insert({ ThrowControlsTex, TextureManager::Load("Resources/UI/Game/ThrowControlsUI.png", dxCommon_) }); // 操作テキスト
 	// エイムアシスト系
-	texHandles_.insert({ AimAssistTextTex, TextureManager::Load("Resources/UI/Game/AimAssistTextTex.png", dxCommon_, texHandleManager_) }); // エイムアシストテキスト
-	texHandles_.insert({ AimStrengthTex, TextureManager::Load("Resources/UI/Game/AimAssistStrength.png", dxCommon_, texHandleManager_) }); // エイムアシストテキスト
+	texHandles_.insert({ AimAssistTextTex, TextureManager::Load("Resources/UI/Game/AimAssistTextTex.png", dxCommon_) }); // エイムアシストテキスト
+	texHandles_.insert({ AimStrengthTex, TextureManager::Load("Resources/UI/Game/AimAssistStrength.png", dxCommon_) }); // エイムアシストテキスト
 
 }
 

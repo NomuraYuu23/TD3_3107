@@ -52,8 +52,6 @@ public:
 	/// <param name="textureHnadles">テクスチャハンドル</param>
 	virtual void Draw(BaseCamera& camera, std::vector<UINT>* textureHnadles = nullptr);
 
-	virtual void ImGuiDraw() = 0;
-
 	/// <summary>
 	/// 死んでるのを削除
 	/// </summary>
@@ -70,6 +68,8 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	std::list<std::unique_ptr<OneOfManyObjects>>* GetObjects() { return &objects_; }
+
+	virtual void ImGuiDraw() {}
 
 
 protected: // トランスフォーム関係

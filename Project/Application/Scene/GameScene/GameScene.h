@@ -3,7 +3,6 @@
 #include "../../../Engine/Scene/IScene/IScene.h"
 #include "../../../Engine/Collider/ColliderDebugDraw/ColliderDebugDraw.h"// コライダーデバッグ描画
 #include"../../../Engine/Collision/CollisionManager.h"
-#include "../../../Engine/base/ITextureHandleManager.h"
 #include "../../../Engine/Collision/CollisionManager.h"
 #include "../../UI/UIManager.h"
 #include "../../AudioManager/GameAudioManager.h"
@@ -26,6 +25,7 @@
 
 #include "../../UI/GameUIManager.h"
 #include "../../Object/Arrow/ArrowManager.h"
+#include "../../Object/MapBackGround/MapBackGroundManager.h"
 
 class GameScene : public IScene
 {
@@ -139,6 +139,7 @@ private:
 
 	// 地形・ブロック
 	std::unique_ptr<MapManager> mapManager_;
+	std::unique_ptr<MapBackGroundManager> mapBackGroundManager_;
 	std::unique_ptr<Model> terrainModel_;
 
 	// 背景

@@ -37,7 +37,7 @@ public: // サブクラス
 		kDepthTextureResouceStateIndexOfCount // 数を数える
 	};
 
-public:
+public: 
 
 	/// <summary>
 	/// 初期化

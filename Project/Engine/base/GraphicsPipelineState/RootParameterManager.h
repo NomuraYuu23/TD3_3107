@@ -25,6 +25,7 @@ enum SRV_PSIndex {
 	kSRV_PSIndexSpotLight = 9, // スポットライト
 	kSRV_PSIndexMaterials = 10, // マテリアル
 	kSRV_PSIndexEnvironmentTexture = 11, // 環境マップ(映り込み用テクスチャ)
+	kSRV_PSIndexDissolve = 12, // Dissolveデータ(float)
 	kSRV_PSIndexOfCount,
 };
 
@@ -33,9 +34,11 @@ enum SRV_PSIndex {
 /// </summary>
 enum SRV_VSIndex {
 	kSRV_VSIndexParticleForGPU = 0, //  パーティクル用
-	kSRV_VSIndexCollider2DDebugDrawForGPU = 2, // コライダーデバッグ2d
-	kSRV_VSIndexTransformationMatrix = 3, // トランスフォーム行列
-	kSRV_VSIndexLineForGPU = 4, // 線描画
+	kSRV_VSIndexCollider2DDebugDrawForGPU = 1, // コライダーデバッグ2d
+	kSRV_VSIndexTransformationMatrix = 2, // トランスフォーム行列
+	kSRV_VSIndexLineForGPU = 3, // 線描画
+	kSRV_VSIndexGPUParticleForGPU = 4, //  GPUパーティクル用
+	kSRV_VSIndexVertex= 5, // 頂点
 	kSRV_VSIndexOfCount,
 };
 
@@ -58,11 +61,12 @@ enum CBV_PSIndex {
 enum CBV_VSIndex {
 
 	kCBV_VSIndexWorldTransform = 0,// ワールドトランスフォーム
-	kCBV_VSIndexOutlineData = 1,// アウトラインデータ
+
 	kCBV_VSIndexParticleStart = 2,// パーティクルの開始位置
 	kCBV_VSIndexViewProjection = 3,// viewProjection
 	kCBV_VSIndexSpriteForGPU = 4, // スプライト用
 	kCBV_VSIndexSkyboxForGPU = 5, // スカイボックス用
+	kCBV_VSIndexGPUParticleView = 6, //  GPUパーティクルのView
 	kCBV_VSIndexOfCount
 
 };
@@ -93,14 +97,13 @@ enum RootParameterIndex {
 	kRootParameterIndexManyModels, // たくさんのアニメーション無しモデル
 	kRootParameterIndexManyAnimModels, // たくさんのアニメーション無しモデル
 
-	kRootParameterIndexNormalOutline, // アニメーション無しアウトライン
-
 	kRootParameterIndexSprite, // スプライト
 	kRootParameterIndexParticle, // パーティクル
+	kRootParameterIndexGPUParticle, // GPUパーティクル
+	kRootParameterIndexGPUParticleDissolve, // GPUパーティクルdissolveあり
 	kRootParameterIndexCollision2DDebugDraw, // コライダーデバッグ2d
 	kRootParameterIndexLine, // 線
 	kRootParameterIndexWindowSpriteSRV, // ウィンドウスプライトSRV
-	kRootParameterIndexWindowSpriteUAV,// ウィンドウスプライトUAV
 	
 	kRootParameterIndexSkyBox, // スカイボックス
 

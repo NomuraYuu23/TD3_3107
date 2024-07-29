@@ -51,10 +51,6 @@ public: // 関数
 	/// <param name="lineForGPU">線情報</param>
 	void Map(const LineForGPU& lineForGPU);
 
-public: // アクセッサ等
-
-	LineForGPU* GetLineInfo() { return lineForGPUMap_; }
-
 private:
 
 	//lineForGPU用のリソース
@@ -85,7 +81,7 @@ private:
 public: // 静的メンバ変数
 
 	// 線最大数
-	const uint32_t kNumInstanceMax_ = 256;
+	const uint32_t kNumInstanceMax_ = 4096;
 
 private: // メンバ変数
 

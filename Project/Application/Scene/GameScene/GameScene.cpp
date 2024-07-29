@@ -147,15 +147,19 @@ void GameScene::Initialize() {
 
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();
-	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	mapManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance());
 	mapManager_->Initialize(terrainModel_.get());
+
+	mapBackGroundManager_ = std::make_unique<MapBackGroundManager>();
+	mapBackGroundManager_->blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance());
+	mapBackGroundManager_->Initialize(terrainModel_.get());
 
 	// 背景用オブジェクト
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize(backGroundModel_.get());
 	if (StageNumberManager::stageNum_ == 1) {
 		// 最初のステージならチュートリアルモデルを設定
-		backGround_->SetTutorialPlaneModel(textureHandleManager_.get(), spearJumpTutorialPlaneModel_.get(), enemyTutorialPlaneModel_.get());
+		backGround_->SetTutorialPlaneModel(spearJumpTutorialPlaneModel_.get(), enemyTutorialPlaneModel_.get());
 	}
 	// 定点カメラ（仮
 	gameCamera_ = std::make_unique<GameBasicCamera>();
@@ -171,7 +175,7 @@ void GameScene::Initialize() {
 	PostEffect* pe = PostEffect::GetInstance();
 	pe->SetThreshold(0.05f);
 	pe->SetKernelSize(5);
-	pe->SetSigma(5.0f);
+	pe->SetGaussianSigma(5.0f);
 
 	FogManager* fm = FogManager::GetInstance();
 	fm->SetColor({ 0.0f, 0.25f, .65f, 1.0f });
@@ -195,7 +199,7 @@ void GameScene::Initialize() {
 
 	// UIマネージャーの生成
 	gameUIManager_ = std::make_unique<GameUIManager>();		// 生成
-	gameUIManager_->Initialze(textureHandleManager_.get()); // 初期化
+	gameUIManager_->Initialze(); // 初期化
 	gameUIManager_->SetPlayer(player_.get());				// プレイヤーセット
 	player_->SetUIManager(gameUIManager_.get());			// UIマネージャーセット
 
@@ -264,6 +268,7 @@ void GameScene::Update() {
 	//Obj
 	// マップ
 	mapManager_->Update();
+	mapBackGroundManager_->Update();
 	// プレイヤー
 	if (!player_->GetIsDead() && !gameUIManager_->GetDisplayPoseUI()) { // 死亡していないときのみ更新
 		player_->Update();
@@ -345,6 +350,7 @@ void GameScene::Draw() {
 	//bossEnemy_->Draw(camera_);
 
 	// ブロック用
+	mapBackGroundManager_->Draw(camera_);
 	mapManager_->Draw(camera_);
 	// ゴール系
 	gameSystemManager_->Draw(camera_);
@@ -437,7 +443,7 @@ void GameScene::Draw() {
 	if (std::holds_alternative<SpearAerialState*>(player_->GetNowState()) && !player_->IsDead()) {
 		postEffectBit += 16;
 		PostEffect::GetInstance()->SetKernelSize(33);
-		PostEffect::GetInstance()->SetSigma(33.0f);
+		PostEffect::GetInstance()->SetGaussianSigma(33.0f);
 	}
 
 	if (player_->GetWeaponGuardEffect()->IsActive()) {
@@ -451,7 +457,7 @@ void GameScene::Draw() {
 		PostEffect::kCommandIndexTAKEYARIMONOGATARI_First,
 		&desc);
 
-	WindowSprite::GetInstance()->DrawUAV(PostEffect::GetInstance()->GetEditTextures(0)->GetUavHandleGPU());
+	WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetSrvHandleGPU());
 
 }
 
@@ -506,6 +512,7 @@ void GameScene::ImguiDraw() {
 
 	//Obj
 	mapManager_->ImGuiDraw();
+	mapBackGroundManager_->ImGuiDraw();
 	// プレイヤー
 	player_->ImGuiDraw();
 	// 敵
@@ -572,59 +579,59 @@ void GameScene::ModelCreate()
 {
 
 	// パーティクル
-	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.gltf", dxCommon_, textureHandleManager_.get()));
-	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_, textureHandleManager_.get()));
-	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_, textureHandleManager_.get()));
-	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_, textureHandleManager_.get()));
-	particleSmokeModel_.reset(Model::Create("Resources/Particle/Smoke", "Smoke.obj", dxCommon_, textureHandleManager_.get()));
-	particleKiraKiraModel_.reset(Model::Create("Resources/Particle/KiraKira", "KiraKira.obj", dxCommon_, textureHandleManager_.get()));
+	particleUvcheckerModel_.reset(Model::Create("Resources/default/", "plane.gltf", dxCommon_));
+	particleCircleModel_.reset(Model::Create("Resources/Particle/", "plane.obj", dxCommon_));
+	particleLeafModel_.reset(Model::Create("Resources/Particle/BambooLeaf", "BambooLeaf.obj", dxCommon_));
+	particleSpearLeafModel_.reset(Model::Create("Resources/Particle/SpearLeaf", "SpearLeaf.obj", dxCommon_));
+	particleSmokeModel_.reset(Model::Create("Resources/Particle/Smoke", "Smoke.obj", dxCommon_));
+	particleKiraKiraModel_.reset(Model::Create("Resources/Particle/KiraKira", "KiraKira.obj", dxCommon_));
 
 	// スカイドーム
-	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_, textureHandleManager_.get()));
+	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_));
 
 	// サンプルobj
-	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_, textureHandleManager_.get()));
+	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_));
 
 	// プレイヤーモデル
 	#ifdef _RELEASE // デバッグ以外の場合高負荷モデルを読み込む
-	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_, textureHandleManager_.get()));
-	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_, textureHandleManager_.get()));
+	playerModel_.reset(Model::Create("Resources/Model/Player/", "Player.gltf", dxCommon_));
+	ponyTailModel_.reset(Model::Create("Resources/Model/Player/", "PonyTail.gltf", dxCommon_));
 	#endif // !_DEBUG
 	#ifndef _RELEASE // デバッグの場合低負荷モデルを読み込む
-	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_, textureHandleManager_.get()));
+	playerModel_.reset(Model::Create("Resources/default/", "ball.obj", dxCommon_));
 	#endif // _DEBUG
-	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_, textureHandleManager_.get()));
-	ringUnderModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingUnder.obj", dxCommon_, textureHandleManager_.get()));
-	ringTopModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingTop.obj", dxCommon_, textureHandleManager_.get()));
-	arrowModel_.reset(Model::Create("Resources/Model/Direction/", "Direction.obj", dxCommon_, textureHandleManager_.get()));
+	weaponModel_.reset(Model::Create("Resources/Model/Spear/", "Spear.gltf", dxCommon_));
+	ringUnderModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingUnder.obj", dxCommon_));
+	ringTopModel_.reset(Model::Create("Resources/Model/SpearRing/", "SpearRingTop.obj", dxCommon_));
+	arrowModel_.reset(Model::Create("Resources/Model/Direction/", "Direction.obj", dxCommon_));
 
 
 	// 地形ブロック
-	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_, textureHandleManager_.get()));
+	terrainModel_.reset(Model::Create("Resources/GameObject/Block", "Block.gltf", dxCommon_));
 
 	// 背景モデル
-	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_, textureHandleManager_.get()));
+	backGroundModel_.reset(Model::Create("Resources/Model/BackGround", "BackGround.obj", dxCommon_));
 
-	checkPointModel_.reset(Model::Create("Resources/Model/Takenoko", "Takenoko.obj", dxCommon_, textureHandleManager_.get()));
-	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_, textureHandleManager_.get()));
+	checkPointModel_.reset(Model::Create("Resources/Model/Takenoko", "Takenoko.obj", dxCommon_));
+	goalModel_.reset(Model::Create("Resources/Model/Goal", "Goal.gltf", dxCommon_));
 
 	// ステージ番号が 00 のときのみロード
 	if (StageNumberManager::stageNum_ == 1) {
-		spearJumpTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
-		enemyTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_, textureHandleManager_.get()));
+		spearJumpTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_));
+		enemyTutorialPlaneModel_.reset(Model::Create("Resources/Model/TutorialPlane", "TutorialPlane.obj", dxCommon_));
 	}
 
 	// 敵モデル
 	// プレイヤーモデル
 	#ifdef _RELEASE // デバッグ以外の場合高負荷モデルを読み込む
-	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_, textureHandleManager_.get()));
+	enemyModel_.reset(Model::Create("Resources/Model/Enemy/", "Enemy.gltf", dxCommon_));
 	#endif // !_DEBUG
 	#ifndef _RELEASE // デバッグの場合低負荷モデルを読み込む
-	enemyModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_, textureHandleManager_.get()));
+	enemyModel_.reset(Model::Create("Resources/GameObject/cube", "cube.obj", dxCommon_));
 	#endif // _DEBUG
 
 	// 矢印
-	roadArrowModel_.reset(Model::Create("Resources/Model/Arrow", "Arrow.obj", dxCommon_, textureHandleManager_.get()));
+	roadArrowModel_.reset(Model::Create("Resources/Model/Arrow", "Arrow.obj", dxCommon_));
 
 }
 
@@ -632,18 +639,18 @@ void GameScene::TextureLoad()
 {
 
 	collision2DDebugDrawTextures_ = {
-		TextureManager::Load("Resources/Debug/Box.png", DirectXCommon::GetInstance(), textureHandleManager_.get()),
-		TextureManager::Load("Resources/Debug/Circle.png", DirectXCommon::GetInstance(), textureHandleManager_.get())
+		TextureManager::Load("Resources/Debug/Box.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/Debug/Circle.png", DirectXCommon::GetInstance())
 	};
 
-	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
-	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyRedTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	blockTexture_ = TextureManager::Load("Resources/default/white2x2.png", DirectXCommon::GetInstance());
+	enemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyRedTex.png", DirectXCommon::GetInstance());
 
-	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	skyboxTextureHandle_ = TextureManager::Load("Resources/default/rostock_laage_airport_4k.dds", DirectXCommon::GetInstance());
 
-	singleEnemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyBlueTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	singleEnemyTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyBlueTex.png", DirectXCommon::GetInstance());
 
-	chaseTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance(), textureHandleManager_.get());
+	chaseTexture_ = TextureManager::Load("Resources/Model/Enemy/EnemyTex.png", DirectXCommon::GetInstance());
 	//uiTextureHandles_ = {
 
 	//};

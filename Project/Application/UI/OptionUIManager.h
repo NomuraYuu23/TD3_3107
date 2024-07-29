@@ -79,7 +79,7 @@ public: // メンバ関数
 	/// 初期化関数
 	/// </summary>
 	/// <param name="texHandleManager">テクスチャハンドルマネージャーのインスタンス</param>
-	void Initialze(ITextureHandleManager* texHandleManager);
+	void Initialze();
 
 	/// <summary>
 	/// 更新関数
@@ -146,8 +146,6 @@ private: // メンバ変数
 
 	// DirectX汎用クラスのインスタンス
 	DirectXCommon* dxCommon_ = nullptr;
-	// テクスチャハンドルのマネージャー
-	ITextureHandleManager* texHandleManager_ = nullptr;
 
 	// 入力クラス
 	Input* input_ = nullptr;
