@@ -105,6 +105,9 @@ private:
 	// 前フレームの右スティック
 	Vector2 prevRightStick_ = {};
 
+	// スティックで戻す処理のONかOFFフラグ
+	bool isStickBack_ = false;
+
 public:
 
 	// 短縮処理

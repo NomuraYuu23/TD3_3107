@@ -374,6 +374,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					if (leftStick.x != 0) {
 						// 槍じゃんステートへ
 						spearJumpAccepter_.Start(2.0f);
+						jumpAttack_.StartAccept(GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AttackFrame"));
 						ChangeState(std::make_unique<SpearAerialState>());
 					}
 					else {
@@ -430,7 +431,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 #endif // !_DEBUG
 
 
-		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive()) {
+		if (hpManager_.InvisibleActive() || knockBackSystem_.AcceptActive() || jumpAttack_.IsActive()) {
 			return;
 		}
 		// 反動生成
@@ -490,6 +491,9 @@ void Player::OnCollision(ColliderParentObject2D target)
 	}
 	// 地形との当たり判定
 	else if (std::holds_alternative<Terrain*>(target)) {
+		// ジャンプ中の攻撃を中断
+		jumpAttack_.Cancel();
+
 		// 前の座標から現座標へのベクトル
 		Vector3 moveDirect = worldtransform_.GetWorldPosition() - prevPosition_;
 		moveDirect = Vector3::Normalize(moveDirect);
@@ -594,6 +598,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					return;
 				}
 			}
+			// じゃない
 			else {
 				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
@@ -605,14 +610,12 @@ void Player::OnCollision(ColliderParentObject2D target)
 				isGround_ = true;
 				return;
 			}
-			//// プレイヤーの修正されたY座標を計算
-			//correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
-			//worldtransform_.transform_.translate.y = correctPosition.y;
 			break;
 
 			///---一点のみの衝突---///
 #pragma region 左下
 		case IObject::kLBPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -625,17 +628,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 					isGround_ = true;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
+			return;
 			break;
 #pragma endregion
 
 #pragma region 左上
 		case IObject::kLTPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -644,18 +650,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 					velocity_.y = 0;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x / 2.0f) + correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-
+			return;
 			break;
 #pragma endregion
 
 #pragma region 右下
 		case IObject::kRBPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -668,17 +676,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 					isGround_ = true;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
+			return;
 			break;
 #pragma endregion
 
 #pragma region 右上
 		case IObject::kRTPoint:
+			// Yの移動量の方が大きい
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
@@ -687,13 +698,14 @@ void Player::OnCollision(ColliderParentObject2D target)
 					velocity_.y = 0;
 				}
 			}
+			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
 				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x / 2.0f) - correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-
+			return;
 			break;
 #pragma endregion
 
@@ -1026,6 +1038,8 @@ void Player::SystemInitialize()
 	weaponGuardEffect_ = std::make_unique<WeaponGuardEffect>();
 	weaponGuardEffect_->Initialize(this);
 
+	// ジャンプ攻撃
+	jumpAttack_.Initialize(this);
 }
 
 void Player::SystemUpdate()
@@ -1056,5 +1070,6 @@ void Player::SystemUpdate()
 
 	// ガードエフェクト
 	weaponGuardEffect_->Update();
-
+	// ジャンプ攻撃判定
+	jumpAttack_.Update();
 }

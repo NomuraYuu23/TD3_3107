@@ -281,7 +281,7 @@ void RenderTargetTexture::ChangePixelShaderResource(uint32_t resourceIndex)
 	commandList_->ResourceBarrier(1, &barrier);
 
 	resouceStates_[resourceIndex] = kResouceStateIndexPixelShaderResource;
- 
+
 }
 
 void RenderTargetTexture::ChangeNonPixelShaderResource(uint32_t resourceIndex)

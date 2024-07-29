@@ -63,6 +63,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "inverceRatio", spearJump_.invAerialRatio_);
 	globalVariables_->AddItem(groupName, "Gravity", spearJump_.jumpGravity_);
 	globalVariables_->AddItem(groupName, "FallStopFrame", spearJump_.throwFallStopFrame_);
+	globalVariables_->AddItem(groupName, "AttackFrame", spearJump_.attackFrame_);
 
 	groupName = "Camera";
 	// グループを追加
@@ -146,6 +147,7 @@ void GameObjectData::ApplyGlobalVariables()
 	spearJump_.invAerialRatio_ = globalVariables_->GetFloatValue(groupName, "inverceRatio");
 	spearJump_.jumpGravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	spearJump_.throwFallStopFrame_ = globalVariables_->GetFloatValue(groupName, "FallStopFrame");
+	spearJump_.attackFrame_ = globalVariables_->GetFloatValue(groupName, "AttackFrame");
 
 	groupName = "Camera";
 	// グループを追加

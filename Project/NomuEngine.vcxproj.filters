@@ -234,6 +234,8 @@
     <ClCompile Include="Engine\Physics\Gravity.cpp" />
     <ClCompile Include="Application\Object\MapBackGround\MapBackGroundEditor.cpp" />
     <ClCompile Include="Application\Object\MapBackGround\MapBackGroundManager.cpp" />
+    <ClCompile Include="Application\Object\Enemy\State\RushEnemyState.cpp" />
+    <ClCompile Include="Application\Object\Player\System\JumpAttack\JumpAttack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -528,6 +530,8 @@
     <ClInclude Include="Application\Object\MapBackGround\MapBackGroundData.h" />
     <ClInclude Include="Application\Object\MapBackGround\MapBackGroundEditor.h" />
     <ClInclude Include="Application\Object\MapBackGround\MapBackGroundManager.h" />
+    <ClInclude Include="Application\Object\Enemy\State\RushEnemyState.h" />
+    <ClInclude Include="Application\Object\Player\System\JumpAttack\JumpAttack.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

@@ -145,6 +145,8 @@ private: // データ用構造体クラス
 
 		// 投げた直後の落下を停止するフレーム数
 		float throwFallStopFrame_;
+		// 攻撃判定のフレーム
+		float attackFrame_;
 
 	};
 
