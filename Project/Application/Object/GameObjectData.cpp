@@ -15,6 +15,8 @@ void GameObjectData::Initialize()
 	groupName = "Player";
 	// グループを追加
 	globalVariables_->CreateGroup(groupName);
+	globalVariables_->AddItem(groupName, "RespawnPos", player_.respawnPosition_);
+	globalVariables_->AddItem(groupName, "ScaleValue", player_.scaleValue_);
 	globalVariables_->AddItem(groupName, "NormalJumpPower", player_.jumpData_.normalJumpPower_);
 	globalVariables_->AddItem(groupName, "Gravity", player_.jumpData_.gravity_);
 	globalVariables_->AddItem(groupName, "AerialInActiveDecelerateRatio", player_.jumpData_.aerialInActiveDecelerateRatio_);
@@ -104,6 +106,8 @@ void GameObjectData::ApplyGlobalVariables()
 
 	// プレイヤー
 	groupName = "Player";
+	player_.scaleValue_ = globalVariables_->GetFloatValue(groupName, "ScaleValue");
+	player_.respawnPosition_ = globalVariables_->GetVector3Value(groupName, "RespawnPos");
 	player_.jumpData_.normalJumpPower_ = globalVariables_->GetFloatValue(groupName, "NormalJumpPower");
 	player_.jumpData_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	player_.jumpData_.aerialInActiveDecelerateRatio_ = globalVariables_->GetFloatValue(groupName, "AerialInActiveDecelerateRatio");

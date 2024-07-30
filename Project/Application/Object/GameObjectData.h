@@ -73,6 +73,10 @@ private: // データ用構造体クラス
 		// 画面外から戻ってくる際の画面外の距離
 		float deadLength_;
 
+		float scaleValue_;
+
+		Vector3 respawnPosition_;
+
 		// 体力データ
 		HealthData hpData_;
 

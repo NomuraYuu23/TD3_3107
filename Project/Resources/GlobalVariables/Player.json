@@ -9,6 +9,12 @@
         "NormalJumpPower": 40.0,
         "RecoilFrame": 20.0,
         "RecoilLerpRatio": 0.05000000074505806,
-        "RecoilRatio": 60.0
+        "RecoilRatio": 60.0,
+        "RespawnPos": [
+            0.0,
+            4.0,
+            0.0
+        ],
+        "ScaleValue": 1.75
     }
 }
