@@ -46,6 +46,9 @@ private:
 	Vector2 position2D_ = {};
 	Vector2 scale2D_ = {};
 
+	float scaleValue_ = 1.0f;
+	float heightOffset_ = 0.05f;
+
 	// マテリアル関係
 	std::unique_ptr<Material> material_ = nullptr;
 
