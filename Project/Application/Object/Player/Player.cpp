@@ -15,9 +15,9 @@ void Player::Initialize(Model* model)
 	// 基底クラスの初期化
 	IObject::Initialize(model);
 
-	worldtransform_.transform_.translate = { 0.0f,10.0f,0 };
-	//worldtransform_.transform_.scale = { 2.0f,2.0f,2.0f };
-
+	worldtransform_.transform_.translate = GlobalVariables::GetInstance()->GetVector3Value("Player", "RespawnPos");
+	float scale = GlobalVariables::GetInstance()->GetFloatValue("Player", "ScaleValue");
+	worldtransform_.transform_.scale = { scale,scale,scale };
 	worldtransform_.UpdateMatrix();
 
 	// ライティング有効
@@ -171,6 +171,7 @@ void Player::Update()
 	}
 
 	// コライダー
+	circleCollider_.radius_ = worldtransform_.transform_.scale.x;
 	CircleColliderUpdate();
 	// 足元のコライダー
 	footCollider_.Update();
@@ -619,7 +620,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 			// じゃない
 			else {
-				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y / 2.0f) + correctValue;
+				correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
 				velocity_.y = 0;
 				// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
