@@ -19,6 +19,9 @@ void SpearAerialState::Initialize()
 	player_->isGround_ = true;
 	// コンボ加算
 	player_->AddCombo();
+
+	// 槍じゃん攻撃に
+	//player_->GetJumpAttack().StartAccept(GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AttackFrame"));
 	//// キャストして方向設定
 	//SpearAerialState* state = dynamic_cast<SpearAerialState*>(player_->actionState_.get());
 
