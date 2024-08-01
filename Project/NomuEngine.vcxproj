@@ -379,6 +379,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Application\Particle\user\SmokeParticle\SmokeParticle.cpp" />
     <ClCompile Include="Application\AudioManager\StageSelectAudioManager.cpp" />
     <ClCompile Include="Application\UI\OptionUIManager.cpp" />
+    <ClCompile Include="Application\Particle\user\PlayerAttack\PlayerAttackParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\AllSceneObject\StageNumberManager.h" />
@@ -672,6 +673,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Application\AudioManager\StageSelectAudioManager.h" />
     <ClInclude Include="Application\Object\Player\System\WeaponGuardEffect\WeaponGuardEffect.h" />
     <ClInclude Include="Application\UI\OptionUIManager.h" />
+    <ClInclude Include="Application\Particle\user\PlayerAttack\PlayerAttackParticle.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt" />

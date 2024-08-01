@@ -9,5 +9,6 @@ enum ParticleModelIndex {
 	kSpearLeaf,
 	kSmoke,
 	kKiraKira,
+	kSpark,
 	kCountofParticleModelIndex
 };

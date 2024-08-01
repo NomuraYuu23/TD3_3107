@@ -16,6 +16,7 @@ void Player::Initialize(Model* model)
 	IObject::Initialize(model);
 
 	worldtransform_.transform_.translate = { 0.0f,10.0f,0 };
+	//worldtransform_.transform_.scale = { 2.0f,2.0f,2.0f };
 
 	worldtransform_.UpdateMatrix();
 
@@ -123,6 +124,24 @@ void Player::Update()
 		// 更新
 		ponytail_->Update();
 	}
+
+	// 槍ジャン攻撃判定中ならパーティクルを発生させる
+	if (IsJumpAttack()) {
+		Vector3 inv = { -velocity_.x, -velocity_.y, velocity_.z };
+
+		// 槍ジャンプパーティクル再生
+		EmitterDesc desc;
+		desc.transform = &worldtransform_.transform_;
+		desc.velocity = inv;
+		desc.instanceCount = 2;
+		desc.frequency = 0.01f;
+		desc.lifeTime = 0.025f;
+		desc.particleModelNum = kSpark;
+		desc.paeticleName = kPlayerAttackParticle;
+
+		ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+	}
+
 
 	// デバック以外の場合行う
 	#ifdef _RELEASE

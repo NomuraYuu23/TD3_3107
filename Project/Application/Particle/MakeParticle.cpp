@@ -8,6 +8,7 @@
 #include "user/SmokeParticle/SmokeParticle.h"
 #include "user/ImapledParticle/ImpaledParticle.h"
 #include "user/DeadForcusing/DeadForcusingParticle.h"
+#include "user/PlayerAttack/PlayerAttackParticle.h"
 #include <cassert>
 
 MakeParticle* MakeParticle::GetInstance()
@@ -60,6 +61,10 @@ IParticle* MakeParticle::Run(ParticleDesc* particleDesc, uint32_t paeticleName)
 		break;
 	case kDeadForcusingParticle:
 		particle = new DeadForcusingParticle();
+		particle->Initialize(particleDesc);
+		break;
+	case kPlayerAttackParticle:
+		particle = new PlayerAttackParticle();
 		particle->Initialize(particleDesc);
 		break;
 

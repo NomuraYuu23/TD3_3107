@@ -11,5 +11,6 @@ enum ParticleName {
 	kSmokePaticle,
 	kImpaledParticle,
 	kDeadForcusingParticle,
+	kPlayerAttackParticle,
 	kCountOfParticleName,
 };
