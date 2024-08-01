@@ -69,12 +69,6 @@ void GameScene::Initialize() {
 	collisionManager_.reset(new CollisionManager);
 	collisionManager_->Initialize();
 
-	//UIマネージャー
-	//uiManager_ = std::make_unique<UIManager>();
-	//uiManager_->Initialize(uiTextureHandles_);
-	// 
-	//uiManager_->SetAudioManager(audioManager_.get());
-
 	// スカイドーム
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
@@ -137,9 +131,6 @@ void GameScene::Initialize() {
 
 	player_->SetEnemyManager(enemyManager_.get());
 	player_->Update();
-
-	//bossEnemy_ = std::make_unique<PrevSmallBoss>();
-	//bossEnemy_->Initialize(enemyModel_.get());
 
 	// マップ管理クラス
 	mapManager_ = std::make_unique<MapManager>();

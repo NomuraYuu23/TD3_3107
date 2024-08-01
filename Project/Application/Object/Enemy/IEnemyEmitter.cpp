@@ -10,6 +10,11 @@
 
 uint32_t IEnemyEmitter::sSerialNumber_ = 0;
 
+IEnemyEmitter::~IEnemyEmitter()
+{
+
+}
+
 void IEnemyEmitter::Initialize(Model* model)
 {
 	LargeNumberOfObjects::Initialize(model);

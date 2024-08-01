@@ -12,7 +12,7 @@ class TutorialScene : public IScene
 
 public:
 
-	~TutorialScene();
+	~TutorialScene() override;
 
 	/// <summary>
 	/// 初期化

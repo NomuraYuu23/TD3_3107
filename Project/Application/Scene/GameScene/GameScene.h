@@ -32,7 +32,7 @@ class GameScene : public IScene
 
 public:
 
-	~GameScene();
+	~GameScene() override;
 
 	/// <summary>
 	/// 初期化

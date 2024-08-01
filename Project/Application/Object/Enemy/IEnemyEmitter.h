@@ -16,6 +16,12 @@ private:
 	uint32_t serialNum_ = 0;
 
 public:
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~IEnemyEmitter() override;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>

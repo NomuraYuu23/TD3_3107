@@ -10,7 +10,7 @@ class ClearScene : public IScene
 
 public: // メンバ関数
 
-	~ClearScene();
+	~ClearScene() override;
 
 	/// <summary>
 	/// 初期化

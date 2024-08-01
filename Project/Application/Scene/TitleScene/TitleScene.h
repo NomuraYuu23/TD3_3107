@@ -10,7 +10,7 @@ class TitleScene : public IScene
 
 public: // メンバ関数
 
-	~TitleScene();
+	~TitleScene() override;
 
 	/// <summary>
 	/// 初期化
