@@ -16,7 +16,7 @@ void GroundState::Initialize()
 	// 槍を踏んだかのフラグ
 	player_->isOneStepOn_ = false;
 	// ジャンプ攻撃中断
-	player_->GetJumpAttack().Cancel();
+	player_->JumpAttackCancel();
 
 #ifdef _RELEASE
 
