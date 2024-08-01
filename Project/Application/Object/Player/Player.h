@@ -259,6 +259,8 @@ public:
 	
 	// プレイヤーの描画フラグ
 	bool isDraw_ = true;
+	
+	float colliderXScale_ = 0.5f;
 
 	// 足元コライダー
 	PlayerFootCollider footCollider_;

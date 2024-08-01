@@ -30,6 +30,10 @@ void Player::Initialize(Model* model)
 	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
 
+	boxCollider_.Initialize(position2D_, worldtransform_.transform_.scale.x, worldtransform_.transform_.scale.y, 0.0f, this);
+	boxCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
+	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
+
 	// システム系の初期化
 	SystemInitialize();
 
@@ -195,6 +199,10 @@ void Player::Update()
 	// コライダー
 	circleCollider_.radius_ = worldtransform_.transform_.scale.x;
 	CircleColliderUpdate();
+
+	scale2D_ = { worldtransform_.transform_.scale.x * colliderXScale_, worldtransform_.transform_.scale.y };
+	BoxColliderUpdate();
+
 	// 足元のコライダー
 	footCollider_.Update();
 	// レイ
@@ -297,6 +305,9 @@ void Player::ImGuiDraw()
 	if (ImGui::Button("PosReset")) {
 		Reset(Vector3{4.0f,3.0f,0.0f});
 	}
+	ImGui::Separator();
+	ImGui::DragFloat("ScaleX", &colliderXScale_, 0.01f);
+	ImGui::Separator();
 
 	ImGui::DragFloat3("PlayerDirect", &worldtransform_.direction_.x);
 
@@ -541,8 +552,8 @@ void Player::OnCollision(ColliderParentObject2D target)
 		Vector3 lerpPos = Ease::Easing(Ease::EaseName::Lerp, prevPosition_, worldtransform_.GetWorldPosition(), 0.95f);
 
 		// 最小・最大値
-		Vector2 plMin = { lerpPos.x - circleCollider_.radius_,lerpPos.y - circleCollider_.radius_ };
-		Vector2 plMax = { lerpPos.x + circleCollider_.radius_,lerpPos.y + circleCollider_.radius_ };
+		Vector2 plMin = { lerpPos.x - scale2D_.x,lerpPos.y - scale2D_.y };
+		Vector2 plMax = { lerpPos.x + scale2D_.x,lerpPos.y + scale2D_.y };
 
 		// 四頂点
 		IObject::FourTop player4Point = IObject::GenerateFourTop(plMin, plMax);
@@ -556,14 +567,14 @@ void Player::OnCollision(ColliderParentObject2D target)
 		case IObject::kLeftSide:
 			// プレイヤーの修正されたX座標を計算
 			//correctPosition.x = maxPos.x + (scale2D_.x / 2.0f) + correctValue;
-			correctPosition.x = maxPos.x + (circleCollider_.radius_) + correctValue;		
+			correctPosition.x = maxPos.x + (scale2D_.x) + correctValue;		
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
 			// 右側
 		case IObject::kRightSide:
 			// プレイヤーの修正されたX座標を計算
-			correctPosition.x = targetPos.x - targetRad.x - (circleCollider_.radius_) - correctValue;
+			correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x) - correctValue;
 			worldtransform_.transform_.translate.x = correctPosition.x;
 			velocity_.x = 0;
 			break;
@@ -573,20 +584,20 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (std::fabsf(velocity_.y) > 85.0f) {
 				// プレイヤーの修正されたY座標を計算
 				if (velocity_.y > 0) {
-					correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
 					return;
 				}
 				else if (velocity_.y < 0) {
-					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y) + correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
 					return;
 				}
 			}
 			else {
-				correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
+				correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y) - correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
 				velocity_.y = 0;
 				return;
@@ -598,13 +609,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (std::fabsf(velocity_.y) > 85.0f) {
 				// プレイヤーの修正されたY座標を計算
 				if (velocity_.y > 0) {
-					correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
 					return;
 				}
 				else if (velocity_.y < 0) {
-					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y) + correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
 					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
@@ -618,7 +629,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			}
 			// じゃない
 			else {
-				correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
+				correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y) + correctValue;
 				worldtransform_.transform_.translate.y = correctPosition.y;
 				velocity_.y = 0;
 				// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
@@ -637,7 +648,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
-					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y) + correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
@@ -649,7 +660,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
-				correctPosition.x = targetPos.x + targetRad.x + (circleCollider_.radius_) + correctValue;
+				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x) + correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
@@ -663,7 +674,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
-					correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
 				}
@@ -671,7 +682,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
-				correctPosition.x = targetPos.x + targetRad.x + (circleCollider_.radius_) + correctValue;
+				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x) + correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
@@ -685,7 +696,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
-					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
+					correctPosition.y = targetPos.y + targetRad.y + (scale2D_.y) + correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
@@ -697,7 +708,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
-				correctPosition.x = targetPos.x - targetRad.x - (circleCollider_.radius_) - correctValue;
+				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x) - correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
@@ -711,7 +722,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			if (std::fabsf(moveDirect.x) < std::fabsf(moveDirect.y)) {
 				if (moveDirect.y > 0) {
 					// プレイヤーの修正されたY座標を計算
-					correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
+					correctPosition.y = targetPos.y - targetRad.y - (scale2D_.y) - correctValue;
 					worldtransform_.transform_.translate.y = correctPosition.y;
 					velocity_.y = 0;
 				}
@@ -719,7 +730,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 			// Xの移動量の方が大きい
 			else if (std::fabsf(moveDirect.x) > std::fabsf(moveDirect.y)) {
 				// プレイヤーの修正されたX座標を計算
-				correctPosition.x = targetPos.x - targetRad.x - (circleCollider_.radius_) - correctValue;
+				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.y) - correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
@@ -744,13 +755,13 @@ void Player::OnCollision(ColliderParentObject2D target)
 			Vector3 wPosP = worldtransform_.GetWorldPosition();
 			if (wPosP.x > targetPos.x) {
 				// プレイヤーの修正されたX座標を計算
-				correctPosition.x = targetPos.x + targetRad.x + (circleCollider_.radius_) + correctValue;
+				correctPosition.x = targetPos.x + targetRad.x + (scale2D_.x) + correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
 			else {
 				// プレイヤーの修正されたX座標を計算
-				correctPosition.x = targetPos.x - targetRad.x - (circleCollider_.radius_) - correctValue;
+				correctPosition.x = targetPos.x - targetRad.x - (scale2D_.x) - correctValue;
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
