@@ -56,7 +56,7 @@ void PlayerAnimManager::Update()
 		}
 
 		EulerTransform transform = player_->worldtransform_.transform_;
-		transform.translate.y -= 1.0f;
+		transform.translate.y -= 2.0f;
 
 		if (player_->isGround_) {
 			// 走りパーティクル

@@ -16,13 +16,13 @@ void PlayerAttackParticle::Initialize(ParticleDesc* particleDesc)
 	int scaleNumber = static_cast<int>(distScale(randomEngine));
 	float scale = 0.0f;
 	if (scaleNumber == 0) {
-		scale = 1.0f;
+		scale = 2.0f;
 	}
 	else if (scaleNumber == 1) {
-		scale = 0.5f;
+		scale = 1.0f;
 	}
 	else {
-		scale = 0.1f;
+		scale = 0.5f;
 	}
 
 	// 回転のランダム変数を生成
