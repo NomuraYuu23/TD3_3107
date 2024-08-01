@@ -20,6 +20,9 @@ void PlayerFootCollider::Initialize(Model* model, Player* parent)
 	//scale2D_ = { 0.95f*1.95f, 0.2f };
 	scale2D_ = { 1.85f, 0.2f };
 
+	scaleValue_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "FootXScale");
+	heightOffset_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "FootHeightOffset");
+
 	worldtransform_.SetParent(&player_->worldtransform_);
 	worldtransform_.transform_.translate.y = -(player_->circleCollider_.radius_ + 0.05f);
 
@@ -37,7 +40,8 @@ void PlayerFootCollider::Initialize(Model* model, Player* parent)
 void PlayerFootCollider::Update()
 {
 	// 行列・座標更新
-	worldtransform_.transform_.translate.y = -(player_->circleCollider_.radius_ + 0.05f);
+	scale2D_.x = player_->worldtransform_.transform_.scale.x * scaleValue_;
+	worldtransform_.transform_.translate.y = -(player_->circleCollider_.radius_ + heightOffset_);
 	worldtransform_.UpdateMatrix();
 	position2D_ = { worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y};
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0);
@@ -54,6 +58,11 @@ void PlayerFootCollider::ImGuiDraw()
 	ImGui::DragFloat3("footScale", &worldtransform_.transform_.scale.x);
 	ImGui::DragFloat2("coPos", &position2D_.x);
 	ImGui::DragFloat2("scale2D", &scale2D_.x);
+	ImGui::DragFloat("ScaleValue", &scaleValue_, 0.01f);
+	ImGui::DragFloat("HeightOffset", &heightOffset_, 0.01f);
+
+	scaleValue_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "FootXScale");
+	heightOffset_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "FootHeightOffset");
 
 }
 

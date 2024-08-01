@@ -22,6 +22,8 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "AerialInActiveDecelerateRatio", player_.jumpData_.aerialInActiveDecelerateRatio_);
 	globalVariables_->AddItem(groupName, "AerialActiveDecelerateRatio", player_.jumpData_.aerialActiveDecelerateRatio_);
 	globalVariables_->AddItem(groupName, "MoveSpeed", player_.moveData_.moveValue_);
+	globalVariables_->AddItem(groupName, "FootXScale", player_.footColliderXScale_);
+	globalVariables_->AddItem(groupName, "FootHeightOffset", player_.footColliderHeightOffset_);
 
 	// 反動用
 	globalVariables_->AddItem(groupName, "RecoilFrame", player_.recoil.time_);
@@ -108,6 +110,9 @@ void GameObjectData::ApplyGlobalVariables()
 	groupName = "Player";
 	player_.scaleValue_ = globalVariables_->GetFloatValue(groupName, "ScaleValue");
 	player_.respawnPosition_ = globalVariables_->GetVector3Value(groupName, "RespawnPos");
+	player_.footColliderXScale_ = globalVariables_->GetFloatValue(groupName, "FootXScale");
+	player_.footColliderHeightOffset_ = globalVariables_->GetFloatValue(groupName, "FootHeightOffset");
+
 	player_.jumpData_.normalJumpPower_ = globalVariables_->GetFloatValue(groupName, "NormalJumpPower");
 	player_.jumpData_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");
 	player_.jumpData_.aerialInActiveDecelerateRatio_ = globalVariables_->GetFloatValue(groupName, "AerialInActiveDecelerateRatio");

@@ -74,6 +74,11 @@ private: // データ用構造体クラス
 		float deadLength_;
 
 		float scaleValue_;
+		// X方向の大きさ調整（プレイヤーのスケールに付随
+		float footColliderXScale_;
+		// 
+		float footColliderHeightOffset_;
+
 
 		Vector3 respawnPosition_;
 
