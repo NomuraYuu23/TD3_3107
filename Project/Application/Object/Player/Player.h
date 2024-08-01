@@ -173,6 +173,8 @@ public:
 
 	bool IsJumpAttack() { return jumpAttack_.IsActive(); }
 
+	void JumpAttackCancel() { jumpAttack_.Cancel(); }
+
 	void SetFallTimer();
 
 	/// <summary>

@@ -74,15 +74,6 @@ void SRVDescriptorHerpManager::NextIndexDescriptorHeapChange()
 
 void SRVDescriptorHerpManager::DescriptorHeapsMakeNull(uint32_t index)
 {
-	if (index >= 456) {
-		int z = 0;
-	}
-	else if (index >= 356) {
-		int z = 0;
-	}
-	else if (index >= 256) {
-		int z = 0;
-	}
 
 	isNullDescriptorHeaps_[index] = true;
 
