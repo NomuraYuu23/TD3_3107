@@ -101,6 +101,8 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 		if (playerPtr != nullptr) {
 			Player* player = *playerPtr;
 			if (player->IsJumpAttack()) {
+#ifdef _RELEASE
+
 				// 死亡パーティクル再生
 				EmitterDesc desc;
 				EulerTransform transform =
@@ -116,6 +118,8 @@ void Enemy::OnCollision(ColliderParentObject2D target)
 				desc.paeticleName = kEnemyDeadParticle;
 
 				ParticleManager::GetInstance()->MakeEmitter(&desc, 0);
+
+#endif // !_DEBUG
 
 				// デバッグ以外の場合行う
 #ifdef _RELEASE
