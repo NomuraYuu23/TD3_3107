@@ -74,6 +74,8 @@ public: // アクセッサ
 
 	bool GetIsGameClear() { return isGameClear_; }
 
+	bool GetIsGoToSelect() { return isGoToSelect_; }
+
 	/// <summary>
 	/// ゲーム画面UIマネージャーセッター
 	/// </summary>
@@ -98,6 +100,9 @@ private:
 	bool isGameClear_ = false;
 	// ゲームオーバー
 	bool isGameOver_ = false;
+
+	// セレクトへ
+	bool isGoToSelect_ = false;
 
 	// プレイヤーの死ぬ高さ
 	float deathHeight_ = 0.0f;

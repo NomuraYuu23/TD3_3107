@@ -20,6 +20,7 @@ void GameSystemManager::Initialize(Model* goalModel, Model* checkPointModel, Pla
 	// クリアフラグ
 	isGameClear_ = false;
 	isGameOver_ = false;
+	isGoToSelect_ = false;
 
 	checkPointManager_ = std::make_unique<CheckPointManager>();
 	checkPointManager_->Initialize(player_, checkPointModel_, goalModel_, gam);
@@ -62,7 +63,7 @@ void GameSystemManager::Update()
 	}
 
 	if (gum_->GetIsReturnStageSelect()) {
-		isGameClear_ = true;
+		isGoToSelect_ = true;
 	}
 
 	// クリアかゲームオーバーの処理を判断

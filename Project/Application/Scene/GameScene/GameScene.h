@@ -116,10 +116,6 @@ private:
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<Model> skydomeModel_;
 
-	// サンプルOBJ
-	std::unique_ptr<SampleObject> sampleObj_;
-	std::unique_ptr<Model> sampleObjModel_;
-
 	// Collision2DManager
 	std::unique_ptr<Collision2DManager> collision2DManager_;
 	// Collision2DDebugDraw

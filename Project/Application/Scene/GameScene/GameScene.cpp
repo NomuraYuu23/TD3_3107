@@ -79,10 +79,6 @@ void GameScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(skydomeModel_.get());
 
-	// サンプルobj
-	sampleObj_ = std::make_unique<SampleObject>();
-	sampleObj_->Initialize(sampleObjModel_.get());
-
 	collision2DManager_ = std::make_unique<Collision2DManager>();
 	collision2DManager_->Initialize();
 
@@ -90,7 +86,6 @@ void GameScene::Initialize() {
 	collision2DDebugDraw_->Initialize(dxCommon_->GetDevice(), collision2DDebugDrawTextures_,
 		GraphicsPipelineState::sRootSignature[GraphicsPipelineState::kPipelineStateIndexCollision2DDebugDraw].Get(),
 		GraphicsPipelineState::sPipelineState[GraphicsPipelineState::kPipelineStateIndexCollision2DDebugDraw].Get());
-
 
 	// プレイヤーの初期化
 	// 武器の生成
@@ -245,7 +240,21 @@ void GameScene::Update() {
 
 #endif
 
+	// クリア
 	if (gameSystemManager_->GetIsGameClear()) {
+		isDecreasingVolume = true;
+		if(StageNumberManager::stageNum_ == StageNumberManager::kStageMax - 1){
+			requestSceneNo_ = kSelect;
+		}
+		else {
+			resetScene_ = true;
+			isBeingReset_ = true;
+			StageNumberManager::stageNum_++;
+		}
+		return;
+	}
+
+	if (gameSystemManager_->GetIsGoToSelect()) {
 		requestSceneNo_ = kSelect;
 	}
 
@@ -458,7 +467,11 @@ void GameScene::Draw() {
 		PostEffect::kCommandIndexTAKEYARIMONOGATARI_First,
 		&desc);
 
+	PostEffect::GetInstance()->GetEditTextures(0)->ChangePixelShaderResource(dxCommon_->GetCommadList());
+
 	WindowSprite::GetInstance()->DrawSRV(PostEffect::GetInstance()->GetEditTextures(0)->GetSrvHandleGPU());
+
+	PostEffect::GetInstance()->GetEditTextures(0)->ChangeUnorderedAccessResource(dxCommon_->GetCommadList());
 
 }
 
@@ -526,6 +539,8 @@ void GameScene::ImguiDraw() {
 	//矢印
 	roadArrowManager_->ImGuiDraw();
 
+	StageNumberManager::ImGuiDraw();
+
 #endif // _DEMO
 
 }
@@ -590,9 +605,6 @@ void GameScene::ModelCreate()
 
 	// スカイドーム
 	skydomeModel_.reset(Model::Create("Resources/Model/Skydome/", "skydome.obj", dxCommon_));
-
-	// サンプルobj
-	sampleObjModel_.reset(Model::Create("Resources/default/", "ball.gltf", dxCommon_));
 
 	// プレイヤーモデル
 	#ifdef _RELEASE // デバッグ以外の場合高負荷モデルを読み込む
