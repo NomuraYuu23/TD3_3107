@@ -353,7 +353,7 @@ void Weapon::OnCollision(ColliderParentObject2D target)
 	}
 
 	// 投げられてる状態
-	if (std::holds_alternative<ThrownState*>(nowState_))
+		if (std::holds_alternative<ThrownState*>(nowState_))
 	{
 		// プレイヤーとの
 		if (std::holds_alternative<Player*>(target)) {

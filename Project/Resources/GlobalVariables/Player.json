@@ -2,6 +2,10 @@
     "Player": {
         "AerialActiveDecelerateRatio": 0.004999999888241291,
         "AerialInActiveDecelerateRatio": 0.05000000074505806,
+        "BoxColliderScale": [
+            0.6000000238418579,
+            1.0
+        ],
         "FootHeightOffset": 0.10000000149011612,
         "FootXScale": 1.0,
         "Gravity": 10.0,

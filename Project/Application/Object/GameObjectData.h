@@ -78,7 +78,8 @@ private: // データ用構造体クラス
 		float footColliderXScale_;
 		// 
 		float footColliderHeightOffset_;
-
+		// プレイヤーのコライダーのサイズ
+		Vector2 boxColliderScaleValue_;
 
 		Vector3 respawnPosition_;
 

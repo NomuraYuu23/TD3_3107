@@ -24,6 +24,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "MoveSpeed", player_.moveData_.moveValue_);
 	globalVariables_->AddItem(groupName, "FootXScale", player_.footColliderXScale_);
 	globalVariables_->AddItem(groupName, "FootHeightOffset", player_.footColliderHeightOffset_);
+	globalVariables_->AddItem(groupName, "BoxColliderScale", player_.boxColliderScaleValue_);
 
 	// 反動用
 	globalVariables_->AddItem(groupName, "RecoilFrame", player_.recoil.time_);
@@ -112,6 +113,7 @@ void GameObjectData::ApplyGlobalVariables()
 	player_.respawnPosition_ = globalVariables_->GetVector3Value(groupName, "RespawnPos");
 	player_.footColliderXScale_ = globalVariables_->GetFloatValue(groupName, "FootXScale");
 	player_.footColliderHeightOffset_ = globalVariables_->GetFloatValue(groupName, "FootHeightOffset");
+	player_.boxColliderScaleValue_ = globalVariables_->GetVector2Value(groupName, "BoxColliderScale");
 
 	player_.jumpData_.normalJumpPower_ = globalVariables_->GetFloatValue(groupName, "NormalJumpPower");
 	player_.jumpData_.gravity_ = globalVariables_->GetFloatValue(groupName, "Gravity");

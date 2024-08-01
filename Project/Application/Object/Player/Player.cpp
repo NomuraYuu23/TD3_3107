@@ -25,11 +25,6 @@ void Player::Initialize(Model* model)
 	material_->SetEnableLighting(enableLighting_);
 
 	// コライダーの初期化
-	circleCollider_.radius_ = 0.985f;
-	circleCollider_.Initialize(position2D_, circleCollider_.radius_, this);
-	circleCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
-	circleCollider_.SetCollisionMask(kCollisionAttributeEnemy);
-
 	boxCollider_.Initialize(position2D_, worldtransform_.transform_.scale.x, worldtransform_.transform_.scale.y, 0.0f, this);
 	boxCollider_.SetCollisionAttribute(kCollisionAttributePlayer);
 	boxCollider_.SetCollisionMask(kCollisionAttributeEnemy);
@@ -197,10 +192,8 @@ void Player::Update()
 	}
 
 	// コライダー
-	circleCollider_.radius_ = worldtransform_.transform_.scale.x;
-	CircleColliderUpdate();
-
-	scale2D_ = { worldtransform_.transform_.scale.x * colliderXScale_, worldtransform_.transform_.scale.y };
+	Vector2 scaleRate = GlobalVariables::GetInstance()->GetVector2Value("Player", "BoxColliderScale");
+	scale2D_ = { worldtransform_.transform_.scale.x * scaleRate.x, worldtransform_.transform_.scale.y * scaleRate.y };
 	BoxColliderUpdate();
 
 	// 足元のコライダー
@@ -290,10 +283,6 @@ void Player::ImGuiDraw()
 	correctSystem_.ImGuiDraw();
 	slowEffect_->ImGuiDraw();
 
-	// ゲームスピード
-	//float ratio = IObject::sPlaySpeed;
-	//ImGui::DragFloat("playTime", &ratio);
-	//sPlaySpeed = ratio;
 	// 反動フラグ
 	ImGui::Text("%d : IsRecoil", recoil_.IsActive());
 	int tex = IsCanReturn();
@@ -344,9 +333,8 @@ void Player::ImGuiDraw()
 		if (ImGui::BeginTabItem("Collider")) {
 			footCollider_.ImGuiDraw();
 
-			ImGui::DragFloat2("ColliderPos", &circleCollider_.position_.x, 0.01f, -absValue, absValue);
-			ImGui::DragFloat2("ColliderSize", &circleCollider_.scale_.x, 0.01f, 0, 10.0f);
-			ImGui::DragFloat("Radius", &circleCollider_.radius_, 0.01f, 0, 10.0f);
+			ImGui::DragFloat2("BoxPosition", &boxCollider_.position_.x);
+			ImGui::DragFloat2("BoxScale", &boxCollider_.scale_.x);
 			ImGui::EndTabItem();
 		}
 
@@ -784,27 +772,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 		}
 		// 反動中かつ壁ジャンの受付をしていない場合
 		else if (recoil_.IsActive() && !recoil_.IsAccept()) {
-			// 方向
-			//weapon_->throwDirect_ = throwDirect_;
-			// X軸
-			//if (std::fabs(p2tDist.x) > std::fabs(p2tDist.y)) {
-			//	if (velocity_.x > 0) {
-			//		weapon_->throwDirect_ = { 1.0f,0,0 };
-			//	}
-			//	else {
-			//		weapon_->throwDirect_ = { -1.0f,0,0 };
-			//	}
-			//}
-			//// Y軸
-			//else if (std::fabs(p2tDist.x) < std::fabs(p2tDist.y)) {
-			//	if (velocity_.y > 0) {
-			//		weapon_->throwDirect_ = { 0,-1.0f,0 };
-			//	}
-			//	else {
-			//		weapon_->throwDirect_ = { 0,1.0f,0 };
-			//	}
-			//}
-
 			weapon_->throwDirect_ = Vector3::Normalize(moveDirect);
 
 			weapon_->worldtransform_.transform_.translate = worldtransform_.GetWorldPosition();

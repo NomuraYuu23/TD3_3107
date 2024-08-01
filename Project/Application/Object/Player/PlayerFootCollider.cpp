@@ -41,7 +41,7 @@ void PlayerFootCollider::Update()
 {
 	// 行列・座標更新
 	scale2D_.x = player_->worldtransform_.transform_.scale.x * scaleValue_;
-	worldtransform_.transform_.translate.y = -(player_->circleCollider_.radius_ + heightOffset_);
+	worldtransform_.transform_.translate.y = -(player_->boxCollider_.scale_.y + heightOffset_);
 	worldtransform_.UpdateMatrix();
 	position2D_ = { worldtransform_.GetWorldPosition().x,worldtransform_.GetWorldPosition().y};
 	boxCollider_.Update(position2D_, scale2D_.x, scale2D_.y, 0);
