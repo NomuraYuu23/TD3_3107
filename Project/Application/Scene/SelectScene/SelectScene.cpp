@@ -123,7 +123,8 @@ void SelectScene::TextureLoad()
 		TextureManager::Load("Resources/SelectObject/Phot/Phot_02.png", DirectXCommon::GetInstance()),
 		TextureManager::Load("Resources/SelectObject/Phot/Phot_03.png", DirectXCommon::GetInstance()),
 		TextureManager::Load("Resources/SelectObject/Phot/Phot_04.png", DirectXCommon::GetInstance()),
-		TextureManager::Load("Resources/SelectObject/Phot/Phot_05.png", DirectXCommon::GetInstance())
+		TextureManager::Load("Resources/SelectObject/Phot/Phot_05.png", DirectXCommon::GetInstance()),
+		TextureManager::Load("Resources/SelectObject/Phot/Phot_06.png", DirectXCommon::GetInstance())
 	};
 
 	stageUITextureHandles_ = {

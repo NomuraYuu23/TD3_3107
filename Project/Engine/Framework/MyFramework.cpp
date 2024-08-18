@@ -5,7 +5,7 @@ void MyFramework::Initialize()
 
 	//ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow(L"NomuEngine");
+	win->CreateGameWindow(L"3107_竹槍物語");
 
 	//DirectX初期化
 	dxCommon = DirectXCommon::GetInstance();
