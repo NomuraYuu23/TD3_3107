@@ -503,7 +503,7 @@
             "rotateSpeed": 90.0
         }
     },
-    "Stage03": {
+    "Stage04": {
         "ChaseEnemy01": {
             "position": [
                 198.8000030517578,
@@ -638,7 +638,7 @@
             "rotateSpeed": -120.0
         }
     },
-    "Stage04": {
+    "Stage05": {
         "ChaseEnemy00": {
             "position": [
                 40.0,
@@ -1139,7 +1139,7 @@
             "rotateSpeed": -260.0
         }
     },
-    "Stage05": {
+    "Stage03": {
         "ChaseEnemy00": {
             "position": [
                 128.3000030517578,
