@@ -1138,5 +1138,231 @@
             ],
             "rotateSpeed": -260.0
         }
-    }
+    },
+    "Stage05": {
+        "ChaseEnemy00": {
+            "position": [
+                128.3000030517578,
+                1.7000000476837158,
+                0.0
+            ],
+            "searchLength": 15.0
+        },
+        "ChaseEnemy01": {
+            "position": [
+                214.6999969482422,
+                53.29999923706055,
+                0.0
+            ],
+            "searchLength": 10.0
+        },
+        "ChaseEnemy02": {
+            "position": [
+                254.3000030517578,
+                37.400001525878906,
+                0.0
+            ],
+            "searchLength": 13.0
+        },
+        "ChaseEnemy03": {
+            "position": [
+                274.1000061035156,
+                27.899999618530273,
+                0.0
+            ],
+            "searchLength": 10.0
+        },
+        "ChaseEnemy04": {
+            "position": [
+                448.5,
+                60.0,
+                0.0
+            ],
+            "searchLength": 10.0
+        },
+        "ChaseEnemy05": {
+            "position": [
+                468.1000061035156,
+                72.0,
+                0.0
+            ],
+            "searchLength": 10.0
+        },
+        "ChaseEnemy06": {
+            "position": [
+                183.8000030517578,
+                47.20000076293945,
+                0.0
+            ],
+            "searchLength": 15.0
+        },
+        "ChaseEnemy07": {
+            "position": [
+                189.1999969482422,
+                43.20000076293945,
+                0.0
+            ],
+            "searchLength": 10.0
+        },
+        "Enemy00": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                54.0,
+                -1.899999976158142,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy01": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                125.0,
+                31.799999237060547,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy02": {
+            "easeEndPosition": [
+                -25.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 120.0,
+            "position": [
+                225.0,
+                5.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy03": {
+            "easeEndPosition": [
+                40.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                235.0,
+                5.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy04": {
+            "easeEndPosition": [
+                -25.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                225.0,
+                15.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy05": {
+            "easeEndPosition": [
+                25.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                200.0,
+                31.399999618530273,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy06": {
+            "easeEndPosition": [
+                -20.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                360.0,
+                40.0,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy07": {
+            "easeEndPosition": [
+                -25.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 150.0,
+            "position": [
+                420.0,
+                50.79999923706055,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "Enemy08": {
+            "easeEndPosition": [
+                13.0,
+                0.0,
+                0.0
+            ],
+            "endFrame": 130.0,
+            "position": [
+                372.0,
+                64.0999984741211,
+                0.0
+            ],
+            "typeNum": 0
+        },
+        "EnemyEmitter:00": {
+            "distance": 8.0,
+            "enemyMaxCount": 10,
+            "padding": 0,
+            "position": [
+                254.89999389648438,
+                16.600000381469727,
+                0.0
+            ],
+            "rotateSpeed": -120.0
+        },
+        "EnemyEmitter:01": {
+            "distance": 10.0,
+            "enemyMaxCount": 9,
+            "padding": 0,
+            "position": [
+                378.1000061035156,
+                45.099998474121094,
+                0.0
+            ],
+            "rotateSpeed": -200.0
+        },
+        "EnemyEmitter:02": {
+            "distance": 8.0,
+            "enemyMaxCount": 10,
+            "padding": 0,
+            "position": [
+                474.5,
+                58.20000076293945,
+                0.0
+            ],
+            "rotateSpeed": 180.0
+        }
+    },
+    "Stage06": {}
 }
