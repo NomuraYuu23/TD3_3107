@@ -56,6 +56,7 @@ void GameObjectData::Initialize()
 	globalVariables_->AddItem(groupName, "FreeFallGravityRate", weapon_.freeFallGravityRate_);
 	globalVariables_->AddItem(groupName, "FreeFallSpinSpeed", weapon_.freeFallSpinSpeed_);
 	globalVariables_->AddItem(groupName, "GetBackFrame", weapon_.getbackFrame_);
+	globalVariables_->AddItem(groupName, "ModelScale", weapon_.modelScale_);
 
 	groupName = "SpearJump";
 	// グループを追加
@@ -147,6 +148,7 @@ void GameObjectData::ApplyGlobalVariables()
 	weapon_.freeFallGravityRate_ = globalVariables_->GetFloatValue(groupName, "FreeFallGravityRate");
 	weapon_.freeFallSpinSpeed_ = globalVariables_->GetFloatValue(groupName, "FreeFallSpinSpeed");
 	weapon_.getbackFrame_ = globalVariables_->GetFloatValue(groupName, "GetBackFrame");
+	weapon_.modelScale_ = globalVariables_->GetVector3Value(groupName, "ModelScale");
 
 	groupName = "SpearJump";
 	spearJump_.horizontalPower_ = globalVariables_->GetFloatValue(groupName, "HorizontalPower");

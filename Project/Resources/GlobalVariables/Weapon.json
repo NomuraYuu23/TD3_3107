@@ -15,8 +15,13 @@
             0.0,
             0.0
         ],
+        "ModelScale": [
+            1.5,
+            1.5,
+            1.5
+        ],
         "ReturnRate": 0.4000000059604645,
-        "ScaleRate": 2.5,
+        "ScaleRate": 3.0,
         "SpeedRatio": 40.0
     }
 }

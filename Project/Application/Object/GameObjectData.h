@@ -133,6 +133,8 @@ private: // データ用構造体クラス
 
 		// 戻しができる迄のフレーム
 		float getbackFrame_;
+		// モデル自体のサイズ
+		Vector3 modelScale_;
 	};
 
 	/// <summary>

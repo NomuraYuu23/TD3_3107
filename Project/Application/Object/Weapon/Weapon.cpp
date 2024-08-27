@@ -25,7 +25,7 @@ void Weapon::Initialize(Model* model)
 	worldtransform_.usedDirection_ = true;
 	float scaleRate = globalVariables->GetFloatValue("Weapon", "ScaleRate");
 	//float scaleRate = 2.5f;
-	worldtransform_.transform_.scale = { 1.0f,1.0f,1.0f };
+	worldtransform_.transform_.scale = globalVariables->GetVector3Value("Weapon", "ModelScale");
 	scale2D_ = { scaleRate * 2.0f,0.10f };
 
 	// コライダーの初期化
