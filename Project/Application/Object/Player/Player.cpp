@@ -626,6 +626,7 @@ void Player::OnCollision(ColliderParentObject2D target)
 					ChangeState(std::make_unique<GroundState>());
 				}
 				isGround_ = true;
+				worldtransform_.UpdateMatrix();
 				return;
 			}
 			break;

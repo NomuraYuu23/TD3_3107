@@ -3,7 +3,7 @@
         "AerialActiveDecelerateRatio": 0.004999999888241291,
         "AerialInActiveDecelerateRatio": 0.05000000074505806,
         "FootHeightOffset": 0.10000000149011612,
-        "FootXScale": 1.0,
+        "FootXScale": 2.0,
         "Gravity": 10.0,
         "HitInvisibleFrame": 75.0,
         "HitPoint": 3,
@@ -17,6 +17,6 @@
             4.0,
             0.0
         ],
-        "ScaleValue": 1.0
+        "ScaleValue": 1.75
     }
 }
