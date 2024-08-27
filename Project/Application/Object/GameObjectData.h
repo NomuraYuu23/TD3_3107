@@ -135,6 +135,9 @@ private: // データ用構造体クラス
 		float getbackFrame_;
 		// モデル自体のサイズ
 		Vector3 modelScale_;
+		// 戻しのスティックデッドゾーン
+		float returnDeadZone_;
+
 	};
 
 	/// <summary>

@@ -15,6 +15,8 @@ void PlayerController::Initialize(Player* player)
 
 	groundSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("Player", "MoveSpeed");
 	aerialSpeed_ = GlobalVariables::GetInstance()->GetFloatValue("SpearJump", "AerialAcceleration");
+
+	isStickBack_ = true;
 }
 
 void PlayerController::Update()
@@ -68,7 +70,8 @@ void PlayerController::GetBackWeaponProcess()
 
 	if (std::holds_alternative<ImpaledState*>(weapon->GetNowState())) {
 		Vector2 rightStick = Input::GetInstance()->GetRightAnalogstick();
-		if ((rightStick.x != 0 || rightStick.y != 0) && !weapon->getbackAccepter_.IsActive()) {
+		float deadZone = GlobalVariables::GetInstance()->GetFloatValue("Weapon", "ReturnDeadZone");
+		if ((std::fabsf(rightStick.x) >= deadZone || std::fabsf(rightStick.y) >= deadZone) && !weapon->getbackAccepter_.IsActive()) {
 			if (!isStickBack_) {
 				return;
 			}

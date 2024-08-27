@@ -20,6 +20,7 @@
             1.5,
             1.5
         ],
+        "ReturnDeadZone": 0.15000000596046448,
         "ReturnRate": 0.4000000059604645,
         "ScaleRate": 3.0,
         "SpeedRatio": 50.0

@@ -574,23 +574,16 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// プレイヤーの修正されたY座標を計算
 				if (velocity_.y > 0) {
 					correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
-					worldtransform_.transform_.translate.y = correctPosition.y;
-					velocity_.y = 0;
-					return;
 				}
 				else if (velocity_.y < 0) {
 					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
-					worldtransform_.transform_.translate.y = correctPosition.y;
-					velocity_.y = 0;
-					return;
 				}
 			}
 			else {
 				correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
-				worldtransform_.transform_.translate.y = correctPosition.y;
-				velocity_.y = 0;
-				return;
 			}
+			worldtransform_.transform_.translate.y = correctPosition.y;
+			velocity_.y = 0;
 			break;
 			// 下側
 		case IObject::kBottomSide:
@@ -599,36 +592,29 @@ void Player::OnCollision(ColliderParentObject2D target)
 				// プレイヤーの修正されたY座標を計算
 				if (velocity_.y > 0) {
 					correctPosition.y = targetPos.y - targetRad.y - (circleCollider_.radius_) - correctValue;
-					worldtransform_.transform_.translate.y = correctPosition.y;
-					velocity_.y = 0;
-					return;
 				}
 				else if (velocity_.y < 0) {
 					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
-					worldtransform_.transform_.translate.y = correctPosition.y;
-					velocity_.y = 0;
 					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
-					isGround_ = true;
 
-					return;
 				}
 			}
 			// じゃない
 			else {
 				correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
-				worldtransform_.transform_.translate.y = correctPosition.y;
-				velocity_.y = 0;
 				// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
 				if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 					ChangeState(std::make_unique<GroundState>());
 				}
-				isGround_ = true;
-				worldtransform_.UpdateMatrix();
-				return;
 			}
+			// 共通処理
+			worldtransform_.transform_.translate.y = correctPosition.y;
+			worldtransform_.UpdateMatrix();
+			velocity_.y = 0;
+			isGround_ = true;
 			break;
 
 			///---一点のみの衝突---///
@@ -639,11 +625,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
 					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
-					worldtransform_.transform_.translate.y = correctPosition.y;
 					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					worldtransform_.transform_.translate.y = correctPosition.y;
 					isGround_ = true;
 				}
 			}
@@ -654,7 +640,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-			return;
 			break;
 #pragma endregion
 
@@ -676,7 +661,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-			return;
 			break;
 #pragma endregion
 
@@ -687,11 +671,11 @@ void Player::OnCollision(ColliderParentObject2D target)
 				if (moveDirect.y < 0) {
 					// プレイヤーの修正されたY座標を計算
 					correctPosition.y = targetPos.y + targetRad.y + (circleCollider_.radius_) + correctValue;
-					worldtransform_.transform_.translate.y = correctPosition.y;
 					// プレイヤーが下向きに移動しており、空中にいる場合、着地状態に変更
 					if (std::holds_alternative<AerialState*>(GetNowState()) || std::holds_alternative<SpearAerialState*>(GetNowState())) {
 						ChangeState(std::make_unique<GroundState>());
 					}
+					worldtransform_.transform_.translate.y = correctPosition.y;
 					isGround_ = true;
 				}
 			}
@@ -702,7 +686,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-			return;
 			break;
 #pragma endregion
 
@@ -724,7 +707,6 @@ void Player::OnCollision(ColliderParentObject2D target)
 				worldtransform_.transform_.translate.x = correctPosition.x;
 				velocity_.x = 0;
 			}
-			return;
 			break;
 #pragma endregion
 
